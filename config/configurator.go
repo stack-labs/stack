@@ -49,7 +49,10 @@ func (c *configurator) init(ops Options) (err error) {
 		return
 	}
 
-	c.conf = NewConfig()
+	c.conf, err = NewConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
 	// 加载配置
 	err = c.conf.Load(ops.Source...)
 	if err != nil {

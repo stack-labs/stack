@@ -1,10 +1,10 @@
 package router
 
 import (
-	"github.com/micro/go-micro/api/resolver"
-	"github.com/micro/go-micro/api/resolver/micro"
-	"github.com/micro/go-micro/config/cmd"
-	"github.com/micro/go-micro/registry"
+	"github.com/stack-labs/stack-rpc/api/resolver"
+	"github.com/stack-labs/stack-rpc/api/resolver/micro"
+	"github.com/stack-labs/stack-rpc/config/cmd"
+	"github.com/stack-labs/stack-rpc/registry"
 )
 
 type Options struct {

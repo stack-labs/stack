@@ -1,7 +1,7 @@
 package http
 
 import (
-	"github.com/micro/go-micro/registry"
+	"github.com/stack-labs/stack-rpc/registry"
 )
 
 type Options struct {

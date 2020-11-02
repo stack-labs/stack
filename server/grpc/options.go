@@ -4,13 +4,13 @@ import (
 	"context"
 	"crypto/tls"
 
-	"github.com/micro/go-micro/broker"
-	"github.com/micro/go-micro/codec"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/server"
-	"github.com/micro/go-micro/transport"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/encoding"
+	"github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack-rpc/codec"
+	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/transport"
 )
 
 type codecsKey struct{}

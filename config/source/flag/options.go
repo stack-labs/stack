@@ -3,7 +3,7 @@ package flag
 import (
 	"context"
 
-	"github.com/micro/go-micro/config/source"
+	"github.com/stack-labs/stack-rpc/config/source"
 )
 
 type includeUnsetKey struct{}

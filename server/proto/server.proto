@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package go.micro.server;
+package stack.rpc.server;
 
 service Server {
 	rpc Handle(HandleRequest) returns (HandleResponse) {};

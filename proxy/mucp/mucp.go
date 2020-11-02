@@ -1,4 +1,4 @@
-// Package mucp transparently forwards the incoming request using a go-micro client.
+// Package mucp transparently forwards the incoming request using a stack-rpc client.
 package mucp
 
 import (
@@ -10,17 +10,17 @@ import (
 	"sync"
 	"time"
 
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/client/selector"
-	"github.com/micro/go-micro/codec"
-	"github.com/micro/go-micro/codec/bytes"
-	"github.com/micro/go-micro/config/options"
-	"github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/metadata"
-	"github.com/micro/go-micro/proxy"
-	"github.com/micro/go-micro/router"
-	"github.com/micro/go-micro/server"
-	"github.com/micro/go-micro/util/log"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack-rpc/codec"
+	"github.com/stack-labs/stack-rpc/codec/bytes"
+	"github.com/stack-labs/stack-rpc/config/options"
+	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/metadata"
+	"github.com/stack-labs/stack-rpc/proxy"
+	"github.com/stack-labs/stack-rpc/router"
+	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 // Proxy will transparently proxy requests to an endpoint.
@@ -175,7 +175,7 @@ func (p *Proxy) getLink(r router.Route) (client.Client, error) {
 	}
 	l, ok := p.Links[r.Link]
 	if !ok {
-		return nil, errors.InternalServerError("go.micro.proxy", "link not found")
+		return nil, errors.InternalServerError("stack.rpc.proxy", "link not found")
 	}
 	return l, nil
 }
@@ -340,7 +340,7 @@ func (p *Proxy) ServeRequest(ctx context.Context, req server.Request, rsp server
 	endpoint := req.Endpoint()
 
 	if len(service) == 0 {
-		return errors.BadRequest("go.micro.proxy", "service name is blank")
+		return errors.BadRequest("stack.rpc.proxy", "service name is blank")
 	}
 
 	log.Tracef("Proxy received request for %s", service)
@@ -410,7 +410,7 @@ func (p *Proxy) ServeRequest(ctx context.Context, req server.Request, rsp server
 
 	// we're assuming we need routes to operate on
 	if len(routes) == 0 {
-		return errors.InternalServerError("go.micro.proxy", "route not found")
+		return errors.InternalServerError("stack.rpc.proxy", "route not found")
 	}
 
 	var gerr error

@@ -14,14 +14,14 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/micro/cli"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/registry"
-	maddr "github.com/micro/go-micro/util/addr"
-	mhttp "github.com/micro/go-micro/util/http"
-	"github.com/micro/go-micro/util/log"
-	mnet "github.com/micro/go-micro/util/net"
-	mls "github.com/micro/go-micro/util/tls"
+	"github.com/stack-labs/stack-rpc/cli"
+	"github.com/stack-labs/stack-rpc"
+	"github.com/stack-labs/stack-rpc/registry"
+	maddr "github.com/stack-labs/stack-rpc/util/addr"
+	mhttp "github.com/stack-labs/stack-rpc/util/http"
+	"github.com/stack-labs/stack-rpc/util/log"
+	mnet "github.com/stack-labs/stack-rpc/util/net"
+	mls "github.com/stack-labs/stack-rpc/util/tls"
 )
 
 type service struct {
@@ -310,17 +310,17 @@ func (s *service) Init(opts ...Option) error {
 		o(&s.opts)
 	}
 
-	serviceOpts := []micro.Option{}
+	serviceOpts := []stack.Option{}
 
 	if len(s.opts.Flags) > 0 {
-		serviceOpts = append(serviceOpts, micro.Flags(s.opts.Flags...))
+		serviceOpts = append(serviceOpts, stack.Flags(s.opts.Flags...))
 	}
 
 	if s.opts.Registry != nil {
-		serviceOpts = append(serviceOpts, micro.Registry(s.opts.Registry))
+		serviceOpts = append(serviceOpts, stack.Registry(s.opts.Registry))
 	}
 
-	serviceOpts = append(serviceOpts, micro.Action(func(ctx *cli.Context) {
+	serviceOpts = append(serviceOpts, stack.Action(func(ctx *cli.Context) {
 		if ttl := ctx.Int("register_ttl"); ttl > 0 {
 			s.opts.RegisterTTL = time.Duration(ttl) * time.Second
 		}

@@ -1,9 +1,9 @@
 package grpc
 
 import (
-	"github.com/micro/go-micro/transport"
-	pb "github.com/micro/go-micro/transport/grpc/proto"
 	"google.golang.org/grpc"
+	"github.com/stack-labs/stack-rpc/transport"
+	pb "github.com/stack-labs/stack-rpc/transport/grpc/proto"
 )
 
 type grpcTransportClient struct {

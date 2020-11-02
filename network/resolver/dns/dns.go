@@ -5,8 +5,8 @@ import (
 	"context"
 	"net"
 
-	"github.com/micro/go-micro/network/resolver"
 	"github.com/miekg/dns"
+	"github.com/stack-labs/stack-rpc/network/resolver"
 )
 
 // Resolver is a DNS network resolve

@@ -6,12 +6,12 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/micro/go-micro/api/handler"
-	"github.com/micro/go-micro/api/router"
-	regRouter "github.com/micro/go-micro/api/router/registry"
-	"github.com/micro/go-micro/config/cmd"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/memory"
+	"github.com/stack-labs/stack-rpc/api/handler"
+	"github.com/stack-labs/stack-rpc/api/router"
+	regRouter "github.com/stack-labs/stack-rpc/api/router/registry"
+	"github.com/stack-labs/stack-rpc/config/cmd"
+	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/registry/memory"
 )
 
 func testHttp(t *testing.T, path, service, ns string) {
@@ -81,33 +81,33 @@ func TestHttpHandler(t *testing.T) {
 	}{
 		{
 			"/test/foo",
-			"go.micro.api.test",
-			"go.micro.api",
+			"stack.rpc.api.test",
+			"stack.rpc.api",
 		},
 		{
 			"/test/foo/baz",
-			"go.micro.api.test",
-			"go.micro.api",
+			"stack.rpc.api.test",
+			"stack.rpc.api",
 		},
 		{
 			"/v1/foo",
-			"go.micro.api.v1.foo",
-			"go.micro.api",
+			"stack.rpc.api.v1.foo",
+			"stack.rpc.api",
 		},
 		{
 			"/v1/foo/bar",
-			"go.micro.api.v1.foo",
-			"go.micro.api",
+			"stack.rpc.api.v1.foo",
+			"stack.rpc.api",
 		},
 		{
 			"/v2/baz",
-			"go.micro.api.v2.baz",
-			"go.micro.api",
+			"stack.rpc.api.v2.baz",
+			"stack.rpc.api",
 		},
 		{
 			"/v2/baz/bar",
-			"go.micro.api.v2.baz",
-			"go.micro.api",
+			"stack.rpc.api.v2.baz",
+			"stack.rpc.api",
 		},
 		{
 			"/v2/baz/bar",

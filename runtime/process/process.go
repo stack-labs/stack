@@ -4,7 +4,7 @@ package process
 import (
 	"io"
 
-	"github.com/micro/go-micro/runtime/build"
+	"github.com/stack-labs/stack-rpc/runtime/build"
 )
 
 // Process manages a running process

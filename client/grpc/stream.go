@@ -5,8 +5,8 @@ import (
 	"io"
 	"sync"
 
-	"github.com/micro/go-micro/client"
 	"google.golang.org/grpc"
+	"github.com/stack-labs/stack-rpc/client"
 )
 
 // Implements the streamer interface

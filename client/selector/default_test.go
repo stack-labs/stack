@@ -3,7 +3,7 @@ package selector
 import (
 	"testing"
 
-	"github.com/micro/go-micro/registry/memory"
+	"github.com/stack-labs/stack-rpc/registry/memory"
 )
 
 func TestRegistrySelector(t *testing.T) {

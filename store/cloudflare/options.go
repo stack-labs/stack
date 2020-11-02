@@ -1,7 +1,7 @@
 package cloudflare
 
 import (
-	"github.com/micro/go-micro/config/options"
+	"github.com/stack-labs/stack-rpc/config/options"
 )
 
 // Token sets the cloudflare api token

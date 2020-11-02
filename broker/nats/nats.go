@@ -7,9 +7,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/micro/go-micro/broker"
-	"github.com/micro/go-micro/codec/json"
 	nats "github.com/nats-io/nats.go"
+	"github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack-rpc/codec/json"
 )
 
 type natsBroker struct {

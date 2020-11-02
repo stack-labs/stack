@@ -1,7 +1,7 @@
 package mock
 
 import (
-	"github.com/micro/go-micro/client"
+	"github.com/stack-labs/stack-rpc/client"
 )
 
 // Response sets the response methods for a service

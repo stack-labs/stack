@@ -4,7 +4,7 @@ import (
 	"fmt"
 	golog "log"
 
-	"github.com/micro/go-micro/debug/buffer"
+	"github.com/stack-labs/stack-rpc/debug/buffer"
 )
 
 var (

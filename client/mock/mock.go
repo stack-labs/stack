@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/errors"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/errors"
 )
 
 var (
@@ -64,7 +64,7 @@ func (m *MockClient) Call(ctx context.Context, req client.Request, rsp interface
 
 	response, ok := m.Response[req.Service()]
 	if !ok {
-		return errors.NotFound("go.micro.client.mock", "service not found")
+		return errors.NotFound("stack.rpc.client.mock", "service not found")
 	}
 
 	for _, r := range response {

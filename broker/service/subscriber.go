@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/micro/go-micro/broker"
-	pb "github.com/micro/go-micro/broker/service/proto"
-	"github.com/micro/go-micro/util/log"
+	"github.com/stack-labs/stack-rpc/broker"
+	pb "github.com/stack-labs/stack-rpc/broker/service/proto"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 type serviceSub struct {

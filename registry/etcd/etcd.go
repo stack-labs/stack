@@ -15,9 +15,9 @@ import (
 
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/etcdserver/api/v3rpc/rpctypes"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/util/log"
 	hash "github.com/mitchellh/hashstructure"
+	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 var (

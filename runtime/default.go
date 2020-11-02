@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/micro/go-micro/util/log"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 type runtime struct {

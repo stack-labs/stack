@@ -3,8 +3,8 @@ package cli
 import (
 	"context"
 
-	"github.com/micro/cli"
-	"github.com/micro/go-micro/config/source"
+	"github.com/stack-labs/stack-rpc/cli"
+	"github.com/stack-labs/stack-rpc/config/source"
 )
 
 type contextKey struct{}

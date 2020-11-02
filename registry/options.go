@@ -21,6 +21,7 @@ type RegisterOptions struct {
 	// Other options for implementations of the interface
 	// can be stored in a context
 	Context context.Context
+	Domain  string
 }
 
 type WatchOptions struct {

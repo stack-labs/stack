@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/mholt/certmagic"
-	"github.com/micro/go-micro/store"
-	"github.com/micro/go-micro/sync/lock"
+	"github.com/stack-labs/stack-rpc/store"
+	"github.com/stack-labs/stack-rpc/sync/lock"
 )
 
 // File represents a "File" that will be stored in store.Store - the contents and last modified time
@@ -138,7 +138,7 @@ func (s *storage) Stat(key string) (certmagic.KeyInfo, error) {
 	}, nil
 }
 
-// NewStorage returns a certmagic.Storage backed by a go-micro/lock and go-micro/store
+// NewStorage returns a certmagic.Storage backed by a stack-rpc/lock and stack-rpc/store
 func NewStorage(lock lock.Lock, store store.Store) certmagic.Storage {
 	return &storage{
 		lock:  lock,

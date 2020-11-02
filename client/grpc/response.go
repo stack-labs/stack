@@ -3,10 +3,10 @@ package grpc
 import (
 	"strings"
 
-	"github.com/micro/go-micro/codec"
-	"github.com/micro/go-micro/codec/bytes"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/encoding"
+	"github.com/stack-labs/stack-rpc/codec"
+	"github.com/stack-labs/stack-rpc/codec/bytes"
 )
 
 type response struct {

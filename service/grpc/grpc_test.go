@@ -6,10 +6,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/registry/memory"
-	hello "github.com/micro/go-micro/service/grpc/proto"
-	mls "github.com/micro/go-micro/util/tls"
+	"github.com/stack-labs/stack-rpc"
+	"github.com/stack-labs/stack-rpc/registry/memory"
+	hello "github.com/stack-labs/stack-rpc/service/grpc/proto"
+	mls "github.com/stack-labs/stack-rpc/util/tls"
 )
 
 type testHandler struct{}
@@ -31,13 +31,13 @@ func TestGRPCService(t *testing.T) {
 
 	// create GRPC service
 	service := NewService(
-		micro.Name("test.service"),
-		micro.Registry(r),
-		micro.AfterStart(func() error {
+		stack.Name("test.service"),
+		stack.Registry(r),
+		stack.AfterStart(func() error {
 			wg.Done()
 			return nil
 		}),
-		micro.Context(ctx),
+		stack.Context(ctx),
 	)
 
 	// register test handler
@@ -79,13 +79,13 @@ func TestGRPCFunction(t *testing.T) {
 
 	// create service
 	fn := NewFunction(
-		micro.Name("test.function"),
-		micro.Registry(memory.NewRegistry()),
-		micro.AfterStart(func() error {
+		stack.Name("test.function"),
+		stack.Registry(memory.NewRegistry()),
+		stack.AfterStart(func() error {
 			wg.Done()
 			return nil
 		}),
-		micro.Context(ctx),
+		stack.Context(ctx),
 	)
 
 	// register test handler
@@ -136,13 +136,13 @@ func TestGRPCTLSService(t *testing.T) {
 
 	// create GRPC service
 	service := NewService(
-		micro.Name("test.service"),
-		micro.Registry(r),
-		micro.AfterStart(func() error {
+		stack.Name("test.service"),
+		stack.Registry(r),
+		stack.AfterStart(func() error {
 			wg.Done()
 			return nil
 		}),
-		micro.Context(ctx),
+		stack.Context(ctx),
 		// set TLS config
 		WithTLS(config),
 	)

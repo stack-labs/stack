@@ -2,20 +2,20 @@
 package mucp
 
 import (
-	// TODO: change to go-micro/service
-	"github.com/micro/go-micro"
-	cmucp "github.com/micro/go-micro/client/mucp"
-	smucp "github.com/micro/go-micro/server/mucp"
+	// TODO: change to stack-rpc/service
+	"github.com/stack-labs/stack-rpc"
+	cmucp "github.com/stack-labs/stack-rpc/client/mucp"
+	smucp "github.com/stack-labs/stack-rpc/server/mucp"
 )
 
 // NewService returns a new mucp service
-func NewService(opts ...micro.Option) micro.Service {
-	options := []micro.Option{
-		micro.Client(cmucp.NewClient()),
-		micro.Server(smucp.NewServer()),
+func NewService(opts ...stack.Option) stack.Service {
+	options := []stack.Option{
+		stack.Client(cmucp.NewClient()),
+		stack.Server(smucp.NewServer()),
 	}
 
 	options = append(options, opts...)
 
-	return micro.NewService(options...)
+	return stack.NewService(options...)
 }

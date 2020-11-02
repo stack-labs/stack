@@ -5,9 +5,9 @@ import (
 	"context"
 	"sync"
 
-	"github.com/micro/go-micro/debug/service/handler"
-	"github.com/micro/go-micro/proxy"
-	"github.com/micro/go-micro/server"
+	"github.com/stack-labs/stack-rpc/debug/service/handler"
+	"github.com/stack-labs/stack-rpc/proxy"
+	"github.com/stack-labs/stack-rpc/server"
 )
 
 // Server is a proxy muxer that incudes the use of the DefaultHandler

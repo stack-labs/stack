@@ -13,12 +13,12 @@ import (
 	"sync"
 	"time"
 
-	maddr "github.com/micro/go-micro/util/addr"
-	"github.com/micro/go-micro/util/buf"
-	mnet "github.com/micro/go-micro/util/net"
-	mls "github.com/micro/go-micro/util/tls"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
+	maddr "github.com/stack-labs/stack-rpc/util/addr"
+	"github.com/stack-labs/stack-rpc/util/buf"
+	mnet "github.com/stack-labs/stack-rpc/util/net"
+	mls "github.com/stack-labs/stack-rpc/util/tls"
 )
 
 type httpTransport struct {

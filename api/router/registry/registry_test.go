@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/micro/go-micro/api"
+	"github.com/stack-labs/stack-rpc/api"
 )
 
 func TestSetNamespace(t *testing.T) {
@@ -17,21 +17,21 @@ func TestSetNamespace(t *testing.T) {
 	}{
 		// default dotted path
 		{
-			"go.micro.api",
+			"stack.rpc.api",
 			"foo",
-			"go.micro.api.foo",
+			"stack.rpc.api.foo",
 		},
 		// dotted end
 		{
-			"go.micro.api.",
+			"stack.rpc.api.",
 			"foo",
-			"go.micro.api.foo",
+			"stack.rpc.api.foo",
 		},
 		// dashed end
 		{
-			"go-micro-api-",
+			"stack-rpc-api-",
 			"foo",
-			"go-micro-api-foo",
+			"stack-rpc-api-foo",
 		},
 		// no namespace
 		{
@@ -40,9 +40,9 @@ func TestSetNamespace(t *testing.T) {
 			"foo",
 		},
 		{
-			"go-micro-api-",
+			"stack-rpc-api-",
 			"v2.foo",
-			"go-micro-api-v2-foo",
+			"stack-rpc-api-v2-foo",
 		},
 	}
 

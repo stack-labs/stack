@@ -5,9 +5,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/micro/cli"
-	"github.com/micro/go-micro/config/cmd"
-	"github.com/micro/go-micro/config/source"
+	"github.com/stack-labs/stack-rpc/cli"
+	"github.com/stack-labs/stack-rpc/config/cmd"
+	"github.com/stack-labs/stack-rpc/config/source"
 )
 
 func test(t *testing.T, withContext bool) {

@@ -1,8 +1,8 @@
 package monitor
 
 import (
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/registry"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/registry"
 )
 
 type Options struct {

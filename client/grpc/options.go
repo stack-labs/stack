@@ -5,9 +5,9 @@ import (
 	"context"
 	"crypto/tls"
 
-	"github.com/micro/go-micro/client"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/encoding"
+	"github.com/stack-labs/stack-rpc/client"
 )
 
 var (

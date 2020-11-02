@@ -3,5 +3,5 @@ package debug
 
 var (
 	// DefaultName is the name of debug service
-	DefaultName = "go.micro.debug"
+	DefaultName = "stack.rpc.debug"
 )

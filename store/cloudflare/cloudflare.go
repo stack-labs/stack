@@ -17,9 +17,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/micro/go-micro/config/options"
-	"github.com/micro/go-micro/store"
 	"github.com/pkg/errors"
+	"github.com/stack-labs/stack-rpc/config/options"
+	"github.com/stack-labs/stack-rpc/store"
 )
 
 const (

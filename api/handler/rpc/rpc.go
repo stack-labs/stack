@@ -1,4 +1,4 @@
-// Package rpc is a go-micro rpc handler.
+// Package rpc is a stack-rpc rpc handler.
 package rpc
 
 import (
@@ -10,17 +10,17 @@ import (
 	"strings"
 
 	"github.com/joncalhoun/qson"
-	"github.com/micro/go-micro/api"
-	"github.com/micro/go-micro/api/handler"
-	proto "github.com/micro/go-micro/api/internal/proto"
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/client/selector"
-	"github.com/micro/go-micro/codec"
-	"github.com/micro/go-micro/codec/jsonrpc"
-	"github.com/micro/go-micro/codec/protorpc"
-	"github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/util/ctx"
+	"github.com/stack-labs/stack-rpc/api"
+	"github.com/stack-labs/stack-rpc/api/handler"
+	proto "github.com/stack-labs/stack-rpc/api/internal/proto"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack-rpc/codec"
+	"github.com/stack-labs/stack-rpc/codec/jsonrpc"
+	"github.com/stack-labs/stack-rpc/codec/protorpc"
+	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/util/ctx"
 )
 
 const (
@@ -78,13 +78,13 @@ func (h *rpcHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		// try get service from router
 		s, err := h.opts.Router.Route(r)
 		if err != nil {
-			writeError(w, r, errors.InternalServerError("go.micro.api", err.Error()))
+			writeError(w, r, errors.InternalServerError("stack.rpc.api", err.Error()))
 			return
 		}
 		service = s
 	} else {
 		// we have no way of routing the request
-		writeError(w, r, errors.InternalServerError("go.micro.api", "no route found"))
+		writeError(w, r, errors.InternalServerError("stack.rpc.api", "no route found"))
 		return
 	}
 
@@ -255,7 +255,7 @@ func writeError(w http.ResponseWriter, r *http.Request, err error) {
 	case 0:
 		// assuming it's totally screwed
 		ce.Code = 500
-		ce.Id = "go.micro.api"
+		ce.Id = "stack.rpc.api"
 		ce.Status = http.StatusText(500)
 		ce.Detail = "error during request: " + ce.Detail
 		w.WriteHeader(500)

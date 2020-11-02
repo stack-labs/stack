@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/micro/go-micro/client/selector"
-	"github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/memory"
+	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/registry/memory"
 )
 
 func newTestRegistry() registry.Registry {

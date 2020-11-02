@@ -6,10 +6,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/micro/go-micro/client"
-	pb "github.com/micro/go-micro/debug/service/proto"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/cache"
+	"github.com/stack-labs/stack-rpc/client"
+	pb "github.com/stack-labs/stack-rpc/debug/service/proto"
+	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/registry/cache"
 )
 
 type monitor struct {
@@ -59,7 +59,7 @@ func (m *monitor) check(service string) (*Status, error) {
 		for _, node := range service.Nodes {
 			// TODO: checks that are not just RPC based
 			// TODO: better matching of the protocol
-			// TODO: maybe everything has to be a go-micro service?
+			// TODO: maybe everything has to be a stack-rpc service?
 			if node.Metadata["server"] != m.client.String() {
 				continue
 			}

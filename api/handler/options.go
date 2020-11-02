@@ -1,14 +1,14 @@
 package handler
 
 import (
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/api/router"
+	"github.com/stack-labs/stack-rpc"
+	"github.com/stack-labs/stack-rpc/api/router"
 )
 
 type Options struct {
 	Namespace string
 	Router    router.Router
-	Service   micro.Service
+	Service   stack.Service
 }
 
 type Option func(o *Options)
@@ -22,12 +22,12 @@ func NewOptions(opts ...Option) Options {
 
 	// create service if its blank
 	if options.Service == nil {
-		WithService(micro.NewService())(&options)
+		WithService(stack.NewService())(&options)
 	}
 
 	// set namespace if blank
 	if len(options.Namespace) == 0 {
-		WithNamespace("go.micro.api")(&options)
+		WithNamespace("stack.rpc.api")(&options)
 	}
 
 	return options
@@ -48,7 +48,7 @@ func WithRouter(r router.Router) Option {
 }
 
 // WithService specifies a micro.Service
-func WithService(s micro.Service) Option {
+func WithService(s stack.Service) Option {
 	return func(o *Options) {
 		o.Service = s
 	}

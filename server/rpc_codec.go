@@ -4,16 +4,16 @@ import (
 	"bytes"
 	"sync"
 
-	"github.com/micro/go-micro/codec"
-	raw "github.com/micro/go-micro/codec/bytes"
-	"github.com/micro/go-micro/codec/grpc"
-	"github.com/micro/go-micro/codec/json"
-	"github.com/micro/go-micro/codec/jsonrpc"
-	"github.com/micro/go-micro/codec/proto"
-	"github.com/micro/go-micro/codec/protorpc"
-	"github.com/micro/go-micro/transport"
 	"github.com/oxtoacart/bpool"
 	"github.com/pkg/errors"
+	"github.com/stack-labs/stack-rpc/codec"
+	raw "github.com/stack-labs/stack-rpc/codec/bytes"
+	"github.com/stack-labs/stack-rpc/codec/grpc"
+	"github.com/stack-labs/stack-rpc/codec/json"
+	"github.com/stack-labs/stack-rpc/codec/jsonrpc"
+	"github.com/stack-labs/stack-rpc/codec/proto"
+	"github.com/stack-labs/stack-rpc/codec/protorpc"
+	"github.com/stack-labs/stack-rpc/transport"
 )
 
 type rpcCodec struct {

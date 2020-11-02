@@ -4,12 +4,12 @@ package client
 import (
 	"strings"
 
-	"github.com/micro/go-micro/util/log"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 var (
 	// DefaultImage is default micro image
-	DefaultImage = "micro/go-micro"
+	DefaultImage = "stack-labs/stack-rpc"
 )
 
 // Kubernetes client

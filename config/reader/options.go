@@ -1,12 +1,12 @@
 package reader
 
 import (
-	"github.com/micro/go-micro/config/encoder"
-	"github.com/micro/go-micro/config/encoder/hcl"
-	"github.com/micro/go-micro/config/encoder/json"
-	"github.com/micro/go-micro/config/encoder/toml"
-	"github.com/micro/go-micro/config/encoder/xml"
-	"github.com/micro/go-micro/config/encoder/yaml"
+	"github.com/stack-labs/stack-rpc/config/encoder"
+	"github.com/stack-labs/stack-rpc/config/encoder/hcl"
+	"github.com/stack-labs/stack-rpc/config/encoder/json"
+	"github.com/stack-labs/stack-rpc/config/encoder/toml"
+	"github.com/stack-labs/stack-rpc/config/encoder/xml"
+	"github.com/stack-labs/stack-rpc/config/encoder/yaml"
 )
 
 type Options struct {

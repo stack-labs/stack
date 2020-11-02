@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/micro/go-micro/sync/lock"
+	"github.com/stack-labs/stack-rpc/sync/lock"
 )
 
 var (

@@ -6,10 +6,10 @@ import (
 	"io"
 	"time"
 
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/config/options"
-	"github.com/micro/go-micro/store"
-	pb "github.com/micro/go-micro/store/service/proto"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/config/options"
+	"github.com/stack-labs/stack-rpc/store"
+	pb "github.com/stack-labs/stack-rpc/store/service/proto"
 )
 
 type serviceStore struct {
@@ -113,7 +113,7 @@ func NewStore(opts ...options.Option) store.Store {
 	service := &serviceStore{
 		Options: options,
 		Nodes:   nodes,
-		Client:  pb.NewStoreService("go.micro.store", client.DefaultClient),
+		Client:  pb.NewStoreService("stack.rpc.store", client.DefaultClient),
 	}
 
 	return service

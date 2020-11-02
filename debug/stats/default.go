@@ -1,7 +1,7 @@
 package stats
 
 import (
-	"github.com/micro/go-micro/debug/buffer"
+	"github.com/stack-labs/stack-rpc/debug/buffer"
 )
 
 type stats struct {

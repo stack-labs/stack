@@ -1,4 +1,4 @@
-// Package cloudevents provides a cloudevents handler publishing the event using the go-micro/client
+// Package cloudevents provides a cloudevents handler publishing the event using the stack-rpc/client
 package cloudevents
 
 import (
@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/micro/go-micro/api/handler"
-	"github.com/micro/go-micro/util/ctx"
+	"github.com/stack-labs/stack-rpc/api/handler"
+	"github.com/stack-labs/stack-rpc/util/ctx"
 )
 
 type event struct {

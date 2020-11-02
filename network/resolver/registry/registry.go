@@ -1,9 +1,9 @@
-// Package registry resolves names using the go-micro registry
+// Package registry resolves names using the stack-rpc registry
 package registry
 
 import (
-	"github.com/micro/go-micro/network/resolver"
-	"github.com/micro/go-micro/registry"
+	"github.com/stack-labs/stack-rpc/network/resolver"
+	"github.com/stack-labs/stack-rpc/registry"
 )
 
 // Resolver is a registry network resolver

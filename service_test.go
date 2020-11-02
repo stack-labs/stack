@@ -1,4 +1,4 @@
-package micro
+package stack
 
 import (
 	"context"
@@ -7,11 +7,11 @@ import (
 	"testing"
 
 	glog "github.com/go-log/log"
-	"github.com/micro/go-micro/client"
-	proto "github.com/micro/go-micro/debug/service/proto"
-	"github.com/micro/go-micro/registry/memory"
-	"github.com/micro/go-micro/util/log"
-	"github.com/micro/go-micro/util/test"
+	"github.com/stack-labs/stack-rpc/client"
+	proto "github.com/stack-labs/stack-rpc/debug/service/proto"
+	"github.com/stack-labs/stack-rpc/registry/memory"
+	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack-rpc/util/test"
 )
 
 func testShutdown(wg *sync.WaitGroup, cancel func()) {

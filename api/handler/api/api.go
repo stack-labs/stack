@@ -4,13 +4,13 @@ package api
 import (
 	"net/http"
 
-	goapi "github.com/micro/go-micro/api"
-	"github.com/micro/go-micro/api/handler"
-	api "github.com/micro/go-micro/api/proto"
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/client/selector"
-	"github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/util/ctx"
+	goapi "github.com/stack-labs/stack-rpc/api"
+	"github.com/stack-labs/stack-rpc/api/handler"
+	api "github.com/stack-labs/stack-rpc/api/proto"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/util/ctx"
 )
 
 type apiHandler struct {
@@ -26,7 +26,7 @@ const (
 func (a *apiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	request, err := requestToProto(r)
 	if err != nil {
-		er := errors.InternalServerError("go.micro.api", err.Error())
+		er := errors.InternalServerError("stack.rpc.api", err.Error())
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		w.Write([]byte(er.Error()))
@@ -42,7 +42,7 @@ func (a *apiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		// try get service from router
 		s, err := a.opts.Router.Route(r)
 		if err != nil {
-			er := errors.InternalServerError("go.micro.api", err.Error())
+			er := errors.InternalServerError("stack.rpc.api", err.Error())
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(500)
 			w.Write([]byte(er.Error()))
@@ -51,7 +51,7 @@ func (a *apiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		service = s
 	} else {
 		// we have no way of routing the request
-		er := errors.InternalServerError("go.micro.api", "no route found")
+		er := errors.InternalServerError("stack.rpc.api", "no route found")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		w.Write([]byte(er.Error()))

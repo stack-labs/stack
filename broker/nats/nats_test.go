@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/micro/go-micro/broker"
 	nats "github.com/nats-io/nats.go"
+	"github.com/stack-labs/stack-rpc/broker"
 )
 
 var addrTestCases = []struct {

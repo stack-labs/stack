@@ -3,7 +3,7 @@ package json
 import (
 	"testing"
 
-	"github.com/micro/go-micro/config/source"
+	"github.com/stack-labs/stack-rpc/config/source"
 )
 
 func TestReader(t *testing.T) {

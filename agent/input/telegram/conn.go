@@ -6,9 +6,9 @@ import (
 	"sync"
 
 	"github.com/forestgiant/sliceutil"
-	"github.com/micro/go-micro/agent/input"
-	"github.com/micro/go-micro/util/log"
 	tgbotapi "gopkg.in/telegram-bot-api.v4"
+	"github.com/stack-labs/stack-rpc/agent/input"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 type telegramConn struct {

@@ -34,7 +34,7 @@ func TestFormatName(t *testing.T) {
 		{"foo-bar", "foo-bar"},
 		{"foo.bar", "foo-bar"},
 		{"Foo.Bar", "foo-bar"},
-		{"go.micro.foo.bar", "go-micro-foo-bar"},
+		{"stack.rpc.foo.bar", "stack-rpc-foo-bar"},
 	}
 
 	for _, test := range testCases {

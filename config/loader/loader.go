@@ -4,8 +4,8 @@ package loader
 import (
 	"context"
 
-	"github.com/micro/go-micro/config/reader"
-	"github.com/micro/go-micro/config/source"
+	"github.com/stack-labs/stack-rpc/config/reader"
+	"github.com/stack-labs/stack-rpc/config/source"
 )
 
 // Loader manages loading sources

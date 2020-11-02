@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"time"
 
-	"github.com/micro/go-micro/codec"
+	"github.com/stack-labs/stack-rpc/codec"
 )
 
 type Options struct {

@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/memory"
+	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/registry/memory"
 )
 
 func TestService(t *testing.T) {
@@ -47,7 +47,7 @@ func TestService(t *testing.T) {
 	}
 
 	service := NewService(
-		Name("go.micro.web.test"),
+		Name("stack.rpc.web.test"),
 		Registry(reg),
 		BeforeStart(beforeStart),
 		AfterStart(afterStart),
@@ -67,7 +67,7 @@ func TestService(t *testing.T) {
 
 	eventually(func() bool {
 		var err error
-		s, err = reg.GetService("go.micro.web.test")
+		s, err = reg.GetService("stack.rpc.web.test")
 		return err == nil
 	}, t.Fatal)
 
@@ -111,7 +111,7 @@ func TestService(t *testing.T) {
 	<-ch
 
 	eventually(func() bool {
-		_, err := reg.GetService("go.micro.web.test")
+		_, err := reg.GetService("stack.rpc.web.test")
 		return err == registry.ErrNotFound
 	}, t.Error)
 
@@ -214,7 +214,7 @@ func TestTLS(t *testing.T) {
 	)
 
 	service := NewService(
-		Name("go.micro.web.test"),
+		Name("stack.rpc.web.test"),
 		Secure(secure),
 		Registry(reg),
 	)
@@ -231,7 +231,7 @@ func TestTLS(t *testing.T) {
 
 	eventually(func() bool {
 		var err error
-		s, err = reg.GetService("go.micro.web.test")
+		s, err = reg.GetService("stack.rpc.web.test")
 		return err == nil
 	}, t.Fatal)
 

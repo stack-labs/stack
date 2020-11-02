@@ -14,16 +14,16 @@ import (
 	"sync"
 	"time"
 
-	"github.com/micro/go-micro/broker"
-	"github.com/micro/go-micro/codec"
-	"github.com/micro/go-micro/errors"
-	meta "github.com/micro/go-micro/metadata"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/server"
-	"github.com/micro/go-micro/util/addr"
-	mgrpc "github.com/micro/go-micro/util/grpc"
-	"github.com/micro/go-micro/util/log"
-	mnet "github.com/micro/go-micro/util/net"
+	"github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack-rpc/codec"
+	"github.com/stack-labs/stack-rpc/errors"
+	meta "github.com/stack-labs/stack-rpc/metadata"
+	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/util/addr"
+	mgrpc "github.com/stack-labs/stack-rpc/util/grpc"
+	"github.com/stack-labs/stack-rpc/util/log"
+	mnet "github.com/stack-labs/stack-rpc/util/net"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -192,7 +192,7 @@ func (g *grpcServer) handler(srv interface{}, stream grpc.ServerStream) error {
 		gmd = metadata.MD{}
 	}
 
-	// copy the metadata to go-micro.metadata
+	// copy the metadata to stack-rpc.metadata
 	md := meta.Metadata{}
 	for k, v := range gmd {
 		md[k] = strings.Join(v, ", ")
@@ -232,7 +232,7 @@ func (g *grpcServer) handler(srv interface{}, stream grpc.ServerStream) error {
 	if g.opts.Router != nil {
 		cc, err := g.newGRPCCodec(ct)
 		if err != nil {
-			return errors.InternalServerError("go.micro.server", err.Error())
+			return errors.InternalServerError("stack.rpc.server", err.Error())
 		}
 		codec := &grpcCodec{
 			method:   fmt.Sprintf("%s.%s", serviceName, methodName),
@@ -328,7 +328,7 @@ func (g *grpcServer) processRequest(stream grpc.ServerStream, service *service, 
 
 		cc, err := g.newGRPCCodec(ct)
 		if err != nil {
-			return errors.InternalServerError("go.micro.server", err.Error())
+			return errors.InternalServerError("stack.rpc.server", err.Error())
 		}
 		b, err := cc.Marshal(argv.Interface())
 		if err != nil {
@@ -350,7 +350,7 @@ func (g *grpcServer) processRequest(stream grpc.ServerStream, service *service, 
 				if r := recover(); r != nil {
 					log.Log("panic recovered: ", r)
 					log.Logf(string(debug.Stack()))
-					err = errors.InternalServerError("go.micro.server", "panic recovered: %v", r)
+					err = errors.InternalServerError("stack.rpc.server", "panic recovered: %v", r)
 				}
 			}()
 			returnValues = function.Call([]reflect.Value{service.rcvr, mtype.prepareContext(ctx), reflect.ValueOf(argv.Interface()), reflect.ValueOf(rsp)})

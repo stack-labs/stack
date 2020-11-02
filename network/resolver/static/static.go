@@ -2,7 +2,7 @@
 package registry
 
 import (
-	"github.com/micro/go-micro/network/resolver"
+	"github.com/stack-labs/stack-rpc/network/resolver"
 )
 
 // Resolver returns a static list of nodes. In the event the node list

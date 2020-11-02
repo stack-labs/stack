@@ -5,10 +5,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/micro/go-micro/broker"
-	pb "github.com/micro/go-micro/broker/service/proto"
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/util/log"
+	"github.com/stack-labs/stack-rpc/broker"
+	pb "github.com/stack-labs/stack-rpc/broker/service/proto"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 type serviceBroker struct {
@@ -18,7 +18,7 @@ type serviceBroker struct {
 }
 
 var (
-	DefaultName = "go.micro.broker"
+	DefaultName = "stack.rpc.broker"
 )
 
 func (b *serviceBroker) Address() string {

@@ -1,9 +1,9 @@
 package config
 
 import (
-	"github.com/micro/go-micro/config/loader"
-	"github.com/micro/go-micro/config/reader"
-	"github.com/micro/go-micro/config/source"
+	"github.com/stack-labs/stack-rpc/config/loader"
+	"github.com/stack-labs/stack-rpc/config/reader"
+	"github.com/stack-labs/stack-rpc/config/source"
 )
 
 // WithLoader sets the loader for manager config

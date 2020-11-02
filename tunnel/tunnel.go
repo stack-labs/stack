@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/micro/go-micro/transport"
+	"github.com/stack-labs/stack-rpc/transport"
 )
 
 const (
@@ -33,7 +33,7 @@ var (
 // Mode of the session
 type Mode uint8
 
-// Tunnel creates a gre tunnel on top of the go-micro/transport.
+// Tunnel creates a gre tunnel on top of the stack-rpc/transport.
 // It establishes multiple streams using the Micro-Tunnel-Channel header
 // and Micro-Tunnel-Session header. The tunnel id is a hash of
 // the address being requested.

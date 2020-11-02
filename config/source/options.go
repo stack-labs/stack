@@ -3,8 +3,8 @@ package source
 import (
 	"context"
 
-	"github.com/micro/go-micro/config/encoder"
-	"github.com/micro/go-micro/config/encoder/json"
+	"github.com/stack-labs/stack-rpc/config/encoder"
+	"github.com/stack-labs/stack-rpc/config/encoder/json"
 )
 
 type Options struct {

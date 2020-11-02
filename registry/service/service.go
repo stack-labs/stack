@@ -5,14 +5,14 @@ import (
 	"context"
 	"time"
 
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/registry"
-	pb "github.com/micro/go-micro/registry/service/proto"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/registry"
+	pb "github.com/stack-labs/stack-rpc/registry/service/proto"
 )
 
 var (
 	// The default service name
-	DefaultService = "go.micro.service"
+	DefaultService = "stack.rpc.service"
 )
 
 type serviceRegistry struct {

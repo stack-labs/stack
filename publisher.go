@@ -1,9 +1,9 @@
-package micro
+package stack
 
 import (
 	"context"
 
-	"github.com/micro/go-micro/client"
+	"github.com/stack-labs/stack-rpc/client"
 )
 
 type publisher struct {

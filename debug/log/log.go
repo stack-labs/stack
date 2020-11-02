@@ -49,7 +49,7 @@ const (
 )
 
 func init() {
-	switch os.Getenv("MICRO_LOG_LEVEL") {
+	switch os.Getenv("STACK_LOG_LEVEL") {
 	case "trace":
 		DefaultLevel = LevelTrace
 	case "debug":

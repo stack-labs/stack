@@ -10,10 +10,10 @@ import (
 	"net/url"
 	"path"
 
-	"github.com/micro/go-micro/config/options"
-	"github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/proxy"
-	"github.com/micro/go-micro/server"
+	"github.com/stack-labs/stack-rpc/config/options"
+	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/proxy"
+	"github.com/stack-labs/stack-rpc/server"
 )
 
 // Proxy will proxy rpc requests as http POST requests. It is a server.Proxy

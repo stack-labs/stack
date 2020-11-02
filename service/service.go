@@ -2,8 +2,8 @@
 package service
 
 import (
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/server"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/server"
 )
 
 // Service is an interface for a micro service

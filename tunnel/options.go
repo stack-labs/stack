@@ -4,15 +4,15 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/micro/go-micro/transport"
-	"github.com/micro/go-micro/transport/quic"
+	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack-rpc/transport/quic"
 )
 
 var (
 	// DefaultAddress is default tunnel bind address
 	DefaultAddress = ":0"
 	// The shared default token
-	DefaultToken = "go.micro.tunnel"
+	DefaultToken = "stack.rpc.tunnel"
 )
 
 type Option func(*Options)

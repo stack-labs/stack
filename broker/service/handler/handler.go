@@ -3,10 +3,10 @@ package handler
 import (
 	"context"
 
-	"github.com/micro/go-micro/broker"
-	pb "github.com/micro/go-micro/broker/service/proto"
-	"github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/util/log"
+	"github.com/stack-labs/stack-rpc/broker"
+	pb "github.com/stack-labs/stack-rpc/broker/service/proto"
+	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 type Broker struct {
@@ -21,7 +21,7 @@ func (b *Broker) Publish(ctx context.Context, req *pb.PublishRequest, rsp *pb.Em
 	})
 	log.Debugf("Published message to %s topic", req.Topic)
 	if err != nil {
-		return errors.InternalServerError("go.micro.broker", err.Error())
+		return errors.InternalServerError("stack.rpc.broker", err.Error())
 	}
 	return nil
 }
@@ -48,7 +48,7 @@ func (b *Broker) Subscribe(ctx context.Context, req *pb.SubscribeRequest, stream
 	log.Debugf("Subscribing to %s topic", req.Topic)
 	sub, err := b.Broker.Subscribe(req.Topic, handler, broker.Queue(req.Queue))
 	if err != nil {
-		return errors.InternalServerError("go.micro.broker", err.Error())
+		return errors.InternalServerError("stack.rpc.broker", err.Error())
 	}
 	defer func() {
 		log.Debugf("Unsubscribing from topic %s", req.Topic)

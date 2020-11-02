@@ -8,10 +8,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/registry/memory"
-	"github.com/micro/go-micro/server"
+	"github.com/stack-labs/stack-rpc"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/registry/memory"
+	"github.com/stack-labs/stack-rpc/server"
 )
 
 type testHandler struct{}
@@ -56,11 +56,11 @@ func TestHTTPProxy(t *testing.T) {
 	wg.Add(1)
 
 	// new micro service
-	service := micro.NewService(
-		micro.Context(ctx),
-		micro.Name("foobar"),
-		micro.Registry(memory.NewRegistry()),
-		micro.AfterStart(func() error {
+	service := stack.NewService(
+		stack.Context(ctx),
+		stack.Name("foobar"),
+		stack.Registry(memory.NewRegistry()),
+		stack.AfterStart(func() error {
 			wg.Done()
 			return nil
 		}),

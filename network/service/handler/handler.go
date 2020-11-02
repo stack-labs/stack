@@ -4,12 +4,12 @@ package handler
 import (
 	"context"
 
-	"github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/network"
-	pbNet "github.com/micro/go-micro/network/proto"
-	"github.com/micro/go-micro/router"
-	pbRtr "github.com/micro/go-micro/router/proto"
-	"github.com/micro/go-micro/util/log"
+	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/network"
+	pbNet "github.com/stack-labs/stack-rpc/network/proto"
+	"github.com/stack-labs/stack-rpc/router"
+	pbRtr "github.com/stack-labs/stack-rpc/router/proto"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 // Network implements network handler
@@ -164,7 +164,7 @@ func (n *Network) Routes(ctx context.Context, req *pbNet.RoutesRequest, resp *pb
 
 	routes, err := n.Network.Options().Router.Table().Query(qOpts...)
 	if err != nil {
-		return errors.InternalServerError("go.micro.network", "failed to list routes: %s", err)
+		return errors.InternalServerError("stack.rpc.network", "failed to list routes: %s", err)
 	}
 
 	respRoutes := make([]*pbRtr.Route, 0, len(routes))
@@ -190,7 +190,7 @@ func (n *Network) Routes(ctx context.Context, req *pbNet.RoutesRequest, resp *pb
 func (n *Network) Services(ctx context.Context, req *pbNet.ServicesRequest, resp *pbNet.ServicesResponse) error {
 	routes, err := n.Network.Options().Router.Table().List()
 	if err != nil {
-		return errors.InternalServerError("go.micro.network", "failed to list services: %s", err)
+		return errors.InternalServerError("stack.rpc.network", "failed to list services: %s", err)
 	}
 
 	services := make(map[string]bool)

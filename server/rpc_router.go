@@ -18,9 +18,9 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/micro/go-micro/codec"
-	merrors "github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/util/log"
+	"github.com/stack-labs/stack-rpc/codec"
+	merrors "github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 var (
@@ -514,7 +514,7 @@ func (router *router) ProcessMessage(ctx context.Context, msg Message) error {
 		if r := recover(); r != nil {
 			log.Log("panic recovered: ", r)
 			log.Log(string(debug.Stack()))
-			err = merrors.InternalServerError("go.micro.server", "panic recovered: %v", r)
+			err = merrors.InternalServerError("stack.rpc.server", "panic recovered: %v", r)
 		}
 	}()
 
@@ -624,7 +624,7 @@ func (router *router) ProcessMessage(ctx context.Context, msg Message) error {
 
 	// if no errors just return
 	if len(errResults) > 0 {
-		err = merrors.InternalServerError("go.micro.server", "subscriber error: %v", strings.Join(errResults, "\n"))
+		err = merrors.InternalServerError("stack.rpc.server", "subscriber error: %v", strings.Join(errResults, "\n"))
 	}
 
 	return err

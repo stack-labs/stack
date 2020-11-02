@@ -4,11 +4,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/micro/go-micro/broker"
-	"github.com/micro/go-micro/client/selector"
-	"github.com/micro/go-micro/codec"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/transport"
+	"github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack-rpc/codec"
+	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/transport"
 )
 
 type Options struct {

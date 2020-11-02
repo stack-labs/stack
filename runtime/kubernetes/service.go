@@ -4,9 +4,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/micro/go-micro/runtime"
-	"github.com/micro/go-micro/runtime/kubernetes/client"
-	"github.com/micro/go-micro/util/log"
+	"github.com/stack-labs/stack-rpc/runtime"
+	"github.com/stack-labs/stack-rpc/runtime/kubernetes/client"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 type service struct {

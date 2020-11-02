@@ -1,17 +1,17 @@
 // Package micro is a pluggable framework for microservices
-package micro
+package stack
 
 import (
 	"context"
 
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/server"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/server"
 )
 
 type serviceKey struct{}
 
 // Service is an interface that wraps the lower level libraries
-// within go-micro. Its a convenience method for building
+// within stack-rpc. Its a convenience method for building
 // and initialising services.
 type Service interface {
 	// The service name

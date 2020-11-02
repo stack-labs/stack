@@ -1,10 +1,10 @@
-package micro
+package stack
 
 import (
 	"context"
 	"time"
 
-	"github.com/micro/go-micro/server"
+	"github.com/stack-labs/stack-rpc/server"
 )
 
 type function struct {

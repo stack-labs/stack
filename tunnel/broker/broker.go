@@ -4,9 +4,9 @@ package broker
 import (
 	"context"
 
-	"github.com/micro/go-micro/broker"
-	"github.com/micro/go-micro/transport"
-	"github.com/micro/go-micro/tunnel"
+	"github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack-rpc/tunnel"
 )
 
 type tunBroker struct {

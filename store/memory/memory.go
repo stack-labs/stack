@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/micro/go-micro/config/options"
-	"github.com/micro/go-micro/store"
+	"github.com/stack-labs/stack-rpc/config/options"
+	"github.com/stack-labs/stack-rpc/store"
 )
 
 type memoryStore struct {

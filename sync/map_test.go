@@ -4,10 +4,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/micro/go-micro/store"
-	store_mock "github.com/micro/go-micro/store/mock"
-	mem_lock "github.com/micro/go-micro/sync/lock/memory"
 	"github.com/stretchr/testify/mock"
+	"github.com/stack-labs/stack-rpc/store"
+	store_mock "github.com/stack-labs/stack-rpc/store/mock"
+	mem_lock "github.com/stack-labs/stack-rpc/sync/lock/memory"
 )
 
 func TestIterate(t *testing.T) {

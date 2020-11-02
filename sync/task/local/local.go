@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/micro/go-micro/sync/task"
+	"github.com/stack-labs/stack-rpc/sync/task"
 )
 
 type localTask struct {

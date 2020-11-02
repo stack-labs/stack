@@ -3,14 +3,14 @@ package grpc
 import (
 	"time"
 
-	"github.com/micro/go-micro"
-	broker "github.com/micro/go-micro/broker"
-	client "github.com/micro/go-micro/client/grpc"
-	server "github.com/micro/go-micro/server/grpc"
+	"github.com/stack-labs/stack-rpc"
+	broker "github.com/stack-labs/stack-rpc/broker"
+	client "github.com/stack-labs/stack-rpc/client/grpc"
+	server "github.com/stack-labs/stack-rpc/server/grpc"
 )
 
-// NewService returns a grpc service compatible with go-micro.Service
-func NewService(opts ...micro.Option) micro.Service {
+// NewService returns a grpc service compatible with stack-rpc.Service
+func NewService(opts ...stack.Option) stack.Service {
 	// our grpc client
 	c := client.NewClient()
 	// our grpc server
@@ -19,21 +19,21 @@ func NewService(opts ...micro.Option) micro.Service {
 	b := broker.NewBroker()
 
 	// create options with priority for our opts
-	options := []micro.Option{
-		micro.Client(c),
-		micro.Server(s),
-		micro.Broker(b),
+	options := []stack.Option{
+		stack.Client(c),
+		stack.Server(s),
+		stack.Broker(b),
 	}
 
 	// append passed in opts
 	options = append(options, opts...)
 
 	// generate and return a service
-	return micro.NewService(options...)
+	return stack.NewService(options...)
 }
 
-// NewFunction returns a grpc service compatible with go-micro.Function
-func NewFunction(opts ...micro.Option) micro.Function {
+// NewFunction returns a grpc service compatible with stack-rpc.Function
+func NewFunction(opts ...stack.Option) stack.Function {
 	// our grpc client
 	c := client.NewClient()
 	// our grpc server
@@ -42,17 +42,17 @@ func NewFunction(opts ...micro.Option) micro.Function {
 	b := broker.NewBroker()
 
 	// create options with priority for our opts
-	options := []micro.Option{
-		micro.Client(c),
-		micro.Server(s),
-		micro.Broker(b),
-		micro.RegisterTTL(time.Minute),
-		micro.RegisterInterval(time.Second * 30),
+	options := []stack.Option{
+		stack.Client(c),
+		stack.Server(s),
+		stack.Broker(b),
+		stack.RegisterTTL(time.Minute),
+		stack.RegisterInterval(time.Second * 30),
 	}
 
 	// append passed in opts
 	options = append(options, opts...)
 
 	// generate and return a function
-	return micro.NewFunction(options...)
+	return stack.NewFunction(options...)
 }

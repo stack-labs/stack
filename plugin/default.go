@@ -11,13 +11,13 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/micro/go-micro/broker"
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/client/selector"
-	"github.com/micro/go-micro/config/cmd"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/server"
-	"github.com/micro/go-micro/transport"
+	"github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack-rpc/config/cmd"
+	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/transport"
 )
 
 type plugin struct{}

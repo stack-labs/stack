@@ -4,9 +4,9 @@ import (
 	"context"
 	"sync"
 
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/runtime"
-	pb "github.com/micro/go-micro/runtime/service/proto"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/runtime"
+	pb "github.com/stack-labs/stack-rpc/runtime/service/proto"
 )
 
 type svc struct {

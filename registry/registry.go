@@ -2,6 +2,7 @@
 package registry
 
 import (
+	"context"
 	"errors"
 )
 
@@ -30,9 +31,29 @@ type Registry interface {
 
 type Option func(*Options)
 
-type RegisterOption func(*RegisterOptions)
+type DeregisterOptions struct {
+	Context context.Context
+	// Domain the service was registered in
+	Domain string
+}
 
+type GetOptions struct {
+	Context context.Context
+	// Domain to scope the request to
+	Domain string
+}
+
+type ListOptions struct {
+	Context context.Context
+	// Domain to scope the request to
+	Domain string
+}
+
+type RegisterOption func(*RegisterOptions)
+type DeregisterOption func(*DeregisterOptions)
 type WatchOption func(*WatchOptions)
+type GetOption func(*GetOptions)
+type ListOption func(*ListOptions)
 
 // Register a service node. Additionally supply options such as TTL.
 func Register(s *Service, opts ...RegisterOption) error {

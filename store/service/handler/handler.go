@@ -5,9 +5,9 @@ import (
 	"io"
 	"time"
 
-	"github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/store"
-	pb "github.com/micro/go-micro/store/service/proto"
+	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/store"
+	pb "github.com/stack-labs/stack-rpc/store/service/proto"
 )
 
 type Store struct {
@@ -17,7 +17,7 @@ type Store struct {
 func (s *Store) Read(ctx context.Context, req *pb.ReadRequest, rsp *pb.ReadResponse) error {
 	vals, err := s.Store.Read(req.Keys...)
 	if err != nil {
-		return errors.InternalServerError("go.micro.store", err.Error())
+		return errors.InternalServerError("stack.rpc.store", err.Error())
 	}
 	for _, val := range vals {
 		rsp.Records = append(rsp.Records, &pb.Record{
@@ -42,7 +42,7 @@ func (s *Store) Write(ctx context.Context, req *pb.WriteRequest, rsp *pb.WriteRe
 
 	err := s.Store.Write(records...)
 	if err != nil {
-		return errors.InternalServerError("go.micro.store", err.Error())
+		return errors.InternalServerError("stack.rpc.store", err.Error())
 	}
 	return nil
 }
@@ -50,7 +50,7 @@ func (s *Store) Write(ctx context.Context, req *pb.WriteRequest, rsp *pb.WriteRe
 func (s *Store) Delete(ctx context.Context, req *pb.DeleteRequest, rsp *pb.DeleteResponse) error {
 	err := s.Store.Delete(req.Keys...)
 	if err != nil {
-		return errors.InternalServerError("go.micro.store", err.Error())
+		return errors.InternalServerError("stack.rpc.store", err.Error())
 	}
 	return nil
 }
@@ -65,7 +65,7 @@ func (s *Store) List(ctx context.Context, req *pb.ListRequest, stream pb.Store_L
 		vals, err = s.Store.List()
 	}
 	if err != nil {
-		return errors.InternalServerError("go.micro.store", err.Error())
+		return errors.InternalServerError("stack.rpc.store", err.Error())
 	}
 	rsp := new(pb.ListResponse)
 
@@ -83,7 +83,7 @@ func (s *Store) List(ctx context.Context, req *pb.ListRequest, stream pb.Store_L
 		return nil
 	}
 	if err != nil {
-		return errors.InternalServerError("go.micro.store", err.Error())
+		return errors.InternalServerError("stack.rpc.store", err.Error())
 	}
 	return nil
 }

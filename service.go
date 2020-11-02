@@ -1,4 +1,4 @@
-package micro
+package stack
 
 import (
 	"os"
@@ -7,15 +7,15 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/config/cmd"
-	"github.com/micro/go-micro/debug/profile"
-	"github.com/micro/go-micro/debug/profile/pprof"
-	"github.com/micro/go-micro/debug/service/handler"
-	"github.com/micro/go-micro/plugin"
-	"github.com/micro/go-micro/server"
-	"github.com/micro/go-micro/util/log"
-	"github.com/micro/go-micro/util/wrapper"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/config/cmd"
+	"github.com/stack-labs/stack-rpc/debug/profile"
+	"github.com/stack-labs/stack-rpc/debug/profile/pprof"
+	"github.com/stack-labs/stack-rpc/debug/service/handler"
+	"github.com/stack-labs/stack-rpc/plugin"
+	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack-rpc/util/wrapper"
 )
 
 type service struct {

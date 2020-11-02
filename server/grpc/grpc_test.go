@@ -4,11 +4,11 @@ import (
 	"context"
 	"testing"
 
-	"github.com/micro/go-micro/registry/memory"
-	"github.com/micro/go-micro/server"
 	"google.golang.org/grpc"
+	"github.com/stack-labs/stack-rpc/registry/memory"
+	"github.com/stack-labs/stack-rpc/server"
 
-	pb "github.com/micro/go-micro/server/grpc/proto"
+	pb "github.com/stack-labs/stack-rpc/server/grpc/proto"
 )
 
 // server is used to implement helloworld.GreeterServer.
@@ -50,7 +50,7 @@ func TestGRPCServer(t *testing.T) {
 		t.Fatalf("failed to dial server: %v", err)
 	}
 
-	testMethods := []string{"/test.Test/Call", "/go.micro.test.Test/Call"}
+	testMethods := []string{"/test.Test/Call", "/stack.rpc.test.Test/Call"}
 
 	for _, method := range testMethods {
 		rsp := pb.Response{}

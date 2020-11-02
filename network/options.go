@@ -2,12 +2,12 @@ package network
 
 import (
 	"github.com/google/uuid"
-	"github.com/micro/go-micro/network/resolver"
-	"github.com/micro/go-micro/network/resolver/registry"
-	"github.com/micro/go-micro/proxy"
-	"github.com/micro/go-micro/proxy/mucp"
-	"github.com/micro/go-micro/router"
-	"github.com/micro/go-micro/tunnel"
+	"github.com/stack-labs/stack-rpc/network/resolver"
+	"github.com/stack-labs/stack-rpc/network/resolver/registry"
+	"github.com/stack-labs/stack-rpc/proxy"
+	"github.com/stack-labs/stack-rpc/proxy/mucp"
+	"github.com/stack-labs/stack-rpc/router"
+	"github.com/stack-labs/stack-rpc/tunnel"
 )
 
 type Option func(*Options)

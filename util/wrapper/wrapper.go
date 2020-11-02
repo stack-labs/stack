@@ -3,8 +3,8 @@ package wrapper
 import (
 	"context"
 
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/metadata"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/metadata"
 )
 
 type clientWrapper struct {

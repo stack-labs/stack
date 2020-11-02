@@ -7,7 +7,7 @@ import (
 
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
-	"github.com/micro/go-micro/codec"
+	"github.com/stack-labs/stack-rpc/codec"
 )
 
 type Codec struct {

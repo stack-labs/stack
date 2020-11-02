@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package go.micro.router;
+package stack.rpc.router;
 
 // Router service is used by the proxy to lookup routes
 service Router {

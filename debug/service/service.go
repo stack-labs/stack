@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/micro/go-micro/client"
+	"github.com/stack-labs/stack-rpc/client"
 
-	"github.com/micro/go-micro/debug/log"
-	pb "github.com/micro/go-micro/debug/service/proto"
+	"github.com/stack-labs/stack-rpc/debug/log"
+	pb "github.com/stack-labs/stack-rpc/debug/service/proto"
 )
 
 // Debug provides debug service client

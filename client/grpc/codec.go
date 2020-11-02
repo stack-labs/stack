@@ -9,10 +9,10 @@ import (
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
 	jsoniter "github.com/json-iterator/go"
-	"github.com/micro/go-micro/codec"
-	"github.com/micro/go-micro/codec/bytes"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/encoding"
+	"github.com/stack-labs/stack-rpc/codec"
+	"github.com/stack-labs/stack-rpc/codec/bytes"
 )
 
 type jsonCodec struct{}

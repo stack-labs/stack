@@ -1,4 +1,4 @@
-// Package registry is a go-micro/registry handler
+// Package registry is a stack-rpc/registry handler
 package registry
 
 import (
@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/micro/go-micro/api/handler"
-	"github.com/micro/go-micro/registry"
+	"github.com/stack-labs/stack-rpc/api/handler"
+	"github.com/stack-labs/stack-rpc/registry"
 )
 
 const (

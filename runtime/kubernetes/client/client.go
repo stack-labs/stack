@@ -9,8 +9,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/micro/go-micro/runtime/kubernetes/client/api"
-	"github.com/micro/go-micro/util/log"
+	"github.com/stack-labs/stack-rpc/runtime/kubernetes/client/api"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 var (

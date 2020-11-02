@@ -1,13 +1,13 @@
-package micro
+package stack
 
 import (
 	"context"
 	"sync"
 	"testing"
 
-	proto "github.com/micro/go-micro/debug/service/proto"
-	"github.com/micro/go-micro/registry/memory"
-	"github.com/micro/go-micro/util/test"
+	proto "github.com/stack-labs/stack-rpc/debug/service/proto"
+	"github.com/stack-labs/stack-rpc/registry/memory"
+	"github.com/stack-labs/stack-rpc/util/test"
 )
 
 func TestFunction(t *testing.T) {

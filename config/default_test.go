@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/micro/go-micro/config/source/env"
-	"github.com/micro/go-micro/config/source/file"
+	"github.com/stack-labs/stack-rpc/config/source/env"
+	"github.com/stack-labs/stack-rpc/config/source/file"
 )
 
 var (

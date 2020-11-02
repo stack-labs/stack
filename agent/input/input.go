@@ -2,7 +2,7 @@
 package input
 
 import (
-	"github.com/micro/cli"
+	"github.com/stack-labs/stack-rpc/cli"
 )
 
 type EventType string

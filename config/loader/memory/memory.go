@@ -9,10 +9,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/micro/go-micro/config/loader"
-	"github.com/micro/go-micro/config/reader"
-	"github.com/micro/go-micro/config/reader/json"
-	"github.com/micro/go-micro/config/source"
+	"github.com/stack-labs/stack-rpc/config/loader"
+	"github.com/stack-labs/stack-rpc/config/reader"
+	"github.com/stack-labs/stack-rpc/config/reader/json"
+	"github.com/stack-labs/stack-rpc/config/source"
 )
 
 type memory struct {

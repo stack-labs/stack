@@ -4,8 +4,8 @@ package transport
 import (
 	"context"
 
-	"github.com/micro/go-micro/transport"
-	"github.com/micro/go-micro/tunnel"
+	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack-rpc/tunnel"
 )
 
 type tunTransport struct {

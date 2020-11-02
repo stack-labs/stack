@@ -4,13 +4,13 @@ package network
 import (
 	"time"
 
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/server"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/server"
 )
 
 var (
 	// DefaultName is default network name
-	DefaultName = "go.micro"
+	DefaultName = "stack.rpc"
 	// DefaultAddress is default network address
 	DefaultAddress = ":0"
 	// ResolveTime defines time interval to periodically resolve network nodes

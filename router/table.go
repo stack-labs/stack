@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/micro/go-micro/util/log"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 var (

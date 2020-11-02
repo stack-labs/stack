@@ -7,12 +7,12 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/micro/go-micro/broker"
-	"github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/metadata"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/server"
-	"github.com/micro/go-micro/util/log"
+	"github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/metadata"
+	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 const (
@@ -174,7 +174,7 @@ func (g *grpcServer) createSubHandler(sb *subscriber, opts server.Options) broke
 			if r := recover(); r != nil {
 				log.Log("panic recovered: ", r)
 				log.Logf(string(debug.Stack()))
-				err = errors.InternalServerError("go.micro.server", "panic recovered: %v", r)
+				err = errors.InternalServerError("stack.rpc.server", "panic recovered: %v", r)
 			}
 		}()
 

@@ -9,13 +9,13 @@ import (
 
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
-	"github.com/micro/go-micro/codec"
-	"github.com/micro/go-micro/codec/bytes"
-	"github.com/micro/go-micro/codec/jsonrpc"
-	"github.com/micro/go-micro/codec/protorpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/encoding"
 	"google.golang.org/grpc/metadata"
+	"github.com/stack-labs/stack-rpc/codec"
+	"github.com/stack-labs/stack-rpc/codec/bytes"
+	"github.com/stack-labs/stack-rpc/codec/jsonrpc"
+	"github.com/stack-labs/stack-rpc/codec/protorpc"
 )
 
 type jsonCodec struct{}

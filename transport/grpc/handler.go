@@ -3,11 +3,11 @@ package grpc
 import (
 	"runtime/debug"
 
-	"github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/transport"
-	pb "github.com/micro/go-micro/transport/grpc/proto"
-	"github.com/micro/go-micro/util/log"
 	"google.golang.org/grpc/peer"
+	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/transport"
+	pb "github.com/stack-labs/stack-rpc/transport/grpc/proto"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 // microTransport satisfies the pb.TransportServer inteface
@@ -33,7 +33,7 @@ func (m *microTransport) Stream(ts pb.Transport_StreamServer) error {
 		if r := recover(); r != nil {
 			log.Log(r, string(debug.Stack()))
 			sock.Close()
-			err = errors.InternalServerError("go.micro.transport", "panic recovered: %v", r)
+			err = errors.InternalServerError("stack.rpc.transport", "panic recovered: %v", r)
 		}
 	}()
 

@@ -3,8 +3,8 @@ package grpc
 import (
 	"context"
 
-	"github.com/micro/go-micro/server"
 	"google.golang.org/grpc"
+	"github.com/stack-labs/stack-rpc/server"
 )
 
 // rpcStream implements a server side Stream.

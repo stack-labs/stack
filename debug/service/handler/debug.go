@@ -6,9 +6,9 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/micro/go-micro/debug/log"
-	proto "github.com/micro/go-micro/debug/service/proto"
-	"github.com/micro/go-micro/server"
+	"github.com/stack-labs/stack-rpc/debug/log"
+	proto "github.com/stack-labs/stack-rpc/debug/service/proto"
+	"github.com/stack-labs/stack-rpc/server"
 )
 
 var (

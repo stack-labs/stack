@@ -1,7 +1,7 @@
 package store
 
 import (
-	"github.com/micro/go-micro/config/options"
+	"github.com/stack-labs/stack-rpc/config/options"
 )
 
 // Nodes is a list of nodes used to back the store

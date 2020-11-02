@@ -3,9 +3,9 @@ package handler
 import (
 	"context"
 
-	"github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/runtime"
-	pb "github.com/micro/go-micro/runtime/service/proto"
+	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/runtime"
+	pb "github.com/stack-labs/stack-rpc/runtime/service/proto"
 )
 
 type Runtime struct {
@@ -63,7 +63,7 @@ func toReadOptions(opts *pb.ReadOptions) []runtime.ReadOption {
 
 func (r *Runtime) Create(ctx context.Context, req *pb.CreateRequest, rsp *pb.CreateResponse) error {
 	if req.Service == nil {
-		return errors.BadRequest("go.micro.runtime", "blank service")
+		return errors.BadRequest("stack.rpc.runtime", "blank service")
 	}
 
 	var options []runtime.CreateOption
@@ -74,7 +74,7 @@ func (r *Runtime) Create(ctx context.Context, req *pb.CreateRequest, rsp *pb.Cre
 	service := toService(req.Service)
 	err := r.Runtime.Create(service, options...)
 	if err != nil {
-		return errors.InternalServerError("go.micro.runtime", err.Error())
+		return errors.InternalServerError("stack.rpc.runtime", err.Error())
 	}
 
 	return nil
@@ -88,7 +88,7 @@ func (r *Runtime) Read(ctx context.Context, req *pb.ReadRequest, rsp *pb.ReadRes
 
 	services, err := r.Runtime.Read(options...)
 	if err != nil {
-		return errors.InternalServerError("go.micro.runtime", err.Error())
+		return errors.InternalServerError("stack.rpc.runtime", err.Error())
 	}
 
 	for _, service := range services {
@@ -100,14 +100,14 @@ func (r *Runtime) Read(ctx context.Context, req *pb.ReadRequest, rsp *pb.ReadRes
 
 func (r *Runtime) Update(ctx context.Context, req *pb.UpdateRequest, rsp *pb.UpdateResponse) error {
 	if req.Service == nil {
-		return errors.BadRequest("go.micro.runtime", "blank service")
+		return errors.BadRequest("stack.rpc.runtime", "blank service")
 	}
 
 	// TODO: add opts
 	service := toService(req.Service)
 	err := r.Runtime.Update(service)
 	if err != nil {
-		return errors.InternalServerError("go.micro.runtime", err.Error())
+		return errors.InternalServerError("stack.rpc.runtime", err.Error())
 	}
 
 	return nil
@@ -115,14 +115,14 @@ func (r *Runtime) Update(ctx context.Context, req *pb.UpdateRequest, rsp *pb.Upd
 
 func (r *Runtime) Delete(ctx context.Context, req *pb.DeleteRequest, rsp *pb.DeleteResponse) error {
 	if req.Service == nil {
-		return errors.BadRequest("go.micro.runtime", "blank service")
+		return errors.BadRequest("stack.rpc.runtime", "blank service")
 	}
 
 	// TODO: add opts
 	service := toService(req.Service)
 	err := r.Runtime.Delete(service)
 	if err != nil {
-		return errors.InternalServerError("go.micro.runtime", err.Error())
+		return errors.InternalServerError("stack.rpc.runtime", err.Error())
 	}
 
 	return nil
@@ -131,7 +131,7 @@ func (r *Runtime) Delete(ctx context.Context, req *pb.DeleteRequest, rsp *pb.Del
 func (r *Runtime) List(ctx context.Context, req *pb.ListRequest, rsp *pb.ListResponse) error {
 	services, err := r.Runtime.List()
 	if err != nil {
-		return errors.InternalServerError("go.micro.runtime", err.Error())
+		return errors.InternalServerError("stack.rpc.runtime", err.Error())
 	}
 
 	for _, service := range services {

@@ -7,11 +7,11 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/client/selector"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/router"
-	pb "github.com/micro/go-micro/router/proto"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/router"
+	pb "github.com/stack-labs/stack-rpc/router/proto"
 )
 
 type routerSelector struct {

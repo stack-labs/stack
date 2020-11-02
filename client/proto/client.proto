@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package go.micro.client;
+package stack.rpc.client;
 
 // Client is the micro client interface
 service Client {

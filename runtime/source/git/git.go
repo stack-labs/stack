@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/micro/go-micro/runtime/source"
 	git "gopkg.in/src-d/go-git.v4"
+	"github.com/stack-labs/stack-rpc/runtime/source"
 )
 
 // Source retrieves source code

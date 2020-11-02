@@ -4,10 +4,10 @@ package config
 import (
 	"context"
 
-	"github.com/micro/go-micro/config/loader"
-	"github.com/micro/go-micro/config/reader"
-	"github.com/micro/go-micro/config/source"
-	"github.com/micro/go-micro/config/source/file"
+	"github.com/stack-labs/stack-rpc/config/loader"
+	"github.com/stack-labs/stack-rpc/config/reader"
+	"github.com/stack-labs/stack-rpc/config/source"
+	"github.com/stack-labs/stack-rpc/config/source/file"
 )
 
 // Config is an interface abstraction for dynamic configuration

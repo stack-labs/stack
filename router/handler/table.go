@@ -3,9 +3,9 @@ package handler
 import (
 	"context"
 
-	"github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/router"
-	pb "github.com/micro/go-micro/router/proto"
+	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/router"
+	pb "github.com/stack-labs/stack-rpc/router/proto"
 )
 
 type Table struct {
@@ -23,7 +23,7 @@ func (t *Table) Create(ctx context.Context, route *pb.Route, resp *pb.CreateResp
 		Metric:  route.Metric,
 	})
 	if err != nil {
-		return errors.InternalServerError("go.micro.router", "failed to create route: %s", err)
+		return errors.InternalServerError("stack.rpc.router", "failed to create route: %s", err)
 	}
 
 	return nil
@@ -40,7 +40,7 @@ func (t *Table) Update(ctx context.Context, route *pb.Route, resp *pb.UpdateResp
 		Metric:  route.Metric,
 	})
 	if err != nil {
-		return errors.InternalServerError("go.micro.router", "failed to update route: %s", err)
+		return errors.InternalServerError("stack.rpc.router", "failed to update route: %s", err)
 	}
 
 	return nil
@@ -57,7 +57,7 @@ func (t *Table) Delete(ctx context.Context, route *pb.Route, resp *pb.DeleteResp
 		Metric:  route.Metric,
 	})
 	if err != nil {
-		return errors.InternalServerError("go.micro.router", "failed to delete route: %s", err)
+		return errors.InternalServerError("stack.rpc.router", "failed to delete route: %s", err)
 	}
 
 	return nil
@@ -67,7 +67,7 @@ func (t *Table) Delete(ctx context.Context, route *pb.Route, resp *pb.DeleteResp
 func (t *Table) List(ctx context.Context, req *pb.Request, resp *pb.ListResponse) error {
 	routes, err := t.Router.Table().List()
 	if err != nil {
-		return errors.InternalServerError("go.micro.router", "failed to list routes: %s", err)
+		return errors.InternalServerError("stack.rpc.router", "failed to list routes: %s", err)
 	}
 
 	respRoutes := make([]*pb.Route, 0, len(routes))
@@ -92,7 +92,7 @@ func (t *Table) List(ctx context.Context, req *pb.Request, resp *pb.ListResponse
 func (t *Table) Query(ctx context.Context, req *pb.QueryRequest, resp *pb.QueryResponse) error {
 	routes, err := t.Router.Table().Query(router.QueryService(req.Query.Service))
 	if err != nil {
-		return errors.InternalServerError("go.micro.router", "failed to lookup routes: %s", err)
+		return errors.InternalServerError("stack.rpc.router", "failed to lookup routes: %s", err)
 	}
 
 	respRoutes := make([]*pb.Route, 0, len(routes))

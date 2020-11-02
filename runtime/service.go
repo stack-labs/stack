@@ -5,11 +5,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/micro/go-micro/runtime/build"
+	"github.com/stack-labs/stack-rpc/runtime/build"
 
-	"github.com/micro/go-micro/runtime/process"
-	proc "github.com/micro/go-micro/runtime/process/os"
-	"github.com/micro/go-micro/util/log"
+	"github.com/stack-labs/stack-rpc/runtime/process"
+	proc "github.com/stack-labs/stack-rpc/runtime/process/os"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 type service struct {

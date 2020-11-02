@@ -2,11 +2,11 @@
 package sync
 
 import (
-	"github.com/micro/go-micro/store"
-	"github.com/micro/go-micro/sync/leader"
-	"github.com/micro/go-micro/sync/lock"
-	"github.com/micro/go-micro/sync/task"
-	"github.com/micro/go-micro/sync/time"
+	"github.com/stack-labs/stack-rpc/store"
+	"github.com/stack-labs/stack-rpc/sync/leader"
+	"github.com/stack-labs/stack-rpc/sync/lock"
+	"github.com/stack-labs/stack-rpc/sync/task"
+	"github.com/stack-labs/stack-rpc/sync/time"
 )
 
 // Map provides synchronized access to key-value storage.

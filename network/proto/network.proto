@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package go.micro.network;
+package stack.rpc.network;
 
-import "github.com/micro/go-micro/router/proto/router.proto";
+import "github.com/stack-labs/stack-rpc/router/proto/router.proto";
 
 // Network service is usesd to gain visibility into networks
 service Network {
@@ -11,9 +11,9 @@ service Network {
 	// Returns the entire network graph
 	rpc Graph(GraphRequest) returns (GraphResponse) {};
 	// Returns a list of known nodes in the network
-        rpc Nodes(NodesRequest) returns (NodesResponse) {};
+    rpc Nodes(NodesRequest) returns (NodesResponse) {};
 	// Returns a list of known routes in the network
-        rpc Routes(RoutesRequest) returns (RoutesResponse) {};
+    rpc Routes(RoutesRequest) returns (RoutesResponse) {};
 	// Returns a list of known services based on routes
 	rpc Services(ServicesRequest) returns (ServicesResponse) {};
 }
@@ -54,13 +54,13 @@ message GraphResponse {
 	Peer root = 1;
 }
 
-message RoutesRequest {	
+message RoutesRequest {
 	// filter based on
 	Query query = 1;
 }
 
 message RoutesResponse {
-	repeated go.micro.router.Route routes = 1;
+	repeated stack.rpc.router.Route routes = 1;
 }
 
 message ServicesRequest {}

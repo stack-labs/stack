@@ -17,14 +17,14 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/micro/go-micro/codec/json"
-	merr "github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/cache"
-	maddr "github.com/micro/go-micro/util/addr"
-	mnet "github.com/micro/go-micro/util/net"
-	mls "github.com/micro/go-micro/util/tls"
 	"golang.org/x/net/http2"
+	"github.com/stack-labs/stack-rpc/codec/json"
+	merr "github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/registry/cache"
+	maddr "github.com/stack-labs/stack-rpc/util/addr"
+	mnet "github.com/stack-labs/stack-rpc/util/net"
+	mls "github.com/stack-labs/stack-rpc/util/tls"
 )
 
 // HTTP Broker is a point to point async broker
@@ -64,7 +64,7 @@ type httpEvent struct {
 
 var (
 	DefaultSubPath   = "/_sub"
-	serviceName      = "go.micro.http.broker"
+	serviceName      = "stack.rpc.http.broker"
 	broadcastVersion = "ff.http.broadcast"
 	registerTTL      = time.Minute
 	registerInterval = time.Second * 30
@@ -289,7 +289,7 @@ func (h *httpBroker) run(l net.Listener) {
 
 func (h *httpBroker) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	if req.Method != "POST" {
-		err := merr.BadRequest("go.micro.broker", "Method not allowed")
+		err := merr.BadRequest("stack.rpc.broker", "Method not allowed")
 		http.Error(w, err.Error(), http.StatusMethodNotAllowed)
 		return
 	}
@@ -299,7 +299,7 @@ func (h *httpBroker) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	b, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		errr := merr.InternalServerError("go.micro.broker", "Error reading request body: %v", err)
+		errr := merr.InternalServerError("stack.rpc.broker", "Error reading request body: %v", err)
 		w.WriteHeader(500)
 		w.Write([]byte(errr.Error()))
 		return
@@ -307,7 +307,7 @@ func (h *httpBroker) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	var m *Message
 	if err = h.opts.Codec.Unmarshal(b, &m); err != nil {
-		errr := merr.InternalServerError("go.micro.broker", "Error parsing request body: %v", err)
+		errr := merr.InternalServerError("stack.rpc.broker", "Error parsing request body: %v", err)
 		w.WriteHeader(500)
 		w.Write([]byte(errr.Error()))
 		return
@@ -317,7 +317,7 @@ func (h *httpBroker) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	delete(m.Header, ":topic")
 
 	if len(topic) == 0 {
-		errr := merr.InternalServerError("go.micro.broker", "Topic not found")
+		errr := merr.InternalServerError("stack.rpc.broker", "Topic not found")
 		w.WriteHeader(500)
 		w.Write([]byte(errr.Error()))
 		return
@@ -475,7 +475,7 @@ func (h *httpBroker) Init(opts ...Option) error {
 	}
 
 	if len(h.id) == 0 {
-		h.id = "go.micro.http.broker-" + uuid.New().String()
+		h.id = "stack.rpc.http.broker-" + uuid.New().String()
 	}
 
 	// get registry

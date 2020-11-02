@@ -9,45 +9,45 @@ import (
 	"strings"
 	"time"
 
-	"github.com/micro/cli"
-	"github.com/micro/go-micro/client"
-	cgrpc "github.com/micro/go-micro/client/grpc"
-	cmucp "github.com/micro/go-micro/client/mucp"
-	"github.com/micro/go-micro/server"
-	sgrpc "github.com/micro/go-micro/server/grpc"
-	smucp "github.com/micro/go-micro/server/mucp"
-	"github.com/micro/go-micro/util/log"
+	"github.com/stack-labs/stack-rpc/cli"
+	"github.com/stack-labs/stack-rpc/client"
+	cgrpc "github.com/stack-labs/stack-rpc/client/grpc"
+	cmucp "github.com/stack-labs/stack-rpc/client/mucp"
+	"github.com/stack-labs/stack-rpc/server"
+	sgrpc "github.com/stack-labs/stack-rpc/server/grpc"
+	smucp "github.com/stack-labs/stack-rpc/server/mucp"
+	"github.com/stack-labs/stack-rpc/util/log"
 
 	// brokers
-	"github.com/micro/go-micro/broker"
-	"github.com/micro/go-micro/broker/http"
-	"github.com/micro/go-micro/broker/memory"
-	"github.com/micro/go-micro/broker/nats"
-	brokerSrv "github.com/micro/go-micro/broker/service"
+	"github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack-rpc/broker/http"
+	"github.com/stack-labs/stack-rpc/broker/memory"
+	"github.com/stack-labs/stack-rpc/broker/nats"
+	brokerSrv "github.com/stack-labs/stack-rpc/broker/service"
 
 	// registries
-	"github.com/micro/go-micro/registry"
-	"github.com/micro/go-micro/registry/etcd"
-	"github.com/micro/go-micro/registry/mdns"
-	rmem "github.com/micro/go-micro/registry/memory"
-	regSrv "github.com/micro/go-micro/registry/service"
+	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/registry/etcd"
+	"github.com/stack-labs/stack-rpc/registry/mdns"
+	rmem "github.com/stack-labs/stack-rpc/registry/memory"
+	regSrv "github.com/stack-labs/stack-rpc/registry/service"
 
 	// selectors
-	"github.com/micro/go-micro/client/selector"
-	"github.com/micro/go-micro/client/selector/dns"
-	"github.com/micro/go-micro/client/selector/router"
-	"github.com/micro/go-micro/client/selector/static"
+	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack-rpc/client/selector/dns"
+	"github.com/stack-labs/stack-rpc/client/selector/router"
+	"github.com/stack-labs/stack-rpc/client/selector/static"
 
 	// transports
-	"github.com/micro/go-micro/transport"
-	tgrpc "github.com/micro/go-micro/transport/grpc"
-	thttp "github.com/micro/go-micro/transport/http"
-	tmem "github.com/micro/go-micro/transport/memory"
-	"github.com/micro/go-micro/transport/quic"
+	"github.com/stack-labs/stack-rpc/transport"
+	tgrpc "github.com/stack-labs/stack-rpc/transport/grpc"
+	thttp "github.com/stack-labs/stack-rpc/transport/http"
+	tmem "github.com/stack-labs/stack-rpc/transport/memory"
+	"github.com/stack-labs/stack-rpc/transport/quic"
 
 	// runtimes
-	"github.com/micro/go-micro/runtime"
-	"github.com/micro/go-micro/runtime/kubernetes"
+	"github.com/stack-labs/stack-rpc/runtime"
+	"github.com/stack-labs/stack-rpc/runtime/kubernetes"
 )
 
 type Cmd interface {
@@ -74,7 +74,7 @@ var (
 		cli.StringFlag{
 			Name:   "client",
 			EnvVar: "MICRO_CLIENT",
-			Usage:  "Client for go-micro; rpc",
+			Usage:  "Client for stack-rpc; rpc",
 		},
 		cli.StringFlag{
 			Name:   "client_request_timeout",
@@ -112,12 +112,12 @@ var (
 		cli.StringFlag{
 			Name:   "server",
 			EnvVar: "MICRO_SERVER",
-			Usage:  "Server for go-micro; rpc",
+			Usage:  "Server for stack-rpc; rpc",
 		},
 		cli.StringFlag{
 			Name:   "server_name",
 			EnvVar: "MICRO_SERVER_NAME",
-			Usage:  "Name of the server. go.micro.srv.example",
+			Usage:  "Name of the server. stack.rpc.srv.example",
 		},
 		cli.StringFlag{
 			Name:   "server_version",
@@ -194,7 +194,7 @@ var (
 	}
 
 	DefaultBrokers = map[string]func(...broker.Option) broker.Broker{
-		"go.micro.broker": brokerSrv.NewBroker,
+		"stack.rpc.broker": brokerSrv.NewBroker,
 		"service":         brokerSrv.NewBroker,
 		"http":            http.NewBroker,
 		"memory":          memory.NewBroker,
@@ -208,7 +208,7 @@ var (
 	}
 
 	DefaultRegistries = map[string]func(...registry.Option) registry.Registry{
-		"go.micro.registry": regSrv.NewRegistry,
+		"stack.rpc.registry": regSrv.NewRegistry,
 		"service":           regSrv.NewRegistry,
 		"etcd":              etcd.NewRegistry,
 		"mdns":              mdns.NewRegistry,
@@ -284,7 +284,7 @@ func newCmd(opts ...Option) Cmd {
 	}
 
 	if len(options.Description) == 0 {
-		options.Description = "a go-micro service"
+		options.Description = "a stack-rpc service"
 	}
 
 	cmd := new(cmd)

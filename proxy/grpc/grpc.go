@@ -1,4 +1,4 @@
-// Package grpc transparently forwards the grpc protocol using a go-micro client.
+// Package grpc transparently forwards the grpc protocol using a stack-rpc client.
 package grpc
 
 import (
@@ -6,12 +6,12 @@ import (
 	"io"
 	"strings"
 
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/client/grpc"
-	"github.com/micro/go-micro/codec"
-	"github.com/micro/go-micro/config/options"
-	"github.com/micro/go-micro/proxy"
-	"github.com/micro/go-micro/server"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/client/grpc"
+	"github.com/stack-labs/stack-rpc/codec"
+	"github.com/stack-labs/stack-rpc/config/options"
+	"github.com/stack-labs/stack-rpc/proxy"
+	"github.com/stack-labs/stack-rpc/server"
 )
 
 // Proxy will transparently proxy requests to the backend.

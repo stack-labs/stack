@@ -1,4 +1,4 @@
-// Package broker provides a go-micro/broker handler
+// Package broker provides a stack-rpc/broker handler
 package broker
 
 import (
@@ -11,9 +11,9 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/micro/go-micro/api/handler"
-	"github.com/micro/go-micro/broker"
-	"github.com/micro/go-micro/util/log"
+	"github.com/stack-labs/stack-rpc/api/handler"
+	"github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 const (

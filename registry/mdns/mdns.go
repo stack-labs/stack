@@ -4,7 +4,7 @@ package mdns
 import (
 	"context"
 
-	"github.com/micro/go-micro/registry"
+	"github.com/stack-labs/stack-rpc/registry"
 )
 
 // NewRegistry returns a new mdns registry

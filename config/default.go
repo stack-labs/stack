@@ -2,6 +2,8 @@ package config
 
 import (
 	"bytes"
+	"os"
+	"path/filepath"
 	"sync"
 	"time"
 
@@ -10,6 +12,7 @@ import (
 	"github.com/stack-labs/stack-rpc/config/reader"
 	"github.com/stack-labs/stack-rpc/config/reader/json"
 	"github.com/stack-labs/stack-rpc/config/source"
+	log "github.com/stack-labs/stack-rpc/logger"
 )
 
 type config struct {
@@ -60,12 +63,24 @@ func newConfig(opts ...Option) (Config, error) {
 		vals: values,
 	}
 
-	go c.run()
+	c.init()
+	c.run()
 
 	return c, nil
 }
 
-func (c *config) run() {
+func (c *config) init() {
+	// set the static dir to working directory
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Errorf("set log static dir error: %s", err)
+		return
+	}
+
+	DefaultStaticDir = dir + string(filepath.Separator) + staticDirName
+}
+
+func (c *config) watch() {
 	watch := func(w loader.Watcher) error {
 		for {
 			// get changeset
@@ -76,10 +91,7 @@ func (c *config) run() {
 
 			c.Lock()
 
-			// save
 			c.snap = snap
-
-			// set values
 			c.vals, _ = c.opts.Reader.Values(snap.ChangeSet)
 
 			c.Unlock()
@@ -120,6 +132,10 @@ func (c *config) run() {
 		default:
 		}
 	}
+}
+
+func (c *config) run() {
+	go c.watch()
 }
 
 func (c *config) Map() map[string]interface{} {

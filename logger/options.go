@@ -34,15 +34,15 @@ func WithLevel(level Level) Option {
 	}
 }
 
-// WithOutput set default output writer for the logger
-func WithOutput(out io.Writer) Option {
+// Output set default output writer for the logger
+func Output(out io.Writer) Option {
 	return func(args *Options) {
 		args.Out = out
 	}
 }
 
-// WithCallerSkipCount set frame count to skip
-func WithCallerSkipCount(c int) Option {
+// CallerSkipCount set frame count to skip
+func CallerSkipCount(c int) Option {
 	return func(args *Options) {
 		args.CallerSkipCount = c
 	}

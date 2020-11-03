@@ -18,7 +18,7 @@ require (
 	github.com/go-acme/lego/v3 v3.1.0
 	github.com/go-log/log v0.1.0
 	github.com/go-playground/universal-translator v0.17.0 // indirect
-	github.com/golang/protobuf v1.4.1
+	github.com/golang/protobuf v1.3.2
 	github.com/google/go-cmp v0.5.0 // indirect
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/handlers v1.4.2
@@ -44,9 +44,8 @@ require (
 	go.uber.org/zap v1.12.0 // indirect
 	golang.org/x/crypto v0.0.0-20200220183623-bac4c82f6975
 	golang.org/x/net v0.0.0-20190930134127-c5a3c61f89f3
-	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013
+	google.golang.org/genproto v0.0.0-20190819201941-24fa4b261c55
 	google.golang.org/grpc v1.27.1
-	google.golang.org/protobuf v1.25.0
 	gopkg.in/go-playground/validator.v9 v9.31.0
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/telegram-bot-api.v4 v4.6.4

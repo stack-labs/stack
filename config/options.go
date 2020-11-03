@@ -6,22 +6,22 @@ import (
 	"github.com/stack-labs/stack-rpc/config/source"
 )
 
-// WithLoader sets the loader for manager config
-func WithLoader(l loader.Loader) Option {
+// Loader sets the loader for manager config
+func Loader(l loader.Loader) Option {
 	return func(o *Options) {
 		o.Loader = l
 	}
 }
 
-// WithSource appends a source to list of sources
-func WithSource(s source.Source) Option {
+// Source appends a source to list of sources
+func Source(s source.Source) Option {
 	return func(o *Options) {
 		o.Source = append(o.Source, s)
 	}
 }
 
-// WithReader sets the config reader
-func WithReader(r reader.Reader) Option {
+// Reader sets the config reader
+func Reader(r reader.Reader) Option {
 	return func(o *Options) {
 		o.Reader = r
 	}

@@ -2,6 +2,8 @@ package config
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"sync"
 
 	log "github.com/stack-labs/stack-rpc/logger"
@@ -9,9 +11,8 @@ import (
 
 var (
 	m      sync.RWMutex
+	c      *configurator
 	inited bool
-
-	c = &configurator{}
 )
 
 // Configurator
@@ -29,7 +30,7 @@ func (c *configurator) App(name string, config interface{}) (err error) {
 	if v != nil {
 		err = v.Scan(config)
 	} else {
-		err = fmt.Errorf("[App] 配置不存在，err：%s", name)
+		err = fmt.Errorf("config isn't existed，err：%s", name)
 	}
 
 	return
@@ -45,7 +46,7 @@ func (c *configurator) init(ops Options) (err error) {
 	defer m.Unlock()
 
 	if inited {
-		log.Info("[init] 配置已经初始化过")
+		log.Info("config has been inited")
 		return
 	}
 
@@ -53,37 +54,45 @@ func (c *configurator) init(ops Options) (err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// set the static dir to working directory
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Errorf("set log static dir error: %s", err)
+		return
+	}
+
+	DefaultStaticDir = dir + string(filepath.Separator) + staticDirName
+
 	// 加载配置
 	err = c.conf.Load(ops.Source...)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	go func() {
-		log.Info("[init] 侦听配置变动 ...")
+	go c.watchChanges()
 
-		// 开始侦听变动事件
-		watcher, err := c.conf.Watch()
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		for {
-			v, err := watcher.Next()
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			log.Infof("[init] 侦听配置变动: %v", string(v.Bytes()))
-		}
-	}()
-
-	// 标记已经初始化
 	inited = true
 	return
 }
 
-// Init 初始化配置
+func (c *configurator) watchChanges() {
+	log.Infof("start to watch config changes")
+	watcher, err := c.conf.Watch()
+	if err != nil {
+		log.Errorf("watch config changes error: %s", err)
+	}
+
+	for {
+		v, err := watcher.Next()
+		if err != nil {
+			log.Errorf("watcher get next change error: %s", err)
+		}
+
+		log.Debugf("configuration changes: %v", string(v.Bytes()))
+	}
+}
+
 func Init(opts ...Option) error {
 	ops := Options{}
 	for _, o := range opts {

@@ -10,6 +10,13 @@ import (
 	"github.com/stack-labs/stack-rpc/config/source/file"
 )
 
+var (
+	staticDirName    = "resources"
+	DefaultStaticDir = ""
+	// Default Config Manager
+	DefaultConfig, _ = NewConfig()
+)
+
 // Config is an interface abstraction for dynamic configuration
 type Config interface {
 	// provide the reader.Values interface
@@ -37,14 +44,11 @@ type Options struct {
 
 	// for alternative data
 	Context context.Context
+
+	StaticDir string
 }
 
 type Option func(o *Options)
-
-var (
-	// Default Config Manager
-	DefaultConfig, _ = NewConfig()
-)
 
 // NewConfig returns new config
 func NewConfig(opts ...Option) (Config, error) {

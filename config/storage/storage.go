@@ -1,6 +1,6 @@
 package storage
 
 type Storage interface {
-	Write(namespace string, config []byte) (err error)
-	Load(namespace string) (config []byte, err error)
+	Write(config []byte) (err error)
+	Load() (config []byte, err error)
 }

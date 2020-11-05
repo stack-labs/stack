@@ -78,9 +78,21 @@ func newConfig(opts ...Option) (Config, error) {
 		values:  values,
 	}
 
+	if len(options.Source) > 0 {
+		c.writeStorage(snap)
+	}
+
 	go c.run()
 
 	return c, nil
+}
+
+func (c *config) writeStorage(snap *loader.Snapshot) {
+	if snap != nil && c.opts.EnableStorage && c.storage != nil {
+		if err := c.storage.Write(snap.ChangeSet.Data); err != nil {
+			log.Errorf("config storage write error: %v", err)
+		}
+	}
 }
 
 func (c *config) run() {
@@ -92,11 +104,7 @@ func (c *config) run() {
 				return err
 			}
 
-			if c.opts.EnableStorage && c.storage != nil {
-				if err := c.storage.Write(snap.ChangeSet.Data); err != nil {
-					log.Errorf("config storage write error: %v", err)
-				}
-			}
+			c.writeStorage(snap)
 
 			c.Lock()
 
@@ -166,6 +174,8 @@ func (c *config) Sync() error {
 		return err
 	}
 
+	c.writeStorage(snap)
+
 	c.Lock()
 	defer c.Unlock()
 
@@ -222,16 +232,17 @@ func (c *config) Load(sources ...source.Source) error {
 	if err != nil {
 		return err
 	}
+	c.writeStorage(snap)
 
 	c.Lock()
 	defer c.Unlock()
 
 	c.snap = snap
-	vals, err := c.opts.Reader.Values(snap.ChangeSet)
+	values, err := c.opts.Reader.Values(snap.ChangeSet)
 	if err != nil {
 		return err
 	}
-	c.values = vals
+	c.values = values
 
 	return nil
 }

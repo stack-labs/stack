@@ -4,8 +4,12 @@
 package stack_rpc_grpc_transport
 
 import (
+	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	math "math"
 )
 
@@ -89,4 +93,116 @@ var fileDescriptor_a97e32c760ec1b28 = []byte{
 	0x5b, 0x70, 0x49, 0x51, 0x6a, 0x62, 0xae, 0x90, 0x22, 0x41, 0xc7, 0x49, 0x11, 0x56, 0xa2, 0xc4,
 	0xa0, 0xc1, 0x68, 0xc0, 0x98, 0xc4, 0x06, 0x0e, 0x25, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff,
 	0x11, 0xdb, 0xf4, 0xd2, 0x38, 0x01, 0x00, 0x00,
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// TransportClient is the client API for Transport service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type TransportClient interface {
+	Stream(ctx context.Context, opts ...grpc.CallOption) (Transport_StreamClient, error)
+}
+
+type transportClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewTransportClient(cc *grpc.ClientConn) TransportClient {
+	return &transportClient{cc}
+}
+
+func (c *transportClient) Stream(ctx context.Context, opts ...grpc.CallOption) (Transport_StreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Transport_serviceDesc.Streams[0], "/stack.rpc.grpc.transport.Transport/Stream", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &transportStreamClient{stream}
+	return x, nil
+}
+
+type Transport_StreamClient interface {
+	Send(*Message) error
+	Recv() (*Message, error)
+	grpc.ClientStream
+}
+
+type transportStreamClient struct {
+	grpc.ClientStream
+}
+
+func (x *transportStreamClient) Send(m *Message) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *transportStreamClient) Recv() (*Message, error) {
+	m := new(Message)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// TransportServer is the server API for Transport service.
+type TransportServer interface {
+	Stream(Transport_StreamServer) error
+}
+
+// UnimplementedTransportServer can be embedded to have forward compatible implementations.
+type UnimplementedTransportServer struct {
+}
+
+func (*UnimplementedTransportServer) Stream(srv Transport_StreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method Stream not implemented")
+}
+
+func RegisterTransportServer(s *grpc.Server, srv TransportServer) {
+	s.RegisterService(&_Transport_serviceDesc, srv)
+}
+
+func _Transport_Stream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(TransportServer).Stream(&transportStreamServer{stream})
+}
+
+type Transport_StreamServer interface {
+	Send(*Message) error
+	Recv() (*Message, error)
+	grpc.ServerStream
+}
+
+type transportStreamServer struct {
+	grpc.ServerStream
+}
+
+func (x *transportStreamServer) Send(m *Message) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *transportStreamServer) Recv() (*Message, error) {
+	m := new(Message)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+var _Transport_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "stack.rpc.grpc.transport.Transport",
+	HandlerType: (*TransportServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Stream",
+			Handler:       _Transport_Stream_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
+	Metadata: "transport.proto",
 }

@@ -5,9 +5,9 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 
 	"github.com/stack-labs/stack-rpc/config/storage"
-	"path/filepath"
 )
 
 type file struct {

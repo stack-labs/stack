@@ -2,17 +2,16 @@ package config
 
 import (
 	"context"
+
 	"github.com/stack-labs/stack-rpc/config/loader"
 	"github.com/stack-labs/stack-rpc/config/loader/memory"
 	"github.com/stack-labs/stack-rpc/config/reader"
 	"github.com/stack-labs/stack-rpc/config/reader/json"
-	"github.com/stack-labs/stack-rpc/config/source"
 )
 
 type Options struct {
 	Loader loader.Loader
 	Reader reader.Reader
-	Source []source.Source
 
 	EnableStorage bool
 	// for alternative data
@@ -39,13 +38,6 @@ func NewOptions(opts ...Option) Options {
 func Loader(l loader.Loader) Option {
 	return func(o *Options) {
 		o.Loader = l
-	}
-}
-
-// Source appends a source to list of sources
-func Source(s source.Source) Option {
-	return func(o *Options) {
-		o.Source = append(o.Source, s)
 	}
 }
 

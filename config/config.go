@@ -49,10 +49,9 @@ func NewConfig(opts ...Option) (Config, error) {
 func newConfig(opts ...Option) (Config, error) {
 	options := NewOptions(opts...)
 
-	if err := options.Loader.Load(options.Source...); err != nil {
+	if err := options.Loader.Load(); err != nil {
 		return nil, err
 	}
-
 	snap, err := options.Loader.Snapshot()
 	if err != nil {
 		return nil, err
@@ -68,7 +67,7 @@ func newConfig(opts ...Option) (Config, error) {
 		if err != nil {
 			return nil, err
 		}
-		f := fmt.Sprintf("%s/.stack_config/config.%s", dir, snap.ChangeSet.Format)
+		f := fmt.Sprintf("%s/.stack_config/config.conf", dir)
 		cStorage = file.NewStorage(f)
 	}
 
@@ -78,10 +77,6 @@ func newConfig(opts ...Option) (Config, error) {
 		opts:    options,
 		snap:    snap,
 		values:  values,
-	}
-
-	if len(options.Source) > 0 {
-		c.writeStorage(snap)
 	}
 
 	go c.run()
@@ -225,8 +220,43 @@ func (c *config) Bytes() []byte {
 	return c.values.Bytes()
 }
 
+func (c *config) loadBackupConfig() error {
+	bytes, err := c.storage.Load()
+	if err != nil {
+		return err
+	}
+
+	cs := &source.ChangeSet{
+		Data:      bytes,
+		Format:    c.opts.Reader.String(),
+		Source:    "backup",
+		Timestamp: time.Now(),
+	}
+	cs.Sum()
+	snap := &loader.Snapshot{
+		ChangeSet: cs,
+		Version:   fmt.Sprintf("%d", time.Now().Unix()),
+	}
+
+	c.Lock()
+	defer c.Unlock()
+
+	c.snap = snap
+	values, err := c.opts.Reader.Values(snap.ChangeSet)
+	if err != nil {
+		return err
+	}
+	c.values = values
+
+	return nil
+}
+
 func (c *config) Load(sources ...source.Source) error {
 	if err := c.opts.Loader.Load(sources...); err != nil {
+		if c.opts.EnableStorage && c.storage.Exist() {
+			log.Warn("load config from backup file")
+			return c.loadBackupConfig()
+		}
 		return err
 	}
 

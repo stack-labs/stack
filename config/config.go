@@ -2,6 +2,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"sync"
 	"time"
@@ -67,6 +68,7 @@ func newConfig(opts ...Option) (Config, error) {
 		if err != nil {
 			return nil, err
 		}
+		local = fmt.Sprintf("%s/.stack_config/config", local)
 		cStorage = file.NewStorage(local, snap.ChangeSet.Format)
 	}
 

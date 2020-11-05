@@ -14,8 +14,17 @@ type file struct {
 	file string
 }
 
-func NewStorage(path, format string) storage.Storage {
-	return &file{file: fmt.Sprintf("%s.%s", path, format)}
+func NewStorage(f string) storage.Storage {
+	return &file{file: f}
+}
+
+func (f *file) Exist() bool {
+	exit, _ := existFile(f.file)
+	return exit
+}
+
+func (f *file) FileName() string {
+	return f.file
 }
 
 func (f *file) Write(content []byte) (err error) {

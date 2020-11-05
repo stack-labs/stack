@@ -64,12 +64,12 @@ func newConfig(opts ...Option) (Config, error) {
 
 	var cStorage storage.Storage
 	if options.EnableStorage {
-		local, err := os.Getwd()
+		dir, err := os.Getwd()
 		if err != nil {
 			return nil, err
 		}
-		local = fmt.Sprintf("%s/.stack_config/config", local)
-		cStorage = file.NewStorage(local, snap.ChangeSet.Format)
+		f := fmt.Sprintf("%s/.stack_config/config.%s", dir, snap.ChangeSet.Format)
+		cStorage = file.NewStorage(f)
 	}
 
 	c := &config{

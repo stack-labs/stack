@@ -26,6 +26,9 @@ type Loader interface {
 	Sync() error
 	// Watch for changes
 	Watch(...string) (Watcher, error)
+
+	Values(*source.ChangeSet) (reader.Values, error)
+	Reader() reader.Reader
 }
 
 type loader struct {
@@ -36,7 +39,7 @@ type loader struct {
 	// the current snapshot
 	snap *Snapshot
 	// the current values
-	vals reader.Values
+	values reader.Values
 	// all the sets
 	sets []*source.ChangeSet
 	// all the sources
@@ -55,6 +58,14 @@ func NewLoader(opts ...Option) Loader {
 	}
 }
 
+func (m *loader) Values(c *source.ChangeSet) (reader.Values, error) {
+	return m.opts.Reader.Values(c)
+}
+
+func (m *loader) Reader() reader.Reader {
+	return m.opts.Reader
+}
+
 // Snapshot returns a snapshot of the current loaded config
 func (m *loader) Snapshot() (*Snapshot, error) {
 	if !m.loaded() {
@@ -65,7 +76,7 @@ func (m *loader) Snapshot() (*Snapshot, error) {
 	}
 
 	m.RLock()
-	snap := Copy(m.snap)
+	snap := m.snap.Clone()
 	m.RUnlock()
 
 	return snap, nil
@@ -98,12 +109,12 @@ func (m *loader) Sync() error {
 	}
 
 	// set values
-	vals, err := m.opts.Reader.Values(set)
+	values, err := m.opts.Reader.Values(set)
 	if err != nil {
 		m.Unlock()
 		return err
 	}
-	m.vals = vals
+	m.values = values
 	m.snap = &Snapshot{
 		ChangeSet: set,
 		Version:   fmt.Sprintf("%d", time.Now().Unix()),
@@ -142,8 +153,8 @@ func (m *loader) Get(path ...string) (reader.Value, error) {
 	defer m.Unlock()
 
 	// did sync actually work?
-	if m.vals != nil {
-		return m.vals.Get(path...), nil
+	if m.values != nil {
+		return m.values.Get(path...), nil
 	}
 
 	// assuming vals is nil
@@ -158,10 +169,10 @@ func (m *loader) Get(path ...string) (reader.Value, error) {
 	}
 
 	// lets set it just because
-	m.vals = v
+	m.values = v
 
-	if m.vals != nil {
-		return m.vals.Get(path...), nil
+	if m.values != nil {
+		return m.values.Get(path...), nil
 	}
 
 	// ok we're going hardcore now
@@ -290,7 +301,7 @@ func (m *loader) watch(idx int, s source.Source) {
 
 func (m *loader) loaded() bool {
 	m.RLock()
-	loaded := m.vals != nil
+	loaded := m.values != nil
 	m.RUnlock()
 	return loaded
 }
@@ -307,7 +318,7 @@ func (m *loader) reload() error {
 	}
 
 	// set values
-	m.vals, _ = m.opts.Reader.Values(set)
+	m.values, _ = m.opts.Reader.Values(set)
 	m.snap = &Snapshot{
 		ChangeSet: set,
 		Version:   fmt.Sprintf("%d", time.Now().Unix()),
@@ -332,7 +343,7 @@ func (m *loader) update() {
 
 	for _, w := range watchers {
 		select {
-		case w.updates <- m.vals.Get(w.path...):
+		case w.updates <- m.values.Get(w.path...):
 		default:
 		}
 	}

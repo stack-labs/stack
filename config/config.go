@@ -23,7 +23,7 @@ type Config interface {
 	Close() error
 	// Load config sources
 	Load(source ...source.Source) error
-	// Force a source changeset sync
+	// Force a source change set sync
 	Sync() error
 	// Watch a value for changes
 	Watch(path ...string) (Watcher, error)
@@ -32,6 +32,7 @@ type Config interface {
 type config struct {
 	exit    chan bool
 	storage storage.Storage
+	loader  loader.Loader
 	opts    Options
 
 	sync.RWMutex
@@ -49,14 +50,15 @@ func NewConfig(opts ...Option) (Config, error) {
 func newConfig(opts ...Option) (Config, error) {
 	options := NewOptions(opts...)
 
-	if err := options.Loader.Load(); err != nil {
+	l := loader.NewLoader()
+	if err := l.Load(); err != nil {
 		return nil, err
 	}
-	snap, err := options.Loader.Snapshot()
+	snap, err := l.Snapshot()
 	if err != nil {
 		return nil, err
 	}
-	values, err := options.Reader.Values(snap.ChangeSet)
+	values, err := l.Values(snap.ChangeSet)
 	if err != nil {
 		return nil, err
 	}
@@ -76,6 +78,7 @@ func newConfig(opts ...Option) (Config, error) {
 		storage: cStorage,
 		opts:    options,
 		snap:    snap,
+		loader:  l,
 		values:  values,
 	}
 
@@ -95,7 +98,7 @@ func (c *config) writeStorage(snap *loader.Snapshot) {
 func (c *config) run() {
 	watch := func(w loader.Watcher) error {
 		for {
-			// get changeset
+			// get change set
 			snap, err := w.Next()
 			if err != nil {
 				return err
@@ -106,14 +109,14 @@ func (c *config) run() {
 			c.Lock()
 
 			c.snap = snap
-			c.values, _ = c.opts.Reader.Values(snap.ChangeSet)
+			c.values, _ = c.loader.Values(snap.ChangeSet)
 
 			c.Unlock()
 		}
 	}
 
 	for {
-		w, err := c.opts.Loader.Watch()
+		w, err := c.loader.Watch()
 		if err != nil {
 			time.Sleep(time.Second)
 			continue
@@ -127,7 +130,7 @@ func (c *config) run() {
 			case <-done:
 			case <-c.exit:
 			}
-			w.Stop()
+			_ = w.Stop()
 		}()
 
 		// block watch
@@ -162,11 +165,11 @@ func (c *config) Scan(v interface{}) error {
 
 // sync loads all the sources, calls the parser and updates the config
 func (c *config) Sync() error {
-	if err := c.opts.Loader.Sync(); err != nil {
+	if err := c.loader.Sync(); err != nil {
 		return err
 	}
 
-	snap, err := c.opts.Loader.Snapshot()
+	snap, err := c.loader.Snapshot()
 	if err != nil {
 		return err
 	}
@@ -177,11 +180,11 @@ func (c *config) Sync() error {
 	defer c.Unlock()
 
 	c.snap = snap
-	vals, err := c.opts.Reader.Values(snap.ChangeSet)
+	values, err := c.loader.Values(snap.ChangeSet)
 	if err != nil {
 		return err
 	}
-	c.values = vals
+	c.values = values
 
 	return nil
 }
@@ -228,7 +231,7 @@ func (c *config) loadBackupConfig() error {
 
 	cs := &source.ChangeSet{
 		Data:      bytes,
-		Format:    c.opts.Reader.String(),
+		Format:    "json",
 		Source:    "backup",
 		Timestamp: time.Now(),
 	}
@@ -242,7 +245,7 @@ func (c *config) loadBackupConfig() error {
 	defer c.Unlock()
 
 	c.snap = snap
-	values, err := c.opts.Reader.Values(snap.ChangeSet)
+	values, err := c.loader.Values(snap.ChangeSet)
 	if err != nil {
 		return err
 	}
@@ -252,7 +255,7 @@ func (c *config) loadBackupConfig() error {
 }
 
 func (c *config) Load(sources ...source.Source) error {
-	if err := c.opts.Loader.Load(sources...); err != nil {
+	if err := c.loader.Load(sources...); err != nil {
 		if c.opts.EnableStorage && c.storage.Exist() {
 			log.Warn("load config from backup file")
 			return c.loadBackupConfig()
@@ -260,7 +263,7 @@ func (c *config) Load(sources ...source.Source) error {
 		return err
 	}
 
-	snap, err := c.opts.Loader.Snapshot()
+	snap, err := c.loader.Snapshot()
 	if err != nil {
 		return err
 	}
@@ -270,7 +273,7 @@ func (c *config) Load(sources ...source.Source) error {
 	defer c.Unlock()
 
 	c.snap = snap
-	values, err := c.opts.Reader.Values(snap.ChangeSet)
+	values, err := c.loader.Values(snap.ChangeSet)
 	if err != nil {
 		return err
 	}
@@ -282,14 +285,14 @@ func (c *config) Load(sources ...source.Source) error {
 func (c *config) Watch(path ...string) (Watcher, error) {
 	value := c.Get(path...)
 
-	w, err := c.opts.Loader.Watch(path...)
+	w, err := c.loader.Watch(path...)
 	if err != nil {
 		return nil, err
 	}
 
 	return &watcher{
 		lw:    w,
-		rd:    c.opts.Reader,
+		rd:    c.loader.Reader(),
 		path:  path,
 		value: value,
 	}, nil

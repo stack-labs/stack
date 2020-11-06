@@ -11,7 +11,7 @@ type Snapshot struct {
 }
 
 // Copy snapshot
-func Copy(s *Snapshot) *Snapshot {
+func (s *Snapshot) Clone() *Snapshot {
 	cs := *(s.ChangeSet)
 
 	return &Snapshot{

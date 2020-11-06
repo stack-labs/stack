@@ -2,6 +2,7 @@ package config
 
 import (
 	"bytes"
+
 	"github.com/stack-labs/stack-rpc/config/loader"
 	"github.com/stack-labs/stack-rpc/config/reader"
 )

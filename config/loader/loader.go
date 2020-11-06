@@ -2,9 +2,6 @@
 package loader
 
 import (
-	"context"
-
-	"github.com/stack-labs/stack-rpc/config/reader"
 	"github.com/stack-labs/stack-rpc/config/source"
 )
 
@@ -32,32 +29,4 @@ type Watcher interface {
 	Next() (*Snapshot, error)
 	// Stop watching for changes
 	Stop() error
-}
-
-// Snapshot is a merged ChangeSet
-type Snapshot struct {
-	// The merged ChangeSet
-	ChangeSet *source.ChangeSet
-	// Deterministic and comparable version of the snapshot
-	Version string
-}
-
-type Options struct {
-	Reader reader.Reader
-	Source []source.Source
-
-	// for alternative data
-	Context context.Context
-}
-
-type Option func(o *Options)
-
-// Copy snapshot
-func Copy(s *Snapshot) *Snapshot {
-	cs := *(s.ChangeSet)
-
-	return &Snapshot{
-		ChangeSet: &cs,
-		Version:   s.Version,
-	}
 }

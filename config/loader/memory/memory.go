@@ -1,7 +1,6 @@
 package memory
 
 import (
-	"bytes"
 	"container/list"
 	"errors"
 	"fmt"
@@ -9,9 +8,10 @@ import (
 	"sync"
 	"time"
 
+	log "github.com/stack-labs/stack-rpc/logger"
+
 	"github.com/stack-labs/stack-rpc/config/loader"
 	"github.com/stack-labs/stack-rpc/config/reader"
-	"github.com/stack-labs/stack-rpc/config/reader/json"
 	"github.com/stack-labs/stack-rpc/config/source"
 )
 
@@ -32,19 +32,17 @@ type memory struct {
 	watchers *list.List
 }
 
-type watcher struct {
-	exit    chan bool
-	path    []string
-	value   reader.Value
-	reader  reader.Reader
-	updates chan reader.Value
+func NewLoader(opts ...loader.Option) loader.Loader {
+	options := loader.NewOptions(opts...)
+
+	return &memory{
+		exit:     make(chan bool),
+		opts:     options,
+		watchers: list.New(),
+	}
 }
 
 func (m *memory) watch(idx int, s source.Source) {
-	m.Lock()
-	m.sets = append(m.sets, &source.ChangeSet{Source: s.String()})
-	m.Unlock()
-
 	// watches a source for changes
 	watch := func(idx int, s source.Watcher) error {
 		for {
@@ -55,27 +53,12 @@ func (m *memory) watch(idx int, s source.Source) {
 			}
 
 			m.Lock()
-
-			// save
 			m.sets[idx] = cs
-
-			// merge sets
-			set, err := m.opts.Reader.Merge(m.sets...)
-			if err != nil {
-				m.Unlock()
-				return err
-			}
-
-			// set values
-			m.vals, _ = m.opts.Reader.Values(set)
-			m.snap = &loader.Snapshot{
-				ChangeSet: set,
-				Version:   fmt.Sprintf("%d", time.Now().Unix()),
-			}
 			m.Unlock()
 
-			// send watch updates
-			m.update()
+			if err := m.reload(); err != nil {
+				return err
+			}
 		}
 	}
 
@@ -100,6 +83,7 @@ func (m *memory) watch(idx int, s source.Source) {
 
 		// block watch
 		if err := watch(idx, w); err != nil {
+			log.Errorf("loader watch source error : %s", err.Error())
 			// do something better
 			time.Sleep(time.Second)
 		}
@@ -117,11 +101,8 @@ func (m *memory) watch(idx int, s source.Source) {
 }
 
 func (m *memory) loaded() bool {
-	var loaded bool
 	m.RLock()
-	if m.vals != nil {
-		loaded = true
-	}
+	loaded := m.vals != nil
 	m.RUnlock()
 	return loaded
 }
@@ -171,19 +152,13 @@ func (m *memory) update() {
 
 // Snapshot returns a snapshot of the current loaded config
 func (m *memory) Snapshot() (*loader.Snapshot, error) {
-	if m.loaded() {
-		m.RLock()
-		snap := loader.Copy(m.snap)
-		m.RUnlock()
-		return snap, nil
+	if !m.loaded() {
+		// not loaded, sync
+		if err := m.Sync(); err != nil {
+			return nil, err
+		}
 	}
 
-	// not loaded, sync
-	if err := m.Sync(); err != nil {
-		return nil, err
-	}
-
-	// make copy
 	m.RLock()
 	snap := loader.Copy(m.snap)
 	m.RUnlock()
@@ -352,63 +327,4 @@ func (m *memory) Watch(path ...string) (loader.Watcher, error) {
 
 func (m *memory) String() string {
 	return "memory"
-}
-
-func (w *watcher) Next() (*loader.Snapshot, error) {
-	for {
-		select {
-		case <-w.exit:
-			return nil, errors.New("watcher stopped")
-		case v := <-w.updates:
-			if bytes.Equal(w.value.Bytes(), v.Bytes()) {
-				continue
-			}
-			w.value = v
-
-			cs := &source.ChangeSet{
-				Data:      v.Bytes(),
-				Format:    w.reader.String(),
-				Source:    "memory",
-				Timestamp: time.Now(),
-			}
-			cs.Sum()
-
-			return &loader.Snapshot{
-				ChangeSet: cs,
-				Version:   fmt.Sprintf("%d", time.Now().Unix()),
-			}, nil
-		}
-	}
-}
-
-func (w *watcher) Stop() error {
-	select {
-	case <-w.exit:
-	default:
-		close(w.exit)
-	}
-	return nil
-}
-
-func NewLoader(opts ...loader.Option) loader.Loader {
-	options := loader.Options{
-		Reader: json.NewReader(),
-	}
-
-	for _, o := range opts {
-		o(&options)
-	}
-
-	m := &memory{
-		exit:     make(chan bool),
-		opts:     options,
-		watchers: list.New(),
-		sources:  options.Source,
-	}
-
-	for i, s := range options.Source {
-		go m.watch(i, s)
-	}
-
-	return m
 }

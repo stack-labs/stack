@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/stack-labs/stack-rpc/config/loader"
-	"github.com/stack-labs/stack-rpc/config/loader/memory"
 	"github.com/stack-labs/stack-rpc/config/reader"
 	"github.com/stack-labs/stack-rpc/config/reader/json"
 )
@@ -22,7 +21,7 @@ type Option func(o *Options)
 
 func NewOptions(opts ...Option) Options {
 	options := Options{
-		Loader:        memory.NewLoader(),
+		Loader:        loader.NewLoader(),
 		Reader:        json.NewReader(),
 		EnableStorage: false,
 	}

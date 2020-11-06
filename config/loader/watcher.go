@@ -1,4 +1,4 @@
-package memory
+package loader
 
 import (
 	"bytes"
@@ -6,10 +6,19 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/config/loader"
 	"github.com/stack-labs/stack-rpc/config/reader"
 	"github.com/stack-labs/stack-rpc/config/source"
 )
+
+// Watcher lets you watch sources and returns a merged ChangeSet
+type Watcher interface {
+	// First call to next may return the current Snapshot
+	// If you are watching a path then only the data from
+	// that path is returned.
+	Next() (*Snapshot, error)
+	// Stop watching for changes
+	Stop() error
+}
 
 type watcher struct {
 	exit    chan bool
@@ -19,7 +28,7 @@ type watcher struct {
 	updates chan reader.Value
 }
 
-func (w *watcher) Next() (*loader.Snapshot, error) {
+func (w *watcher) Next() (*Snapshot, error) {
 	for {
 		select {
 		case <-w.exit:
@@ -38,7 +47,7 @@ func (w *watcher) Next() (*loader.Snapshot, error) {
 			}
 			cs.Sum()
 
-			return &loader.Snapshot{
+			return &Snapshot{
 				ChangeSet: cs,
 				Version:   fmt.Sprintf("%d", time.Now().Unix()),
 			}, nil

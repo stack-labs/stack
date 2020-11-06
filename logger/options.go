@@ -9,6 +9,18 @@ type PersistenceOptions struct {
 	Enable    bool
 	Dir       string
 	BackupDir string
+	// log file max size in megabytes
+	MaxFileSize int
+	// backup dir max size in megabytes
+	MaxBackupSize int
+	// backup files keep max days
+	MaxBackupKeepDays int
+	// default pattern is ${serviceName}_${level}.log
+	// todo available patterns map
+	FileNamePattern string
+	// default pattern is ${serviceName}_${level}_${yyyyMMdd_HH}_${idx}.zip
+	// todo available patterns map
+	BackupFileNamePattern string
 }
 
 type Option func(*Options)

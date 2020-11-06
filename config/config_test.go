@@ -131,3 +131,51 @@ func TestConfigMerge(t *testing.T) {
 			actualHost)
 	}
 }
+
+func TestConfigLoadFromBackupFile(t *testing.T) {
+	fh := createFileForIssue18(t, `{
+  "amqp": {
+    "host": "rabbit.platform",
+    "port": 80
+  },
+  "handler": {
+    "exchange": "springCloudBus"
+  }
+}`)
+	path := fh.Name()
+	defer func() {
+		fh.Close()
+		os.Remove(path)
+	}()
+
+	conf, err := NewConfig(EnableStorage(true))
+	if err != nil {
+		t.Fatalf("Expected no error but got %v", err)
+	}
+	if err := conf.Load(
+		file.NewSource(
+			file.WithPath(path),
+		),
+	); err != nil {
+		t.Fatalf("Expected no error but got %v", err)
+	}
+
+	conf2, err := NewConfig(EnableStorage(true))
+	if err != nil {
+		t.Fatalf("Expected no error but got %v", err)
+	}
+	if err := conf2.Load(
+		file.NewSource(
+			file.WithPath("/i/do/not/exists.json"),
+		),
+	); err != nil {
+		t.Fatalf("Expected no error but got %v", err)
+	}
+
+	actualHost := conf.Get("amqp", "host").String("backup")
+	if actualHost != "rabbit.platform" {
+		t.Fatalf("Expected %v but got %v",
+			"rabbit.platform",
+			actualHost)
+	}
+}

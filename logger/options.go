@@ -16,6 +16,7 @@ type Options struct {
 	Out io.Writer
 	// Caller skip frame count for file:line info
 	CallerSkipCount int
+	Persistence     bool
 	// Alternative options
 	Context context.Context
 }
@@ -38,6 +39,12 @@ func WithLevel(level Level) Option {
 func Output(out io.Writer) Option {
 	return func(args *Options) {
 		args.Out = out
+	}
+}
+
+func Persistence(p bool) Option {
+	return func(options *Options) {
+		options.Persistence = p
 	}
 }
 

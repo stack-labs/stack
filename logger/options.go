@@ -5,6 +5,12 @@ import (
 	"io"
 )
 
+type PersistenceOptions struct {
+	Enable    bool
+	Dir       string
+	BackupDir string
+}
+
 type Option func(*Options)
 
 type Options struct {
@@ -16,7 +22,7 @@ type Options struct {
 	Out io.Writer
 	// Caller skip frame count for file:line info
 	CallerSkipCount int
-	Persistence     bool
+	Persistence     *PersistenceOptions
 	// Alternative options
 	Context context.Context
 }
@@ -42,9 +48,9 @@ func Output(out io.Writer) Option {
 	}
 }
 
-func Persistence(p bool) Option {
+func Persistence(o *PersistenceOptions) Option {
 	return func(options *Options) {
-		options.Persistence = p
+		options.Persistence = o
 	}
 }
 

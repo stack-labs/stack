@@ -55,6 +55,8 @@ func TestConfigLoadWithGoodFile(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Expected no error but got %v", err)
 	}
+	defer conf.Close()
+
 	// Load file source
 	if err := conf.Load(file.NewSource(
 		file.WithPath(path),
@@ -76,6 +78,8 @@ func TestConfigLoadWithInvalidFile(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Expected no error but got %v", err)
 	}
+	defer conf.Close()
+
 	// Load file source
 	err = conf.Load(file.NewSource(
 		file.WithPath(path),
@@ -111,6 +115,7 @@ func TestConfigMerge(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Expected no error but got %v", err)
 	}
+	defer conf.Close()
 	if err := conf.Load(
 		file.NewSource(
 			file.WithPath(path),
@@ -148,6 +153,8 @@ func TestConfigLoadFromBackupFile(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Expected no error but got %v", err)
 	}
+	defer conf.Close()
+
 	if err := conf.Load(
 		file.NewSource(
 			file.WithPath(path),
@@ -160,6 +167,7 @@ func TestConfigLoadFromBackupFile(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Expected no error but got %v", err)
 	}
+	defer conf2.Close()
 	if err := conf2.Load(
 		file.NewSource(
 			file.WithPath("/i/do/not/exists.json"),

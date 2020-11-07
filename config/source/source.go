@@ -16,6 +16,8 @@ type Source interface {
 	Read() (*ChangeSet, error)
 	Watch() (Watcher, error)
 	String() string
+	// TODO add Close to avoid goroutine leakage
+	// Close() error
 }
 
 // ChangeSet represents a set of changes from a source

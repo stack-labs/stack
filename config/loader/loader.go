@@ -282,7 +282,9 @@ func (m *loader) watch(idx int, s source.Source) {
 
 		// block watch
 		if err := watch(idx, w); err != nil {
-			log.Errorf("loader watch source error : %s", err.Error())
+			if err != source.ErrWatcherStopped {
+				log.Errorf("loader watch source error : %s", err.Error())
+			}
 			// do something better
 			time.Sleep(time.Second)
 		}

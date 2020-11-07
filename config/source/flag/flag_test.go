@@ -13,8 +13,8 @@ var (
 )
 
 func initTestFlags() {
-	flag.Set("database-host", "localhost")
-	flag.Set("database-password", "some-password")
+	_ = flag.Set("database-host", "localhost")
+	_ = flag.Set("database-password", "some-password")
 	flag.Parse()
 }
 

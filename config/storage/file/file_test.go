@@ -16,7 +16,7 @@ func TestFile_Write_Load(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if bytes.Compare(data, d) != 0 {
+	if !bytes.Equal(data, d) {
 		t.Fatal(data, d)
 	}
 }

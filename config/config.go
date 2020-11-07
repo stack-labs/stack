@@ -239,7 +239,7 @@ func (c *config) loadBackupConfig() error {
 
 	cs := &source.ChangeSet{
 		Data:      bytes,
-		Format:    "json",
+		Format:    "json", // only json reader
 		Source:    "backup",
 		Timestamp: time.Now(),
 	}

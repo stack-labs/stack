@@ -12,6 +12,25 @@ import (
 	"github.com/stack-labs/stack-rpc/config/source/file"
 )
 
+func createFile(t *testing.T, content string, format string) *os.File {
+	data := []byte(content)
+	path := filepath.Join(os.TempDir(), fmt.Sprintf("file.%s", format))
+	fh, err := os.Create(path)
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = fh.Write(data)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if err := fh.Close(); err != nil {
+		t.Error(err)
+	}
+
+	return fh
+}
+
 func createFileForIssue18(t *testing.T, content string) *os.File {
 	data := []byte(content)
 	path := filepath.Join(os.TempDir(), fmt.Sprintf("file.%d", time.Now().UnixNano()))
@@ -28,8 +47,13 @@ func createFileForIssue18(t *testing.T, content string) *os.File {
 }
 
 func createFileForTest(t *testing.T) *os.File {
-	data := []byte(`{"foo": "bar"}`)
-	path := filepath.Join(os.TempDir(), fmt.Sprintf("file.%d", time.Now().UnixNano()))
+	data := []byte(`
+stack:
+  service:
+    name: demo.service
+    rpc-port: 8081
+    http-port: 8082`)
+	path := filepath.Join(os.TempDir(), fmt.Sprintf("file.yml"))
 	fh, err := os.Create(path)
 	if err != nil {
 		t.Error(err)
@@ -181,5 +205,86 @@ func TestConfigLoadFromBackupFile(t *testing.T) {
 		t.Fatalf("Expected %v but got %v",
 			"rabbit.platform",
 			actualHost)
+	}
+}
+
+func TestYmlConfigLoadFromBackupFile(t *testing.T) {
+	data := []byte(`
+stack:
+  service:
+    name: demo.service
+    rpc-port: 8081
+    http-port: 8082`)
+	path := filepath.Join(os.TempDir(), fmt.Sprintf("file.yml"))
+	fh, err := os.Create(path)
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = fh.Write(data)
+	if err != nil {
+		t.Error(err)
+	}
+	defer func() {
+		fh.Close()
+		os.Remove(path)
+	}()
+
+	conf, err := NewConfig(EnableStorage(true), StorageDir(os.TempDir()))
+	if err != nil {
+		t.Fatalf("Expected no error but got %v", err)
+	}
+	defer conf.Close()
+
+	if err := conf.Load(
+		file.NewSource(
+			file.WithPath(path),
+		),
+	); err != nil {
+		t.Fatalf("Expected no error but got %v", err)
+	}
+
+	conf2, err := NewConfig(EnableStorage(true), StorageDir(os.TempDir()))
+	if err != nil {
+		t.Fatalf("Expected no error but got %v", err)
+	}
+	defer conf2.Close()
+	if err := conf2.Load(
+		file.NewSource(
+			file.WithPath("/i/do/not/exists.json"),
+		),
+	); err != nil {
+		t.Fatalf("Expected no error but got %v", err)
+	}
+
+	port := conf.Get("stack", "service", "rpc-port").Int(1)
+	if port != 8081 {
+		t.Fatalf("Expected %d but got %d",
+			8081,
+			port)
+	}
+}
+
+func TestSomeConfigLoad(t *testing.T) {
+	formats := []string{"json", "yaml", "toml", "xml", "hcl", "yml"}
+	for _, v := range formats {
+		fh := createFile(t, "", v)
+		path := fh.Name()
+		defer func() {
+			os.Remove(path)
+		}()
+
+		conf, err := NewConfig()
+		if err != nil {
+			t.Fatalf("Expected no error but got %v", err)
+		}
+		defer conf.Close()
+
+		if err := conf.Load(
+			file.NewSource(
+				file.WithPath(path),
+			),
+		); err != nil {
+			t.Fatalf("Expected no error but got %v", err)
+		}
 	}
 }

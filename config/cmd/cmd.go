@@ -506,8 +506,7 @@ func (c *cmd) Init(opts ...Option) error {
 	c.app.Version = c.opts.Version
 	c.app.HideVersion = len(c.opts.Version) == 0
 	c.app.Usage = c.opts.Description
-	c.app.RunAndExitOnError()
-	return nil
+	return c.app.Run(os.Args)
 }
 
 func DefaultOptions() Options {

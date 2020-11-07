@@ -14,13 +14,13 @@ import (
 	"github.com/stack-labs/stack-rpc/client/selector"
 	"github.com/stack-labs/stack-rpc/codec"
 	"github.com/stack-labs/stack-rpc/codec/bytes"
-	"github.com/stack-labs/stack-rpc/config/options"
 	"github.com/stack-labs/stack-rpc/errors"
 	"github.com/stack-labs/stack-rpc/metadata"
 	"github.com/stack-labs/stack-rpc/proxy"
 	"github.com/stack-labs/stack-rpc/router"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack-rpc/util/options"
 )
 
 // Proxy will transparently proxy requests to an endpoint.

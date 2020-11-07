@@ -11,8 +11,8 @@ import (
 	"github.com/lib/pq"
 	"github.com/pkg/errors"
 
-	"github.com/stack-labs/stack-rpc/config/options"
 	"github.com/stack-labs/stack-rpc/store"
+	"github.com/stack-labs/stack-rpc/util/options"
 )
 
 // DefaultNamespace is the namespace that the sql store

@@ -53,7 +53,7 @@ stack:
     name: demo.service
     rpc-port: 8081
     http-port: 8082`)
-	path := filepath.Join(os.TempDir(), fmt.Sprintf("file.yml"))
+	path := filepath.Join(os.TempDir(), "file.yml")
 	fh, err := os.Create(path)
 	if err != nil {
 		t.Error(err)
@@ -215,7 +215,7 @@ stack:
     name: demo.service
     rpc-port: 8081
     http-port: 8082`)
-	path := filepath.Join(os.TempDir(), fmt.Sprintf("file.yml"))
+	path := filepath.Join(os.TempDir(), "file.yml")
 	fh, err := os.Create(path)
 	if err != nil {
 		t.Error(err)

@@ -122,6 +122,7 @@ func (c *config) run() {
 	for {
 		w, err := c.loader.Watch()
 		if err != nil {
+			log.Warnf("create loader watcher error: %v", err)
 			time.Sleep(time.Second)
 			continue
 		}
@@ -199,6 +200,9 @@ func (c *config) Close() error {
 		return nil
 	default:
 		close(c.exit)
+		if err := c.loader.Close(); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -235,7 +239,7 @@ func (c *config) loadBackupConfig() error {
 
 	cs := &source.ChangeSet{
 		Data:      bytes,
-		Format:    "json",
+		Format:    "json", // only json reader
 		Source:    "backup",
 		Timestamp: time.Now(),
 	}

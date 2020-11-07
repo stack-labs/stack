@@ -15,7 +15,7 @@ jobs:
     - name: Intsall Golangci-lint 
       run: curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b . latest
     - name: Lint
-      run: ./golangci-lint run ./...
+      run: ./golangci-lint run config/...
       
   test:
 #    needs: Lint
@@ -36,5 +36,5 @@ jobs:
       run: go get -v -t -d ./...
     - name: Go Test
 #       run: go test -v ./... 
-      run: sudo chmod -R 777 . && cd config && go test -v
+      run: cd config && go test -v
       

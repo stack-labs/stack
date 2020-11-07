@@ -12,10 +12,6 @@ import (
 	"github.com/stack-labs/stack-rpc/config/source/file"
 )
 
-var (
-	sep = string(os.PathSeparator)
-)
-
 func createFileForIssue18(t *testing.T, content string) *os.File {
 	data := []byte(content)
 	path := filepath.Join(os.TempDir(), fmt.Sprintf("file.%d", time.Now().UnixNano()))

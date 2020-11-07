@@ -23,12 +23,12 @@ func (c *cliSource) Read() (*source.ChangeSet, error) {
 
 	for _, name := range c.ctx.GlobalFlagNames() {
 		tmp := toEntry(name, c.ctx.GlobalGeneric(name))
-		mergo.Map(&changes, tmp) // need to sort error handling
+		_ = mergo.Map(&changes, tmp) // TODO need to sort error handling
 	}
 
 	for _, name := range c.ctx.FlagNames() {
 		tmp := toEntry(name, c.ctx.Generic(name))
-		mergo.Map(&changes, tmp) // need to sort error handling
+		_ = mergo.Map(&changes, tmp) // TODO need to sort error handling
 	}
 
 	b, err := c.opts.Encoder.Encode(changes)
@@ -121,10 +121,10 @@ func NewSource(opts ...source.Option) source.Source {
 
 		// parse flags
 		set.SetOutput(ioutil.Discard)
-		set.Parse(os.Args[1:])
+		_ = set.Parse(os.Args[1:])
 
 		// normalise flags
-		normalizeFlags(app.Flags, set)
+		_ = normalizeFlags(app.Flags, set)
 
 		// create context
 		ctx = cli.NewContext(app, set, nil)

@@ -28,7 +28,9 @@ func test(t *testing.T, withContext bool) {
 		}
 
 		// run app
-		app.Run([]string{"run", "-db-host", "localhost"})
+		if err := app.Run([]string{"run", "-db-host", "localhost"}); err != nil {
+			t.Error(err)
+		}
 		// no context
 	} else {
 		// set args

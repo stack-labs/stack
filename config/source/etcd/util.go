@@ -14,11 +14,11 @@ func makeEvMap(e encoder.Encoder, data map[string]interface{}, kv []*clientv3.Ev
 	}
 
 	for _, v := range kv {
-		switch mvccpb.Event_EventType(v.Type) {
+		switch v.Type {
 		case mvccpb.DELETE:
-			data = update(e, data, (*mvccpb.KeyValue)(v.Kv), "delete", stripPrefix)
+			data = update(e, data, v.Kv, "delete", stripPrefix)
 		default:
-			data = update(e, data, (*mvccpb.KeyValue)(v.Kv), "insert", stripPrefix)
+			data = update(e, data, v.Kv, "insert", stripPrefix)
 		}
 	}
 
@@ -43,7 +43,7 @@ func update(e encoder.Encoder, data map[string]interface{}, v *mvccpb.KeyValue, 
 	keys := strings.Split(vkey, "/")
 
 	var vals interface{}
-	e.Decode(v.Value, &vals)
+	_ = e.Decode(v.Value, &vals)
 
 	if !haveSplit && len(keys) == 1 {
 		switch action {

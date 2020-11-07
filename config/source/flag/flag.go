@@ -3,10 +3,11 @@ package flag
 import (
 	"errors"
 	"flag"
-	"github.com/imdario/mergo"
-	"github.com/stack-labs/stack-rpc/config/source"
 	"strings"
 	"time"
+
+	"github.com/imdario/mergo"
+	"github.com/stack-labs/stack-rpc/config/source"
 )
 
 type flagsrc struct {
@@ -35,8 +36,7 @@ func (fs *flagsrc) Read() (*source.ChangeSet, error) {
 			tmp = map[string]interface{}{k: tmp}
 		}
 
-		mergo.Map(&changes, tmp) // need to sort error handling
-		return
+		_ = mergo.Map(&changes, tmp) // need to sort error handling
 	}
 
 	unset, ok := fs.opts.Context.Value(includeUnsetKey{}).(bool)

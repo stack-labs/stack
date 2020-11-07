@@ -6,6 +6,7 @@ import (
 
 type Options struct {
 	EnableStorage bool
+	StorageDir    string
 	// for alternative data
 	Context context.Context
 }
@@ -27,5 +28,11 @@ func NewOptions(opts ...Option) Options {
 func EnableStorage(e bool) Option {
 	return func(o *Options) {
 		o.EnableStorage = e
+	}
+}
+
+func StorageDir(d string) Option {
+	return func(o *Options) {
+		o.StorageDir = d
 	}
 }

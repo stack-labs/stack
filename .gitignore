@@ -34,6 +34,3 @@ _cgo_export.*
 *~
 *.swp
 *.swo
-
-# config test files
-config/.stack_config/

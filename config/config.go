@@ -4,6 +4,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"sync"
 	"time"
 
@@ -65,11 +66,14 @@ func newConfig(opts ...Option) (Config, error) {
 
 	var cStorage storage.Storage
 	if options.EnableStorage {
-		dir, err := os.Getwd()
-		if err != nil {
-			return nil, err
+		dir := options.StorageDir
+		if len(dir) == 0 {
+			dir, err = os.Getwd()
+			if err != nil {
+				return nil, err
+			}
 		}
-		f := fmt.Sprintf("%s/.stack_config/config.conf", dir)
+		f := filepath.Join(dir, "stack_config.conf")
 		cStorage = file.NewStorage(f)
 	}
 

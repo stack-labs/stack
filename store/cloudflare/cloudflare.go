@@ -18,8 +18,8 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/stack-labs/stack-rpc/config/options"
 	"github.com/stack-labs/stack-rpc/store"
+	"github.com/stack-labs/stack-rpc/util/options"
 )
 
 const (

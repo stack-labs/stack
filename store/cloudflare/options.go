@@ -1,7 +1,7 @@
 package cloudflare
 
 import (
-	"github.com/stack-labs/stack-rpc/config/options"
+	"github.com/stack-labs/stack-rpc/util/options"
 )
 
 // Token sets the cloudflare api token

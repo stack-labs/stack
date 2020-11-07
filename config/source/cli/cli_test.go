@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/stack-labs/stack-rpc/cli"
-	"github.com/stack-labs/stack-rpc/config/cmd"
+	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/config/source"
 )
 

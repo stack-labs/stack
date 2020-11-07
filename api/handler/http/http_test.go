@@ -9,7 +9,7 @@ import (
 	"github.com/stack-labs/stack-rpc/api/handler"
 	"github.com/stack-labs/stack-rpc/api/router"
 	regRouter "github.com/stack-labs/stack-rpc/api/router/registry"
-	"github.com/stack-labs/stack-rpc/config/cmd"
+	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/registry/memory"
 )

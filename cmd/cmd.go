@@ -195,10 +195,10 @@ var (
 
 	DefaultBrokers = map[string]func(...broker.Option) broker.Broker{
 		"stack.rpc.broker": brokerSrv.NewBroker,
-		"service":         brokerSrv.NewBroker,
-		"http":            http.NewBroker,
-		"memory":          memory.NewBroker,
-		"nats":            nats.NewBroker,
+		"service":          brokerSrv.NewBroker,
+		"http":             http.NewBroker,
+		"memory":           memory.NewBroker,
+		"nats":             nats.NewBroker,
 	}
 
 	DefaultClients = map[string]func(...client.Option) client.Client{
@@ -209,10 +209,10 @@ var (
 
 	DefaultRegistries = map[string]func(...registry.Option) registry.Registry{
 		"stack.rpc.registry": regSrv.NewRegistry,
-		"service":           regSrv.NewRegistry,
-		"etcd":              etcd.NewRegistry,
-		"mdns":              mdns.NewRegistry,
-		"memory":            rmem.NewRegistry,
+		"service":            regSrv.NewRegistry,
+		"etcd":               etcd.NewRegistry,
+		"mdns":               mdns.NewRegistry,
+		"memory":             rmem.NewRegistry,
 	}
 
 	DefaultSelectors = map[string]func(...selector.Option) selector.Selector{
@@ -240,15 +240,6 @@ var (
 		"local":      runtime.NewRuntime,
 		"kubernetes": kubernetes.NewRuntime,
 	}
-
-	// used for default selection as the fall back
-	defaultClient    = "rpc"
-	defaultServer    = "rpc"
-	defaultBroker    = "http"
-	defaultRegistry  = "mdns"
-	defaultSelector  = "registry"
-	defaultTransport = "http"
-	defaultRuntime   = "local"
 )
 
 func init() {
@@ -515,8 +506,7 @@ func (c *cmd) Init(opts ...Option) error {
 	c.app.Version = c.opts.Version
 	c.app.HideVersion = len(c.opts.Version) == 0
 	c.app.Usage = c.opts.Description
-	c.app.RunAndExitOnError()
-	return nil
+	return c.app.Run(os.Args)
 }
 
 func DefaultOptions() Options {

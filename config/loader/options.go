@@ -10,6 +10,7 @@ import (
 
 type Options struct {
 	Reader reader.Reader
+	Watch  bool
 
 	// for alternative data
 	Context context.Context
@@ -24,9 +25,17 @@ func WithReader(r reader.Reader) Option {
 	}
 }
 
+// WithReader sets the config reader
+func WithWatch(t bool) Option {
+	return func(o *Options) {
+		o.Watch = t
+	}
+}
+
 func NewOptions(opts ...Option) Options {
 	options := Options{
 		Reader: json.NewReader(),
+		Watch:  true,
 	}
 
 	for _, o := range opts {

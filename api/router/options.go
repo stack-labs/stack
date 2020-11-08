@@ -3,7 +3,7 @@ package router
 import (
 	"github.com/stack-labs/stack-rpc/api/resolver"
 	"github.com/stack-labs/stack-rpc/api/resolver/micro"
-	"github.com/stack-labs/stack-rpc/config/cmd"
+	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/registry"
 )
 

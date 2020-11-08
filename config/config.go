@@ -4,6 +4,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"sync"
 	"time"
 
@@ -50,7 +51,7 @@ func NewConfig(opts ...Option) (Config, error) {
 func newConfig(opts ...Option) (Config, error) {
 	options := NewOptions(opts...)
 
-	l := loader.NewLoader()
+	l := loader.NewLoader(loader.WithWatch(options.Watch))
 	if err := l.Load(); err != nil {
 		return nil, err
 	}
@@ -64,12 +65,15 @@ func newConfig(opts ...Option) (Config, error) {
 	}
 
 	var cStorage storage.Storage
-	if options.EnableStorage {
-		dir, err := os.Getwd()
-		if err != nil {
-			return nil, err
+	if options.Storage {
+		dir := options.StorageDir
+		if len(dir) == 0 {
+			dir, err = os.Getwd()
+			if err != nil {
+				return nil, err
+			}
 		}
-		f := fmt.Sprintf("%s/.stack_config/config.conf", dir)
+		f := filepath.Join(dir, "stack_config.conf")
 		cStorage = file.NewStorage(f)
 	}
 
@@ -82,13 +86,15 @@ func newConfig(opts ...Option) (Config, error) {
 		values:  values,
 	}
 
-	go c.run()
+	if c.opts.Watch {
+		go c.run()
+	}
 
 	return c, nil
 }
 
 func (c *config) writeStorage(snap *loader.Snapshot) {
-	if snap != nil && c.opts.EnableStorage && c.storage != nil {
+	if snap != nil && c.opts.Storage && c.storage != nil {
 		if err := c.storage.Write(snap.ChangeSet.Data); err != nil {
 			log.Errorf("config storage write error: %v", err)
 		}
@@ -118,6 +124,7 @@ func (c *config) run() {
 	for {
 		w, err := c.loader.Watch()
 		if err != nil {
+			log.Warnf("create loader watcher error: %v", err)
 			time.Sleep(time.Second)
 			continue
 		}
@@ -195,6 +202,9 @@ func (c *config) Close() error {
 		return nil
 	default:
 		close(c.exit)
+		if err := c.loader.Close(); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -231,7 +241,7 @@ func (c *config) loadBackupConfig() error {
 
 	cs := &source.ChangeSet{
 		Data:      bytes,
-		Format:    "json",
+		Format:    "json", // only json reader
 		Source:    "backup",
 		Timestamp: time.Now(),
 	}
@@ -256,7 +266,7 @@ func (c *config) loadBackupConfig() error {
 
 func (c *config) Load(sources ...source.Source) error {
 	if err := c.loader.Load(sources...); err != nil {
-		if c.opts.EnableStorage && c.storage.Exist() {
+		if c.opts.Storage && c.storage.Exist() {
 			log.Warn("load config from backup file")
 			return c.loadBackupConfig()
 		}

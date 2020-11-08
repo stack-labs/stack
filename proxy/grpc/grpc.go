@@ -9,9 +9,9 @@ import (
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/grpc"
 	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/config/options"
 	"github.com/stack-labs/stack-rpc/proxy"
 	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/util/options"
 )
 
 // Proxy will transparently proxy requests to the backend.

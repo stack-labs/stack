@@ -197,7 +197,9 @@ func (m *loader) Load(sources ...source.Source) error {
 		m.sets = append(m.sets, set)
 		idx := len(m.sets) - 1
 		m.Unlock()
-		go m.watch(idx, source)
+		if m.opts.Watch {
+			go m.watch(idx, source)
+		}
 	}
 
 	if err := m.reload(); err != nil {
@@ -277,12 +279,14 @@ func (m *loader) watch(idx int, s source.Source) {
 			case <-done:
 			case <-m.exit:
 			}
-			w.Stop()
+			_ = w.Stop()
 		}()
 
 		// block watch
 		if err := watch(idx, w); err != nil {
-			log.Errorf("loader watch source error : %s", err.Error())
+			if err != source.ErrWatcherStopped {
+				log.Errorf("loader watch source error : %s", err.Error())
+			}
 			// do something better
 			time.Sleep(time.Second)
 		}

@@ -51,7 +51,8 @@ func (q *quicSocket) Send(m *transport.Message) error {
 }
 
 func (q *quicSocket) Close() error {
-	return q.s.Close()
+	// TODO check
+	return q.s.CloseWithError(quic.ErrorCode(0), "")
 }
 
 func (q *quicSocket) Local() string {
@@ -118,8 +119,9 @@ func (q *quicTransport) Dial(addr string, opts ...transport.DialOption) (transpo
 		}
 	}
 	s, err := quic.DialAddr(addr, config, &quic.Config{
-		IdleTimeout: time.Minute * 2,
-		KeepAlive:   true,
+		// TODO check
+		//IdleTimeout: time.Minute * 2,
+		KeepAlive: true,
 	})
 	if err != nil {
 		return nil, err

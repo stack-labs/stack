@@ -7,8 +7,8 @@ import (
 
 	client "github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/mvcc/mvccpb"
-	"github.com/stack-labs/stack-rpc/config/options"
 	"github.com/stack-labs/stack-rpc/store"
+	"github.com/stack-labs/stack-rpc/util/options"
 )
 
 type ekv struct {

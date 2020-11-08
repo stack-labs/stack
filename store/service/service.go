@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/config/options"
 	"github.com/stack-labs/stack-rpc/store"
 	pb "github.com/stack-labs/stack-rpc/store/service/proto"
+	"github.com/stack-labs/stack-rpc/util/options"
 )
 
 type serviceStore struct {

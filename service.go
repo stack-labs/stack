@@ -8,7 +8,7 @@ import (
 	"syscall"
 
 	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/config/cmd"
+	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/debug/profile"
 	"github.com/stack-labs/stack-rpc/debug/profile/pprof"
 	"github.com/stack-labs/stack-rpc/debug/service/handler"
@@ -130,6 +130,10 @@ func (s *service) Stop() error {
 		return err
 	}
 
+	if err := s.opts.Config.Close(); err != nil {
+		return err
+	}
+
 	for _, fn := range s.opts.AfterStop {
 		if err := fn(); err != nil {
 			gerr = err
@@ -140,6 +144,12 @@ func (s *service) Stop() error {
 }
 
 func (s *service) Run() error {
+	// init the stack config
+	var err error
+	if s.opts.Config, err = newConfig(s.opts.ConfigSource...); err != nil {
+		return err
+	}
+
 	// register the debug handler
 	s.opts.Server.Handle(
 		s.opts.Server.NewHandler(

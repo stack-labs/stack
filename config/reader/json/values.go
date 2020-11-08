@@ -38,7 +38,7 @@ func newValue(s *simple.Json) reader.Value {
 }
 
 func (j *jsonValues) Get(path ...string) reader.Value {
-	return &jsonValue{j.sj.GetPath(path...)}
+	return newValue(j.sj.GetPath(path...))
 }
 
 func (j *jsonValues) Del(path ...string) {
@@ -56,7 +56,6 @@ func (j *jsonValues) Del(path ...string) {
 	vals := j.sj.GetPath(path[:len(path)-1]...)
 	vals.Del(path[len(path)-1])
 	j.sj.SetPath(path[:len(path)-1], vals.Interface())
-	return
 }
 
 func (j *jsonValues) Set(val interface{}, path ...string) {

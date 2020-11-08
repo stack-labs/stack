@@ -4,6 +4,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"sync"
 	"time"
 
@@ -23,7 +24,7 @@ type Config interface {
 	Close() error
 	// Load config sources
 	Load(source ...source.Source) error
-	// Force a source changeset sync
+	// Force a source change set sync
 	Sync() error
 	// Watch a value for changes
 	Watch(path ...string) (Watcher, error)
@@ -32,6 +33,7 @@ type Config interface {
 type config struct {
 	exit    chan bool
 	storage storage.Storage
+	loader  loader.Loader
 	opts    Options
 
 	sync.RWMutex
@@ -49,27 +51,30 @@ func NewConfig(opts ...Option) (Config, error) {
 func newConfig(opts ...Option) (Config, error) {
 	options := NewOptions(opts...)
 
-	if err := options.Loader.Load(options.Source...); err != nil {
+	l := loader.NewLoader(loader.WithWatch(options.Watch))
+	if err := l.Load(); err != nil {
 		return nil, err
 	}
-
-	snap, err := options.Loader.Snapshot()
+	snap, err := l.Snapshot()
 	if err != nil {
 		return nil, err
 	}
-	values, err := options.Reader.Values(snap.ChangeSet)
+	values, err := l.Values(snap.ChangeSet)
 	if err != nil {
 		return nil, err
 	}
 
 	var cStorage storage.Storage
-	if options.EnableStorage {
-		local, err := os.Getwd()
-		if err != nil {
-			return nil, err
+	if options.Storage {
+		dir := options.StorageDir
+		if len(dir) == 0 {
+			dir, err = os.Getwd()
+			if err != nil {
+				return nil, err
+			}
 		}
-		local = fmt.Sprintf("%s/.stack_config/config", local)
-		cStorage = file.NewStorage(local, snap.ChangeSet.Format)
+		f := filepath.Join(dir, "stack_config.conf")
+		cStorage = file.NewStorage(f)
 	}
 
 	c := &config{
@@ -77,20 +82,19 @@ func newConfig(opts ...Option) (Config, error) {
 		storage: cStorage,
 		opts:    options,
 		snap:    snap,
+		loader:  l,
 		values:  values,
 	}
 
-	if len(options.Source) > 0 {
-		c.writeStorage(snap)
+	if c.opts.Watch {
+		go c.run()
 	}
-
-	go c.run()
 
 	return c, nil
 }
 
 func (c *config) writeStorage(snap *loader.Snapshot) {
-	if snap != nil && c.opts.EnableStorage && c.storage != nil {
+	if snap != nil && c.opts.Storage && c.storage != nil {
 		if err := c.storage.Write(snap.ChangeSet.Data); err != nil {
 			log.Errorf("config storage write error: %v", err)
 		}
@@ -100,7 +104,7 @@ func (c *config) writeStorage(snap *loader.Snapshot) {
 func (c *config) run() {
 	watch := func(w loader.Watcher) error {
 		for {
-			// get changeset
+			// get change set
 			snap, err := w.Next()
 			if err != nil {
 				return err
@@ -111,15 +115,16 @@ func (c *config) run() {
 			c.Lock()
 
 			c.snap = snap
-			c.values, _ = c.opts.Reader.Values(snap.ChangeSet)
+			c.values, _ = c.loader.Values(snap.ChangeSet)
 
 			c.Unlock()
 		}
 	}
 
 	for {
-		w, err := c.opts.Loader.Watch()
+		w, err := c.loader.Watch()
 		if err != nil {
+			log.Warnf("create loader watcher error: %v", err)
 			time.Sleep(time.Second)
 			continue
 		}
@@ -132,7 +137,7 @@ func (c *config) run() {
 			case <-done:
 			case <-c.exit:
 			}
-			w.Stop()
+			_ = w.Stop()
 		}()
 
 		// block watch
@@ -167,11 +172,11 @@ func (c *config) Scan(v interface{}) error {
 
 // sync loads all the sources, calls the parser and updates the config
 func (c *config) Sync() error {
-	if err := c.opts.Loader.Sync(); err != nil {
+	if err := c.loader.Sync(); err != nil {
 		return err
 	}
 
-	snap, err := c.opts.Loader.Snapshot()
+	snap, err := c.loader.Snapshot()
 	if err != nil {
 		return err
 	}
@@ -182,11 +187,11 @@ func (c *config) Sync() error {
 	defer c.Unlock()
 
 	c.snap = snap
-	vals, err := c.opts.Reader.Values(snap.ChangeSet)
+	values, err := c.loader.Values(snap.ChangeSet)
 	if err != nil {
 		return err
 	}
-	c.values = vals
+	c.values = values
 
 	return nil
 }
@@ -197,6 +202,9 @@ func (c *config) Close() error {
 		return nil
 	default:
 		close(c.exit)
+		if err := c.loader.Close(); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -225,12 +233,47 @@ func (c *config) Bytes() []byte {
 	return c.values.Bytes()
 }
 
-func (c *config) Load(sources ...source.Source) error {
-	if err := c.opts.Loader.Load(sources...); err != nil {
+func (c *config) loadBackupConfig() error {
+	bytes, err := c.storage.Load()
+	if err != nil {
 		return err
 	}
 
-	snap, err := c.opts.Loader.Snapshot()
+	cs := &source.ChangeSet{
+		Data:      bytes,
+		Format:    "json", // only json reader
+		Source:    "backup",
+		Timestamp: time.Now(),
+	}
+	cs.Sum()
+	snap := &loader.Snapshot{
+		ChangeSet: cs,
+		Version:   fmt.Sprintf("%d", time.Now().Unix()),
+	}
+
+	c.Lock()
+	defer c.Unlock()
+
+	c.snap = snap
+	values, err := c.loader.Values(snap.ChangeSet)
+	if err != nil {
+		return err
+	}
+	c.values = values
+
+	return nil
+}
+
+func (c *config) Load(sources ...source.Source) error {
+	if err := c.loader.Load(sources...); err != nil {
+		if c.opts.Storage && c.storage.Exist() {
+			log.Warn("load config from backup file")
+			return c.loadBackupConfig()
+		}
+		return err
+	}
+
+	snap, err := c.loader.Snapshot()
 	if err != nil {
 		return err
 	}
@@ -240,7 +283,7 @@ func (c *config) Load(sources ...source.Source) error {
 	defer c.Unlock()
 
 	c.snap = snap
-	values, err := c.opts.Reader.Values(snap.ChangeSet)
+	values, err := c.loader.Values(snap.ChangeSet)
 	if err != nil {
 		return err
 	}
@@ -252,14 +295,14 @@ func (c *config) Load(sources ...source.Source) error {
 func (c *config) Watch(path ...string) (Watcher, error) {
 	value := c.Get(path...)
 
-	w, err := c.opts.Loader.Watch(path...)
+	w, err := c.loader.Watch(path...)
 	if err != nil {
 		return nil, err
 	}
 
 	return &watcher{
 		lw:    w,
-		rd:    c.opts.Reader,
+		rd:    c.loader.Reader(),
 		path:  path,
 		value: value,
 	}, nil

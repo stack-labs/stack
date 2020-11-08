@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/stack-labs/stack-rpc/cli"
-	"github.com/stack-labs/stack-rpc/config/cmd"
+	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/config/source"
 )
 
@@ -28,7 +28,9 @@ func test(t *testing.T, withContext bool) {
 		}
 
 		// run app
-		app.Run([]string{"run", "-db-host", "localhost"})
+		if err := app.Run([]string{"run", "-db-host", "localhost"}); err != nil {
+			t.Error(err)
+		}
 		// no context
 	} else {
 		// set args

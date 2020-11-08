@@ -4,24 +4,29 @@ import (
 	"context"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/cli"
+	"github.com/stack-labs/stack-rpc/config/source/file"
+
+	"github.com/stack-labs/stack-rpc/config/source"
+
 	"github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack-rpc/cli"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/config/cmd"
+	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/transport"
 )
 
 type Options struct {
-	Broker    broker.Broker
-	Cmd       cmd.Cmd
-	Client    client.Client
-	Server    server.Server
-	Registry  registry.Registry
-	Transport transport.Transport
-
+	Broker       broker.Broker
+	Cmd          cmd.Cmd
+	Client       client.Client
+	Server       server.Server
+	Registry     registry.Registry
+	Transport    transport.Transport
+	ConfigSource []source.Source
+	Config       Config
 	// Before and After funcs
 	BeforeStart []func() error
 	BeforeStop  []func() error
@@ -37,14 +42,15 @@ type Options struct {
 
 func newOptions(opts ...Option) Options {
 	opt := Options{
-		Broker:    broker.DefaultBroker,
-		Cmd:       cmd.DefaultCmd,
-		Client:    client.DefaultClient,
-		Server:    server.DefaultServer,
-		Registry:  registry.DefaultRegistry,
-		Transport: transport.DefaultTransport,
-		Context:   context.Background(),
-		Signal:    true,
+		Broker:       broker.DefaultBroker,
+		Cmd:          cmd.DefaultCmd,
+		Client:       client.DefaultClient,
+		Server:       server.DefaultServer,
+		Registry:     registry.DefaultRegistry,
+		Transport:    transport.DefaultTransport,
+		Context:      context.Background(),
+		ConfigSource: []source.Source{file.NewSource(file.WithPath(DefaultConfigPath))},
+		Signal:       true,
 	}
 
 	for _, o := range opts {
@@ -54,6 +60,11 @@ func newOptions(opts ...Option) Options {
 	return opt
 }
 
+func ConfigSource(s ...source.Source) Option {
+	return func(o *Options) {
+		o.ConfigSource = s
+	}
+}
 func Broker(b broker.Broker) Option {
 	return func(o *Options) {
 		o.Broker = b

@@ -10,16 +10,27 @@ import (
 	"github.com/stack-labs/stack-rpc/config/storage"
 )
 
+const _perm = 0644
+
 type file struct {
 	file string
 }
 
-func NewStorage(path, format string) storage.Storage {
-	return &file{file: fmt.Sprintf("%s.%s", path, format)}
+func NewStorage(f string) storage.Storage {
+	return &file{file: f}
+}
+
+func (f *file) Exist() bool {
+	exit, _ := existFile(f.file)
+	return exit
+}
+
+func (f *file) FileName() string {
+	return f.file
 }
 
 func (f *file) Write(content []byte) (err error) {
-	if err := os.MkdirAll(filepath.Dir(f.file), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(f.file), _perm); err != nil {
 		return err
 	}
 	// create backup file
@@ -33,12 +44,7 @@ func (f *file) Write(content []byte) (err error) {
 		}
 	}
 
-	tmpFile := fmt.Sprintf("%s_tmp", f.file)
-	if err := ioutil.WriteFile(tmpFile, content, 0755); err != nil {
-		return err
-	}
-
-	if err := os.Rename(tmpFile, f.file); err != nil {
+	if err := ioutil.WriteFile(f.file, content, _perm); err != nil {
 		return err
 	}
 

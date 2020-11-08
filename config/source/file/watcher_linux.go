@@ -22,7 +22,9 @@ func newWatcher(f *file) (source.Watcher, error) {
 		return nil, err
 	}
 
-	fw.Add(f.path)
+	if err := fw.Add(f.path); err != nil {
+		return nil, err
+	}
 
 	return &watcher{
 		f:    f,
@@ -41,12 +43,14 @@ func (w *watcher) Next() (*source.ChangeSet, error) {
 
 	// try get the event
 	select {
-	case event, _ := <-w.fw.Events:
+	case event := <-w.fw.Events:
 		if event.Op == fsnotify.Rename {
 			// check existence of file, and add watch again
 			_, err := os.Stat(event.Name)
 			if err == nil || os.IsExist(err) {
-				w.fw.Add(event.Name)
+				if err := w.fw.Add(event.Name); err != nil {
+					return nil, err
+				}
 			}
 		}
 
@@ -56,7 +60,9 @@ func (w *watcher) Next() (*source.ChangeSet, error) {
 		}
 
 		// add path again for the event bug of fsnotify
-		w.fw.Add(w.f.path)
+		if err := w.fw.Add(w.f.path); err != nil {
+			return nil, err
+		}
 
 		return c, nil
 	case err := <-w.fw.Errors:

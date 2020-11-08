@@ -94,7 +94,7 @@ func TestEnvvar_WatchNextNoOpsUntilStop(t *testing.T) {
 
 	go func() {
 		time.Sleep(50 * time.Millisecond)
-		w.Stop()
+		_ = w.Stop()
 	}()
 
 	if _, err := w.Next(); err != source.ErrWatcherStopped {

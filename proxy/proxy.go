@@ -5,9 +5,9 @@ import (
 	"context"
 
 	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/config/options"
 	"github.com/stack-labs/stack-rpc/router"
 	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/util/options"
 )
 
 // Proxy can be used as a proxy server for stack-rpc services

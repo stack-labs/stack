@@ -5,6 +5,24 @@ import (
 	"io"
 )
 
+type PersistenceOptions struct {
+	Enable    bool
+	Dir       string
+	BackupDir string
+	// log file max size in megabytes
+	MaxFileSize int
+	// backup dir max size in megabytes
+	MaxBackupSize int
+	// backup files keep max days
+	MaxBackupKeepDays int
+	// default pattern is ${serviceName}_${level}.log
+	// todo available patterns map
+	FileNamePattern string
+	// default pattern is ${serviceName}_${level}_${yyyyMMdd_HH}_${idx}.zip
+	// todo available patterns map
+	BackupFileNamePattern string
+}
+
 type Option func(*Options)
 
 type Options struct {
@@ -16,6 +34,7 @@ type Options struct {
 	Out io.Writer
 	// Caller skip frame count for file:line info
 	CallerSkipCount int
+	Persistence     *PersistenceOptions
 	// Alternative options
 	Context context.Context
 }
@@ -38,6 +57,12 @@ func WithLevel(level Level) Option {
 func Output(out io.Writer) Option {
 	return func(args *Options) {
 		args.Out = out
+	}
+}
+
+func Persistence(o *PersistenceOptions) Option {
+	return func(options *Options) {
+		options.Persistence = o
 	}
 }
 

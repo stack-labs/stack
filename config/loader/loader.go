@@ -197,7 +197,9 @@ func (m *loader) Load(sources ...source.Source) error {
 		m.sets = append(m.sets, set)
 		idx := len(m.sets) - 1
 		m.Unlock()
-		go m.watch(idx, source)
+		if m.opts.Watch {
+			go m.watch(idx, source)
+		}
 	}
 
 	if err := m.reload(); err != nil {

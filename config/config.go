@@ -51,7 +51,7 @@ func NewConfig(opts ...Option) (Config, error) {
 func newConfig(opts ...Option) (Config, error) {
 	options := NewOptions(opts...)
 
-	l := loader.NewLoader()
+	l := loader.NewLoader(loader.WithWatch(options.Watch))
 	if err := l.Load(); err != nil {
 		return nil, err
 	}
@@ -65,7 +65,7 @@ func newConfig(opts ...Option) (Config, error) {
 	}
 
 	var cStorage storage.Storage
-	if options.EnableStorage {
+	if options.Storage {
 		dir := options.StorageDir
 		if len(dir) == 0 {
 			dir, err = os.Getwd()
@@ -86,13 +86,15 @@ func newConfig(opts ...Option) (Config, error) {
 		values:  values,
 	}
 
-	go c.run()
+	if c.opts.Watch {
+		go c.run()
+	}
 
 	return c, nil
 }
 
 func (c *config) writeStorage(snap *loader.Snapshot) {
-	if snap != nil && c.opts.EnableStorage && c.storage != nil {
+	if snap != nil && c.opts.Storage && c.storage != nil {
 		if err := c.storage.Write(snap.ChangeSet.Data); err != nil {
 			log.Errorf("config storage write error: %v", err)
 		}
@@ -264,7 +266,7 @@ func (c *config) loadBackupConfig() error {
 
 func (c *config) Load(sources ...source.Source) error {
 	if err := c.loader.Load(sources...); err != nil {
-		if c.opts.EnableStorage && c.storage.Exist() {
+		if c.opts.Storage && c.storage.Exist() {
 			log.Warn("load config from backup file")
 			return c.loadBackupConfig()
 		}

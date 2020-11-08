@@ -53,7 +53,7 @@ stack:
     name: demo.service
     rpc-port: 8081
     http-port: 8082`)
-	path := filepath.Join(os.TempDir(), fmt.Sprintf("file.yml"))
+	path := filepath.Join(os.TempDir(), "file.yml")
 	fh, err := os.Create(path)
 	if err != nil {
 		t.Error(err)
@@ -173,7 +173,7 @@ func TestConfigLoadFromBackupFile(t *testing.T) {
 		os.Remove(path)
 	}()
 
-	conf, err := NewConfig(EnableStorage(true), StorageDir(os.TempDir()))
+	conf, err := NewConfig(Storage(true), StorageDir(os.TempDir()))
 	if err != nil {
 		t.Fatalf("Expected no error but got %v", err)
 	}
@@ -187,7 +187,7 @@ func TestConfigLoadFromBackupFile(t *testing.T) {
 		t.Fatalf("Expected no error but got %v", err)
 	}
 
-	conf2, err := NewConfig(EnableStorage(true), StorageDir(os.TempDir()))
+	conf2, err := NewConfig(Storage(true), StorageDir(os.TempDir()))
 	if err != nil {
 		t.Fatalf("Expected no error but got %v", err)
 	}
@@ -215,7 +215,7 @@ stack:
     name: demo.service
     rpc-port: 8081
     http-port: 8082`)
-	path := filepath.Join(os.TempDir(), fmt.Sprintf("file.yml"))
+	path := filepath.Join(os.TempDir(), "file.yml")
 	fh, err := os.Create(path)
 	if err != nil {
 		t.Error(err)
@@ -229,7 +229,7 @@ stack:
 		os.Remove(path)
 	}()
 
-	conf, err := NewConfig(EnableStorage(true), StorageDir(os.TempDir()))
+	conf, err := NewConfig(Storage(true), StorageDir(os.TempDir()))
 	if err != nil {
 		t.Fatalf("Expected no error but got %v", err)
 	}
@@ -243,7 +243,7 @@ stack:
 		t.Fatalf("Expected no error but got %v", err)
 	}
 
-	conf2, err := NewConfig(EnableStorage(true), StorageDir(os.TempDir()))
+	conf2, err := NewConfig(Storage(true), StorageDir(os.TempDir()))
 	if err != nil {
 		t.Fatalf("Expected no error but got %v", err)
 	}

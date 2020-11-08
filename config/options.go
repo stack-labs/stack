@@ -5,8 +5,9 @@ import (
 )
 
 type Options struct {
-	EnableStorage bool
-	StorageDir    string
+	Storage    bool
+	StorageDir string
+	Watch      bool
 	// for alternative data
 	Context context.Context
 }
@@ -15,7 +16,8 @@ type Option func(o *Options)
 
 func NewOptions(opts ...Option) Options {
 	options := Options{
-		EnableStorage: false,
+		Storage: false,
+		Watch:   true,
 	}
 
 	for _, o := range opts {
@@ -25,9 +27,15 @@ func NewOptions(opts ...Option) Options {
 	return options
 }
 
-func EnableStorage(e bool) Option {
+func Watch(t bool) Option {
 	return func(o *Options) {
-		o.EnableStorage = e
+		o.Watch = t
+	}
+}
+
+func Storage(e bool) Option {
+	return func(o *Options) {
+		o.Storage = e
 	}
 }
 

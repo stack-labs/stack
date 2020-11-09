@@ -74,7 +74,12 @@ func TestHTTPProxy(t *testing.T) {
 	// run service
 	// server
 	go http.Serve(c, nil)
-	go service.Run()
+	go func() {
+		if err := service.Run(); err != nil {
+			wg.Done()
+			t.Fatal(err)
+		}
+	}()
 
 	// wait till service is started
 	wg.Wait()

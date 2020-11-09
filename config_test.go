@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/config/source/file"
+	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 )
 
 func TestStackConfig_Config(t *testing.T) {

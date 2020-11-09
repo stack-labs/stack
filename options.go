@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/config/source/file"
+	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 
-	"github.com/stack-labs/stack-rpc/config/source"
+	"github.com/stack-labs/stack-rpc/pkg/config/source"
 
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/cli"

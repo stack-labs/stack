@@ -37,7 +37,8 @@ type Options struct {
 	// can be stored in a context
 	Context context.Context
 
-	Signal bool
+	ConfigFile bool
+	Signal     bool
 }
 
 func newOptions(opts ...Option) Options {
@@ -60,11 +61,18 @@ func newOptions(opts ...Option) Options {
 	return opt
 }
 
+func ConfigFile(t bool) Option {
+	return func(o *Options) {
+		o.ConfigFile = t
+	}
+}
+
 func ConfigSource(s ...source.Source) Option {
 	return func(o *Options) {
 		o.ConfigSource = s
 	}
 }
+
 func Broker(b broker.Broker) Option {
 	return func(o *Options) {
 		o.Broker = b

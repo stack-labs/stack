@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	prefix = "/micro/registry/"
+	prefix = "/stack-rpc/registry/"
 )
 
 type etcdRegistry struct {

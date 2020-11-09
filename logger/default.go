@@ -173,7 +173,6 @@ func NewLogger(opts ...Option) Logger {
 		Fields:          make(map[string]interface{}),
 		Out:             os.Stderr,
 		CallerSkipCount: 2,
-		Persistence:     true,
 		Context:         context.Background(),
 	}
 

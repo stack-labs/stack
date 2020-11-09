@@ -1,9 +1,9 @@
 package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/config"
-	"github.com/stack-labs/stack-rpc/config/reader"
-	"github.com/stack-labs/stack-rpc/config/source"
+	"github.com/stack-labs/stack-rpc/pkg/config"
+	"github.com/stack-labs/stack-rpc/pkg/config/reader"
+	"github.com/stack-labs/stack-rpc/pkg/config/source"
 )
 
 type Config interface {

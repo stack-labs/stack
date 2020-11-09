@@ -12,11 +12,11 @@ jobs:
       id: go
     - name: Code
       uses: actions/checkout@v1
-    - name: Intsall Golangci-lint 
+    - name: Intsall Golangci-lint
       run: curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b . latest
     - name: Lint
-      run: ./golangci-lint run config/...
-      
+      run: ./golangci-lint run pkg/config/...
+
   test:
 #    needs: Lint
     name: Unit Testing
@@ -35,6 +35,4 @@ jobs:
     - name: Go Get dependencies
       run: go get -v -t -d ./...
     - name: Go Test
-#       run: go test -v ./... 
-      run: cd config && go test -v
-      
+      run: go test -v ./...

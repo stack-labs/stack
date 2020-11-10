@@ -55,11 +55,9 @@ func test(t *testing.T, withContext bool) {
 		t.Error(err)
 	}
 
-	actualDB := actual["db"].(map[string]interface{})
-	if actualDB["host"] != "localhost" {
-		t.Errorf("expected localhost, got %v", actualDB["name"])
+	if actual["db-host"] != "localhost" {
+		t.Errorf("expected localhost, got %v", actual["name"])
 	}
-
 }
 
 func TestCliSource(t *testing.T) {

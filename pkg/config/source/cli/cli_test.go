@@ -14,7 +14,7 @@ func test(t *testing.T, withContext bool) {
 	var src source.Source
 
 	// setup app
-	app := cmd.App()
+	app := cmd.NewCmd().App()
 	app.Name = "testapp"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{Name: "db-host"},
@@ -35,7 +35,7 @@ func test(t *testing.T, withContext bool) {
 	} else {
 		// set args
 		os.Args = []string{"run", "-db-host", "localhost"}
-		src = NewSource()
+		src = NewSource(app)
 	}
 
 	// test config
@@ -43,6 +43,11 @@ func test(t *testing.T, withContext bool) {
 	if err != nil {
 		t.Error(err)
 	}
+	if len(c.Data) == 0 {
+		t.Fatal()
+	}
+
+	t.Log(string(c.Data))
 
 	var actual map[string]interface{}
 	if err := json.Unmarshal(c.Data, &actual); err != nil {

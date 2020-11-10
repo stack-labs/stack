@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/imdario/mergo"
 	"github.com/stack-labs/stack-rpc/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config/source"
 )
@@ -18,16 +17,24 @@ type cliSource struct {
 }
 
 func (c *cliSource) Read() (*source.ChangeSet, error) {
-	var changes map[string]interface{}
+	changes := make(map[string]interface{})
+
+	//for _, name := range c.ctx.GlobalFlagNames() {
+	//	tmp := toEntry(name, c.ctx.GlobalGeneric(name))
+	//	_ = mergo.Map(&changes, tmp) // TODO need to sort error handling
+	//}
+	//
+	//for _, name := range c.ctx.FlagNames() {
+	//	tmp := toEntry(name, c.ctx.Generic(name))
+	//	_ = mergo.Map(&changes, tmp) // TODO need to sort error handling
+	//}
 
 	for _, name := range c.ctx.GlobalFlagNames() {
-		tmp := toEntry(name, c.ctx.GlobalGeneric(name))
-		_ = mergo.Map(&changes, tmp) // TODO need to sort error handling
+		changes[name] = c.ctx.GlobalGeneric(name)
 	}
 
 	for _, name := range c.ctx.FlagNames() {
-		tmp := toEntry(name, c.ctx.Generic(name))
-		_ = mergo.Map(&changes, tmp) // TODO need to sort error handling
+		changes[name] = c.ctx.Generic(name)
 	}
 
 	b, err := c.opts.Encoder.Encode(changes)

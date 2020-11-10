@@ -9,7 +9,6 @@ import (
 
 	"github.com/imdario/mergo"
 	"github.com/stack-labs/stack-rpc/cli"
-	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/pkg/config/source"
 )
 
@@ -95,7 +94,7 @@ func (c *cliSource) String() string {
 //              "host": "localhost"
 //          }
 //      }
-func NewSource(opts ...source.Option) source.Source {
+func NewSource(app *cli.App, opts ...source.Option) source.Source {
 	options := source.NewOptions(opts...)
 
 	var ctx *cli.Context
@@ -107,8 +106,6 @@ func NewSource(opts ...source.Option) source.Source {
 
 	// no context
 	if ctx == nil {
-		// get the default app/flags
-		app := cmd.App()
 		flags := app.Flags
 
 		// create flagset

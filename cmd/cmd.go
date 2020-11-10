@@ -68,8 +68,6 @@ type cmd struct {
 type Option func(o *Options)
 
 var (
-	DefaultCmd = newCmd()
-
 	DefaultFlags = []cli.Flag{
 		cli.StringFlag{
 			Name:   "client",
@@ -507,18 +505,6 @@ func (c *cmd) Init(opts ...Option) error {
 	c.app.HideVersion = len(c.opts.Version) == 0
 	c.app.Usage = c.opts.Description
 	return c.app.Run(os.Args)
-}
-
-func DefaultOptions() Options {
-	return DefaultCmd.Options()
-}
-
-func App() *cli.App {
-	return DefaultCmd.App()
-}
-
-func Init(opts ...Option) error {
-	return DefaultCmd.Init(opts...)
 }
 
 func NewCmd(opts ...Option) Cmd {

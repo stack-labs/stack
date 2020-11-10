@@ -44,7 +44,7 @@ type Options struct {
 func newOptions(opts ...Option) Options {
 	opt := Options{
 		Broker:       broker.DefaultBroker,
-		Cmd:          cmd.DefaultCmd,
+		Cmd:          cmd.NewCmd(),
 		Client:       client.DefaultClient,
 		Server:       server.DefaultServer,
 		Registry:     registry.DefaultRegistry,

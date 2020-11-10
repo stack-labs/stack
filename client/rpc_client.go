@@ -319,12 +319,12 @@ func (r *rpcClient) Options() Options {
 // hasProxy checks if we have proxy set in the environment
 func (r *rpcClient) hasProxy() bool {
 	// get proxy
-	if prx := os.Getenv("MICRO_PROXY"); len(prx) > 0 {
+	if prx := os.Getenv("STACK_RPC_PROXY"); len(prx) > 0 {
 		return true
 	}
 
 	// get proxy address
-	if prx := os.Getenv("MICRO_PROXY_ADDRESS"); len(prx) > 0 {
+	if prx := os.Getenv("STACK_RPC_PROXY_ADDRESS"); len(prx) > 0 {
 		return true
 	}
 
@@ -336,12 +336,12 @@ func (r *rpcClient) next(request Request, opts CallOptions) (selector.Next, erro
 	service := request.Service()
 
 	// get proxy
-	if prx := os.Getenv("MICRO_PROXY"); len(prx) > 0 {
+	if prx := os.Getenv("STACK_RPC_PROXY"); len(prx) > 0 {
 		service = prx
 	}
 
 	// get proxy address
-	if prx := os.Getenv("MICRO_PROXY_ADDRESS"); len(prx) > 0 {
+	if prx := os.Getenv("STACK_RPC_PROXY_ADDRESS"); len(prx) > 0 {
 		opts.Address = []string{prx}
 	}
 
@@ -602,7 +602,7 @@ func (r *rpcClient) Publish(ctx context.Context, msg Message, opts ...PublishOpt
 	topic := msg.Topic()
 
 	// get proxy
-	if prx := os.Getenv("MICRO_PROXY"); len(prx) > 0 {
+	if prx := os.Getenv("STACK_RPC_PROXY"); len(prx) > 0 {
 		options.Exchange = prx
 	}
 

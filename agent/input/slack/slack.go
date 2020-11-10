@@ -4,9 +4,9 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/stack-labs/stack-rpc/cli"
 	"github.com/nlopes/slack"
 	"github.com/stack-labs/stack-rpc/agent/input"
+	"github.com/stack-labs/stack-rpc/cli"
 )
 
 type slackInput struct {
@@ -29,12 +29,12 @@ func (p *slackInput) Flags() []cli.Flag {
 		cli.BoolFlag{
 			Name:   "slack_debug",
 			Usage:  "Slack debug output",
-			EnvVar: "MICRO_SLACK_DEBUG",
+			EnvVar: "STACK_RPCSLACK_DEBUG",
 		},
 		cli.StringFlag{
 			Name:   "slack_token",
 			Usage:  "Slack token",
-			EnvVar: "MICRO_SLACK_TOKEN",
+			EnvVar: "STACK_RPCSLACK_TOKEN",
 		},
 	}
 }

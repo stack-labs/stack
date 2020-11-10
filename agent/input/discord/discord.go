@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/stack-labs/stack-rpc/cli"
 	"github.com/stack-labs/stack-rpc/agent/input"
+	"github.com/stack-labs/stack-rpc/cli"
 )
 
 func init() {
@@ -38,18 +38,18 @@ func (d *discordInput) Flags() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:   "discord_token",
-			EnvVar: "MICRO_DISCORD_TOKEN",
+			EnvVar: "STACK_RPC_DISCORD_TOKEN",
 			Usage:  "Discord token (prefix with Bot if it's for bot account)",
 		},
 		cli.StringFlag{
 			Name:   "discord_whitelist",
-			EnvVar: "MICRO_DISCORD_WHITELIST",
+			EnvVar: "STACK_RPC_DISCORD_WHITELIST",
 			Usage:  "Discord Whitelist (seperated by ,)",
 		},
 		cli.StringFlag{
 			Name:   "discord_prefix",
 			Usage:  "Discord Prefix",
-			EnvVar: "MICRO_DISCORD_PREFIX",
+			EnvVar: "STACK_RPC_DISCORD_PREFIX",
 			Value:  "Micro ",
 		},
 	}

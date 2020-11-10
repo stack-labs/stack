@@ -53,7 +53,7 @@ func (s *service) Init(opts ...Option) {
 
 	s.once.Do(func() {
 		// setup the plugins
-		for _, p := range strings.Split(os.Getenv("MICRO_PLUGIN"), ",") {
+		for _, p := range strings.Split(os.Getenv("STACK_RPC_PLUGIN"), ",") {
 			if len(p) == 0 {
 				continue
 			}
@@ -164,7 +164,7 @@ func (s *service) Run() error {
 
 	// start the profiler
 	// TODO: set as an option to the service, don't just use pprof
-	if prof := os.Getenv("MICRO_DEBUG_PROFILE"); len(prof) > 0 {
+	if prof := os.Getenv("STACK_RPC_DEBUG_PROFILE"); len(prof) > 0 {
 		service := s.opts.Server.Options().Name
 		version := s.opts.Server.Options().Version
 		id := s.opts.Server.Options().Id

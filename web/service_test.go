@@ -251,6 +251,7 @@ func TestTLS(t *testing.T) {
 
 	b, err := ioutil.ReadAll(rsp.Body)
 	if err != nil {
+
 		t.Fatal(err)
 	}
 

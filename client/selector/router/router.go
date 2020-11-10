@@ -223,8 +223,8 @@ func NewSelector(opts ...selector.Option) selector.Selector {
 
 	// get the router from env vars if its a remote service
 	remote := true
-	routerName := os.Getenv("MICRO_ROUTER")
-	routerAddress := os.Getenv("MICRO_ROUTER_ADDRESS")
+	routerName := os.Getenv("STACK_ROUTER")
+	routerAddress := os.Getenv("STACK_ROUTER_ADDRESS")
 
 	// start the router advertisements if we're running it locally
 	if len(routerName) == 0 && len(routerAddress) == 0 {

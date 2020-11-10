@@ -53,12 +53,12 @@ func (g *grpcClient) next(request client.Request, opts client.CallOptions) (sele
 	service := request.Service()
 
 	// get proxy
-	if prx := os.Getenv("STACK_RPCPROXY"); len(prx) > 0 {
+	if prx := os.Getenv("STACKPROXY"); len(prx) > 0 {
 		service = prx
 	}
 
 	// get proxy address
-	if prx := os.Getenv("STACK_RPCPROXY_ADDRESS"); len(prx) > 0 {
+	if prx := os.Getenv("STACKPROXY_ADDRESS"); len(prx) > 0 {
 		opts.Address = []string{prx}
 	}
 
@@ -541,7 +541,7 @@ func (g *grpcClient) Publish(ctx context.Context, p client.Message, opts ...clie
 	topic := p.Topic()
 
 	// get proxy topic
-	if prx := os.Getenv("STACK_RPC_PROXY"); len(prx) > 0 {
+	if prx := os.Getenv("STACK_PROXY"); len(prx) > 0 {
 		options.Exchange = prx
 	}
 

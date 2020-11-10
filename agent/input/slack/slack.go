@@ -29,12 +29,12 @@ func (p *slackInput) Flags() []cli.Flag {
 		cli.BoolFlag{
 			Name:   "slack_debug",
 			Usage:  "Slack debug output",
-			EnvVar: "STACK_RPCSLACK_DEBUG",
+			EnvVar: "STACK_SLACK_DEBUG",
 		},
 		cli.StringFlag{
 			Name:   "slack_token",
 			Usage:  "Slack token",
-			EnvVar: "STACK_RPCSLACK_TOKEN",
+			EnvVar: "STACK_SLACK_TOKEN",
 		},
 	}
 }

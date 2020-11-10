@@ -12,7 +12,6 @@ linters:
     - unused
     - prealloc
     - scopelint
-    - gocritic
     - goimports
     - unconvert
     - govet
@@ -24,3 +23,5 @@ linters:
     - interfacer
     - typecheck
     - dupl
+    - gocritic
+

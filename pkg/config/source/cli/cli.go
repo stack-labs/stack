@@ -4,7 +4,6 @@ import (
 	"flag"
 	"io/ioutil"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/stack-labs/stack-rpc/cli"
@@ -53,32 +52,32 @@ func (c *cliSource) Read() (*source.ChangeSet, error) {
 	return cs, nil
 }
 
-func toEntry(name string, v interface{}) map[string]interface{} {
-	n := strings.ToLower(name)
-	keys := strings.FieldsFunc(n, split)
-	reverse(keys)
-	tmp := make(map[string]interface{})
-	for i, k := range keys {
-		if i == 0 {
-			tmp[k] = v
-			continue
-		}
+//func toEntry(name string, v interface{}) map[string]interface{} {
+//	n := strings.ToLower(name)
+//	keys := strings.FieldsFunc(n, split)
+//	reverse(keys)
+//	tmp := make(map[string]interface{})
+//	for i, k := range keys {
+//		if i == 0 {
+//			tmp[k] = v
+//			continue
+//		}
+//
+//		tmp = map[string]interface{}{k: tmp}
+//	}
+//	return tmp
+//}
 
-		tmp = map[string]interface{}{k: tmp}
-	}
-	return tmp
-}
-
-func reverse(ss []string) {
-	for i := len(ss)/2 - 1; i >= 0; i-- {
-		opp := len(ss) - 1 - i
-		ss[i], ss[opp] = ss[opp], ss[i]
-	}
-}
-
-func split(r rune) bool {
-	return r == '-' || r == '_'
-}
+//func reverse(ss []string) {
+//	for i := len(ss)/2 - 1; i >= 0; i-- {
+//		opp := len(ss) - 1 - i
+//		ss[i], ss[opp] = ss[opp], ss[i]
+//	}
+//}
+//
+//func split(r rune) bool {
+//	return r == '-' || r == '_'
+//}
 
 func (c *cliSource) Watch() (source.Watcher, error) {
 	return source.NewNoopWatcher()

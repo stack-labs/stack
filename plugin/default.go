@@ -14,7 +14,6 @@ import (
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/transport"
@@ -30,38 +29,38 @@ func (p *plugin) Init(c *Config) error {
 		if !ok {
 			return fmt.Errorf("Invalid plugin %s", c.Name)
 		}
-		cmd.DefaultBrokers[c.Name] = pg
+		DefaultBrokers[c.Name] = pg
 	case "client":
 		pg, ok := c.NewFunc.(func(...client.Option) client.Client)
 		if !ok {
 			return fmt.Errorf("Invalid plugin %s", c.Name)
 		}
-		cmd.DefaultClients[c.Name] = pg
+		DefaultClients[c.Name] = pg
 	case "registry":
 		pg, ok := c.NewFunc.(func(...registry.Option) registry.Registry)
 		if !ok {
 			return fmt.Errorf("Invalid plugin %s", c.Name)
 		}
-		cmd.DefaultRegistries[c.Name] = pg
+		DefaultRegistries[c.Name] = pg
 
 	case "selector":
 		pg, ok := c.NewFunc.(func(...selector.Option) selector.Selector)
 		if !ok {
 			return fmt.Errorf("Invalid plugin %s", c.Name)
 		}
-		cmd.DefaultSelectors[c.Name] = pg
+		DefaultSelectors[c.Name] = pg
 	case "server":
 		pg, ok := c.NewFunc.(func(...server.Option) server.Server)
 		if !ok {
 			return fmt.Errorf("Invalid plugin %s", c.Name)
 		}
-		cmd.DefaultServers[c.Name] = pg
+		DefaultServers[c.Name] = pg
 	case "transport":
 		pg, ok := c.NewFunc.(func(...transport.Option) transport.Transport)
 		if !ok {
 			return fmt.Errorf("Invalid plugin %s", c.Name)
 		}
-		cmd.DefaultTransports[c.Name] = pg
+		DefaultTransports[c.Name] = pg
 	default:
 		return fmt.Errorf("Unknown plugin type: %s for %s", c.Type, c.Name)
 	}

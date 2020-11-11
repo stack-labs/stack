@@ -60,7 +60,7 @@ transport_address: '1'
 
 	// set args
 	os.Args = []string{"run"}
-	for _, v := range cmd.DefaultFlags {
+	for _, v := range app.Flags {
 		os.Args = append(os.Args, fmt.Sprintf("--%s", v.GetName()), "2")
 	}
 

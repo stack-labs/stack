@@ -1,4 +1,4 @@
-// Package kubernetes implements kubernetes micro runtime
+// Package kubernetes implements kubernetes stack runtime
 package kubernetes
 
 import (
@@ -40,7 +40,7 @@ type kubernetes struct {
 	client client.Kubernetes
 }
 
-// getService queries kubernetes for micro service
+// getService queries kubernetes for stack service
 // NOTE: this function is not thread-safe
 func (k *kubernetes) getService(labels map[string]string) ([]*runtime.Service, error) {
 	// get the service status
@@ -203,7 +203,7 @@ func (k *kubernetes) run(events <-chan runtime.Event) {
 
 				// set the default labels
 				labels := map[string]string{
-					"micro": k.options.Type,
+					"stack": k.options.Type,
 					"name":  name,
 				}
 
@@ -296,7 +296,7 @@ func (k *kubernetes) Create(s *runtime.Service, opts ...runtime.CreateOption) er
 	// format as we'll format in the deployment
 	name = client.Format(name)
 
-	// create new kubernetes micro service
+	// create new kubernetes stack service
 	service := newService(s, options)
 
 	log.Debugf("Runtime queueing service %s version %s for start action", service.Name, service.Version)
@@ -317,7 +317,7 @@ func (k *kubernetes) Read(opts ...runtime.ReadOption) ([]*runtime.Service, error
 
 	// set the default labels
 	labels := map[string]string{
-		"micro": k.options.Type,
+		"stack": k.options.Type,
 	}
 
 	var options runtime.ReadOptions
@@ -335,7 +335,7 @@ func (k *kubernetes) Read(opts ...runtime.ReadOption) ([]*runtime.Service, error
 	}
 
 	if len(options.Type) > 0 {
-		labels["micro"] = options.Type
+		labels["stack"] = options.Type
 	}
 
 	return k.getService(labels)
@@ -347,17 +347,17 @@ func (k *kubernetes) List() ([]*runtime.Service, error) {
 	defer k.Unlock()
 
 	labels := map[string]string{
-		"micro": k.options.Type,
+		"stack": k.options.Type,
 	}
 
-	log.Debugf("Runtime listing all micro services")
+	log.Debugf("Runtime listing all stack services")
 
 	return k.getService(labels)
 }
 
 // Update the service in place
 func (k *kubernetes) Update(s *runtime.Service) error {
-	// create new kubernetes micro service
+	// create new kubernetes stack service
 	service := newService(s, runtime.CreateOptions{
 		Type: k.options.Type,
 	})
@@ -381,7 +381,7 @@ func (k *kubernetes) Delete(s *runtime.Service) error {
 	k.Lock()
 	defer k.Unlock()
 
-	// create new kubernetes micro service
+	// create new kubernetes stack service
 	service := newService(s, runtime.CreateOptions{
 		Type: k.options.Type,
 	})
@@ -460,7 +460,7 @@ func (k *kubernetes) String() string {
 func NewRuntime(opts ...runtime.Option) runtime.Runtime {
 	// get default options
 	options := runtime.Options{
-		// Create labels with type "micro": "service"
+		// Create labels with type "stack": "service"
 		Type: "service",
 	}
 

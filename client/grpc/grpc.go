@@ -142,7 +142,7 @@ func (g *grpcClient) call(ctx context.Context, node *registry.Node, req client.R
 			grpcCallOptions = append(grpcCallOptions, opts...)
 		}
 		err := cc.Invoke(ctx, methodToGRPC(req.Service(), req.Endpoint()), req.Body(), rsp, grpcCallOptions...)
-		ch <- microError(err)
+		ch <- stackError(err)
 	}()
 
 	select {
@@ -513,7 +513,7 @@ func (g *grpcClient) Publish(ctx context.Context, p client.Message, opts ...clie
 		md = make(map[string]string)
 	}
 	md["Content-Type"] = p.ContentType()
-	md["Micro-Topic"] = p.Topic()
+	md["Stack-Topic"] = p.Topic()
 
 	cf, err := g.newGRPCCodec(p.ContentType())
 	if err != nil {

@@ -49,7 +49,7 @@ func (EventType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_41af05d40a615591, []int{0}
 }
 
-// Service represents a go-micro service
+// Service represents a go-stack service
 type Service struct {
 	Name                 string            `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Version              string            `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`

@@ -4,7 +4,7 @@ package runtime
 import "time"
 
 var (
-	// DefaultRuntime is default micro runtime
+	// DefaultRuntime is default stack runtime
 	DefaultRuntime Runtime = NewRuntime()
 	// DefaultName is default runtime service name
 	DefaultName = "stack.rpc.runtime"

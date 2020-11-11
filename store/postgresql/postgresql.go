@@ -1,4 +1,4 @@
-// Package postgresql implements a micro Store backed by sql
+// Package postgresql implements a stack Store backed by sql
 package postgresql
 
 import (
@@ -17,7 +17,7 @@ import (
 
 // DefaultNamespace is the namespace that the sql store
 // will use if no namespace is provided.
-const DefaultNamespace = "micro"
+const DefaultNamespace = "stack"
 
 type sqlStore struct {
 	db *sql.DB
@@ -28,7 +28,7 @@ type sqlStore struct {
 
 // List all the known records
 func (s *sqlStore) List() ([]*store.Record, error) {
-	q, err := s.db.Prepare(fmt.Sprintf("SELECT key, value, expiry FROM micro.%s;", s.table))
+	q, err := s.db.Prepare(fmt.Sprintf("SELECT key, value, expiry FROM stack.%s;", s.table))
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +73,7 @@ func (s *sqlStore) List() ([]*store.Record, error) {
 
 // Read all records with keys
 func (s *sqlStore) Read(keys ...string) ([]*store.Record, error) {
-	q, err := s.db.Prepare(fmt.Sprintf("SELECT key, value, expiry FROM micro.%s WHERE key = $1;", s.table))
+	q, err := s.db.Prepare(fmt.Sprintf("SELECT key, value, expiry FROM stack.%s WHERE key = $1;", s.table))
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +105,7 @@ func (s *sqlStore) Read(keys ...string) ([]*store.Record, error) {
 
 // Write records
 func (s *sqlStore) Write(rec ...*store.Record) error {
-	q, err := s.db.Prepare(fmt.Sprintf(`INSERT INTO micro.%s(key, value, expiry)
+	q, err := s.db.Prepare(fmt.Sprintf(`INSERT INTO stack.%s(key, value, expiry)
 		VALUES ($1, $2::bytea, $3)
 		ON CONFLICT (key)
 		DO UPDATE
@@ -130,7 +130,7 @@ func (s *sqlStore) Write(rec ...*store.Record) error {
 
 // Delete records with keys
 func (s *sqlStore) Delete(keys ...string) error {
-	q, err := s.db.Prepare(fmt.Sprintf("DELETE FROM micro.%s WHERE key = $1;", s.table))
+	q, err := s.db.Prepare(fmt.Sprintf("DELETE FROM stack.%s WHERE key = $1;", s.table))
 	if err != nil {
 		return err
 	}
@@ -160,8 +160,8 @@ func (s *sqlStore) initDB(options options.Options) error {
 		}
 	}
 
-	// Create "micro" schema
-	schema, err := s.db.Prepare("CREATE SCHEMA IF NOT EXISTS micro ;")
+	// Create "stack" schema
+	schema, err := s.db.Prepare("CREATE SCHEMA IF NOT EXISTS stack ;")
 	if err != nil {
 		return err
 	}
@@ -171,7 +171,7 @@ func (s *sqlStore) initDB(options options.Options) error {
 	}
 
 	// Create a table for the Store namespace
-	tableq, err := s.db.Prepare(fmt.Sprintf(`CREATE TABLE IF NOT EXISTS micro.%s
+	tableq, err := s.db.Prepare(fmt.Sprintf(`CREATE TABLE IF NOT EXISTS stack.%s
 	(
 		key text COLLATE "default" NOT NULL,
 		value bytea,
@@ -189,7 +189,7 @@ func (s *sqlStore) initDB(options options.Options) error {
 	return nil
 }
 
-// New returns a new micro Store backed by sql
+// New returns a new stack Store backed by sql
 func New(opts ...options.Option) (store.Store, error) {
 	options := options.NewOptions(opts...)
 	driver, dataSourceName, err := validateOptions(options)

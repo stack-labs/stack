@@ -3,20 +3,20 @@ package grpc
 import (
 	"runtime/debug"
 
-	"google.golang.org/grpc/peer"
 	"github.com/stack-labs/stack-rpc/errors"
 	"github.com/stack-labs/stack-rpc/transport"
 	pb "github.com/stack-labs/stack-rpc/transport/grpc/proto"
 	"github.com/stack-labs/stack-rpc/util/log"
+	"google.golang.org/grpc/peer"
 )
 
-// microTransport satisfies the pb.TransportServer inteface
-type microTransport struct {
+// stackTransport satisfies the pb.TransportServer inteface
+type stackTransport struct {
 	addr string
 	fn   func(transport.Socket)
 }
 
-func (m *microTransport) Stream(ts pb.Transport_StreamServer) error {
+func (m *stackTransport) Stream(ts pb.Transport_StreamServer) error {
 	var err error
 
 	sock := &grpcTransportSocket{

@@ -1,4 +1,4 @@
-// Package server is an interface for a micro server
+// Package server is an interface for a stack server
 package server
 
 import (
@@ -14,7 +14,7 @@ import (
 	log "github.com/stack-labs/stack-rpc/util/log"
 )
 
-// Server is a simple micro server abstraction
+// Server is a simple stack server abstraction
 type Server interface {
 	Options() Options
 	Init(...Option) error

@@ -47,7 +47,7 @@ func WithRouter(r router.Router) Option {
 	}
 }
 
-// WithService specifies a micro.Service
+// WithService specifies a stack.Service
 func WithService(s stack.Service) Option {
 	return func(o *Options) {
 		o.Service = s

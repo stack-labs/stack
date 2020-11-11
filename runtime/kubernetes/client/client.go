@@ -149,7 +149,7 @@ func (c *client) Delete(r *Resource) error {
 // List lists API objects and stores the result in r
 func (c *client) List(r *Resource) error {
 	labels := map[string]string{
-		"micro": "service",
+		"stack": "service",
 	}
 	return c.Get(r, labels)
 }

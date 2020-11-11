@@ -1,4 +1,4 @@
-// Package debug provides micro debug packages
+// Package debug provides stack debug packages
 package debug
 
 var (

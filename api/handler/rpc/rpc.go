@@ -101,7 +101,7 @@ func (h *rpcHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		ct = ct[:idx]
 	}
 
-	// micro client
+	// stack client
 	c := h.opts.Service.Client()
 
 	// create strategy

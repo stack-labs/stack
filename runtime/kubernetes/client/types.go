@@ -84,7 +84,7 @@ type PodSpec struct {
 	Containers []Container `json:"containers"`
 }
 
-// Template is micro deployment template
+// Template is stack deployment template
 type Template struct {
 	Metadata *Metadata `json:"metadata,omitempty"`
 	PodSpec  *PodSpec  `json:"spec,omitempty"`
@@ -96,7 +96,7 @@ type LabelSelector struct {
 	MatchLabels map[string]string `json:"matchLabels,omitempty"`
 }
 
-// DeploymentSpec defines micro deployment spec
+// DeploymentSpec defines stack deployment spec
 type DeploymentSpec struct {
 	Replicas int            `json:"replicas,omitempty"`
 	Selector *LabelSelector `json:"selector"`

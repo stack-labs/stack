@@ -21,7 +21,7 @@ type etcd struct {
 }
 
 var (
-	DefaultPrefix = "/micro/config/"
+	DefaultPrefix = "/stack/config/"
 )
 
 func (c *etcd) Read() (*source.ChangeSet, error) {

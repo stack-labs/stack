@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/cli"
 	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/pkg/cli"
 )
 
 type Cmd interface {

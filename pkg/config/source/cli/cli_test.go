@@ -6,8 +6,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/cli"
 	"github.com/stack-labs/stack-rpc/cmd"
+	"github.com/stack-labs/stack-rpc/pkg/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config/source"
 )
 

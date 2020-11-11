@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/cli"
+	"github.com/stack-labs/stack-rpc/pkg/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config/source"
 )
 

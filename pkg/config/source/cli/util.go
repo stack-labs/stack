@@ -5,7 +5,7 @@ import (
 	"flag"
 	"strings"
 
-	"github.com/stack-labs/stack-rpc/cli"
+	"github.com/stack-labs/stack-rpc/pkg/cli"
 )
 
 func copyFlag(name string, ff *flag.Flag, set *flag.FlagSet) {

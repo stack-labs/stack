@@ -6,7 +6,7 @@ import (
 
 	"github.com/nlopes/slack"
 	"github.com/stack-labs/stack-rpc/agent/input"
-	"github.com/stack-labs/stack-rpc/cli"
+	"github.com/stack-labs/stack-rpc/pkg/cli"
 )
 
 type slackInput struct {

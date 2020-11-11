@@ -4,6 +4,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/stack-labs/stack-rpc/config"
+
 	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 
 	"github.com/stack-labs/stack-rpc/pkg/config/source"
@@ -26,7 +28,7 @@ type Options struct {
 	Registry     registry.Registry
 	Transport    transport.Transport
 	ConfigSource []source.Source
-	Config       Config
+	Config       config.Config
 	// Before and After funcs
 	BeforeStart []func() error
 	BeforeStop  []func() error
@@ -44,7 +46,7 @@ type Options struct {
 func newOptions(opts ...Option) Options {
 	opt := Options{
 		Broker:       broker.DefaultBroker,
-		Cmd:          cmd.DefaultCmd,
+		Cmd:          cmd.NewCmd(),
 		Client:       client.DefaultClient,
 		Server:       server.DefaultServer,
 		Registry:     registry.DefaultRegistry,

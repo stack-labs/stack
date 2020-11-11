@@ -2,8 +2,7 @@ package router
 
 import (
 	"github.com/stack-labs/stack-rpc/api/resolver"
-	"github.com/stack-labs/stack-rpc/api/resolver/micro"
-	"github.com/stack-labs/stack-rpc/cmd"
+	"github.com/stack-labs/stack-rpc/api/resolver/stack"
 	"github.com/stack-labs/stack-rpc/registry"
 )
 
@@ -19,7 +18,7 @@ type Option func(o *Options)
 func NewOptions(opts ...Option) Options {
 	options := Options{
 		Handler:  "meta",
-		Registry: *cmd.DefaultOptions().Registry,
+		Registry: registry.NewRegistry(),
 	}
 
 	for _, o := range opts {
@@ -27,7 +26,7 @@ func NewOptions(opts ...Option) Options {
 	}
 
 	if options.Resolver == nil {
-		options.Resolver = micro.NewResolver(
+		options.Resolver = stack.NewResolver(
 			resolver.WithHandler(options.Handler),
 			resolver.WithNamespace(options.Namespace),
 		)

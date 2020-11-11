@@ -9,15 +9,12 @@ import (
 	"github.com/stack-labs/stack-rpc/api/handler"
 	"github.com/stack-labs/stack-rpc/api/router"
 	regRouter "github.com/stack-labs/stack-rpc/api/router/registry"
-	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/registry/memory"
 )
 
 func testHttp(t *testing.T, path, service, ns string) {
 	r := memory.NewRegistry()
-	cmd.DefaultCmd = cmd.NewCmd(cmd.Registry(&r))
-
 	l, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
 		t.Fatal(err)
@@ -57,6 +54,7 @@ func testHttp(t *testing.T, path, service, ns string) {
 	rt := regRouter.NewRouter(
 		router.WithHandler("http"),
 		router.WithNamespace(ns),
+		router.WithRegistry(r),
 	)
 
 	p := NewHandler(handler.WithRouter(rt))

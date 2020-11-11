@@ -13,7 +13,7 @@ type clientWrapper struct {
 }
 
 var (
-	HeaderPrefix = "Micro-"
+	HeaderPrefix = "Stack-"
 )
 
 func (c *clientWrapper) setHeaders(ctx context.Context) context.Context {

@@ -20,7 +20,7 @@ func (e *event) Message() *broker.Message {
 }
 
 func (e *event) Topic() string {
-	return e.message.Header["Micro-Topic"]
+	return e.message.Header["Stack-Topic"]
 }
 
 func newEvent(msg transport.Message) *event {

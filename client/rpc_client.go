@@ -319,12 +319,12 @@ func (r *rpcClient) Options() Options {
 // hasProxy checks if we have proxy set in the environment
 func (r *rpcClient) hasProxy() bool {
 	// get proxy
-	if prx := os.Getenv("MICRO_PROXY"); len(prx) > 0 {
+	if prx := os.Getenv("STACK_PROXY"); len(prx) > 0 {
 		return true
 	}
 
 	// get proxy address
-	if prx := os.Getenv("MICRO_PROXY_ADDRESS"); len(prx) > 0 {
+	if prx := os.Getenv("STACK_PROXY_ADDRESS"); len(prx) > 0 {
 		return true
 	}
 
@@ -336,12 +336,12 @@ func (r *rpcClient) next(request Request, opts CallOptions) (selector.Next, erro
 	service := request.Service()
 
 	// get proxy
-	if prx := os.Getenv("MICRO_PROXY"); len(prx) > 0 {
+	if prx := os.Getenv("STACK_PROXY"); len(prx) > 0 {
 		service = prx
 	}
 
 	// get proxy address
-	if prx := os.Getenv("MICRO_PROXY_ADDRESS"); len(prx) > 0 {
+	if prx := os.Getenv("STACK_PROXY_ADDRESS"); len(prx) > 0 {
 		opts.Address = []string{prx}
 	}
 
@@ -595,14 +595,14 @@ func (r *rpcClient) Publish(ctx context.Context, msg Message, opts ...PublishOpt
 
 	id := uuid.New().String()
 	md["Content-Type"] = msg.ContentType()
-	md["Micro-Topic"] = msg.Topic()
-	md["Micro-Id"] = id
+	md["Stack-Topic"] = msg.Topic()
+	md["Stack-Id"] = id
 
 	// set the topic
 	topic := msg.Topic()
 
 	// get proxy
-	if prx := os.Getenv("MICRO_PROXY"); len(prx) > 0 {
+	if prx := os.Getenv("STACK_PROXY"); len(prx) > 0 {
 		options.Exchange = prx
 	}
 
@@ -630,8 +630,8 @@ func (r *rpcClient) Publish(ctx context.Context, msg Message, opts ...PublishOpt
 			Target: topic,
 			Type:   codec.Event,
 			Header: map[string]string{
-				"Micro-Id":    id,
-				"Micro-Topic": msg.Topic(),
+				"Stack-Id":    id,
+				"Stack-Topic": msg.Topic(),
 			},
 		}, msg.Payload()); err != nil {
 			return errors.InternalServerError("stack.rpc.client", err.Error())

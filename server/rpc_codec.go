@@ -93,11 +93,11 @@ func getHeaders(m *codec.Message) {
 		return m.Header[hdr]
 	}
 
-	m.Id = set(m.Id, "Micro-Id")
-	m.Error = set(m.Error, "Micro-Error")
-	m.Endpoint = set(m.Endpoint, "Micro-Endpoint")
-	m.Method = set(m.Method, "Micro-Method")
-	m.Target = set(m.Target, "Micro-Service")
+	m.Id = set(m.Id, "Stack-Id")
+	m.Error = set(m.Error, "Stack-Error")
+	m.Endpoint = set(m.Endpoint, "Stack-Endpoint")
+	m.Method = set(m.Method, "Stack-Method")
+	m.Target = set(m.Target, "Stack-Service")
 
 	// TODO: remove this cruft
 	if len(m.Endpoint) == 0 {
@@ -115,21 +115,21 @@ func setHeaders(m, r *codec.Message) {
 	}
 
 	// set headers
-	set("Micro-Id", r.Id)
-	set("Micro-Service", r.Target)
-	set("Micro-Method", r.Method)
-	set("Micro-Endpoint", r.Endpoint)
-	set("Micro-Error", r.Error)
+	set("Stack-Id", r.Id)
+	set("Stack-Service", r.Target)
+	set("Stack-Method", r.Method)
+	set("Stack-Endpoint", r.Endpoint)
+	set("Stack-Error", r.Error)
 }
 
 // setupProtocol sets up the old protocol
 func setupProtocol(msg *transport.Message) codec.NewCodec {
-	service := getHeader("Micro-Service", msg.Header)
-	method := getHeader("Micro-Method", msg.Header)
-	endpoint := getHeader("Micro-Endpoint", msg.Header)
-	protocol := getHeader("Micro-Protocol", msg.Header)
-	target := getHeader("Micro-Target", msg.Header)
-	topic := getHeader("Micro-Topic", msg.Header)
+	service := getHeader("Stack-Service", msg.Header)
+	method := getHeader("Stack-Method", msg.Header)
+	endpoint := getHeader("Stack-Endpoint", msg.Header)
+	protocol := getHeader("Stack-Protocol", msg.Header)
+	target := getHeader("Stack-Target", msg.Header)
+	topic := getHeader("Stack-Topic", msg.Header)
 
 	// if the protocol exists (mucp) do nothing
 	if len(protocol) > 0 {
@@ -153,12 +153,12 @@ func setupProtocol(msg *transport.Message) codec.NewCodec {
 
 	// no method then set to endpoint
 	if len(method) == 0 {
-		msg.Header["Micro-Method"] = endpoint
+		msg.Header["Stack-Method"] = endpoint
 	}
 
 	// no endpoint then set to method
 	if len(endpoint) == 0 {
-		msg.Header["Micro-Endpoint"] = method
+		msg.Header["Stack-Endpoint"] = method
 	}
 
 	return nil
@@ -315,7 +315,7 @@ func (c *rpcCodec) Write(r *codec.Message, b interface{}) error {
 
 		// write an error if it failed
 		m.Error = errors.Wrapf(err, "Unable to encode body").Error()
-		m.Header["Micro-Error"] = m.Error
+		m.Header["Stack-Error"] = m.Error
 		// no body to write
 		if err := c.codec.Write(m, nil); err != nil {
 			return err

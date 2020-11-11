@@ -4,12 +4,9 @@ import (
 	"flag"
 	"io/ioutil"
 	"os"
-	"strings"
 	"time"
 
-	"github.com/imdario/mergo"
 	"github.com/stack-labs/stack-rpc/cli"
-	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/pkg/config/source"
 )
 
@@ -19,16 +16,24 @@ type cliSource struct {
 }
 
 func (c *cliSource) Read() (*source.ChangeSet, error) {
-	var changes map[string]interface{}
+	changes := make(map[string]interface{})
+
+	//for _, name := range c.ctx.GlobalFlagNames() {
+	//	tmp := toEntry(name, c.ctx.GlobalGeneric(name))
+	//	_ = mergo.Map(&changes, tmp) // TODO need to sort error handling
+	//}
+	//
+	//for _, name := range c.ctx.FlagNames() {
+	//	tmp := toEntry(name, c.ctx.Generic(name))
+	//	_ = mergo.Map(&changes, tmp) // TODO need to sort error handling
+	//}
 
 	for _, name := range c.ctx.GlobalFlagNames() {
-		tmp := toEntry(name, c.ctx.GlobalGeneric(name))
-		_ = mergo.Map(&changes, tmp) // TODO need to sort error handling
+		changes[name] = c.ctx.GlobalGeneric(name)
 	}
 
 	for _, name := range c.ctx.FlagNames() {
-		tmp := toEntry(name, c.ctx.Generic(name))
-		_ = mergo.Map(&changes, tmp) // TODO need to sort error handling
+		changes[name] = c.ctx.Generic(name)
 	}
 
 	b, err := c.opts.Encoder.Encode(changes)
@@ -47,32 +52,32 @@ func (c *cliSource) Read() (*source.ChangeSet, error) {
 	return cs, nil
 }
 
-func toEntry(name string, v interface{}) map[string]interface{} {
-	n := strings.ToLower(name)
-	keys := strings.FieldsFunc(n, split)
-	reverse(keys)
-	tmp := make(map[string]interface{})
-	for i, k := range keys {
-		if i == 0 {
-			tmp[k] = v
-			continue
-		}
+//func toEntry(name string, v interface{}) map[string]interface{} {
+//	n := strings.ToLower(name)
+//	keys := strings.FieldsFunc(n, split)
+//	reverse(keys)
+//	tmp := make(map[string]interface{})
+//	for i, k := range keys {
+//		if i == 0 {
+//			tmp[k] = v
+//			continue
+//		}
+//
+//		tmp = map[string]interface{}{k: tmp}
+//	}
+//	return tmp
+//}
 
-		tmp = map[string]interface{}{k: tmp}
-	}
-	return tmp
-}
-
-func reverse(ss []string) {
-	for i := len(ss)/2 - 1; i >= 0; i-- {
-		opp := len(ss) - 1 - i
-		ss[i], ss[opp] = ss[opp], ss[i]
-	}
-}
-
-func split(r rune) bool {
-	return r == '-' || r == '_'
-}
+//func reverse(ss []string) {
+//	for i := len(ss)/2 - 1; i >= 0; i-- {
+//		opp := len(ss) - 1 - i
+//		ss[i], ss[opp] = ss[opp], ss[i]
+//	}
+//}
+//
+//func split(r rune) bool {
+//	return r == '-' || r == '_'
+//}
 
 func (c *cliSource) Watch() (source.Watcher, error) {
 	return source.NewNoopWatcher()
@@ -82,7 +87,7 @@ func (c *cliSource) String() string {
 	return "cli"
 }
 
-// NewSource returns a config source for integrating parsed flags from a micro/cli.Context.
+// NewSource returns a config source for integrating parsed flags from a stack/cli.Context.
 // Hyphens are delimiters for nesting, and all keys are lowercased. The assumption is that
 // command line flags have already been parsed.
 //
@@ -95,7 +100,7 @@ func (c *cliSource) String() string {
 //              "host": "localhost"
 //          }
 //      }
-func NewSource(opts ...source.Option) source.Source {
+func NewSource(app *cli.App, opts ...source.Option) source.Source {
 	options := source.NewOptions(opts...)
 
 	var ctx *cli.Context
@@ -107,8 +112,6 @@ func NewSource(opts ...source.Option) source.Source {
 
 	// no context
 	if ctx == nil {
-		// get the default app/flags
-		app := cmd.App()
 		flags := app.Flags
 
 		// create flagset

@@ -10,7 +10,7 @@ var (
 	DefaultAddress = ":9093"
 	// DefaultName is default router service name
 	DefaultName = "stack.rpc.router"
-	// DefaultNetwork is default micro network
+	// DefaultNetwork is default stack network
 	DefaultNetwork = "stack.rpc"
 	// DefaultRouter is default network router
 	DefaultRouter = NewRouter()

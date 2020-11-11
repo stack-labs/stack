@@ -53,12 +53,12 @@ func (g *grpcClient) next(request client.Request, opts client.CallOptions) (sele
 	service := request.Service()
 
 	// get proxy
-	if prx := os.Getenv("MICRO_PROXY"); len(prx) > 0 {
+	if prx := os.Getenv("STACKPROXY"); len(prx) > 0 {
 		service = prx
 	}
 
 	// get proxy address
-	if prx := os.Getenv("MICRO_PROXY_ADDRESS"); len(prx) > 0 {
+	if prx := os.Getenv("STACKPROXY_ADDRESS"); len(prx) > 0 {
 		opts.Address = []string{prx}
 	}
 
@@ -142,7 +142,7 @@ func (g *grpcClient) call(ctx context.Context, node *registry.Node, req client.R
 			grpcCallOptions = append(grpcCallOptions, opts...)
 		}
 		err := cc.Invoke(ctx, methodToGRPC(req.Service(), req.Endpoint()), req.Body(), rsp, grpcCallOptions...)
-		ch <- microError(err)
+		ch <- stackError(err)
 	}()
 
 	select {
@@ -513,7 +513,7 @@ func (g *grpcClient) Publish(ctx context.Context, p client.Message, opts ...clie
 		md = make(map[string]string)
 	}
 	md["Content-Type"] = p.ContentType()
-	md["Micro-Topic"] = p.Topic()
+	md["Stack-Topic"] = p.Topic()
 
 	cf, err := g.newGRPCCodec(p.ContentType())
 	if err != nil {
@@ -541,7 +541,7 @@ func (g *grpcClient) Publish(ctx context.Context, p client.Message, opts ...clie
 	topic := p.Topic()
 
 	// get proxy topic
-	if prx := os.Getenv("MICRO_PROXY"); len(prx) > 0 {
+	if prx := os.Getenv("STACK_PROXY"); len(prx) > 0 {
 		options.Exchange = prx
 	}
 

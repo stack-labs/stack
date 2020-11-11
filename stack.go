@@ -1,4 +1,4 @@
-// Package micro is a pluggable framework for microservices
+// Package stack is a pluggable framework for microservices
 package stack
 
 import (
@@ -50,7 +50,7 @@ type Publisher interface {
 type Option func(*Options)
 
 var (
-	HeaderPrefix = "Micro-"
+	HeaderPrefix = "Stack-"
 )
 
 // NewService creates and returns a new Service based on the packages within.

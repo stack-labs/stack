@@ -9,6 +9,7 @@ import (
 
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/cmd"
+	"github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/debug/profile"
 	"github.com/stack-labs/stack-rpc/debug/profile/pprof"
 	"github.com/stack-labs/stack-rpc/debug/service/handler"
@@ -53,7 +54,7 @@ func (s *service) Init(opts ...Option) {
 
 	s.once.Do(func() {
 		// setup the plugins
-		for _, p := range strings.Split(os.Getenv("MICRO_PLUGIN"), ",") {
+		for _, p := range strings.Split(os.Getenv("STACK_PLUGIN"), ",") {
 			if len(p) == 0 {
 				continue
 			}
@@ -94,7 +95,7 @@ func (s *service) Server() server.Server {
 }
 
 func (s *service) String() string {
-	return "micro"
+	return "stack"
 }
 
 func (s *service) Start() error {
@@ -149,7 +150,7 @@ func (s *service) Run() error {
 	// init the stack config
 	var err error
 	if s.opts.ConfigFile {
-		if s.opts.Config, err = newConfig(s.opts.ConfigSource...); err != nil {
+		if s.opts.Config, err = config.New(s.opts.ConfigSource...); err != nil {
 			return err
 		}
 	}
@@ -164,7 +165,7 @@ func (s *service) Run() error {
 
 	// start the profiler
 	// TODO: set as an option to the service, don't just use pprof
-	if prof := os.Getenv("MICRO_DEBUG_PROFILE"); len(prof) > 0 {
+	if prof := os.Getenv("STACK_DEBUG_PROFILE"); len(prof) > 0 {
 		service := s.opts.Server.Options().Name
 		version := s.opts.Server.Options().Version
 		id := s.opts.Server.Options().Id

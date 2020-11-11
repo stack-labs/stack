@@ -33,13 +33,13 @@
 // Go code.  Run it by building this program and putting it in your path with
 // the name
 // 	protoc-gen-stack
-// That word 'micro' at the end becomes part of the option string set for the
+// That word 'stack' at the end becomes part of the option string set for the
 // protocol compiler, so once the protocol compiler (protoc) is installed
 // you can run
-// 	protoc --micro_out=output_directory --go_out=output_directory input_directory/file.proto
+// 	protoc --stack_out=output_directory --go_out=output_directory input_directory/file.proto
 // to generate stack-rpc code for the protocol defined by file.proto.
 // With that input, the output will be written to
-// 	output_directory/file.micro.go
+// 	output_directory/file.stack.go
 //
 // The generated code is documented in the package comment for
 // the library.

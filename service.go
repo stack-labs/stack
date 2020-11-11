@@ -7,6 +7,8 @@ import (
 	"sync"
 	"syscall"
 
+	"github.com/stack-labs/stack-rpc/config"
+
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/debug/profile"
@@ -149,7 +151,7 @@ func (s *service) Run() error {
 	// init the stack config
 	var err error
 	if s.opts.ConfigFile {
-		if s.opts.Config, err = newConfig(s.opts.ConfigSource...); err != nil {
+		if s.opts.Config, err = config.New(s.opts.ConfigSource...); err != nil {
 			return err
 		}
 	}

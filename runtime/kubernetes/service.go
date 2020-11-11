@@ -32,8 +32,8 @@ func newService(s *runtime.Service, c runtime.CreateOptions) *service {
 	kdeploy.Metadata.Annotations["source"] = s.Source
 
 	// associate owner:group to be later augmented
-	kdeploy.Metadata.Annotations["owner"] = "micro"
-	kdeploy.Metadata.Annotations["group"] = "micro"
+	kdeploy.Metadata.Annotations["owner"] = "stack"
+	kdeploy.Metadata.Annotations["group"] = "stack"
 
 	// set a build timestamp to the current time
 	if kdeploy.Spec.Template.Metadata.Annotations == nil {

@@ -79,7 +79,7 @@ func (t *grpcTransportListener) Accept(fn func(transport.Socket)) error {
 	srv := grpc.NewServer(opts...)
 
 	// register service
-	pb.RegisterTransportServer(srv, &microTransport{addr: t.listener.Addr().String(), fn: fn})
+	pb.RegisterTransportServer(srv, &stackTransport{addr: t.listener.Addr().String(), fn: fn})
 
 	// start serving
 	return srv.Serve(t.listener)

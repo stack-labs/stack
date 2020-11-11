@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/cli"
 	"github.com/stack-labs/stack-rpc"
+	"github.com/stack-labs/stack-rpc/cli"
 	"github.com/stack-labs/stack-rpc/registry"
 )
 
@@ -156,8 +156,8 @@ func Server(srv *http.Server) Option {
 	}
 }
 
-// MicroService sets the micro.Service used internally
-func MicroService(s stack.Service) Option {
+// StackService sets the stack.Service used internally
+func StackService(s stack.Service) Option {
 	return func(o *Options) {
 		o.Service = s
 	}

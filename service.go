@@ -7,10 +7,9 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/stack-labs/stack-rpc/config"
-
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/cmd"
+	"github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/debug/profile"
 	"github.com/stack-labs/stack-rpc/debug/profile/pprof"
 	"github.com/stack-labs/stack-rpc/debug/service/handler"
@@ -96,7 +95,7 @@ func (s *service) Server() server.Server {
 }
 
 func (s *service) String() string {
-	return "micro"
+	return "stack"
 }
 
 func (s *service) Start() error {

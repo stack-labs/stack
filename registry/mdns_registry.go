@@ -11,12 +11,12 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/micro/mdns"
+	"github.com/stack-labs/stack-rpc/pkg/mdns"
 )
 
 var (
-	// use a .micro domain rather than .local
-	mdnsDomain = "micro"
+	// use a .stack domain rather than .local
+	mdnsDomain = "stack"
 )
 
 type mdnsTxt struct {

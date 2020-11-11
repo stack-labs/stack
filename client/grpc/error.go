@@ -1,18 +1,18 @@
 package grpc
 
 import (
-	"google.golang.org/grpc/status"
 	"github.com/stack-labs/stack-rpc/errors"
+	"google.golang.org/grpc/status"
 )
 
-func microError(err error) error {
+func stackError(err error) error {
 	// no error
 	switch err {
 	case nil:
 		return nil
 	}
 
-	// micro error
+	// stack error
 	if v, ok := err.(*errors.Error); ok {
 		return v
 	}
@@ -20,7 +20,7 @@ func microError(err error) error {
 	// grpc error
 	if s, ok := status.FromError(err); ok {
 		if e := errors.Parse(s.Message()); e.Code > 0 {
-			return e // actually a micro error
+			return e // actually a stack error
 		}
 		return errors.InternalServerError("stack.rpc.client", s.Message())
 	}

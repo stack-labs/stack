@@ -29,8 +29,8 @@ func (c *Codec) ReadHeader(m *codec.Message, t codec.MessageType) error {
 	// service method
 	path := m.Header[":path"]
 	if len(path) == 0 || path[0] != '/' {
-		m.Target = m.Header["Micro-Service"]
-		m.Endpoint = m.Header["Micro-Endpoint"]
+		m.Target = m.Header["Stack-Service"]
+		m.Endpoint = m.Header["Stack-Endpoint"]
 	} else {
 		// [ , a.package.Foo, Bar]
 		parts := strings.Split(path, "/")
@@ -96,7 +96,7 @@ func (c *Codec) Write(m *codec.Message, b interface{}) error {
 		//		m.Header["grpc-message"] = ""
 	case codec.Error:
 		m.Header["Trailer"] = "grpc-status, grpc-message"
-		// micro end of stream
+		// stack end of stream
 		if m.Error == "EOS" {
 			m.Header["grpc-status"] = "0"
 		} else {

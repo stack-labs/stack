@@ -595,8 +595,8 @@ func (r *rpcClient) Publish(ctx context.Context, msg Message, opts ...PublishOpt
 
 	id := uuid.New().String()
 	md["Content-Type"] = msg.ContentType()
-	md["Micro-Topic"] = msg.Topic()
-	md["Micro-Id"] = id
+	md["Stack-Topic"] = msg.Topic()
+	md["Stack-Id"] = id
 
 	// set the topic
 	topic := msg.Topic()
@@ -630,8 +630,8 @@ func (r *rpcClient) Publish(ctx context.Context, msg Message, opts ...PublishOpt
 			Target: topic,
 			Type:   codec.Event,
 			Header: map[string]string{
-				"Micro-Id":    id,
-				"Micro-Topic": msg.Topic(),
+				"Stack-Id":    id,
+				"Stack-Topic": msg.Topic(),
 			},
 		}, msg.Payload()); err != nil {
 			return errors.InternalServerError("stack.rpc.client", err.Error())

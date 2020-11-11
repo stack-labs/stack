@@ -5,7 +5,7 @@ import (
 	"github.com/stack-labs/stack-rpc/server"
 )
 
-// NewServer returns a micro server interface
+// NewServer returns a stack server interface
 func NewServer(opts ...server.Option) server.Server {
 	return server.NewServer(opts...)
 }

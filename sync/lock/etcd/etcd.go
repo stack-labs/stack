@@ -105,7 +105,7 @@ func NewLock(opts ...lock.Option) lock.Lock {
 	}
 
 	return &etcdLock{
-		path:   "/micro/lock",
+		path:   "/stack/lock",
 		client: c,
 		opts:   options,
 		locks:  make(map[string]*elock),

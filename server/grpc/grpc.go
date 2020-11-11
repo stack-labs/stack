@@ -377,7 +377,7 @@ func (g *grpcServer) processRequest(stream grpc.ServerStream, service *service, 
 				statusCode = err.code
 				statusDesc = err.desc
 			} else if err, ok := appErr.(*errors.Error); ok {
-				statusCode = microError(err)
+				statusCode = stackError(err)
 				statusDesc = appErr.Error()
 			} else {
 				statusCode = convertCode(appErr)
@@ -433,7 +433,7 @@ func (g *grpcServer) processStream(stream grpc.ServerStream, service *service, m
 			statusCode = err.code
 			statusDesc = err.desc
 		} else if err, ok := appErr.(*errors.Error); ok {
-			statusCode = microError(err)
+			statusCode = stackError(err)
 			statusDesc = appErr.Error()
 		} else {
 			statusCode = convertCode(appErr)
@@ -729,7 +729,7 @@ func (g *grpcServer) Start() error {
 
 	config := g.Options()
 
-	// micro: config.Transport.Listen(config.Address)
+	// stack: config.Transport.Listen(config.Address)
 	ts, err := net.Listen("tcp", config.Address)
 	if err != nil {
 		return err
@@ -755,7 +755,7 @@ func (g *grpcServer) Start() error {
 		log.Log("Server register error: ", err)
 	}
 
-	// micro: go ts.Accept(s.accept)
+	// stack: go ts.Accept(s.accept)
 	go func() {
 		if err := g.srv.Serve(ts); err != nil {
 			log.Log("gRPC Server start error: ", err)

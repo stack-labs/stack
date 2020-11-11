@@ -55,7 +55,7 @@ func TestHTTPProxy(t *testing.T) {
 	var wg sync.WaitGroup
 	wg.Add(1)
 
-	// new micro service
+	// new stack service
 	service := stack.NewService(
 		stack.Context(ctx),
 		stack.Name("foobar"),

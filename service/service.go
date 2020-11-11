@@ -1,4 +1,4 @@
-// Package service encapsulates the client, server and other interfaces to provide a complete micro service.
+// Package service encapsulates the client, server and other interfaces to provide a complete stack service.
 package service
 
 import (
@@ -6,7 +6,7 @@ import (
 	"github.com/stack-labs/stack-rpc/server"
 )
 
-// Service is an interface for a micro service
+// Service is an interface for a stack service
 type Service interface {
 	// The service name
 	Name() string

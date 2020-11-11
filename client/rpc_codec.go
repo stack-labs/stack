@@ -96,16 +96,16 @@ func getHeaders(m *codec.Message) {
 	}
 
 	// check error in header
-	m.Error = set(m.Error, "Micro-Error")
+	m.Error = set(m.Error, "Stack-Error")
 
 	// check endpoint in header
-	m.Endpoint = set(m.Endpoint, "Micro-Endpoint")
+	m.Endpoint = set(m.Endpoint, "Stack-Endpoint")
 
 	// check method in header
-	m.Method = set(m.Method, "Micro-Method")
+	m.Method = set(m.Method, "Stack-Method")
 
 	// set the request id
-	m.Id = set(m.Id, "Micro-Id")
+	m.Id = set(m.Id, "Stack-Id")
 }
 
 func setHeaders(m *codec.Message, stream string) {
@@ -116,14 +116,14 @@ func setHeaders(m *codec.Message, stream string) {
 		m.Header[hdr] = v
 	}
 
-	set("Micro-Id", m.Id)
-	set("Micro-Service", m.Target)
-	set("Micro-Method", m.Method)
-	set("Micro-Endpoint", m.Endpoint)
-	set("Micro-Error", m.Error)
+	set("Stack-Id", m.Id)
+	set("Stack-Service", m.Target)
+	set("Stack-Method", m.Method)
+	set("Stack-Endpoint", m.Endpoint)
+	set("Stack-Error", m.Error)
 
 	if len(stream) > 0 {
-		set("Micro-Stream", stream)
+		set("Stack-Stream", stream)
 	}
 }
 
@@ -137,7 +137,7 @@ func setupProtocol(msg *transport.Message, node *registry.Node) codec.NewCodec {
 	}
 
 	// processing topic publishing
-	if len(msg.Header["Micro-Topic"]) > 0 {
+	if len(msg.Header["Stack-Topic"]) > 0 {
 		return nil
 	}
 

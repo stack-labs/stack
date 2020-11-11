@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	// DefaultImage is default micro image
+	// DefaultImage is default stack image
 	DefaultImage = "stack-labs/stack-rpc"
 )
 
@@ -26,14 +26,14 @@ type Kubernetes interface {
 	List(*Resource) error
 }
 
-// NewService returns default micro kubernetes service definition
+// NewService returns default stack kubernetes service definition
 func NewService(name, version, typ string) *Service {
 	log.Tracef("kubernetes default service: name: %s, version: %s", name, version)
 
 	Labels := map[string]string{
 		"name":    name,
 		"version": version,
-		"micro":   typ,
+		"stack":   typ,
 	}
 
 	svcName := name
@@ -63,14 +63,14 @@ func NewService(name, version, typ string) *Service {
 	}
 }
 
-// NewService returns default micro kubernetes deployment definition
+// NewService returns default stack kubernetes deployment definition
 func NewDeployment(name, version, typ string) *Deployment {
 	log.Tracef("kubernetes default deployment: name: %s, version: %s", name, version)
 
 	Labels := map[string]string{
 		"name":    name,
 		"version": version,
-		"micro":   typ,
+		"stack":   typ,
 	}
 
 	depName := name

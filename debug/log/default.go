@@ -12,7 +12,7 @@ var (
 	DefaultSize = 1000
 )
 
-// defaultLog is default micro log
+// defaultLog is default stack log
 type defaultLog struct {
 	*buffer.Buffer
 }

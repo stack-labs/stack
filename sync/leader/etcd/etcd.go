@@ -129,7 +129,7 @@ func NewLeader(opts ...leader.Option) leader.Leader {
 	}
 
 	return &etcdLeader{
-		path:   "/micro/leader",
+		path:   "/stack/leader",
 		client: c,
 		opts:   options,
 	}

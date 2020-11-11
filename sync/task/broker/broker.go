@@ -1,4 +1,4 @@
-// Package broker provides a distributed task manager built on the micro broker
+// Package broker provides a distributed task manager built on the stack broker
 package broker
 
 import (
@@ -19,7 +19,7 @@ type brokerKey struct{}
 
 // Task is a broker task
 type Task struct {
-	// a micro broker
+	// a stack broker
 	Broker broker.Broker
 	// Options
 	Options task.Options
@@ -183,7 +183,7 @@ func (t *Task) Status() string {
 	return t.status
 }
 
-// Broker sets the micro broker
+// Broker sets the stack broker
 func WithBroker(b broker.Broker) task.Option {
 	return func(o *task.Options) {
 		if o.Context == nil {

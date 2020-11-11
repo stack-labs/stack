@@ -40,8 +40,7 @@ require (
 	github.com/lucas-clemente/quic-go v0.18.1
 	github.com/marten-seemann/qtls-go1-15 v0.1.1 // indirect
 	github.com/mholt/certmagic v0.8.3
-	github.com/micro/mdns v0.3.0
-	github.com/miekg/dns v1.1.22 // indirect
+	github.com/miekg/dns v1.1.22
 	github.com/mitchellh/hashstructure v1.0.0
 	github.com/nats-io/nats-server/v2 v2.1.9 // indirect
 	github.com/nats-io/nats.go v1.10.0

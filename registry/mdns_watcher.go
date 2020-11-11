@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/micro/mdns"
+	"github.com/stack-labs/stack-rpc/pkg/mdns"
 )
 
 type mdnsWatcher struct {

@@ -1,5 +1,5 @@
-// Package micro provides a micro rpc resolver which prefixes a namespace
-package micro
+// Package stack provides a stack rpc resolver which prefixes a namespace
+package stack
 
 import (
 	"net/http"
@@ -20,7 +20,7 @@ func (r *Resolver) Resolve(req *http.Request) (*resolver.Endpoint, error) {
 
 	switch r.Options.Handler {
 	// internal handlers
-	case "meta", "api", "rpc", "micro":
+	case "meta", "api", "rpc", "stack":
 		name, method = apiRoute(req.URL.Path)
 	default:
 		method = req.Method
@@ -34,10 +34,10 @@ func (r *Resolver) Resolve(req *http.Request) (*resolver.Endpoint, error) {
 }
 
 func (r *Resolver) String() string {
-	return "micro"
+	return "stack"
 }
 
-// NewResolver creates a new micro resolver
+// NewResolver creates a new stack resolver
 func NewResolver(opts ...resolver.Option) resolver.Resolver {
 	return &Resolver{
 		Options: resolver.NewOptions(opts...),

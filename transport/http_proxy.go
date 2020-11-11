@@ -44,7 +44,7 @@ func proxyDial(conn net.Conn, addr string, proxyURL *url.URL) (_ net.Conn, err e
 	r := &http.Request{
 		Method: http.MethodConnect,
 		URL:    &url.URL{Host: addr},
-		Header: map[string][]string{"User-Agent": {"micro/latest"}},
+		Header: map[string][]string{"User-Agent": {"stack/latest"}},
 	}
 
 	if user := proxyURL.User; user != nil {

@@ -3,11 +3,11 @@ package grpc
 import (
 	"net/http"
 
-	"google.golang.org/grpc/codes"
 	"github.com/stack-labs/stack-rpc/errors"
+	"google.golang.org/grpc/codes"
 )
 
-func microError(err *errors.Error) codes.Code {
+func stackError(err *errors.Error) codes.Code {
 	switch err {
 	case nil:
 		return codes.OK

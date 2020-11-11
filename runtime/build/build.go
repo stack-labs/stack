@@ -1,4 +1,4 @@
-// Package build builds a micro runtime package
+// Package build builds a stack runtime package
 package build
 
 import (
@@ -21,7 +21,7 @@ type Source struct {
 	Repository *source.Repository
 }
 
-// Package is micro service package
+// Package is stack service package
 type Package struct {
 	// Name of the binary
 	Name string

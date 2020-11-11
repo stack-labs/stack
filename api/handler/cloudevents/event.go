@@ -65,11 +65,12 @@ func New(eventType string, mimeType string, payload interface{}) *Event {
 	event := &Event{
 		EventType:          eventType,
 		CloudEventsVersion: CloudEventsVersion,
-		Source:             "https://micro.mu",
-		EventID:            uuid.New().String(),
-		EventTime:          &now,
-		ContentType:        mimeType,
-		Data:               payload,
+		// todo remove cloud event?
+		Source:      "https://micro.mu",
+		EventID:     uuid.New().String(),
+		EventTime:   &now,
+		ContentType: mimeType,
+		Data:        payload,
 		Extensions: map[string]interface{}{
 			"eventgateway": map[string]interface{}{
 				"transformed":            "true",

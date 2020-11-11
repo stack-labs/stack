@@ -22,7 +22,7 @@ type File struct {
 	Contents []byte
 }
 
-// storage is an implementation of certmagic.Storage using micro's sync.Map and store.Store interfaces.
+// storage is an implementation of certmagic.Storage using stack's sync.Map and store.Store interfaces.
 // As certmagic storage expects a filesystem (with stat() abilities) we have to implement
 // the bare minimum of metadata.
 type storage struct {

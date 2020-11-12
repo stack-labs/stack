@@ -11,10 +11,11 @@ import (
 	"github.com/stack-labs/stack-rpc/pkg/config/source"
 
 	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/cli"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/selector"
 	"github.com/stack-labs/stack-rpc/cmd"
+	"github.com/stack-labs/stack-rpc/pkg/cli"
+	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/transport"
@@ -27,6 +28,7 @@ type Options struct {
 	Server       server.Server
 	Registry     registry.Registry
 	Transport    transport.Transport
+	Selector     selector.Selector
 	ConfigSource []source.Source
 	Config       config.Config
 	// Before and After funcs
@@ -45,20 +47,21 @@ type Options struct {
 
 func newOptions(opts ...Option) Options {
 	opt := Options{
-		Broker:       broker.DefaultBroker,
-		Cmd:          cmd.NewCmd(),
-		Client:       client.DefaultClient,
-		Server:       server.DefaultServer,
-		Registry:     registry.DefaultRegistry,
-		Transport:    transport.DefaultTransport,
-		Context:      context.Background(),
-		ConfigSource: []source.Source{file.NewSource(file.WithPath(DefaultConfigPath))},
-		Signal:       true,
+		Broker:    broker.DefaultBroker,
+		Cmd:       cmd.NewCmd(),
+		Client:    client.DefaultClient,
+		Server:    server.DefaultServer,
+		Registry:  registry.DefaultRegistry,
+		Transport: transport.DefaultTransport,
+		Context:   context.Background(),
+		Signal:    true,
 	}
 
 	for _, o := range opts {
 		o(&opt)
 	}
+
+	opt.ConfigSource = append(opt.ConfigSource, file.NewSource(file.WithPath(DefaultConfigPath)), cliSource.NewSource(opt.Cmd.App()))
 
 	return opt
 }

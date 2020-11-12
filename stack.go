@@ -49,10 +49,6 @@ type Publisher interface {
 
 type Option func(*Options)
 
-var (
-	HeaderPrefix = "Stack-"
-)
-
 // NewService creates and returns a new Service based on the packages within.
 func NewService(opts ...Option) Service {
 	return newService(opts...)

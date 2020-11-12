@@ -64,7 +64,7 @@ export PATH=$PATH:$GOPATH/bin
 
 cli is tested against multiple versions of Go on Linux, and against the latest
 released version of Go on OS X and Windows.  For full details, see
-[`./.travis.yml`](./.travis.yml) and [`./appveyor.yml`](./appveyor.yml).
+[`./.travis.yml`](.travis.yml) and [`./appveyor.yml`](./appveyor.yml).
 
 ### Using the `v2` branch
 

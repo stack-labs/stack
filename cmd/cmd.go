@@ -2,52 +2,13 @@
 package cmd
 
 import (
-	"fmt"
 	"io"
 	"math/rand"
 	"os"
-	"strings"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/cli"
 	"github.com/stack-labs/stack-rpc/client"
-	cgrpc "github.com/stack-labs/stack-rpc/client/grpc"
-	cmucp "github.com/stack-labs/stack-rpc/client/mucp"
-	"github.com/stack-labs/stack-rpc/server"
-	sgrpc "github.com/stack-labs/stack-rpc/server/grpc"
-	smucp "github.com/stack-labs/stack-rpc/server/mucp"
-	"github.com/stack-labs/stack-rpc/util/log"
-
-	// brokers
-	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/broker/http"
-	"github.com/stack-labs/stack-rpc/broker/memory"
-	"github.com/stack-labs/stack-rpc/broker/nats"
-	brokerSrv "github.com/stack-labs/stack-rpc/broker/service"
-
-	// registries
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/registry/etcd"
-	"github.com/stack-labs/stack-rpc/registry/mdns"
-	rmem "github.com/stack-labs/stack-rpc/registry/memory"
-	regSrv "github.com/stack-labs/stack-rpc/registry/service"
-
-	// selectors
-	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/client/selector/dns"
-	"github.com/stack-labs/stack-rpc/client/selector/router"
-	"github.com/stack-labs/stack-rpc/client/selector/static"
-
-	// transports
-	"github.com/stack-labs/stack-rpc/transport"
-	tgrpc "github.com/stack-labs/stack-rpc/transport/grpc"
-	thttp "github.com/stack-labs/stack-rpc/transport/http"
-	tmem "github.com/stack-labs/stack-rpc/transport/memory"
-	"github.com/stack-labs/stack-rpc/transport/quic"
-
-	// runtimes
-	"github.com/stack-labs/stack-rpc/runtime"
-	"github.com/stack-labs/stack-rpc/runtime/kubernetes"
+	"github.com/stack-labs/stack-rpc/pkg/cli"
 )
 
 type Cmd interface {
@@ -190,54 +151,6 @@ var (
 			Usage:  "Comma-separated list of transport addresses",
 		},
 	}
-
-	DefaultBrokers = map[string]func(...broker.Option) broker.Broker{
-		"stack.rpc.broker": brokerSrv.NewBroker,
-		"service":          brokerSrv.NewBroker,
-		"http":             http.NewBroker,
-		"memory":           memory.NewBroker,
-		"nats":             nats.NewBroker,
-	}
-
-	DefaultClients = map[string]func(...client.Option) client.Client{
-		"rpc":  client.NewClient,
-		"mucp": cmucp.NewClient,
-		"grpc": cgrpc.NewClient,
-	}
-
-	DefaultRegistries = map[string]func(...registry.Option) registry.Registry{
-		"stack.rpc.registry": regSrv.NewRegistry,
-		"service":            regSrv.NewRegistry,
-		"etcd":               etcd.NewRegistry,
-		"mdns":               mdns.NewRegistry,
-		"memory":             rmem.NewRegistry,
-	}
-
-	DefaultSelectors = map[string]func(...selector.Option) selector.Selector{
-		"default": selector.NewSelector,
-		"dns":     dns.NewSelector,
-		"cache":   selector.NewSelector,
-		"router":  router.NewSelector,
-		"static":  static.NewSelector,
-	}
-
-	DefaultServers = map[string]func(...server.Option) server.Server{
-		"rpc":  server.NewServer,
-		"mucp": smucp.NewServer,
-		"grpc": sgrpc.NewServer,
-	}
-
-	DefaultTransports = map[string]func(...transport.Option) transport.Transport{
-		"memory": tmem.NewTransport,
-		"http":   thttp.NewTransport,
-		"grpc":   tgrpc.NewTransport,
-		"quic":   quic.NewTransport,
-	}
-
-	DefaultRuntimes = map[string]func(...runtime.Option) runtime.Runtime{
-		"local":      runtime.NewRuntime,
-		"kubernetes": kubernetes.NewRuntime,
-	}
 )
 
 func init() {
@@ -250,23 +163,7 @@ func init() {
 }
 
 func newCmd(opts ...Option) Cmd {
-	options := Options{
-		Broker:    &broker.DefaultBroker,
-		Client:    &client.DefaultClient,
-		Registry:  &registry.DefaultRegistry,
-		Server:    &server.DefaultServer,
-		Selector:  &selector.DefaultSelector,
-		Transport: &transport.DefaultTransport,
-		Runtime:   &runtime.DefaultRuntime,
-
-		Brokers:    DefaultBrokers,
-		Clients:    DefaultClients,
-		Registries: DefaultRegistries,
-		Selectors:  DefaultSelectors,
-		Servers:    DefaultServers,
-		Transports: DefaultTransports,
-		Runtimes:   DefaultRuntimes,
-	}
+	options := Options{}
 
 	for _, o := range opts {
 		o(&options)
@@ -282,7 +179,6 @@ func newCmd(opts ...Option) Cmd {
 	cmd.app.Name = cmd.opts.Name
 	cmd.app.Version = cmd.opts.Version
 	cmd.app.Usage = cmd.opts.Description
-	cmd.app.Before = cmd.Before
 	cmd.app.Flags = DefaultFlags
 	cmd.app.Action = func(c *cli.Context) {}
 
@@ -299,201 +195,6 @@ func (c *cmd) App() *cli.App {
 
 func (c *cmd) Options() Options {
 	return c.opts
-}
-
-func (c *cmd) Before(ctx *cli.Context) error {
-	// If flags are set then use them otherwise do nothing
-	var serverOpts []server.Option
-	var clientOpts []client.Option
-
-	// Set the runtime
-	if name := ctx.String("runtime"); len(name) > 0 {
-		r, ok := c.opts.Runtimes[name]
-		if !ok {
-			return fmt.Errorf("Unsupported runtime: %s", name)
-		}
-
-		*c.opts.Runtime = r()
-	}
-
-	// Set the client
-	if name := ctx.String("client"); len(name) > 0 {
-		// only change if we have the client and type differs
-		if cl, ok := c.opts.Clients[name]; ok && (*c.opts.Client).String() != name {
-			*c.opts.Client = cl()
-		}
-	}
-
-	// Set the server
-	if name := ctx.String("server"); len(name) > 0 {
-		// only change if we have the server and type differs
-		if s, ok := c.opts.Servers[name]; ok && (*c.opts.Server).String() != name {
-			*c.opts.Server = s()
-		}
-	}
-
-	// Set the broker
-	if name := ctx.String("broker"); len(name) > 0 && (*c.opts.Broker).String() != name {
-		b, ok := c.opts.Brokers[name]
-		if !ok {
-			return fmt.Errorf("Broker %s not found", name)
-		}
-
-		*c.opts.Broker = b()
-		serverOpts = append(serverOpts, server.Broker(*c.opts.Broker))
-		clientOpts = append(clientOpts, client.Broker(*c.opts.Broker))
-	}
-
-	// Set the registry
-	if name := ctx.String("registry"); len(name) > 0 && (*c.opts.Registry).String() != name {
-		r, ok := c.opts.Registries[name]
-		if !ok {
-			return fmt.Errorf("Registry %s not found", name)
-		}
-
-		*c.opts.Registry = r()
-		serverOpts = append(serverOpts, server.Registry(*c.opts.Registry))
-		clientOpts = append(clientOpts, client.Registry(*c.opts.Registry))
-
-		if err := (*c.opts.Selector).Init(selector.Registry(*c.opts.Registry)); err != nil {
-			log.Fatalf("Error configuring registry: %v", err)
-		}
-
-		clientOpts = append(clientOpts, client.Selector(*c.opts.Selector))
-
-		if err := (*c.opts.Broker).Init(broker.Registry(*c.opts.Registry)); err != nil {
-			log.Fatalf("Error configuring broker: %v", err)
-		}
-	}
-
-	// Set the selector
-	if name := ctx.String("selector"); len(name) > 0 && (*c.opts.Selector).String() != name {
-		s, ok := c.opts.Selectors[name]
-		if !ok {
-			return fmt.Errorf("Selector %s not found", name)
-		}
-
-		*c.opts.Selector = s(selector.Registry(*c.opts.Registry))
-
-		// No server option here. Should there be?
-		clientOpts = append(clientOpts, client.Selector(*c.opts.Selector))
-	}
-
-	// Set the transport
-	if name := ctx.String("transport"); len(name) > 0 && (*c.opts.Transport).String() != name {
-		t, ok := c.opts.Transports[name]
-		if !ok {
-			return fmt.Errorf("Transport %s not found", name)
-		}
-
-		*c.opts.Transport = t()
-		serverOpts = append(serverOpts, server.Transport(*c.opts.Transport))
-		clientOpts = append(clientOpts, client.Transport(*c.opts.Transport))
-	}
-
-	// Parse the server options
-	metadata := make(map[string]string)
-	for _, d := range ctx.StringSlice("server_metadata") {
-		var key, val string
-		parts := strings.Split(d, "=")
-		key = parts[0]
-		if len(parts) > 1 {
-			val = strings.Join(parts[1:], "=")
-		}
-		metadata[key] = val
-	}
-
-	if len(metadata) > 0 {
-		serverOpts = append(serverOpts, server.Metadata(metadata))
-	}
-
-	if len(ctx.String("broker_address")) > 0 {
-		if err := (*c.opts.Broker).Init(broker.Addrs(strings.Split(ctx.String("broker_address"), ",")...)); err != nil {
-			log.Fatalf("Error configuring broker: %v", err)
-		}
-	}
-
-	if len(ctx.String("registry_address")) > 0 {
-		if err := (*c.opts.Registry).Init(registry.Addrs(strings.Split(ctx.String("registry_address"), ",")...)); err != nil {
-			log.Fatalf("Error configuring registry: %v", err)
-		}
-	}
-
-	if len(ctx.String("transport_address")) > 0 {
-		if err := (*c.opts.Transport).Init(transport.Addrs(strings.Split(ctx.String("transport_address"), ",")...)); err != nil {
-			log.Fatalf("Error configuring transport: %v", err)
-		}
-	}
-
-	if len(ctx.String("server_name")) > 0 {
-		serverOpts = append(serverOpts, server.Name(ctx.String("server_name")))
-	}
-
-	if len(ctx.String("server_version")) > 0 {
-		serverOpts = append(serverOpts, server.Version(ctx.String("server_version")))
-	}
-
-	if len(ctx.String("server_id")) > 0 {
-		serverOpts = append(serverOpts, server.Id(ctx.String("server_id")))
-	}
-
-	if len(ctx.String("server_address")) > 0 {
-		serverOpts = append(serverOpts, server.Address(ctx.String("server_address")))
-	}
-
-	if len(ctx.String("server_advertise")) > 0 {
-		serverOpts = append(serverOpts, server.Advertise(ctx.String("server_advertise")))
-	}
-
-	if ttl := time.Duration(ctx.GlobalInt("register_ttl")); ttl >= 0 {
-		serverOpts = append(serverOpts, server.RegisterTTL(ttl*time.Second))
-	}
-
-	if val := time.Duration(ctx.GlobalInt("register_interval")); val >= 0 {
-		serverOpts = append(serverOpts, server.RegisterInterval(val*time.Second))
-	}
-
-	// client opts
-	if r := ctx.Int("client_retries"); r >= 0 {
-		clientOpts = append(clientOpts, client.Retries(r))
-	}
-
-	if t := ctx.String("client_request_timeout"); len(t) > 0 {
-		d, err := time.ParseDuration(t)
-		if err != nil {
-			return fmt.Errorf("failed to parse client_request_timeout: %v", t)
-		}
-		clientOpts = append(clientOpts, client.RequestTimeout(d))
-	}
-
-	if r := ctx.Int("client_pool_size"); r > 0 {
-		clientOpts = append(clientOpts, client.PoolSize(r))
-	}
-
-	if t := ctx.String("client_pool_ttl"); len(t) > 0 {
-		d, err := time.ParseDuration(t)
-		if err != nil {
-			return fmt.Errorf("failed to parse client_pool_ttl: %v", t)
-		}
-		clientOpts = append(clientOpts, client.PoolTTL(d))
-	}
-
-	// We have some command line opts for the server.
-	// Lets set it up
-	if len(serverOpts) > 0 {
-		if err := (*c.opts.Server).Init(serverOpts...); err != nil {
-			log.Fatalf("Error configuring server: %v", err)
-		}
-	}
-
-	// Use an init option?
-	if len(clientOpts) > 0 {
-		if err := (*c.opts.Client).Init(clientOpts...); err != nil {
-			log.Fatalf("Error configuring client: %v", err)
-		}
-	}
-
-	return nil
 }
 
 func (c *cmd) Init(opts ...Option) error {

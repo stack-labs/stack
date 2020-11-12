@@ -206,6 +206,7 @@ func (s *service) Run() error {
 
 func (s *service) load() error {
 	config := s.opts.Config.Config()
+	log.Infof("stack config: %#v", config)
 
 	// If flags are set then use them otherwise do nothing
 	var serverOpts []server.Option
@@ -222,16 +223,16 @@ func (s *service) load() error {
 	// Set the server
 	if len(config.Server) > 0 {
 		// only change if we have the server and type differs
-		if server, ok := plugin.DefaultServers[config.Client]; ok && s.opts.Server.String() != config.Client {
-			s.opts.Server = server()
+		if ser, ok := plugin.DefaultServers[config.Server]; ok && s.opts.Server.String() != config.Server {
+			s.opts.Server = ser()
 		}
 	}
 
 	// Set the broker
-	if len(config.Broker) > 0 && s.opts.Broker.String() != config.Client {
-		b, ok := plugin.DefaultBrokers[config.Client]
+	if len(config.Broker) > 0 && s.opts.Broker.String() != config.Broker {
+		b, ok := plugin.DefaultBrokers[config.Broker]
 		if !ok {
-			return fmt.Errorf("broker %s not found", config.Client)
+			return fmt.Errorf("broker %s not found", config.Broker)
 		}
 
 		s.opts.Broker = b()

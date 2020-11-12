@@ -83,7 +83,6 @@ type config struct {
 	RegisterTTL          int      `json:"register_ttl"`
 	Registry             string   `json:"registry"`
 	RegistryAddress      string   `json:"registry_address"`
-	Runtime              string   `json:"runtime"`
 	Selector             string   `json:"selector"`
 	Server               string   `json:"server"`
 	ServerAddress        string   `json:"server_address"`
@@ -159,9 +158,6 @@ func TestCliSource_cmd(t *testing.T) {
 		t.Fatal()
 	}
 	if conf.RegistryAddress != "1" {
-		t.Fatal()
-	}
-	if conf.Runtime != "1" {
 		t.Fatal()
 	}
 	if conf.Selector != "1" {

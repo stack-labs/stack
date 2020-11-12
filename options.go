@@ -4,18 +4,13 @@ import (
 	"context"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/config"
-
-	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
-
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
-
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/selector"
 	"github.com/stack-labs/stack-rpc/cmd"
+	"github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/pkg/cli"
-	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
+	"github.com/stack-labs/stack-rpc/pkg/config/source"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/transport"
@@ -60,8 +55,6 @@ func newOptions(opts ...Option) Options {
 	for _, o := range opts {
 		o(&opt)
 	}
-
-	opt.ConfigSource = append(opt.ConfigSource, file.NewSource(file.WithPath(DefaultConfigPath)), cliSource.NewSource(opt.Cmd.App()))
 
 	return opt
 }

@@ -4,6 +4,8 @@ import (
 	"context"
 )
 
+type Option func(o *Options)
+
 type Options struct {
 	// For the Command Line itself
 	Name        string

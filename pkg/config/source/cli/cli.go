@@ -29,11 +29,15 @@ func (c *cliSource) Read() (*source.ChangeSet, error) {
 	//}
 
 	for _, name := range c.ctx.GlobalFlagNames() {
-		changes[name] = c.ctx.GlobalGeneric(name)
+		if c.ctx.GlobalIsSet(name) {
+			changes[name] = c.ctx.GlobalGeneric(name)
+		}
 	}
 
 	for _, name := range c.ctx.FlagNames() {
-		changes[name] = c.ctx.Generic(name)
+		if c.ctx.IsSet(name) {
+			changes[name] = c.ctx.Generic(name)
+		}
 	}
 
 	b, err := c.opts.Encoder.Encode(changes)

@@ -1,14 +1,11 @@
 package config
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
 
 	"github.com/stack-labs/stack-rpc/cmd"
-	"github.com/stack-labs/stack-rpc/pkg/config/source/cli"
-	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 )
 
 func TestStackConfig_Config(t *testing.T) {
@@ -60,18 +57,16 @@ transport_address: '1'
 
 	// set args
 	os.Args = []string{"run"}
-	for _, v := range app.Flags {
-		os.Args = append(os.Args, fmt.Sprintf("--%s", v.GetName()), "2")
-	}
+	os.Args = append(os.Args, "--broker", "2")
 
-	c, err := New(cli.NewSource(app), file.NewSource(file.WithPath(path)))
+	c, err := New(path, app)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Log(c.Config())
 
-	if c.Config().Broker != "1" {
+	if c.Config().Broker != "2" {
 		t.Fatal()
 	}
 	if c.Config().BrokerAddress != "1" {

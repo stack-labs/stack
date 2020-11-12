@@ -127,10 +127,8 @@ func (s *service) Stop() error {
 		return err
 	}
 
-	if s.opts.ConfigFile {
-		if err := s.opts.Config.Close(); err != nil {
-			return err
-		}
+	if err := s.opts.Config.Close(); err != nil {
+		return err
 	}
 
 	for _, fn := range s.opts.AfterStop {
@@ -148,11 +146,15 @@ func (s *service) Run() error {
 	}
 
 	// init the stack config
-	var err error
+	var (
+		err      error
+		filePath string
+	)
 	if s.opts.ConfigFile {
-		if s.opts.Config, err = config.New(s.opts.ConfigSource...); err != nil {
-			return err
-		}
+		filePath = s.opts.Cmd.ConfigFile()
+	}
+	if s.opts.Config, err = config.New(filePath, s.opts.Cmd.App(), s.opts.ConfigSource...); err != nil {
+		return err
 	}
 
 	// load dynamic config

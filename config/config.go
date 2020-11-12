@@ -1,9 +1,12 @@
 package config
 
 import (
+	"github.com/stack-labs/stack-rpc/pkg/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config"
 	"github.com/stack-labs/stack-rpc/pkg/config/reader"
 	"github.com/stack-labs/stack-rpc/pkg/config/source"
+	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
+	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 )
 
 type Config interface {
@@ -45,12 +48,20 @@ type stackConfig struct {
 	v Value
 }
 
-func New(s ...source.Source) (Config, error) {
+func New(filePath string, app *cli.App, s ...source.Source) (Config, error) {
+	var sources []source.Source
+	// need read from config file
+	if len(filePath) > 0 {
+		sources = append(sources, file.NewSource(file.WithPath(filePath)))
+	}
+	sources = append(sources, cliSource.NewSource(app))
+	sources = append(sources, s...)
+
 	c, err := config.NewConfig(config.Storage(true), config.Watch(false))
 	if err != nil {
 		return nil, err
 	}
-	if err := c.Load(s...); err != nil {
+	if err := c.Load(sources...); err != nil {
 		return nil, err
 	}
 

@@ -207,34 +207,37 @@ func (s *service) Run() error {
 }
 
 func (s *service) load() error {
-	config := s.opts.Config.Config()
-	log.Infof("stack config: %#v", config)
+	conf := newDefaultConfig()
+	if err := s.opts.Config.Scan(conf); err != nil {
+		return err
+	}
+	log.Infof("stack config: %#v", conf)
 
 	// If flags are set then use them otherwise do nothing
 	var serverOpts []server.Option
 	var clientOpts []client.Option
 
 	// Set the client
-	if len(config.Client) > 0 {
+	if len(conf.Client) > 0 {
 		// only change if we have the client and type differs
-		if cl, ok := plugin.DefaultClients[config.Client]; ok && s.opts.Client.String() != config.Client {
+		if cl, ok := plugin.DefaultClients[conf.Client]; ok && s.opts.Client.String() != conf.Client {
 			s.opts.Client = cl()
 		}
 	}
 
 	// Set the server
-	if len(config.Server) > 0 {
+	if len(conf.Server) > 0 {
 		// only change if we have the server and type differs
-		if ser, ok := plugin.DefaultServers[config.Server]; ok && s.opts.Server.String() != config.Server {
+		if ser, ok := plugin.DefaultServers[conf.Server]; ok && s.opts.Server.String() != conf.Server {
 			s.opts.Server = ser()
 		}
 	}
 
 	// Set the broker
-	if len(config.Broker) > 0 && s.opts.Broker.String() != config.Broker {
-		b, ok := plugin.DefaultBrokers[config.Broker]
+	if len(conf.Broker) > 0 && s.opts.Broker.String() != conf.Broker {
+		b, ok := plugin.DefaultBrokers[conf.Broker]
 		if !ok {
-			return fmt.Errorf("broker %s not found", config.Broker)
+			return fmt.Errorf("broker %s not found", conf.Broker)
 		}
 
 		s.opts.Broker = b()
@@ -243,10 +246,10 @@ func (s *service) load() error {
 	}
 
 	// Set the registry
-	if len(config.Registry) > 0 && s.opts.Registry.String() != config.Registry {
-		r, ok := plugin.DefaultRegistries[config.Registry]
+	if len(conf.Registry) > 0 && s.opts.Registry.String() != conf.Registry {
+		r, ok := plugin.DefaultRegistries[conf.Registry]
 		if !ok {
-			return fmt.Errorf("registry %s not found", config.Registry)
+			return fmt.Errorf("registry %s not found", conf.Registry)
 		}
 
 		s.opts.Registry = r()
@@ -265,10 +268,10 @@ func (s *service) load() error {
 	}
 
 	// Set the selector
-	if len(config.Selector) > 0 && s.opts.Selector.String() != config.Selector {
-		sel, ok := plugin.DefaultSelectors[config.Selector]
+	if len(conf.Selector) > 0 && s.opts.Selector.String() != conf.Selector {
+		sel, ok := plugin.DefaultSelectors[conf.Selector]
 		if !ok {
-			return fmt.Errorf("selector %s not found", config.Selector)
+			return fmt.Errorf("selector %s not found", conf.Selector)
 		}
 
 		s.opts.Selector = sel(selector.Registry(s.opts.Registry))
@@ -278,10 +281,10 @@ func (s *service) load() error {
 	}
 
 	// Set the transport
-	if len(config.Transport) > 0 && s.opts.Transport.String() != config.Transport {
-		t, ok := plugin.DefaultTransports[config.Transport]
+	if len(conf.Transport) > 0 && s.opts.Transport.String() != conf.Transport {
+		t, ok := plugin.DefaultTransports[conf.Transport]
 		if !ok {
-			return fmt.Errorf("transport %s not found", config.Transport)
+			return fmt.Errorf("transport %s not found", conf.Transport)
 		}
 
 		s.opts.Transport = t()
@@ -291,7 +294,7 @@ func (s *service) load() error {
 
 	// Parse the server options
 	metadata := make(map[string]string)
-	for _, d := range config.ServerMetadata {
+	for _, d := range conf.ServerMetadata {
 		var key, val string
 		parts := strings.Split(d, "=")
 		key = parts[0]
@@ -305,73 +308,73 @@ func (s *service) load() error {
 		serverOpts = append(serverOpts, server.Metadata(metadata))
 	}
 
-	if len(config.BrokerAddress) > 0 {
-		if err := s.opts.Broker.Init(broker.Addrs(strings.Split(config.BrokerAddress, ",")...)); err != nil {
+	if len(conf.BrokerAddress) > 0 {
+		if err := s.opts.Broker.Init(broker.Addrs(strings.Split(conf.BrokerAddress, ",")...)); err != nil {
 			log.Fatalf("Error configuring broker: %v", err)
 		}
 	}
 
-	if len(config.RegistryAddress) > 0 {
-		if err := s.opts.Registry.Init(registry.Addrs(strings.Split(config.RegistryAddress, ",")...)); err != nil {
+	if len(conf.RegistryAddress) > 0 {
+		if err := s.opts.Registry.Init(registry.Addrs(strings.Split(conf.RegistryAddress, ",")...)); err != nil {
 			log.Fatalf("Error configuring registry: %v", err)
 		}
 	}
 
-	if len(config.TransportAddress) > 0 {
-		if err := s.opts.Transport.Init(transport.Addrs(strings.Split(config.TransportAddress, ",")...)); err != nil {
+	if len(conf.TransportAddress) > 0 {
+		if err := s.opts.Transport.Init(transport.Addrs(strings.Split(conf.TransportAddress, ",")...)); err != nil {
 			log.Fatalf("Error configuring transport: %v", err)
 		}
 	}
 
-	if len(config.ServerName) > 0 {
-		serverOpts = append(serverOpts, server.Name(config.ServerName))
+	if len(conf.ServerName) > 0 {
+		serverOpts = append(serverOpts, server.Name(conf.ServerName))
 	}
 
-	if len(config.ServerVersion) > 0 {
-		serverOpts = append(serverOpts, server.Version(config.ServerVersion))
+	if len(conf.ServerVersion) > 0 {
+		serverOpts = append(serverOpts, server.Version(conf.ServerVersion))
 	}
 
-	if len(config.ServerID) > 0 {
-		serverOpts = append(serverOpts, server.Id(config.ServerID))
+	if len(conf.ServerID) > 0 {
+		serverOpts = append(serverOpts, server.Id(conf.ServerID))
 	}
 
-	if len(config.ServerAddress) > 0 {
-		serverOpts = append(serverOpts, server.Address(config.ServerAddress))
+	if len(conf.ServerAddress) > 0 {
+		serverOpts = append(serverOpts, server.Address(conf.ServerAddress))
 	}
 
-	if len(config.ServerAdvertise) > 0 {
-		serverOpts = append(serverOpts, server.Advertise(config.ServerAdvertise))
+	if len(conf.ServerAdvertise) > 0 {
+		serverOpts = append(serverOpts, server.Advertise(conf.ServerAdvertise))
 	}
 
-	if ttl := time.Duration(config.RegisterTTL); ttl >= 0 {
+	if ttl := time.Duration(conf.RegisterTTL); ttl >= 0 {
 		serverOpts = append(serverOpts, server.RegisterTTL(ttl*time.Second))
 	}
 
-	if val := time.Duration(config.RegisterInterval); val >= 0 {
+	if val := time.Duration(conf.RegisterInterval); val >= 0 {
 		serverOpts = append(serverOpts, server.RegisterInterval(val*time.Second))
 	}
 
 	// client opts
-	if config.ClientRetries >= 0 {
-		clientOpts = append(clientOpts, client.Retries(config.ClientRetries))
+	if conf.ClientRetries >= 0 {
+		clientOpts = append(clientOpts, client.Retries(conf.ClientRetries))
 	}
 
-	if len(config.ClientRequestTimeout) > 0 {
-		d, err := time.ParseDuration(config.ClientRequestTimeout)
+	if len(conf.ClientRequestTimeout) > 0 {
+		d, err := time.ParseDuration(conf.ClientRequestTimeout)
 		if err != nil {
-			return fmt.Errorf("failed to parse client_request_timeout: %v", config.ClientRequestTimeout)
+			return fmt.Errorf("failed to parse client_request_timeout: %v", conf.ClientRequestTimeout)
 		}
 		clientOpts = append(clientOpts, client.RequestTimeout(d))
 	}
 
-	if config.ClientPoolSize > 0 {
-		clientOpts = append(clientOpts, client.PoolSize(config.ClientPoolSize))
+	if conf.ClientPoolSize > 0 {
+		clientOpts = append(clientOpts, client.PoolSize(conf.ClientPoolSize))
 	}
 
-	if len(config.ClientPoolTTL) > 0 {
-		d, err := time.ParseDuration(config.ClientPoolTTL)
+	if len(conf.ClientPoolTTL) > 0 {
+		d, err := time.ParseDuration(conf.ClientPoolTTL)
 		if err != nil {
-			return fmt.Errorf("failed to parse client_pool_ttl: %v", config.ClientPoolTTL)
+			return fmt.Errorf("failed to parse client_pool_ttl: %v", conf.ClientPoolTTL)
 		}
 		clientOpts = append(clientOpts, client.PoolTTL(d))
 	}

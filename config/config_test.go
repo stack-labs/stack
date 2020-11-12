@@ -8,6 +8,32 @@ import (
 	"github.com/stack-labs/stack-rpc/cmd"
 )
 
+type Value struct {
+	Broker               string   `json:"broker"`
+	BrokerAddress        string   `json:"broker_address"`
+	Client               string   `json:"client"`
+	ClientPoolSize       int      `json:"client_pool_size"`
+	ClientPoolTTL        string   `json:"client_pool_ttl"`
+	ClientRequestTimeout string   `json:"client_request_timeout"`
+	ClientRetries        int      `json:"client_retries"`
+	Profile              string   `json:"profile"`
+	RegisterInterval     int      `json:"register_interval"`
+	RegisterTTL          int      `json:"register_ttl"`
+	Registry             string   `json:"registry"`
+	RegistryAddress      string   `json:"registry_address"`
+	Runtime              string   `json:"runtime"`
+	Selector             string   `json:"selector"`
+	Server               string   `json:"server"`
+	ServerAddress        string   `json:"server_address"`
+	ServerAdvertise      string   `json:"server_advertise"`
+	ServerID             string   `json:"server_id"`
+	ServerMetadata       []string `json:"server_metadata"`
+	ServerName           string   `json:"server_name"`
+	ServerVersion        string   `json:"server_version"`
+	Transport            string   `json:"transport"`
+	TransportAddress     string   `json:"transport_address"`
+}
+
 func TestStackConfig_Config(t *testing.T) {
 	data := []byte(`
 ---
@@ -31,7 +57,6 @@ server_advertise: '1'
 server_id: '1'
 server_metadata:
 - '1'
-server_name: '1'
 server_version: '1'
 transport: '1'
 transport_address: '1'
@@ -64,75 +89,80 @@ transport_address: '1'
 		t.Fatal(err)
 	}
 
-	t.Log(c.Config())
+	var conf Value
+	conf.ServerName = "default"
+	if err := c.Scan(&conf); err != nil {
+		t.Fatal(err)
+	}
+	t.Log(conf)
 
-	if c.Config().Broker != "2" {
+	if conf.ServerName != "default" {
 		t.Fatal()
 	}
-	if c.Config().BrokerAddress != "1" {
+	if conf.Broker != "2" {
 		t.Fatal()
 	}
-	if c.Config().Client != "1" {
+	if conf.BrokerAddress != "1" {
 		t.Fatal()
 	}
-	if c.Config().ClientPoolSize != 1 {
+	if conf.Client != "1" {
 		t.Fatal()
 	}
-	if c.Config().ClientPoolTTL != "1" {
+	if conf.ClientPoolSize != 1 {
 		t.Fatal()
 	}
-	if c.Config().ClientRequestTimeout != "1" {
+	if conf.ClientPoolTTL != "1" {
 		t.Fatal()
 	}
-	if c.Config().ClientRetries != 1 {
+	if conf.ClientRequestTimeout != "1" {
 		t.Fatal()
 	}
-	if c.Config().Profile != "1" {
+	if conf.ClientRetries != 1 {
 		t.Fatal()
 	}
-	if c.Config().RegisterInterval != 1 {
+	if conf.Profile != "1" {
 		t.Fatal()
 	}
-	if c.Config().RegisterTTL != 1 {
+	if conf.RegisterInterval != 1 {
 		t.Fatal()
 	}
-	if c.Config().Registry != "1" {
+	if conf.RegisterTTL != 1 {
 		t.Fatal()
 	}
-	if c.Config().RegistryAddress != "1" {
+	if conf.Registry != "1" {
 		t.Fatal()
 	}
-	if c.Config().Runtime != "1" {
+	if conf.RegistryAddress != "1" {
 		t.Fatal()
 	}
-	if c.Config().Selector != "1" {
+	if conf.Runtime != "1" {
 		t.Fatal()
 	}
-	if c.Config().Server != "1" {
+	if conf.Selector != "1" {
 		t.Fatal()
 	}
-	if c.Config().ServerAddress != "1" {
+	if conf.Server != "1" {
 		t.Fatal()
 	}
-	if c.Config().ServerAdvertise != "1" {
+	if conf.ServerAddress != "1" {
 		t.Fatal()
 	}
-	if c.Config().ServerID != "1" {
+	if conf.ServerAdvertise != "1" {
 		t.Fatal()
 	}
-	if c.Config().ServerMetadata[0] != "1" {
+	if conf.ServerID != "1" {
 		t.Fatal()
 	}
-	if c.Config().ServerName != "1" {
+	if conf.ServerMetadata[0] != "1" {
 		t.Fatal()
 	}
-	if c.Config().ServerVersion != "1" {
+	if conf.ServerVersion != "1" {
 		t.Fatal()
 	}
-	if c.Config().Transport != "1" {
+	if conf.Transport != "1" {
 		t.Fatal()
 	}
-	if c.Config().TransportAddress != "1" {
+	if conf.TransportAddress != "1" {
 		t.Fatal()
 	}
 }

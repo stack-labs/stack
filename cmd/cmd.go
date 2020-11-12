@@ -7,7 +7,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/pkg/cli"
 )
 
@@ -44,7 +43,7 @@ var (
 		cli.IntFlag{
 			Name:   "client_retries",
 			EnvVar: "STACK_CLIENT_RETRIES",
-			Value:  client.DefaultRetries,
+			Value:  1,
 			Usage:  "Sets the client retries. Default: 1",
 		},
 		cli.IntFlag{

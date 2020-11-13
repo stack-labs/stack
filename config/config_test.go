@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
+
 	"github.com/stack-labs/stack-rpc/cmd"
 )
 
@@ -165,4 +167,75 @@ transport_address: '1'
 	if conf.TransportAddress != "1" {
 		t.Fatal()
 	}
+}
+
+func TestStackConfig_MultiConfig(t *testing.T) {
+	// 1 config
+	data1 := []byte(`
+---
+broker: '1'
+transport_address: '1'
+`)
+	path1 := filepath.Join(os.TempDir(), "file.yaml")
+	fh1, err := os.Create(path1)
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = fh1.Write(data1)
+	if err != nil {
+		t.Error(err)
+	}
+	defer func() {
+		fh1.Close()
+		os.Remove(path1)
+	}()
+
+	// 2 config
+	data2 := []byte(`
+{ "db" : "mysql"}
+`)
+	path2 := filepath.Join(os.TempDir(), "file.json")
+	fh2, err := os.Create(path2)
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = fh2.Write(data2)
+	if err != nil {
+		t.Error(err)
+	}
+	defer func() {
+		fh2.Close()
+		os.Remove(path2)
+	}()
+
+	// setup app
+	app := cmd.NewCmd().App()
+	app.Name = "testcmd"
+	app.Flags = cmd.DefaultFlags
+
+	// set args
+	os.Args = []string{"run"}
+	os.Args = append(os.Args, "--broker", "2")
+
+	c, err := New(path1, app, file.NewSource(file.WithPath(path2)))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if c.Get("db").String("default") != "mysql" {
+		t.Fatal()
+	}
+
+	var conf Value
+	conf.ServerName = "default"
+	if err := c.Scan(&conf); err != nil {
+		t.Fatal(err)
+	}
+	if conf.ServerName != "default" {
+		t.Fatal()
+	}
+	if conf.Broker != "2" {
+		t.Fatal()
+	}
+
 }

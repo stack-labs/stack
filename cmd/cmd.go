@@ -7,7 +7,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/pkg/cli"
 )
 
@@ -19,14 +18,15 @@ type Cmd interface {
 	Init(opts ...Option) error
 	// Options set within this command
 	Options() Options
+	// ConfigFile path. This is not good
+	ConfigFile() string
 }
 
 type cmd struct {
 	opts Options
 	app  *cli.App
+	conf string
 }
-
-type Option func(o *Options)
 
 var (
 	DefaultFlags = []cli.Flag{
@@ -43,7 +43,7 @@ var (
 		cli.IntFlag{
 			Name:   "client_retries",
 			EnvVar: "STACK_CLIENT_RETRIES",
-			Value:  client.DefaultRetries,
+			Value:  1,
 			Usage:  "Sets the client retries. Default: 1",
 		},
 		cli.IntFlag{
@@ -130,12 +130,6 @@ var (
 			Usage:  "Comma-separated list of registry addresses",
 		},
 		cli.StringFlag{
-			Name:   "runtime",
-			Usage:  "Runtime for building and running services e.g local, kubernetes",
-			EnvVar: "STACK_RUNTIME",
-			Value:  "local",
-		},
-		cli.StringFlag{
 			Name:   "selector",
 			EnvVar: "STACK_SELECTOR",
 			Usage:  "Selector used to pick nodes for querying",
@@ -149,6 +143,13 @@ var (
 			Name:   "transport_address",
 			EnvVar: "STACK_TRANSPORT_ADDRESS",
 			Usage:  "Comma-separated list of transport addresses",
+		},
+
+		cli.StringFlag{
+			Name:   "config",
+			EnvVar: "CONFIG",
+			Usage:  "config file",
+			Value:  "/opt/config.yml",
 		},
 	}
 )
@@ -180,13 +181,25 @@ func newCmd(opts ...Option) Cmd {
 	cmd.app.Version = cmd.opts.Version
 	cmd.app.Usage = cmd.opts.Description
 	cmd.app.Flags = DefaultFlags
+	cmd.app.Before = cmd.before
 	cmd.app.Action = func(c *cli.Context) {}
-
 	if len(options.Version) == 0 {
 		cmd.app.HideVersion = true
 	}
 
 	return cmd
+}
+
+func (c *cmd) ConfigFile() string {
+	return c.conf
+}
+
+func (c *cmd) before(ctx *cli.Context) error {
+	// set the config file path
+	if name := ctx.String("config"); len(name) > 0 {
+		c.conf = name
+	}
+	return nil
 }
 
 func (c *cmd) App() *cli.App {

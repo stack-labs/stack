@@ -7,6 +7,7 @@ import (
 	"github.com/stack-labs/stack-rpc/pkg/config/source"
 	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 type Config interface {
@@ -22,6 +23,7 @@ func New(filePath string, app *cli.App, s ...source.Source) (Config, error) {
 	var sources []source.Source
 	// need read from config file
 	if len(filePath) > 0 {
+		log.Info("config read from file:", filePath)
 		sources = append(sources, file.NewSource(file.WithPath(filePath)))
 	}
 	sources = append(sources, cliSource.NewSource(app))

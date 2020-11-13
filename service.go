@@ -146,14 +146,8 @@ func (s *service) Run() error {
 	}
 
 	// init the stack config
-	var (
-		err      error
-		filePath string
-	)
-	if s.opts.ConfigFile {
-		filePath = s.opts.Cmd.ConfigFile()
-	}
-	if s.opts.Config, err = config.New(filePath, s.opts.Cmd.App(), s.opts.ConfigSource...); err != nil {
+	var err error
+	if s.opts.Config, err = config.New(s.opts.Cmd.ConfigFile(), s.opts.Cmd.App(), s.opts.ConfigSource...); err != nil {
 		return err
 	}
 

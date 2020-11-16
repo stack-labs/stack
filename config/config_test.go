@@ -5,63 +5,105 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
-
 	"github.com/stack-labs/stack-rpc/cmd"
+	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 )
 
+type Broker struct {
+	Name    string `json:"name"`
+	Address string `json:"address"`
+}
+
+type Pool struct {
+	Size int `json:"size"`
+	TTL  int `json:"ttl"`
+}
+
+type ClientRequest struct {
+	Timeout int `json:"timeout"`
+}
+
+type Client struct {
+	Pool    Pool          `json:"pool"`
+	Request ClientRequest `json:"request"`
+	Retries int           `json:"retries"`
+}
+
+type Registry struct {
+	Name     string `json:"name"`
+	Interval int    `json:"interval"`
+	TTL      int    `json:"ttl"`
+	Address  string `json:"address"`
+}
+
+type Metadata map[string]string
+
+type Server struct {
+	Address   string   `json:"address"`
+	Advertise string   `json:"advertise"`
+	ID        string   `json:"id"`
+	Metadata  Metadata `json:"metadata"`
+	Name      string   `json:"name"`
+	Version   string   `json:"version"`
+}
+
+type Selector struct {
+	Name string `json:"name"`
+}
+
+type Transport struct {
+	Name    string `json:"name"`
+	Address string `json:"address"`
+}
+
+type Stack struct {
+	Broker    Broker    `json:"broker"`
+	Client    Client    `json:"client"`
+	Server    Server    `json:"server"`
+	Registry  Registry  `json:"registry"`
+	Transport Transport `json:"transport"`
+	Selector  Selector  `json:"selector"`
+	Profile   string    `json:"profile"`
+	Runtime   string    `json:"runtime"`
+}
+
 type Value struct {
-	Broker               string   `json:"broker"`
-	BrokerAddress        string   `json:"broker_address"`
-	Client               string   `json:"client"`
-	ClientPoolSize       int      `json:"client_pool_size"`
-	ClientPoolTTL        string   `json:"client_pool_ttl"`
-	ClientRequestTimeout string   `json:"client_request_timeout"`
-	ClientRetries        int      `json:"client_retries"`
-	Profile              string   `json:"profile"`
-	RegisterInterval     int      `json:"register_interval"`
-	RegisterTTL          int      `json:"register_ttl"`
-	Registry             string   `json:"registry"`
-	RegistryAddress      string   `json:"registry_address"`
-	Runtime              string   `json:"runtime"`
-	Selector             string   `json:"selector"`
-	Server               string   `json:"server"`
-	ServerAddress        string   `json:"server_address"`
-	ServerAdvertise      string   `json:"server_advertise"`
-	ServerID             string   `json:"server_id"`
-	ServerMetadata       []string `json:"server_metadata"`
-	ServerName           string   `json:"server_name"`
-	ServerVersion        string   `json:"server_version"`
-	Transport            string   `json:"transport"`
-	TransportAddress     string   `json:"transport_address"`
+	Stack Stack `json:"stack"`
 }
 
 func TestStackConfig_Config(t *testing.T) {
 	data := []byte(`
----
-broker: '1'
-broker_address: '1'
-client: '1'
-client_pool_size: 1
-client_pool_ttl: '1'
-client_request_timeout: '1'
-client_retries: 1
-profile: '1'
-register_interval: 1
-register_ttl: 1
-registry: '1'
-registry_address: '1'
-runtime: '1'
-selector: '1'
-server: '1'
-server_address: '1'
-server_advertise: '1'
-server_id: '1'
-server_metadata:
-- '1'
-server_version: '1'
-transport: '1'
-transport_address: '1'
+stack:
+  broker:
+    name: http
+    address: :8081
+  client:
+    pool:
+      size: 2
+      ttl: 200
+    request:
+      timeout: 300
+  registry:
+    name: mdns
+    interval: 200
+    ttl: 300
+    address: 127.0.0.1:6500
+  server:
+    name: server-name
+    address: :8090
+    advertise: no-test
+    id: test-id
+    metadata:
+      A: a
+      B: b
+    version: 1.0.0
+  selector:
+    name: robin
+  transport:
+    name: gRPC
+    address: :7788
+  profile:
+  runtime:
 `)
 	path := filepath.Join(os.TempDir(), "file.yaml")
 	fh, err := os.Create(path)
@@ -84,87 +126,114 @@ transport_address: '1'
 
 	// set args
 	os.Args = []string{"run"}
-	os.Args = append(os.Args, "--broker", "2")
+	os.Args = append(os.Args, "--broker", "http", "--broker_address", ":10086")
 
 	c, err := New(path, app)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	var conf Value
-	conf.ServerName = "default"
+	conf := Value{
+		Stack: Stack{
+			Server:    Server{},
+			Client:    Client{},
+			Broker:    Broker{},
+			Registry:  Registry{},
+			Transport: Transport{},
+			Selector:  Selector{},
+		},
+	}
+	conf.Stack.Server.Name = "default"
 	if err := c.Scan(&conf); err != nil {
 		t.Fatal(err)
 	}
 	t.Log(conf)
 
-	if conf.ServerName != "default" {
+	if conf.Stack.Server.Name != "default" {
 		t.Fatal()
 	}
-	if conf.Broker != "2" {
+
+	if conf.Stack.Broker.Name != "http" {
 		t.Fatal()
 	}
-	if conf.BrokerAddress != "1" {
+
+	if conf.Stack.Broker.Address != ":10086" {
 		t.Fatal()
 	}
-	if conf.Client != "1" {
+
+	if conf.Stack.Client.Pool.TTL != 200 {
 		t.Fatal()
 	}
-	if conf.ClientPoolSize != 1 {
+
+	if conf.Stack.Client.Pool.Size != 2 {
 		t.Fatal()
 	}
-	if conf.ClientPoolTTL != "1" {
+
+	if conf.Stack.Client.Request.Timeout != 300 {
 		t.Fatal()
 	}
-	if conf.ClientRequestTimeout != "1" {
+
+	if conf.Stack.Client.Retries != 3 {
 		t.Fatal()
 	}
-	if conf.ClientRetries != 1 {
+
+	if conf.Stack.Profile != "1" {
 		t.Fatal()
 	}
-	if conf.Profile != "1" {
+
+	if conf.Stack.Registry.TTL != 1 {
 		t.Fatal()
 	}
-	if conf.RegisterInterval != 1 {
+
+	if conf.Stack.Registry.Interval != 1 {
 		t.Fatal()
 	}
-	if conf.RegisterTTL != 1 {
+
+	if conf.Stack.Registry.Name != "1" {
 		t.Fatal()
 	}
-	if conf.Registry != "1" {
+
+	if conf.Stack.Registry.Address != "1" {
 		t.Fatal()
 	}
-	if conf.RegistryAddress != "1" {
+
+	if conf.Stack.Runtime != "1" {
 		t.Fatal()
 	}
-	if conf.Runtime != "1" {
+
+	if conf.Stack.Selector.Name != "robin" {
 		t.Fatal()
 	}
-	if conf.Selector != "1" {
+
+	if conf.Stack.Server.Name != "server-name" {
 		t.Fatal()
 	}
-	if conf.Server != "1" {
+
+	if conf.Stack.Server.Address != ":8090" {
 		t.Fatal()
 	}
-	if conf.ServerAddress != "1" {
+
+	if conf.Stack.Server.Advertise != "no-test" {
 		t.Fatal()
 	}
-	if conf.ServerAdvertise != "1" {
+
+	if conf.Stack.Server.ID != "test-id" {
 		t.Fatal()
 	}
-	if conf.ServerID != "1" {
+
+	if conf.Stack.Server.Metadata["A"] != "a" {
 		t.Fatal()
 	}
-	if conf.ServerMetadata[0] != "1" {
+
+	if conf.Stack.Server.Version != "1.0.0" {
 		t.Fatal()
 	}
-	if conf.ServerVersion != "1" {
+
+	if conf.Stack.Transport.Name != "gRPC" {
 		t.Fatal()
 	}
-	if conf.Transport != "1" {
-		t.Fatal()
-	}
-	if conf.TransportAddress != "1" {
+
+	if conf.Stack.Transport.Address != ":7788" {
 		t.Fatal()
 	}
 }
@@ -227,15 +296,24 @@ transport_address: '1'
 	}
 
 	var conf Value
-	conf.ServerName = "default"
+	conf = Value{
+		Stack: Stack{
+			Server: Server{
+				Name: "default",
+			},
+		},
+	}
+
 	if err := c.Scan(&conf); err != nil {
 		t.Fatal(err)
 	}
-	if conf.ServerName != "default" {
-		t.Fatal()
-	}
-	if conf.Broker != "2" {
+
+	if conf.Stack.Server.Name != "default" {
 		t.Fatal()
 	}
 
+	if conf.Stack.Broker.Name != "http" {
+		t.Errorf("broker name [%s] should be 'http'", conf.Stack.Broker.Name)
+		t.Fatal()
+	}
 }

@@ -49,6 +49,21 @@ func (c *Context) GlobalSet(name, value string) error {
 	return globalContext(c).flagSet.Set(name, value)
 }
 
+func (c *Context) FlagAlias(name string) string {
+	for _, f := range c.App.Flags {
+		if f.GetName() == name {
+			if f.GetAlias() != "" {
+				return f.GetAlias()
+			}
+
+			return f.GetName()
+		}
+	}
+
+	// if non-existent, return itself
+	return name
+}
+
 // IsSet determines if the flag was actually set
 func (c *Context) IsSet(name string) bool {
 	if c.setFlags == nil {

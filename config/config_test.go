@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -20,13 +21,13 @@ type Pool struct {
 }
 
 type ClientRequest struct {
+	Retries int `json:"retries"`
 	Timeout int `json:"timeout"`
 }
 
 type Client struct {
 	Pool    Pool          `json:"pool"`
 	Request ClientRequest `json:"request"`
-	Retries int           `json:"retries"`
 }
 
 type Registry struct {
@@ -83,13 +84,14 @@ stack:
       ttl: 200
     request:
       timeout: 300
+      retries: 3
   registry:
     name: mdns
     interval: 200
     ttl: 300
     address: 127.0.0.1:6500
   server:
-    name: server-name
+    name:
     address: :8090
     advertise: no-test
     id: test-id
@@ -102,7 +104,7 @@ stack:
   transport:
     name: gRPC
     address: :7788
-  profile:
+  profile: _1
   runtime:
 `)
 	path := filepath.Join(os.TempDir(), "file.yaml")
@@ -135,7 +137,7 @@ stack:
 
 	conf := Value{
 		Stack: Stack{
-			Server:    Server{},
+			Server:    Server{Name: "server-name"},
 			Client:    Client{},
 			Broker:    Broker{},
 			Registry:  Registry{},
@@ -143,98 +145,40 @@ stack:
 			Selector:  Selector{},
 		},
 	}
-	conf.Stack.Server.Name = "default"
+
+	conf.Stack.Server.Name = "default-srv-name"
 	if err := c.Scan(&conf); err != nil {
 		t.Fatal(err)
 	}
 	t.Log(conf)
 
-	if conf.Stack.Server.Name != "default" {
-		t.Fatal()
+	// test default
+	if conf.Stack.Server.Name != "default-srv-name" {
+		t.Fatal(fmt.Errorf("server name should be [default-srv-name], not: [%s]", conf.Stack.Server.Name))
 	}
 
-	if conf.Stack.Broker.Name != "http" {
-		t.Fatal()
-	}
-
+	// test the config from cmd
 	if conf.Stack.Broker.Address != ":10086" {
-		t.Fatal()
+		t.Fatal(fmt.Errorf("broker address should be [:10086] which is cmd value, not: [%s]", conf.Stack.Broker.Address))
 	}
 
+	// test config deep path
 	if conf.Stack.Client.Pool.TTL != 200 {
-		t.Fatal()
+		t.Fatal(fmt.Errorf("client pool's ttl should be [200], not: [%d]", conf.Stack.Client.Pool.TTL))
 	}
 
-	if conf.Stack.Client.Pool.Size != 2 {
-		t.Fatal()
+	// test config root path
+	if conf.Stack.Profile != "_1" {
+		t.Fatal(fmt.Errorf("stack profile should be [\"1\"], not: [%s]", conf.Stack.Profile))
 	}
 
-	if conf.Stack.Client.Request.Timeout != 300 {
-		t.Fatal()
-	}
-
-	if conf.Stack.Client.Retries != 3 {
-		t.Fatal()
-	}
-
-	if conf.Stack.Profile != "1" {
-		t.Fatal()
-	}
-
-	if conf.Stack.Registry.TTL != 1 {
-		t.Fatal()
-	}
-
-	if conf.Stack.Registry.Interval != 1 {
-		t.Fatal()
-	}
-
-	if conf.Stack.Registry.Name != "1" {
-		t.Fatal()
-	}
-
-	if conf.Stack.Registry.Address != "1" {
-		t.Fatal()
-	}
-
-	if conf.Stack.Runtime != "1" {
-		t.Fatal()
-	}
-
-	if conf.Stack.Selector.Name != "robin" {
-		t.Fatal()
-	}
-
-	if conf.Stack.Server.Name != "server-name" {
-		t.Fatal()
-	}
-
-	if conf.Stack.Server.Address != ":8090" {
-		t.Fatal()
-	}
-
-	if conf.Stack.Server.Advertise != "no-test" {
-		t.Fatal()
-	}
-
-	if conf.Stack.Server.ID != "test-id" {
-		t.Fatal()
-	}
-
+	// test map value: the first value
 	if conf.Stack.Server.Metadata["A"] != "a" {
-		t.Fatal()
+		t.Fatal(fmt.Errorf("stack metadata should have [A-a], not: [%s]", conf.Stack.Server.Metadata["A"]))
 	}
-
-	if conf.Stack.Server.Version != "1.0.0" {
-		t.Fatal()
-	}
-
-	if conf.Stack.Transport.Name != "gRPC" {
-		t.Fatal()
-	}
-
-	if conf.Stack.Transport.Address != ":7788" {
-		t.Fatal()
+	// test map value: the extra values
+	if conf.Stack.Server.Metadata["B"] != "b" {
+		t.Fatal(fmt.Errorf("stack metadata should have [B-b], not: [%s]", conf.Stack.Server.Metadata["B"]))
 	}
 }
 

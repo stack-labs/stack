@@ -34,8 +34,7 @@ var (
 			Name:   "client",
 			EnvVar: "STACK_CLIENT",
 			Usage:  "Client for stack-rpc; rpc",
-			// todo good name
-			Alias: "stack_client_protocol",
+			Alias:  "stack_client_protocol",
 		},
 		cli.StringFlag{
 			Name:   "client_request_timeout",
@@ -44,11 +43,11 @@ var (
 			Alias:  "stack_client_request_timeout",
 		},
 		cli.IntFlag{
-			Name:   "client_retries",
-			EnvVar: "STACK_CLIENT_RETRIES",
+			Name:   "client_request_retries",
+			EnvVar: "STACK_CLIENT_REQUEST_RETRIES",
 			Value:  1,
 			Usage:  "Sets the client retries. Default: 1",
-			Alias:  "stack_client_retries",
+			Alias:  "stack_client_request_retries",
 		},
 		cli.IntFlag{
 			Name:   "client_pool_size",
@@ -80,8 +79,7 @@ var (
 			Name:   "server",
 			EnvVar: "STACK_SERVER",
 			Usage:  "Server for stack-rpc; rpc",
-			// todo good name
-			Alias: "stack_server_protocol",
+			Alias:  "stack_server_protocol",
 		},
 		cli.StringFlag{
 			Name:   "server_name",
@@ -118,7 +116,7 @@ var (
 			EnvVar: "STACK_SERVER_METADATA",
 			Value:  &cli.StringSlice{},
 			Usage:  "A list of key-value pairs defining metadata. version=1.0.0",
-			// todo slice Alias
+			Alias:  "stack_server_metadata",
 		},
 		cli.StringFlag{
 			Name:   "broker",
@@ -172,7 +170,6 @@ var (
 			Name:   "config",
 			EnvVar: "STACK_CONFIG",
 			Usage:  "config file",
-			Value:  "/opt/config.yml",
 			Alias:  "stack_config",
 		},
 	}

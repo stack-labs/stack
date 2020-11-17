@@ -10,70 +10,6 @@ import (
 	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 )
 
-type Broker struct {
-	Address string `json:"address"`
-	Name    string `json:"name"`
-}
-
-type Pool struct {
-	Size int `json:"size"`
-	TTL  int `json:"ttl"`
-}
-
-type ClientRequest struct {
-	Retries int `json:"retries"`
-	Timeout int `json:"timeout"`
-}
-
-type Client struct {
-	Protocol string        `json:"protocol"`
-	Pool     Pool          `json:"pool"`
-	Request  ClientRequest `json:"request"`
-}
-
-type Registry struct {
-	Address  string `json:"address"`
-	Interval int    `json:"interval"`
-	Name     string `json:"name"`
-	TTL      int    `json:"ttl"`
-}
-
-type Metadata map[string]string
-
-type Server struct {
-	Address   string   `json:"address"`
-	Advertise string   `json:"advertise"`
-	ID        string   `json:"id"`
-	Metadata  Metadata `json:"metadata"`
-	Name      string   `json:"name"`
-	Protocol  string   `json:"protocol"`
-	Version   string   `json:"version"`
-}
-
-type Selector struct {
-	Name string `json:"name"`
-}
-
-type Transport struct {
-	Name    string `json:"name"`
-	Address string `json:"address"`
-}
-
-type Stack struct {
-	Broker    Broker    `json:"broker"`
-	Client    Client    `json:"client"`
-	Profile   string    `json:"profile"`
-	Registry  Registry  `json:"registry"`
-	Runtime   string    `json:"runtime"`
-	Server    Server    `json:"server"`
-	Selector  Selector  `json:"selector"`
-	Transport Transport `json:"transport"`
-}
-
-type Value struct {
-	Stack Stack `json:"stack"`
-}
-
 func TestStackConfig_Config(t *testing.T) {
 	data := []byte(`
 stack:
@@ -98,8 +34,8 @@ stack:
     advertise: no-test
     id: test-id
     metadata:
-      A: a
-      B: b
+      - A=a
+      - B=b
     version: 1.0.0
   selector:
     name: robin
@@ -130,7 +66,13 @@ stack:
 
 	// set args
 	os.Args = []string{"run"}
+	// string arg
 	os.Args = append(os.Args, "--broker", "http", "--broker_address", ":10086")
+	// int arg
+	os.Args = append(os.Args, "--client_pool_ttl", "100")
+	// map
+	os.Args = append(os.Args, "--server_metadata", "C=c")
+	os.Args = append(os.Args, "--server_metadata", "D=d")
 
 	c, err := New(path, app)
 	if err != nil {
@@ -159,28 +101,35 @@ stack:
 		t.Fatal(fmt.Errorf("server name should be [default-srv-name], not: [%s]", conf.Stack.Server.Name))
 	}
 
+	if conf.Stack.Server.ID != "test-id" {
+		t.Fatal(fmt.Errorf("server id should be [test-id] which is cmd value, not: [%s]", conf.Stack.Server.ID))
+	}
+
 	// test the config from cmd
 	if conf.Stack.Broker.Address != ":10086" {
 		t.Fatal(fmt.Errorf("broker address should be [:10086] which is cmd value, not: [%s]", conf.Stack.Broker.Address))
 	}
 
-	// test config deep path
-	if conf.Stack.Client.Pool.TTL != 200 {
-		t.Fatal(fmt.Errorf("client pool's ttl should be [200], not: [%d]", conf.Stack.Client.Pool.TTL))
+	if conf.Stack.Client.Pool.TTL != "100" {
+		t.Fatal(fmt.Errorf("client pool ttl should be [100] which is cmd value, not: [%s]", conf.Stack.Client.Pool.TTL))
+	}
+
+	if conf.Stack.Registry.TTL != "300" {
+		t.Fatal(fmt.Errorf("client registry ttl should be [300] which is cmd value, not: [%s]", conf.Stack.Registry.TTL))
 	}
 
 	// test config root path
 	if conf.Stack.Profile != "_1" {
-		t.Fatal(fmt.Errorf("stack profile should be [\"1\"], not: [%s]", conf.Stack.Profile))
+		t.Fatal(fmt.Errorf("stack profile should be [\"_1\"], not: [%s]", conf.Stack.Profile))
 	}
 
-	// test map value: the first value
-	if conf.Stack.Server.Metadata["A"] != "a" {
-		t.Fatal(fmt.Errorf("stack metadata should have [A-a], not: [%s]", conf.Stack.Server.Metadata["A"]))
-	}
 	// test map value: the extra values
-	if conf.Stack.Server.Metadata["B"] != "b" {
-		t.Fatal(fmt.Errorf("stack metadata should have [B-b], not: [%s]", conf.Stack.Server.Metadata["B"]))
+	if conf.Stack.Server.Metadata.Value("C") != "c" {
+		t.Fatal(fmt.Errorf("stack metadata should have [C-c], not: [%s]", conf.Stack.Server.Metadata.Value("C")))
+	}
+	// test map value: the cmd value
+	if conf.Stack.Server.Metadata.Value("D") != "d" {
+		t.Fatal(fmt.Errorf("stack metadata should have [D-d], not: [%s]", conf.Stack.Server.Metadata.Value("D")))
 	}
 }
 

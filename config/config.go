@@ -104,7 +104,8 @@ func New(filePath string, app *cli.App, s ...source.Source) (Config, error) {
 		log.Info("config read from file:", filePath)
 		sources = append(sources, file.NewSource(file.WithPath(filePath)))
 	}
-	sources = append(sources, cliSource.NewSource(app))
+
+	sources = append(sources, cliSource.NewSource(app, cliSource.Context(app.Context())))
 	sources = append(sources, s...)
 
 	c, err := config.NewConfig(config.Storage(true), config.Watch(false))

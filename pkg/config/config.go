@@ -2,6 +2,8 @@
 package config
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -95,7 +97,19 @@ func newConfig(opts ...Option) (Config, error) {
 
 func (c *config) writeStorage(snap *loader.Snapshot) {
 	if snap != nil && c.opts.Storage && c.storage != nil {
-		if err := c.storage.Write(snap.ChangeSet.Data); err != nil {
+		var out bytes.Buffer
+		var bs []byte
+		// todo support more types
+		// beautify here is not a good option (:.
+		err := json.Indent(&out, snap.ChangeSet.Data, "", "  ")
+		if err != nil {
+			log.Errorf("beautify data error: %v", err)
+			bs = snap.ChangeSet.Data
+		} else {
+			bs = out.Bytes()
+		}
+
+		if err := c.storage.Write(bs); err != nil {
 			log.Errorf("config storage write error: %v", err)
 		}
 	}

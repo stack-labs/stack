@@ -35,7 +35,7 @@ var (
 			EnvVar: "STACK_CLIENT",
 			Usage:  "Client for stack-rpc; rpc",
 			// todo good name
-			Alias: "stack_client_?",
+			Alias: "stack_client_protocol",
 		},
 		cli.StringFlag{
 			Name:   "client_request_timeout",
@@ -81,7 +81,7 @@ var (
 			EnvVar: "STACK_SERVER",
 			Usage:  "Server for stack-rpc; rpc",
 			// todo good name
-			Alias: "stack_server_?",
+			Alias: "stack_server_protocol",
 		},
 		cli.StringFlag{
 			Name:   "server_name",

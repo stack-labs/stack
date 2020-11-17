@@ -205,7 +205,6 @@ func (s *service) load() error {
 	if err := s.opts.Config.Scan(stackConfig); err != nil {
 		return err
 	}
-	log.Infof("stack config: %#v", stackConfig)
 
 	// If flags are set then use them otherwise do nothing
 	var serverOpts []server.Option

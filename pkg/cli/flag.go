@@ -60,6 +60,7 @@ type Flag interface {
 	// Apply Flag settings to the given flag set
 	Apply(*flag.FlagSet)
 	GetName() string
+	GetAlias() string
 }
 
 // errorableFlag is an interface that allows us to return errors during apply

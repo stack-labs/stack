@@ -4,6 +4,7 @@ import (
 	"flag"
 	"io/ioutil"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/stack-labs/stack-rpc/pkg/cli"
@@ -30,13 +31,17 @@ func (c *cliSource) Read() (*source.ChangeSet, error) {
 
 	for _, name := range c.ctx.GlobalFlagNames() {
 		if c.ctx.GlobalIsSet(name) {
-			changes[name] = c.ctx.GlobalGeneric(name)
+			n := c.ctx.FlagAlias(name)
+			v := c.ctx.GlobalGeneric(name)
+			c.setValue(changes, v, strings.Split(n, "_")...)
 		}
 	}
 
 	for _, name := range c.ctx.FlagNames() {
 		if c.ctx.IsSet(name) {
-			changes[name] = c.ctx.Generic(name)
+			n := c.ctx.FlagAlias(name)
+			v := c.ctx.Generic(name)
+			c.setValue(changes, v, strings.Split(n, "_")...)
 		}
 	}
 
@@ -89,6 +94,23 @@ func (c *cliSource) Watch() (source.Watcher, error) {
 
 func (c *cliSource) String() string {
 	return "cli"
+}
+
+func (c *cliSource) setValue(input map[string]interface{}, v interface{}, keys ...string) {
+	if len(keys) == 1 {
+		input[keys[0]] = v
+		return
+	} else {
+		var tmpMap map[string]interface{}
+		if input[keys[0]] != nil {
+			tmpMap = input[keys[0]].(map[string]interface{})
+		} else {
+			tmpMap = make(map[string]interface{})
+		}
+
+		input[keys[0]] = tmpMap
+		c.setValue(tmpMap, v, keys[1:]...)
+	}
 }
 
 // NewSource returns a config source for integrating parsed flags from a stack/cli.Context.

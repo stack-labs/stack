@@ -52,11 +52,6 @@ func (s *service) Name() string {
 // which parses command line flags. cmd.Init is only called
 // on first Init.
 func (s *service) Init(opts ...Option) {
-	// process options
-	for _, o := range opts {
-		o(&s.opts)
-	}
-
 	s.once.Do(func() {
 		// setup the plugins
 		for _, p := range strings.Split(os.Getenv("STACK_PLUGIN"), ",") {
@@ -75,7 +70,35 @@ func (s *service) Init(opts ...Option) {
 				log.Fatal(err)
 			}
 		}
+
+		if err := s.opts.Cmd.Init(); err != nil {
+			log.Errorf("cmd init error: %s", err)
+			return
+		}
+
+		// load the all config
+		var err error
+		if s.opts.Config, err = config.Init(
+			// todo 合并下列Path与source
+			config.FilePath(s.opts.Cmd.ConfigFile()),
+			config.Sources(s.opts.ConfigSource...),
+			config.App(s.opts.Cmd.App()),
+		); err != nil {
+			log.Errorf("config init error: %s", err)
+			return
+		}
+
+		// load service config
+		if err := s.loadConfig(); err != nil {
+			log.Errorf("load service config error: %s", err)
+			return
+		}
 	})
+
+	// process options
+	for _, o := range opts {
+		o(&s.opts)
+	}
 }
 
 func (s *service) Options() Options {
@@ -141,21 +164,6 @@ func (s *service) Stop() error {
 }
 
 func (s *service) Run() error {
-	if err := s.opts.Cmd.Init(); err != nil {
-		return err
-	}
-
-	// init the stack config
-	var err error
-	if s.opts.Config, err = config.New(s.opts.Cmd.ConfigFile(), s.opts.Cmd.App(), s.opts.ConfigSource...); err != nil {
-		return err
-	}
-
-	// load dynamic config
-	if err := s.load(); err != nil {
-		return err
-	}
-
 	// register the debug handler
 	if err := s.opts.Server.Handle(
 		s.opts.Server.NewHandler(
@@ -200,36 +208,36 @@ func (s *service) Run() error {
 	return s.Stop()
 }
 
-func (s *service) load() error {
-	conf := newDefaultConfig()
-	if err := s.opts.Config.Scan(conf); err != nil {
+func (s *service) loadConfig() error {
+	stackConfig := config.GetDefault()
+	if err := s.opts.Config.Scan(stackConfig); err != nil {
 		return err
 	}
-	log.Infof("stack config: %#v", conf)
 
 	// If flags are set then use them otherwise do nothing
 	var serverOpts []server.Option
 	var clientOpts []client.Option
 
+	conf := stackConfig.Stack
 	// Set the client
-	if len(conf.Client) > 0 {
+	if len(conf.Client.Protocol) > 0 {
 		// only change if we have the client and type differs
-		if cl, ok := plugin.DefaultClients[conf.Client]; ok && s.opts.Client.String() != conf.Client {
+		if cl, ok := plugin.DefaultClients[conf.Client.Protocol]; ok && s.opts.Client.String() != conf.Client.Protocol {
 			s.opts.Client = cl()
 		}
 	}
 
 	// Set the server
-	if len(conf.Server) > 0 {
+	if len(conf.Server.Protocol) > 0 {
 		// only change if we have the server and type differs
-		if ser, ok := plugin.DefaultServers[conf.Server]; ok && s.opts.Server.String() != conf.Server {
+		if ser, ok := plugin.DefaultServers[conf.Server.Protocol]; ok && s.opts.Server.String() != conf.Server.Protocol {
 			s.opts.Server = ser()
 		}
 	}
 
 	// Set the broker
-	if len(conf.Broker) > 0 && s.opts.Broker.String() != conf.Broker {
-		b, ok := plugin.DefaultBrokers[conf.Broker]
+	if len(conf.Broker.Name) > 0 && s.opts.Broker.String() != conf.Broker.Name {
+		b, ok := plugin.DefaultBrokers[conf.Broker.Name]
 		if !ok {
 			return fmt.Errorf("broker %s not found", conf.Broker)
 		}
@@ -240,8 +248,8 @@ func (s *service) load() error {
 	}
 
 	// Set the registry
-	if len(conf.Registry) > 0 && s.opts.Registry.String() != conf.Registry {
-		r, ok := plugin.DefaultRegistries[conf.Registry]
+	if len(conf.Registry.Name) > 0 && s.opts.Registry.String() != conf.Registry.Name {
+		r, ok := plugin.DefaultRegistries[conf.Registry.Name]
 		if !ok {
 			return fmt.Errorf("registry %s not found", conf.Registry)
 		}
@@ -262,8 +270,8 @@ func (s *service) load() error {
 	}
 
 	// Set the selector
-	if len(conf.Selector) > 0 && s.opts.Selector.String() != conf.Selector {
-		sel, ok := plugin.DefaultSelectors[conf.Selector]
+	if len(conf.Selector.Name) > 0 && s.opts.Selector.String() != conf.Selector.Name {
+		sel, ok := plugin.DefaultSelectors[conf.Selector.Name]
 		if !ok {
 			return fmt.Errorf("selector %s not found", conf.Selector)
 		}
@@ -275,8 +283,8 @@ func (s *service) load() error {
 	}
 
 	// Set the transport
-	if len(conf.Transport) > 0 && s.opts.Transport.String() != conf.Transport {
-		t, ok := plugin.DefaultTransports[conf.Transport]
+	if len(conf.Transport.Name) > 0 && s.opts.Transport.String() != conf.Transport.Name {
+		t, ok := plugin.DefaultTransports[conf.Transport.Name]
 		if !ok {
 			return fmt.Errorf("transport %s not found", conf.Transport)
 		}
@@ -288,7 +296,7 @@ func (s *service) load() error {
 
 	// Parse the server options
 	metadata := make(map[string]string)
-	for _, d := range conf.ServerMetadata {
+	for _, d := range conf.Server.Metadata {
 		var key, val string
 		parts := strings.Split(d, "=")
 		key = parts[0]
@@ -302,73 +310,77 @@ func (s *service) load() error {
 		serverOpts = append(serverOpts, server.Metadata(metadata))
 	}
 
-	if len(conf.BrokerAddress) > 0 {
-		if err := s.opts.Broker.Init(broker.Addrs(strings.Split(conf.BrokerAddress, ",")...)); err != nil {
+	if len(conf.Broker.Address) > 0 {
+		if err := s.opts.Broker.Init(broker.Addrs(strings.Split(conf.Broker.Address, ",")...)); err != nil {
 			log.Fatalf("Error configuring broker: %v", err)
 		}
 	}
 
-	if len(conf.RegistryAddress) > 0 {
-		if err := s.opts.Registry.Init(registry.Addrs(strings.Split(conf.RegistryAddress, ",")...)); err != nil {
+	if len(conf.Registry.Address) > 0 {
+		if err := s.opts.Registry.Init(registry.Addrs(strings.Split(conf.Registry.Address, ",")...)); err != nil {
 			log.Fatalf("Error configuring registry: %v", err)
 		}
 	}
 
-	if len(conf.TransportAddress) > 0 {
-		if err := s.opts.Transport.Init(transport.Addrs(strings.Split(conf.TransportAddress, ",")...)); err != nil {
+	if len(conf.Transport.Address) > 0 {
+		if err := s.opts.Transport.Init(transport.Addrs(strings.Split(conf.Transport.Address, ",")...)); err != nil {
 			log.Fatalf("Error configuring transport: %v", err)
 		}
 	}
 
-	if len(conf.ServerName) > 0 {
-		serverOpts = append(serverOpts, server.Name(conf.ServerName))
+	if len(conf.Server.Name) > 0 {
+		serverOpts = append(serverOpts, server.Name(conf.Server.Name))
 	}
 
-	if len(conf.ServerVersion) > 0 {
-		serverOpts = append(serverOpts, server.Version(conf.ServerVersion))
+	if len(conf.Server.Version) > 0 {
+		serverOpts = append(serverOpts, server.Version(conf.Server.Version))
 	}
 
-	if len(conf.ServerID) > 0 {
-		serverOpts = append(serverOpts, server.Id(conf.ServerID))
+	if len(conf.Server.ID) > 0 {
+		serverOpts = append(serverOpts, server.Id(conf.Server.ID))
 	}
 
-	if len(conf.ServerAddress) > 0 {
-		serverOpts = append(serverOpts, server.Address(conf.ServerAddress))
+	if len(conf.Server.Address) > 0 {
+		serverOpts = append(serverOpts, server.Address(conf.Server.Address))
 	}
 
-	if len(conf.ServerAdvertise) > 0 {
-		serverOpts = append(serverOpts, server.Advertise(conf.ServerAdvertise))
+	if len(conf.Server.Advertise) > 0 {
+		serverOpts = append(serverOpts, server.Advertise(conf.Server.Advertise))
 	}
 
-	if ttl := time.Duration(conf.RegisterTTL); ttl >= 0 {
+	registryTTL, _ := conf.Registry.TTL.Int64()
+	if ttl := time.Duration(registryTTL); ttl >= 0 {
 		serverOpts = append(serverOpts, server.RegisterTTL(ttl*time.Second))
 	}
 
-	if val := time.Duration(conf.RegisterInterval); val >= 0 {
+	registryInterval, _ := conf.Registry.Interval.Int64()
+	if val := time.Duration(registryInterval); val >= 0 {
 		serverOpts = append(serverOpts, server.RegisterInterval(val*time.Second))
 	}
 
 	// client opts
-	if conf.ClientRetries >= 0 {
-		clientOpts = append(clientOpts, client.Retries(conf.ClientRetries))
+	requestRetries, _ := conf.Client.Request.Retries.Int64()
+	if requestRetries >= 0 {
+		clientOpts = append(clientOpts, client.Retries(int(requestRetries)))
 	}
 
-	if len(conf.ClientRequestTimeout) > 0 {
-		d, err := time.ParseDuration(conf.ClientRequestTimeout)
+	if len(conf.Client.Request.Timeout) > 0 {
+		d, err := time.ParseDuration(conf.Client.Request.Timeout.String())
 		if err != nil {
-			return fmt.Errorf("failed to parse client_request_timeout: %v", conf.ClientRequestTimeout)
+			return fmt.Errorf("failed to parse client_request_timeout: %v. it shoud be with unit suffix such as 1s, 2m", conf.Client.Request.Timeout.String())
 		}
 		clientOpts = append(clientOpts, client.RequestTimeout(d))
 	}
 
-	if conf.ClientPoolSize > 0 {
-		clientOpts = append(clientOpts, client.PoolSize(conf.ClientPoolSize))
+	if size, _ := conf.Client.Pool.Size.Int64(); size > 0 {
+		clientOpts = append(clientOpts, client.PoolSize(int(size)))
 	}
 
-	if len(conf.ClientPoolTTL) > 0 {
-		d, err := time.ParseDuration(conf.ClientPoolTTL)
+	poolTTL := conf.Client.Pool.TTL.String()
+	if len(poolTTL) > 0 {
+		d, err := time.ParseDuration(poolTTL)
 		if err != nil {
-			return fmt.Errorf("failed to parse client_pool_ttl: %v", conf.ClientPoolTTL)
+			return fmt.Errorf("failed to parse client_pool_ttl: %v. it shoud be with unit suffix such as 1s, 2m", poolTTL)
 		}
 		clientOpts = append(clientOpts, client.PoolTTL(d))
 	}

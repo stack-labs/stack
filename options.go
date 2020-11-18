@@ -47,6 +47,7 @@ func newOptions(opts ...Option) Options {
 		Server:    server.DefaultServer,
 		Registry:  registry.DefaultRegistry,
 		Transport: transport.DefaultTransport,
+		Selector:  selector.DefaultSelector,
 		Context:   context.Background(),
 		Signal:    true,
 	}

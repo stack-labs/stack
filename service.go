@@ -2,7 +2,6 @@ package stack
 
 import (
 	"fmt"
-	"github.com/stack-labs/stack-rpc/config"
 	"os"
 	"os/signal"
 	"strings"
@@ -13,6 +12,7 @@ import (
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/debug/profile"
 	"github.com/stack-labs/stack-rpc/debug/profile/pprof"
 	"github.com/stack-labs/stack-rpc/debug/service/handler"
@@ -52,11 +52,6 @@ func (s *service) Name() string {
 // which parses command line flags. cmd.Init is only called
 // on first Init.
 func (s *service) Init(opts ...Option) {
-	// process options
-	for _, o := range opts {
-		o(&s.opts)
-	}
-
 	s.once.Do(func() {
 		// setup the plugins
 		for _, p := range strings.Split(os.Getenv("STACK_PLUGIN"), ",") {
@@ -75,29 +70,34 @@ func (s *service) Init(opts ...Option) {
 				log.Fatal(err)
 			}
 		}
+
+		if err := s.opts.Cmd.Init(); err != nil {
+			log.Errorf("cmd init error: %s", err)
+			return
+		}
+
+		// load the all config
+		var err error
+		if s.opts.Config, err = config.Init(
+			// todo 合并下列Path与source
+			config.FilePath(s.opts.Cmd.ConfigFile()),
+			config.Sources(s.opts.ConfigSource...),
+			config.App(s.opts.Cmd.App()),
+		); err != nil {
+			log.Errorf("config init error: %s", err)
+			return
+		}
+
+		// load service config
+		if err := s.loadConfig(); err != nil {
+			log.Errorf("load service config error: %s", err)
+			return
+		}
 	})
 
-	if err := s.opts.Cmd.Init(); err != nil {
-		log.Errorf("cmd init error: %s", err)
-		return
-	}
-
-	// load the all config
-	var err error
-	if s.opts.Config, err = config.Init(
-		// todo 合并下列Path与source
-		config.FilePath(s.opts.Cmd.ConfigFile()),
-		config.Sources(s.opts.ConfigSource...),
-		config.App(s.opts.Cmd.App()),
-	); err != nil {
-		log.Errorf("config init error: %s", err)
-		return
-	}
-
-	// load service config
-	if err := s.loadConfig(); err != nil {
-		log.Errorf("load service config error: %s", err)
-		return
+	// process options
+	for _, o := range opts {
+		o(&s.opts)
 	}
 }
 

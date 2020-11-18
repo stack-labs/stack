@@ -4,10 +4,8 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/stack-labs/stack-rpc/pkg/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config"
 	"github.com/stack-labs/stack-rpc/pkg/config/reader"
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
 	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 	"github.com/stack-labs/stack-rpc/util/log"
@@ -97,24 +95,31 @@ type stackConfig struct {
 	config config.Config
 }
 
-func New(filePath string, app *cli.App, s ...source.Source) (Config, error) {
-	var sources []source.Source
-	// need read from config file
-	if len(filePath) > 0 {
-		log.Info("config read from file:", filePath)
-		sources = append(sources, file.NewSource(file.WithPath(filePath)))
+// Init Stack's Config component
+// Any developer Don't use this Func anywhere. Init works for Stack Framework only
+func Init(opts ...Option) (Config, error) {
+	var o = Options{}
+	for _, opt := range opts {
+		opt(&o)
 	}
 
-	sources = append(sources, cliSource.NewSource(app, cliSource.Context(app.Context())))
-	sources = append(sources, s...)
+	// need read from config file
+	if len(o.FilePath) > 0 {
+		log.Info("config read from file:", o.FilePath)
+		o.Sources = append(o.Sources, file.NewSource(file.WithPath(o.FilePath)))
+	}
+	o.Sources = append(o.Sources, cliSource.NewSource(o.App, cliSource.Context(o.App.Context())))
 
-	c, err := config.NewConfig(config.Storage(true), config.Watch(false))
+	c, err := config.NewConfig(config.Storage(true), config.Watch(true))
 	if err != nil {
 		return nil, err
 	}
-	if err := c.Load(sources...); err != nil {
+	if err := c.Load(o.Sources...); err != nil {
 		return nil, err
 	}
+
+	// cache config
+	sugar = c
 
 	return &stackConfig{config: c}, nil
 }

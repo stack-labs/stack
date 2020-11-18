@@ -2,6 +2,7 @@ package stack
 
 import (
 	"fmt"
+	"github.com/stack-labs/stack-rpc/config"
 	"os"
 	"os/signal"
 	"strings"
@@ -12,7 +13,6 @@ import (
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/debug/profile"
 	"github.com/stack-labs/stack-rpc/debug/profile/pprof"
 	"github.com/stack-labs/stack-rpc/debug/service/handler"
@@ -76,6 +76,29 @@ func (s *service) Init(opts ...Option) {
 			}
 		}
 	})
+
+	if err := s.opts.Cmd.Init(); err != nil {
+		log.Errorf("cmd init error: %s", err)
+		return
+	}
+
+	// load the all config
+	var err error
+	if s.opts.Config, err = config.Init(
+		// todo 合并下列Path与source
+		config.FilePath(s.opts.Cmd.ConfigFile()),
+		config.Sources(s.opts.ConfigSource...),
+		config.App(s.opts.Cmd.App()),
+	); err != nil {
+		log.Errorf("config init error: %s", err)
+		return
+	}
+
+	// load service config
+	if err := s.loadConfig(); err != nil {
+		log.Errorf("load service config error: %s", err)
+		return
+	}
 }
 
 func (s *service) Options() Options {
@@ -141,21 +164,6 @@ func (s *service) Stop() error {
 }
 
 func (s *service) Run() error {
-	if err := s.opts.Cmd.Init(); err != nil {
-		return err
-	}
-
-	// init the stack config
-	var err error
-	if s.opts.Config, err = config.New(s.opts.Cmd.ConfigFile(), s.opts.Cmd.App(), s.opts.ConfigSource...); err != nil {
-		return err
-	}
-
-	// load dynamic config
-	if err := s.load(); err != nil {
-		return err
-	}
-
 	// register the debug handler
 	if err := s.opts.Server.Handle(
 		s.opts.Server.NewHandler(
@@ -200,8 +208,8 @@ func (s *service) Run() error {
 	return s.Stop()
 }
 
-func (s *service) load() error {
-	stackConfig := newDefaultConfig()
+func (s *service) loadConfig() error {
+	stackConfig := config.GetDefault()
 	if err := s.opts.Config.Scan(stackConfig); err != nil {
 		return err
 	}

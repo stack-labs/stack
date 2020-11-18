@@ -19,13 +19,7 @@ func FilePath(f string) Option {
 	}
 }
 
-func Source(s source.Source) Option {
-	return func(o *Options) {
-		o.Sources = append(o.Sources, s)
-	}
-}
-
-func Sources(s ...source.Source) Option {
+func Source(s ...source.Source) Option {
 	return func(o *Options) {
 		o.Sources = append(o.Sources, s...)
 	}

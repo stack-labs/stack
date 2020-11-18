@@ -1,16 +1,20 @@
 package config
 
 import (
-	"github.com/stack-labs/stack-rpc/pkg/config"
 	"github.com/stack-labs/stack-rpc/pkg/config/reader"
 )
 
 var (
-	sugar config.Config
+	_sugar Config
 )
 
+func SetDefaultConfig(c Config) {
+	// cache config
+	_sugar = c
+}
+
 func Get(path ...string) reader.Value {
-	return sugar.Get(path...)
+	return _sugar.Get(path...)
 }
 
 func GetDefault() *Value {

@@ -74,7 +74,7 @@ stack:
 	os.Args = append(os.Args, "--server_metadata", "C=c")
 	os.Args = append(os.Args, "--server_metadata", "D=d")
 
-	c, err := Init(path, app)
+	c, err := New(FilePath(path), App(app))
 	if err != nil {
 		t.Error(fmt.Errorf("Config new config error: %s ", err))
 	}
@@ -185,7 +185,7 @@ stack:
 	os.Args = []string{"run"}
 	os.Args = append(os.Args, "--broker", "kafka")
 
-	c, err := Init(ymlPath, app, file.NewSource(file.WithPath(jsonPath)))
+	c, err := New(FilePath(ymlPath), App(app), Source(file.NewSource(file.WithPath(jsonPath))))
 	if err != nil {
 		t.Fatal(fmt.Errorf("new config error: %s", err))
 	}

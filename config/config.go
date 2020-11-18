@@ -97,7 +97,7 @@ type stackConfig struct {
 
 // Init Stack's Config component
 // Any developer Don't use this Func anywhere. Init works for Stack Framework only
-func Init(opts ...Option) (Config, error) {
+func New(opts ...Option) (Config, error) {
 	var o = Options{}
 	for _, opt := range opts {
 		opt(&o)
@@ -110,16 +110,13 @@ func Init(opts ...Option) (Config, error) {
 	}
 	o.Sources = append(o.Sources, cliSource.NewSource(o.App, cliSource.Context(o.App.Context())))
 
-	c, err := config.NewConfig(config.Storage(true), config.Watch(true))
+	c, err := config.NewConfig(config.Storage(true), config.Watch(false))
 	if err != nil {
 		return nil, err
 	}
 	if err := c.Load(o.Sources...); err != nil {
 		return nil, err
 	}
-
-	// cache config
-	sugar = c
 
 	return &stackConfig{config: c}, nil
 }

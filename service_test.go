@@ -3,6 +3,8 @@ package stack
 import (
 	"context"
 	"errors"
+	"fmt"
+	"github.com/stack-labs/stack-rpc/config"
 	"sync"
 	"testing"
 
@@ -70,6 +72,15 @@ func testRequest(ctx context.Context, c client.Client, name string) error {
 	return nil
 }
 
+func testConfig() error {
+	// test sugar
+	if config.ServerName() != "test.service" {
+		return fmt.Errorf("server name in sugar should be [default-srv-name], not: [%s]", config.ServerName())
+	}
+
+	return nil
+}
+
 // TestService tests running and calling a service
 func TestService(t *testing.T) {
 	// waitgroup for server start
@@ -84,6 +95,11 @@ func TestService(t *testing.T) {
 	go func() {
 		// wait for service to start
 		wg.Wait()
+
+		// test the config loaded fine
+		if err := testConfig(); err != nil {
+			t.Fatal(err)
+		}
 
 		// make a test call
 		if err := testRequest(ctx, service.Client(), "test.service"); err != nil {

@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"github.com/stack-labs/stack-rpc/pkg/config/source/memory"
 	"strings"
 
 	"github.com/stack-labs/stack-rpc/pkg/config"
@@ -13,7 +14,7 @@ import (
 
 type Broker struct {
 	Address string `json:"address"`
-	Name    string `json:"name"`
+	Name    string `json:"name" `
 }
 
 type Pool struct {
@@ -71,7 +72,12 @@ type Transport struct {
 	Address string `json:"address"`
 }
 
-type Stack struct {
+type Logger struct {
+	Name  string `json:"name"`
+	Level string `json:"level"`
+}
+
+type stack struct {
 	Broker    Broker    `json:"broker"`
 	Client    Client    `json:"client"`
 	Profile   string    `json:"profile"`
@@ -80,10 +86,11 @@ type Stack struct {
 	Server    Server    `json:"server"`
 	Selector  Selector  `json:"selector"`
 	Transport Transport `json:"transport"`
+	Logger    Logger    `json:"logger"`
 }
 
 type Value struct {
-	Stack Stack `json:"stack"`
+	Stack stack `json:"stack"`
 }
 
 type Config interface {
@@ -108,7 +115,11 @@ func New(opts ...Option) (Config, error) {
 		log.Info("config read from file:", o.FilePath)
 		o.Sources = append(o.Sources, file.NewSource(file.WithPath(o.FilePath)))
 	}
-	o.Sources = append(o.Sources, cliSource.NewSource(o.App, cliSource.Context(o.App.Context())))
+	defaultSource, _ := json.Marshal(GetDefault())
+	o.Sources = append(o.Sources,
+		cliSource.NewSource(o.App, cliSource.Context(o.App.Context())),
+		memory.NewSource(memory.WithJSON(defaultSource)),
+	)
 
 	c, err := config.NewConfig(config.Storage(true), config.Watch(false))
 	if err != nil {

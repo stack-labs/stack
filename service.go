@@ -51,7 +51,12 @@ func (s *service) Name() string {
 // Init initialises options. Additionally it calls cmd.Init
 // which parses command line flags. cmd.Init is only called
 // on first Init.
-func (s *service) Init(opts ...Option) {
+func (s *service) Init(opts ...Option) error {
+	// process options
+	for _, o := range opts {
+		o(&s.opts)
+	}
+
 	s.once.Do(func() {
 		// setup the plugins
 		for _, p := range strings.Split(os.Getenv("STACK_PLUGIN"), ",") {
@@ -70,35 +75,9 @@ func (s *service) Init(opts ...Option) {
 				log.Fatal(err)
 			}
 		}
-
-		if err := s.opts.Cmd.Init(); err != nil {
-			log.Errorf("cmd init error: %s", err)
-			return
-		}
-
-		// load the all config
-		var err error
-		if s.opts.Config, err = config.Init(
-			// todo 合并下列Path与source
-			config.FilePath(s.opts.Cmd.ConfigFile()),
-			config.Sources(s.opts.ConfigSource...),
-			config.App(s.opts.Cmd.App()),
-		); err != nil {
-			log.Errorf("config init error: %s", err)
-			return
-		}
-
-		// load service config
-		if err := s.loadConfig(); err != nil {
-			log.Errorf("load service config error: %s", err)
-			return
-		}
 	})
 
-	// process options
-	for _, o := range opts {
-		o(&s.opts)
-	}
+	return nil
 }
 
 func (s *service) Options() Options {
@@ -164,6 +143,32 @@ func (s *service) Stop() error {
 }
 
 func (s *service) Run() error {
+	if err := s.opts.Cmd.Init(); err != nil {
+		log.Errorf("cmd init error: %s", err)
+		return err
+	}
+
+	// load the all config
+	var err error
+	if s.opts.Config, err = config.New(
+		// todo 合并下列Path与source
+		config.FilePath(s.opts.Cmd.ConfigFile()),
+		config.Source(s.opts.ConfigSource...),
+		config.App(s.opts.Cmd.App()),
+	); err != nil {
+		log.Errorf("config init error: %s", err)
+		return err
+	}
+
+	// set config
+	config.SetDefaultConfig(s.opts.Config)
+
+	// load service config
+	if err := s.loadConfig(); err != nil {
+		log.Errorf("load service config error: %s", err)
+		return err
+	}
+
 	// register the debug handler
 	if err := s.opts.Server.Handle(
 		s.opts.Server.NewHandler(

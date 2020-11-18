@@ -134,6 +134,6 @@ func (m *MockServer) String() string {
 	return "mock"
 }
 
-func NewServer(opts ...server.Option) server.Server {
+func NewServer(opts ...server.Option) *MockServer {
 	return newMockServer(opts...)
 }

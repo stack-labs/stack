@@ -423,10 +423,6 @@ func (c *cmd) Init(opts ...Option) error {
 	return c.app.Run(os.Args)
 }
 
-func NewCmd(opts ...Option) Cmd {
-	return newCmd(opts...)
-}
-
 type Option func(o *Options)
 
 type Options struct {

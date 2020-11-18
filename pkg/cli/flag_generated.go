@@ -15,6 +15,11 @@ type BoolFlag struct {
 	EnvVar      string
 	Hidden      bool
 	Destination *bool
+	Alias       string
+}
+
+func (f BoolFlag) GetAlias() string {
+	return f.Alias
 }
 
 // String returns a readable representation of this value
@@ -62,6 +67,11 @@ type BoolTFlag struct {
 	EnvVar      string
 	Hidden      bool
 	Destination *bool
+	Alias       string
+}
+
+func (f BoolTFlag) GetAlias() string {
+	return f.Alias
 }
 
 // String returns a readable representation of this value
@@ -110,6 +120,11 @@ type DurationFlag struct {
 	Hidden      bool
 	Value       time.Duration
 	Destination *time.Duration
+	Alias       string
+}
+
+func (f DurationFlag) GetAlias() string {
+	return f.Alias
 }
 
 // String returns a readable representation of this value
@@ -158,6 +173,11 @@ type Float64Flag struct {
 	Hidden      bool
 	Value       float64
 	Destination *float64
+	Alias       string
+}
+
+func (f Float64Flag) GetAlias() string {
+	return f.Alias
 }
 
 // String returns a readable representation of this value
@@ -205,6 +225,11 @@ type GenericFlag struct {
 	EnvVar string
 	Hidden bool
 	Value  Generic
+	Alias  string
+}
+
+func (f GenericFlag) GetAlias() string {
+	return f.Alias
 }
 
 // String returns a readable representation of this value
@@ -253,6 +278,11 @@ type Int64Flag struct {
 	Hidden      bool
 	Value       int64
 	Destination *int64
+	Alias       string
+}
+
+func (f Int64Flag) GetAlias() string {
+	return f.Alias
 }
 
 // String returns a readable representation of this value
@@ -301,6 +331,11 @@ type IntFlag struct {
 	Hidden      bool
 	Value       int
 	Destination *int
+	Alias       string
+}
+
+func (f IntFlag) GetAlias() string {
+	return f.Alias
 }
 
 // String returns a readable representation of this value
@@ -348,6 +383,11 @@ type IntSliceFlag struct {
 	EnvVar string
 	Hidden bool
 	Value  *IntSlice
+	Alias  string
+}
+
+func (f IntSliceFlag) GetAlias() string {
+	return f.Alias
 }
 
 // String returns a readable representation of this value
@@ -395,6 +435,11 @@ type Int64SliceFlag struct {
 	EnvVar string
 	Hidden bool
 	Value  *Int64Slice
+	Alias  string
+}
+
+func (f Int64SliceFlag) GetAlias() string {
+	return f.Alias
 }
 
 // String returns a readable representation of this value
@@ -443,6 +488,11 @@ type StringFlag struct {
 	Hidden      bool
 	Value       string
 	Destination *string
+	Alias       string
+}
+
+func (f StringFlag) GetAlias() string {
+	return f.Alias
 }
 
 // String returns a readable representation of this value
@@ -490,6 +540,11 @@ type StringSliceFlag struct {
 	EnvVar string
 	Hidden bool
 	Value  *StringSlice
+	Alias  string
+}
+
+func (f StringSliceFlag) GetAlias() string {
+	return f.Alias
 }
 
 // String returns a readable representation of this value
@@ -538,6 +593,11 @@ type Uint64Flag struct {
 	Hidden      bool
 	Value       uint64
 	Destination *uint64
+	Alias       string
+}
+
+func (f Uint64Flag) GetAlias() string {
+	return f.Alias
 }
 
 // String returns a readable representation of this value
@@ -586,6 +646,11 @@ type UintFlag struct {
 	Hidden      bool
 	Value       uint
 	Destination *uint
+	Alias       string
+}
+
+func (f UintFlag) GetAlias() string {
+	return f.Alias
 }
 
 // String returns a readable representation of this value

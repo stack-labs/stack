@@ -1532,6 +1532,10 @@ func (c *customBoolFlag) GetName() string {
 	return c.Nombre
 }
 
+func (c *customBoolFlag) GetAlias() string {
+	return c.Nombre
+}
+
 func (c *customBoolFlag) Apply(set *flag.FlagSet) {
 	set.String(c.Nombre, c.Nombre, "")
 }

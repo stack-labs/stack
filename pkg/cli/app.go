@@ -92,6 +92,7 @@ type App struct {
 	// render custom help text by setting this variable.
 	CustomAppHelpTemplate string
 
+	context  *Context
 	didSetup bool
 }
 
@@ -192,43 +193,43 @@ func (a *App) Run(arguments []string) (err error) {
 	set.SetOutput(ioutil.Discard)
 	err = set.Parse(arguments[1:])
 	nerr := normalizeFlags(a.Flags, set)
-	context := NewContext(a, set, nil)
+	a.context = NewContext(a, set, nil)
 	if nerr != nil {
 		fmt.Fprintln(a.Writer, nerr)
-		ShowAppHelp(context)
+		ShowAppHelp(a.context)
 		return nerr
 	}
-	context.shellComplete = shellComplete
+	a.context.shellComplete = shellComplete
 
-	if checkCompletions(context) {
+	if checkCompletions(a.context) {
 		return nil
 	}
 
 	if err != nil {
 		if a.OnUsageError != nil {
-			err := a.OnUsageError(context, err, false)
+			err := a.OnUsageError(a.context, err, false)
 			HandleExitCoder(err)
 			return err
 		}
 		fmt.Fprintf(a.Writer, "%s %s\n\n", "Incorrect Usage.", err.Error())
-		ShowAppHelp(context)
+		ShowAppHelp(a.context)
 		return err
 	}
 
-	if !a.HideHelp && checkHelp(context) {
-		ShowAppHelp(context)
+	if !a.HideHelp && checkHelp(a.context) {
+		ShowAppHelp(a.context)
 		return nil
 	}
 
-	if !a.HideVersion && checkVersion(context) {
-		ShowVersion(context)
+	if !a.HideVersion && checkVersion(a.context) {
+		ShowVersion(a.context)
 		os.Exit(0)
 		return nil
 	}
 
 	if a.After != nil {
 		defer func() {
-			if afterErr := a.After(context); afterErr != nil {
+			if afterErr := a.After(a.context); afterErr != nil {
 				if err != nil {
 					err = NewMultiError(err, afterErr)
 				} else {
@@ -239,21 +240,21 @@ func (a *App) Run(arguments []string) (err error) {
 	}
 
 	if a.Before != nil {
-		beforeErr := a.Before(context)
+		beforeErr := a.Before(a.context)
 		if beforeErr != nil {
-			ShowAppHelp(context)
+			ShowAppHelp(a.context)
 			HandleExitCoder(beforeErr)
 			err = beforeErr
 			return err
 		}
 	}
 
-	args := context.Args()
+	args := a.context.Args()
 	if args.Present() {
 		name := args.First()
 		c := a.Command(name)
 		if c != nil {
-			return c.Run(context)
+			return c.Run(a.context)
 		}
 	}
 
@@ -262,7 +263,7 @@ func (a *App) Run(arguments []string) (err error) {
 	}
 
 	// Run default Action
-	err = HandleAction(a.Action, context)
+	err = HandleAction(a.Action, a.context)
 
 	HandleExitCoder(err)
 	return err
@@ -463,6 +464,10 @@ func (a *App) appendFlag(flag Flag) {
 	if !a.hasFlag(flag) {
 		a.Flags = append(a.Flags, flag)
 	}
+}
+
+func (a App) Context() *Context {
+	return a.context
 }
 
 // Author represents someone who has contributed to a cli project.

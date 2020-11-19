@@ -43,14 +43,6 @@ func TestMockServer(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if err := srv.Register(); err != nil {
-		t.Fatal(err)
-	}
-
-	if err := srv.Deregister(); err != nil {
-		t.Fatal(err)
-	}
-
 	if err := srv.Stop(); err != nil {
 		t.Fatal(err)
 	}

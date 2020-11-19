@@ -2,12 +2,11 @@ package config
 
 import (
 	"encoding/json"
+	"github.com/stack-labs/stack-rpc/pkg/config/source/memory"
 	"strings"
 
-	"github.com/stack-labs/stack-rpc/pkg/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config"
 	"github.com/stack-labs/stack-rpc/pkg/config/reader"
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
 	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 	"github.com/stack-labs/stack-rpc/util/log"
@@ -15,7 +14,7 @@ import (
 
 type Broker struct {
 	Address string `json:"address"`
-	Name    string `json:"name"`
+	Name    string `json:"name" `
 }
 
 type Pool struct {
@@ -73,7 +72,12 @@ type Transport struct {
 	Address string `json:"address"`
 }
 
-type Stack struct {
+type Logger struct {
+	Name  string `json:"name"`
+	Level string `json:"level"`
+}
+
+type stack struct {
 	Broker    Broker    `json:"broker"`
 	Client    Client    `json:"client"`
 	Profile   string    `json:"profile"`
@@ -82,10 +86,11 @@ type Stack struct {
 	Server    Server    `json:"server"`
 	Selector  Selector  `json:"selector"`
 	Transport Transport `json:"transport"`
+	Logger    Logger    `json:"logger"`
 }
 
 type Value struct {
-	Stack Stack `json:"stack"`
+	Stack stack `json:"stack"`
 }
 
 type Config interface {
@@ -97,22 +102,30 @@ type stackConfig struct {
 	config config.Config
 }
 
-func New(filePath string, app *cli.App, s ...source.Source) (Config, error) {
-	var sources []source.Source
-	// need read from config file
-	if len(filePath) > 0 {
-		log.Info("config read from file:", filePath)
-		sources = append(sources, file.NewSource(file.WithPath(filePath)))
+// Init Stack's Config component
+// Any developer Don't use this Func anywhere. Init works for Stack Framework only
+func New(opts ...Option) (Config, error) {
+	var o = Options{}
+	for _, opt := range opts {
+		opt(&o)
 	}
 
-	sources = append(sources, cliSource.NewSource(app, cliSource.Context(app.Context())))
-	sources = append(sources, s...)
+	// need read from config file
+	if len(o.FilePath) > 0 {
+		log.Info("config read from file:", o.FilePath)
+		o.Sources = append(o.Sources, file.NewSource(file.WithPath(o.FilePath)))
+	}
+	defaultSource, _ := json.Marshal(GetDefault())
+	o.Sources = append(o.Sources,
+		cliSource.NewSource(o.App, cliSource.Context(o.App.Context())),
+		memory.NewSource(memory.WithJSON(defaultSource)),
+	)
 
 	c, err := config.NewConfig(config.Storage(true), config.Watch(false))
 	if err != nil {
 		return nil, err
 	}
-	if err := c.Load(sources...); err != nil {
+	if err := c.Load(o.Sources...); err != nil {
 		return nil, err
 	}
 

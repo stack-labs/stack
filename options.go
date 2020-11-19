@@ -2,6 +2,7 @@ package stack
 
 import (
 	"context"
+	"github.com/stack-labs/stack-rpc/logger"
 	"time"
 
 	"github.com/stack-labs/stack-rpc/broker"
@@ -26,6 +27,7 @@ type Options struct {
 	Selector     selector.Selector
 	ConfigSource []source.Source
 	Config       config.Config
+	Logger       logger.Logger
 	// Before and After funcs
 	BeforeStart []func() error
 	BeforeStop  []func() error
@@ -48,6 +50,7 @@ func newOptions(opts ...Option) Options {
 		Registry:  registry.DefaultRegistry,
 		Transport: transport.DefaultTransport,
 		Selector:  selector.DefaultSelector,
+		Logger:    logger.DefaultLogger,
 		Context:   context.Background(),
 		Signal:    true,
 	}
@@ -62,6 +65,12 @@ func newOptions(opts ...Option) Options {
 func ConfigSource(s ...source.Source) Option {
 	return func(o *Options) {
 		o.ConfigSource = s
+	}
+}
+
+func Logger(l logger.Logger) Option {
+	return func(o *Options) {
+		o.Logger = l
 	}
 }
 

@@ -1,21 +1,20 @@
 package grpc
 
 import (
+	b "bytes"
 	"encoding/json"
 	"fmt"
 	"strings"
 
-	b "bytes"
-
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/encoding"
-	"google.golang.org/grpc/metadata"
 	"github.com/stack-labs/stack-rpc/codec"
 	"github.com/stack-labs/stack-rpc/codec/bytes"
 	"github.com/stack-labs/stack-rpc/codec/jsonrpc"
 	"github.com/stack-labs/stack-rpc/codec/protorpc"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/encoding"
+	"google.golang.org/grpc/metadata"
 )
 
 type jsonCodec struct{}

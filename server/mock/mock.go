@@ -98,14 +98,6 @@ func (m *MockServer) Subscribe(sub server.Subscriber) error {
 	return nil
 }
 
-func (m *MockServer) Register() error {
-	return nil
-}
-
-func (m *MockServer) Deregister() error {
-	return nil
-}
-
 func (m *MockServer) Start() error {
 	m.Lock()
 	defer m.Unlock()
@@ -134,6 +126,6 @@ func (m *MockServer) String() string {
 	return "mock"
 }
 
-func NewServer(opts ...server.Option) *MockServer {
+func NewServer(opts ...server.Option) server.Server {
 	return newMockServer(opts...)
 }

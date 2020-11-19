@@ -16,11 +16,11 @@ import (
 	"github.com/stack-labs/stack-rpc/debug/profile"
 	"github.com/stack-labs/stack-rpc/debug/profile/pprof"
 	"github.com/stack-labs/stack-rpc/debug/service/handler"
+	log "github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/transport"
-	"github.com/stack-labs/stack-rpc/util/log"
 	"github.com/stack-labs/stack-rpc/util/wrapper"
 )
 
@@ -51,7 +51,7 @@ func (s *service) Name() string {
 // Init initialises options. Additionally it calls cmd.Init
 // which parses command line flags. cmd.Init is only called
 // on first Init.
-func (s *service) Init(opts ...Option) {
+func (s *service) Init(opts ...Option) error {
 	// process options
 	for _, o := range opts {
 		o(&s.opts)
@@ -76,6 +76,8 @@ func (s *service) Init(opts ...Option) {
 			}
 		}
 	})
+
+	return nil
 }
 
 func (s *service) Options() Options {
@@ -142,19 +144,37 @@ func (s *service) Stop() error {
 
 func (s *service) Run() error {
 	if err := s.opts.Cmd.Init(); err != nil {
+		log.Errorf("cmd init error: %s", err)
 		return err
 	}
 
-	// init the stack config
+	// load the all config
 	var err error
-	if s.opts.Config, err = config.New(s.opts.Cmd.ConfigFile(), s.opts.Cmd.App(), s.opts.ConfigSource...); err != nil {
+	if s.opts.Config, err = config.New(
+		// todo 合并下列Path与source
+		config.FilePath(s.opts.Cmd.ConfigFile()),
+		config.Source(s.opts.ConfigSource...),
+		config.App(s.opts.Cmd.App()),
+	); err != nil {
+		log.Errorf("config init error: %s", err)
 		return err
 	}
 
-	// load dynamic config
-	if err := s.load(); err != nil {
+	// set config
+	config.SetDefaultConfig(s.opts.Config)
+
+	// load service config
+	if err := s.loadConfig(); err != nil {
+		log.Errorf("load service config error: %s", err)
 		return err
 	}
+
+	// set Logger
+	if err := s.opts.Logger.Init(); err != nil {
+		log.Errorf("logger init error: %s", err)
+		return err
+	}
+	log.DefaultLogger = s.opts.Logger
 
 	// register the debug handler
 	if err := s.opts.Server.Handle(
@@ -200,8 +220,8 @@ func (s *service) Run() error {
 	return s.Stop()
 }
 
-func (s *service) load() error {
-	stackConfig := newDefaultConfig()
+func (s *service) loadConfig() error {
+	stackConfig := config.GetDefault()
 	if err := s.opts.Config.Scan(stackConfig); err != nil {
 		return err
 	}

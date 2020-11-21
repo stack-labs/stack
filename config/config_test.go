@@ -1,7 +1,9 @@
 package config
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com/stack-labs/stack-rpc/pkg/config/source/memory"
 	"os"
 	"path/filepath"
 	"testing"
@@ -74,31 +76,35 @@ stack:
 	os.Args = append(os.Args, "--server_metadata", "C=c")
 	os.Args = append(os.Args, "--server_metadata", "D=d")
 
-	c, err := New(FilePath(path), App(app))
-	if err != nil {
-		t.Error(fmt.Errorf("Config new config error: %s ", err))
-	}
-
 	conf := Value{
-		Stack: Stack{
+		Stack: stack{
 			Broker:    Broker{},
 			Client:    Client{},
 			Registry:  Registry{},
 			Selector:  Selector{},
-			Server:    Server{Name: "server-name"},
+			Server:    Server{Name: "default-srv-name"},
 			Transport: Transport{},
 		},
 	}
+	defaultBytes, _ := json.Marshal(conf)
 
-	conf.Stack.Server.Name = "default-srv-name"
+	c, err := New(FilePath(path), App(app), Source(memory.NewSource(memory.WithJSON(defaultBytes))))
+	if err != nil {
+		t.Error(fmt.Errorf("Config new config error: %s ", err))
+	}
+
 	if err := c.Scan(&conf); err != nil {
 		t.Error(fmt.Errorf("Config scan confi error: %s ", err))
 	}
+	t.Log(string(c.Bytes()))
 	t.Log(conf)
 
 	// test default
 	if conf.Stack.Server.Name != "default-srv-name" {
 		t.Fatal(fmt.Errorf("server name should be [default-srv-name], not: [%s]", conf.Stack.Server.Name))
+	}
+	if c.Get("stack", "server", "name").String("") != "default-srv-name" {
+		t.Fatal(fmt.Errorf("server name in [c] should be [default-srv-name], not: [%s]", c.Get("stack", "server", "name").String("")))
 	}
 
 	if conf.Stack.Server.ID != "test-id" {
@@ -196,7 +202,7 @@ stack:
 
 	var conf Value
 	conf = Value{
-		Stack: Stack{
+		Stack: stack{
 			Server: Server{
 				Name: "default",
 			},

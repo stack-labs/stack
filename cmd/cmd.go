@@ -167,6 +167,12 @@ var (
 			Alias:  "stack_transport_address",
 		},
 		cli.StringFlag{
+			Name:   "logger_level",
+			EnvVar: "STACK_LOGGER_LEVEL",
+			Usage:  "Logger Level; INFO",
+			Alias:  "stack_logger_level",
+		},
+		cli.StringFlag{
 			Name:   "config",
 			EnvVar: "STACK_CONFIG",
 			Usage:  "config file",

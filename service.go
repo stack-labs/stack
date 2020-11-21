@@ -16,11 +16,11 @@ import (
 	"github.com/stack-labs/stack-rpc/debug/profile"
 	"github.com/stack-labs/stack-rpc/debug/profile/pprof"
 	"github.com/stack-labs/stack-rpc/debug/service/handler"
+	log "github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/transport"
-	"github.com/stack-labs/stack-rpc/util/log"
 	"github.com/stack-labs/stack-rpc/util/wrapper"
 )
 
@@ -168,6 +168,13 @@ func (s *service) Run() error {
 		log.Errorf("load service config error: %s", err)
 		return err
 	}
+
+	// set Logger
+	if err := s.opts.Logger.Init(); err != nil {
+		log.Errorf("logger init error: %s", err)
+		return err
+	}
+	log.DefaultLogger = s.opts.Logger
 
 	// register the debug handler
 	if err := s.opts.Server.Handle(

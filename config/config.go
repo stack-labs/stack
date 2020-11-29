@@ -100,6 +100,7 @@ type Config interface {
 
 type stackConfig struct {
 	config config.Config
+	opts   Options
 }
 
 // Init Stack's Config component
@@ -131,7 +132,7 @@ func New(opts ...Option) (Config, error) {
 		return nil, err
 	}
 
-	return &stackConfig{config: c}, nil
+	return &stackConfig{config: c, opts: o}, nil
 }
 
 func (c *stackConfig) Get(path ...string) reader.Value {

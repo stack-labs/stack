@@ -33,6 +33,32 @@ type WatchOptions struct {
 	Context context.Context
 }
 
+type Option func(*Options)
+
+type DeregisterOptions struct {
+	Context context.Context
+	// Domain the service was registered in
+	Domain string
+}
+
+type GetOptions struct {
+	Context context.Context
+	// Domain to scope the request to
+	Domain string
+}
+
+type ListOptions struct {
+	Context context.Context
+	// Domain to scope the request to
+	Domain string
+}
+
+type RegisterOption func(*RegisterOptions)
+type DeregisterOption func(*DeregisterOptions)
+type WatchOption func(*WatchOptions)
+type GetOption func(*GetOptions)
+type ListOption func(*ListOptions)
+
 // Addrs is the registry addresses to use
 func Addrs(addrs ...string) Option {
 	return func(o *Options) {

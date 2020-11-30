@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/client/mucp"
 
 	"github.com/stack-labs/stack-rpc/debug/log"
 	pb "github.com/stack-labs/stack-rpc/debug/service/proto"
@@ -19,7 +19,7 @@ type Debug struct {
 // NewDebug provides Debug service implementation
 func NewDebug(name string) *Debug {
 	// create default client
-	cli := client.DefaultClient
+	cli := mucp.NewClient()
 
 	return &Debug{
 		dbg: pb.NewDebugService(name, cli),

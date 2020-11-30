@@ -5,12 +5,13 @@ import (
 	"net"
 	"testing"
 
-	pgrpc "google.golang.org/grpc"
-	pb "google.golang.org/grpc/examples/helloworld/helloworld"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/selector"
+	selectorR "github.com/stack-labs/stack-rpc/client/selector/registry"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/registry/memory"
+	pgrpc "google.golang.org/grpc"
+	pb "google.golang.org/grpc/examples/helloworld/helloworld"
 )
 
 // server is used to implement helloworld.GreeterServer.
@@ -53,7 +54,7 @@ func TestGRPCClient(t *testing.T) {
 	})
 
 	// create selector
-	se := selector.NewSelector(
+	se := selectorR.NewSelector(
 		selector.Registry(r),
 	)
 

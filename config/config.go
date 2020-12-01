@@ -90,7 +90,7 @@ type Stack struct {
 }
 
 type Value struct {
-	Stack Stack `json:"Stack"`
+	Stack Stack `json:"stack"`
 }
 
 type Config interface {

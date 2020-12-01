@@ -7,32 +7,32 @@ var (
 	_defaultCfg = &Value{
 		Stack: Stack{
 			Broker: Broker{
-				Name: "",
+				Name: "http",
 			},
 			Client: Client{
-				Protocol: "",
+				Protocol: "mucp",
 				Pool: Pool{
-					Size: "",
-					TTL:  "",
+					Size: "1",
+					TTL:  "60s",
 				},
 				Request: ClientRequest{
-					Retries: "",
-					Timeout: "",
+					Retries: "1",
+					Timeout: "5s",
 				},
 			},
 			Profile: "",
 			Registry: Registry{
-				Name: "",
+				Name: "mdns",
 			},
 			Runtime: "",
 			Server: Server{
-				Protocol: "",
+				Protocol: "mucp",
 			},
 			Selector: Selector{
-				Name: "",
+				Name: "registry",
 			},
 			Transport: Transport{
-				Name: "",
+				Name: "http",
 			},
 		},
 	}

@@ -2,13 +2,13 @@ package config
 
 import (
 	"encoding/json"
-	"github.com/stack-labs/stack-rpc/pkg/config/source/memory"
 	"strings"
 
 	"github.com/stack-labs/stack-rpc/pkg/config"
 	"github.com/stack-labs/stack-rpc/pkg/config/reader"
 	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
+	"github.com/stack-labs/stack-rpc/pkg/config/source/memory"
 	"github.com/stack-labs/stack-rpc/util/log"
 )
 
@@ -77,7 +77,7 @@ type Logger struct {
 	Level string `json:"level"`
 }
 
-type stack struct {
+type Stack struct {
 	Broker    Broker    `json:"broker"`
 	Client    Client    `json:"client"`
 	Profile   string    `json:"profile"`
@@ -90,11 +90,12 @@ type stack struct {
 }
 
 type Value struct {
-	Stack stack `json:"stack"`
+	Stack Stack `json:"Stack"`
 }
 
 type Config interface {
 	reader.Values
+	Init(opts ...Option) error
 	Close() error
 }
 
@@ -105,34 +106,48 @@ type stackConfig struct {
 
 // Init Stack's Config component
 // Any developer Don't use this Func anywhere. Init works for Stack Framework only
-func New(opts ...Option) (Config, error) {
-	var o = Options{}
+func NewConfig(opts ...Option) Config {
+	var o = Options{
+		Watch: true,
+	}
 	for _, opt := range opts {
 		opt(&o)
 	}
 
+	return &stackConfig{opts: o}
+}
+
+func (c *stackConfig) Init(opts ...Option) error {
+	for _, opt := range opts {
+		opt(&c.opts)
+	}
+
 	// need read from config file
-	if len(o.FilePath) > 0 {
-		log.Info("config read from file:", o.FilePath)
-		o.Sources = append(o.Sources, file.NewSource(file.WithPath(o.FilePath)))
+	if len(c.opts.FilePath) > 0 {
+		log.Info("config read from file:", c.opts.FilePath)
+		c.opts.Sources = append(c.opts.Sources, file.NewSource(file.WithPath(c.opts.FilePath)))
 	}
 	defaultSource, _ := json.Marshal(GetDefault())
-	o.Sources = append(o.Sources,
-		cliSource.NewSource(o.App, cliSource.Context(o.App.Context())),
+	c.opts.Sources = append(c.opts.Sources,
+		cliSource.NewSource(c.opts.App, cliSource.Context(c.opts.App.Context())),
 		memory.NewSource(memory.WithJSON(defaultSource)),
 	)
 
-	c, err := config.NewConfig(
-		config.Storage(o.Storage),
-		config.Watch(o.Watch))
+	cfg, err := config.NewConfig(
+		config.Storage(c.opts.Storage),
+		config.Watch(c.opts.Watch))
 	if err != nil {
-		return nil, err
+		return err
 	}
-	if err := c.Load(o.Sources...); err != nil {
-		return nil, err
+	if err := cfg.Load(c.opts.Sources...); err != nil {
+		return err
 	}
 
-	return &stackConfig{config: c, opts: o}, nil
+	c.config = cfg
+
+	// cache c as sugar
+	_sugar = c
+	return nil
 }
 
 func (c *stackConfig) Get(path ...string) reader.Value {

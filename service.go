@@ -142,6 +142,7 @@ func (s *service) Run() error {
 		cmd.Transport(&s.opts.Transport),
 		cmd.Client(&s.opts.Client),
 		cmd.Server(&s.opts.Server),
+		cmd.Selector(&s.opts.Selector),
 		cmd.Logger(&s.opts.Logger),
 		cmd.Config(&s.opts.Config),
 	); err != nil {

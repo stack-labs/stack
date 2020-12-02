@@ -8,7 +8,6 @@ import (
 	"github.com/stack-labs/stack-rpc/pkg/config/reader"
 	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
-	"github.com/stack-labs/stack-rpc/pkg/config/source/memory"
 	"github.com/stack-labs/stack-rpc/util/log"
 )
 
@@ -127,10 +126,10 @@ func (c *stackConfig) Init(opts ...Option) error {
 		log.Info("config read from file:", c.opts.FilePath)
 		c.opts.Sources = append(c.opts.Sources, file.NewSource(file.WithPath(c.opts.FilePath)))
 	}
-	defaultSource, _ := json.Marshal(GetDefault())
+	// defaultSource, _ := json.Marshal(GetDefault())
 	c.opts.Sources = append(c.opts.Sources,
 		cliSource.NewSource(c.opts.App, cliSource.Context(c.opts.App.Context())),
-		memory.NewSource(memory.WithJSON(defaultSource)),
+		// memory.NewSource(memory.WithJSON(defaultSource)),
 	)
 
 	cfg, err := config.NewConfig(

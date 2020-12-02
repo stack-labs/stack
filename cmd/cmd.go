@@ -151,7 +151,7 @@ var (
 			Name:   "registry",
 			EnvVar: "STACK_REGISTRY",
 			Usage:  "Registry for discovery. etcd, mdns",
-			Alias:  "stack_registry",
+			Alias:  "stack_registry_name",
 		},
 		cli.StringFlag{
 			Name:   "registry_address",
@@ -163,13 +163,13 @@ var (
 			Name:   "selector",
 			EnvVar: "STACK_SELECTOR",
 			Usage:  "Selector used to pick nodes for querying",
-			Alias:  "stack_selector",
+			Alias:  "stack_selector_name",
 		},
 		cli.StringFlag{
 			Name:   "transport",
 			EnvVar: "STACK_TRANSPORT",
 			Usage:  "Transport mechanism used; http",
-			Alias:  "stack_transport",
+			Alias:  "stack_transport_name",
 		},
 		cli.StringFlag{
 			Name:   "transport_address",

@@ -1,15 +1,15 @@
-package config
+package cmd
 
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/stack-labs/stack-rpc/pkg/config/source/memory"
 	"os"
 	"path/filepath"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/cmd"
+	"github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
+	"github.com/stack-labs/stack-rpc/pkg/config/source/memory"
 )
 
 func TestStackConfig_Config(t *testing.T) {
@@ -62,9 +62,9 @@ stack:
 	}()
 
 	// setup app
-	app := cmd.NewCmd().App()
+	app := NewCmd().App()
 	app.Name = "testcmd"
-	app.Flags = cmd.DefaultFlags
+	app.Flags = DefaultFlags
 
 	// set args
 	os.Args = []string{"run"}
@@ -76,21 +76,21 @@ stack:
 	os.Args = append(os.Args, "--server_metadata", "C=c")
 	os.Args = append(os.Args, "--server_metadata", "D=d")
 
-	conf := Value{
-		Stack: stack{
-			Broker:    Broker{},
-			Client:    Client{},
-			Registry:  Registry{},
-			Selector:  Selector{},
-			Server:    Server{Name: "default-srv-name"},
-			Transport: Transport{},
+	conf := config.Value{
+		Stack: config.Stack{
+			Broker:    config.Broker{},
+			Client:    config.Client{},
+			Registry:  config.Registry{},
+			Selector:  config.Selector{},
+			Server:    config.Server{Name: "default-srv-name"},
+			Transport: config.Transport{},
 		},
 	}
 	defaultBytes, _ := json.Marshal(conf)
 
-	c, err := New(FilePath(path), App(app), Source(memory.NewSource(memory.WithJSON(defaultBytes))))
-	if err != nil {
-		t.Error(fmt.Errorf("Config new config error: %s ", err))
+	c := config.NewConfig(config.FilePath(path), config.App(app), config.Source(memory.NewSource(memory.WithJSON(defaultBytes))))
+	if err = c.Init(); err != nil {
+		t.Error(fmt.Errorf("Config init error: %s ", err))
 	}
 
 	if err := c.Scan(&conf); err != nil {
@@ -183,27 +183,31 @@ stack:
 	}()
 
 	// setup app
-	app := cmd.NewCmd().App()
+	app := NewCmd().App()
 	app.Name = "testcmd"
-	app.Flags = cmd.DefaultFlags
+	app.Flags = DefaultFlags
 
 	// set args
 	os.Args = []string{"run"}
 	os.Args = append(os.Args, "--broker", "kafka")
 
-	c, err := New(FilePath(ymlPath), App(app), Source(file.NewSource(file.WithPath(jsonPath))))
+	c := config.NewConfig(config.FilePath(ymlPath), config.App(app), config.Source(file.NewSource(file.WithPath(jsonPath))))
 	if err != nil {
 		t.Fatal(fmt.Errorf("new config error: %s", err))
+	}
+
+	if err = c.Init(); err != nil {
+		t.Fatal(fmt.Errorf("Config init error: %s ", err))
 	}
 
 	if c.Get("db").String("default") != "mysql" {
 		t.Fatal(fmt.Errorf("db setting should be 'mysql', not %s", c.Get("db").String("default")))
 	}
 
-	var conf Value
-	conf = Value{
-		Stack: stack{
-			Server: Server{
+	var conf config.Value
+	conf = config.Value{
+		Stack: config.Stack{
+			Server: config.Server{
 				Name: "default",
 			},
 		},

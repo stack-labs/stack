@@ -1,35 +1,38 @@
 package config
 
 var (
+	DefaultConfig = NewConfig()
+
+	// todo this doest work
 	_defaultCfg = &Value{
-		Stack: stack{
+		Stack: Stack{
 			Broker: Broker{
-				Name: "http",
+				Name: "",
 			},
 			Client: Client{
-				Protocol: "mucp",
+				Protocol: "",
 				Pool: Pool{
-					Size: "1",
-					TTL:  "60s",
+					Size: "",
+					TTL:  "",
 				},
 				Request: ClientRequest{
-					Retries: "1",
-					Timeout: "5s",
+					Retries: "",
+					Timeout: "",
 				},
 			},
 			Profile: "",
 			Registry: Registry{
-				Name: "mdns",
+				Name: "",
 			},
 			Runtime: "",
 			Server: Server{
-				Protocol: "mucp",
+				Protocol: "",
 			},
 			Selector: Selector{
-				Name: "registry",
+				Name: "",
 			},
 			Transport: Transport{
-				Name: "http",
+				Name: "",
 			},
 		},
 	}

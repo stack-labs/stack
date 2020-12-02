@@ -8,11 +8,6 @@ var (
 	_sugar Config
 )
 
-func SetDefaultConfig(c Config) {
-	// cache config
-	_sugar = c
-}
-
 func Get(path ...string) reader.Value {
 	return _sugar.Get(path...)
 }

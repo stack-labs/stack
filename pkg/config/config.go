@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/modern-go/reflect2"
 	log "github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/pkg/config/loader"
 	"github.com/stack-labs/stack-rpc/pkg/config/reader"
@@ -228,7 +229,7 @@ func (c *config) Get(path ...string) reader.Value {
 	defer c.RUnlock()
 
 	// did sync actually work?
-	if c.values != nil {
+	if !reflect2.IsNil(c.values) {
 		return c.values.Get(path...)
 	}
 

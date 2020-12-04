@@ -8,12 +8,14 @@ import (
 	"testing"
 
 	"github.com/stack-labs/stack-rpc/config"
+	"github.com/stack-labs/stack-rpc/pkg/config/source"
+	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 	"github.com/stack-labs/stack-rpc/pkg/config/source/memory"
 )
 
-func TestStackConfig_Config(t *testing.T) {
-	data := []byte(`
+var (
+	ymlFile = []byte(`
 stack:
   broker:
     name: http
@@ -47,12 +49,56 @@ stack:
   profile: _1
   runtime:
 `)
+	conf = config.Value{
+		Stack: config.Stack{
+			Broker:    config.Broker{},
+			Client:    config.Client{},
+			Registry:  config.Registry{},
+			Selector:  config.Selector{},
+			Server:    config.Server{},
+			Transport: config.Transport{},
+		},
+	}
+)
+
+func TestStackConfig_File(t *testing.T) {
 	path := filepath.Join(os.TempDir(), "file.yaml")
 	fh, err := os.Create(path)
 	if err != nil {
 		t.Error(fmt.Errorf("Config create tmp yml error: %s ", err))
 	}
-	_, err = fh.Write(data)
+	_, err = fh.Write(ymlFile)
+	if err != nil {
+		t.Error(fmt.Errorf("Config write tmp yml error: %s ", err))
+	}
+	defer func() {
+		fh.Close()
+		os.Remove(path)
+	}()
+
+	c := config.NewConfig(config.Source(file.NewSource(file.WithPath(path))))
+	if err = c.Init(); err != nil {
+		t.Error(fmt.Errorf("Config init error: %s ", err))
+	}
+
+	if err := c.Scan(&conf); err != nil {
+		t.Error(fmt.Errorf("Config scan confi error: %s ", err))
+	}
+	t.Log(string(c.Bytes()))
+	t.Log(conf)
+
+	if conf.Stack.Server.Address != ":8090" {
+		t.Fatal(fmt.Errorf("server address should be [:8090], not: [%s]", conf.Stack.Server.Address))
+	}
+}
+
+func TestStackConfig_Config(t *testing.T) {
+	path := filepath.Join(os.TempDir(), "file.yaml")
+	fh, err := os.Create(path)
+	if err != nil {
+		t.Error(fmt.Errorf("Config create tmp yml error: %s ", err))
+	}
+	_, err = fh.Write(ymlFile)
 	if err != nil {
 		t.Error(fmt.Errorf("Config write tmp yml error: %s ", err))
 	}
@@ -76,19 +122,16 @@ stack:
 	os.Args = append(os.Args, "--server_metadata", "C=c")
 	os.Args = append(os.Args, "--server_metadata", "D=d")
 
-	conf := config.Value{
-		Stack: config.Stack{
-			Broker:    config.Broker{},
-			Client:    config.Client{},
-			Registry:  config.Registry{},
-			Selector:  config.Selector{},
-			Server:    config.Server{Name: "default-srv-name"},
-			Transport: config.Transport{},
-		},
-	}
+	conf.Stack.Server.Name = "default-srv-name"
 	defaultBytes, _ := json.Marshal(conf)
 
-	c := config.NewConfig(config.FilePath(path), config.App(app), config.Source(memory.NewSource(memory.WithJSON(defaultBytes))))
+	sources := []source.Source{
+		memory.NewSource(memory.WithJSON(defaultBytes)),
+		file.NewSource(file.WithPath(path)),
+		cliSource.NewSource(app, cliSource.Context(app.Context())),
+	}
+
+	c := config.NewConfig(config.Source(sources...))
 	if err = c.Init(); err != nil {
 		t.Error(fmt.Errorf("Config init error: %s ", err))
 	}
@@ -140,7 +183,6 @@ stack:
 }
 
 func TestStackConfig_MultiConfig(t *testing.T) {
-	// 1 config
 	ymlData := []byte(`
 stack:
   broker:
@@ -191,9 +233,15 @@ stack:
 	os.Args = []string{"run"}
 	os.Args = append(os.Args, "--broker", "kafka")
 
-	c := config.NewConfig(config.FilePath(ymlPath), config.App(app), config.Source(file.NewSource(file.WithPath(jsonPath))))
-	if err != nil {
-		t.Fatal(fmt.Errorf("new config error: %s", err))
+	sources := []source.Source{
+		file.NewSource(file.WithPath(ymlPath)),
+		file.NewSource(file.WithPath(jsonPath)),
+		cliSource.NewSource(app, cliSource.Context(app.Context())),
+	}
+
+	c := config.NewConfig(config.Source(sources...))
+	if err = c.Init(); err != nil {
+		t.Error(fmt.Errorf("Config init error: %s ", err))
 	}
 
 	if err = c.Init(); err != nil {

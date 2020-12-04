@@ -6,9 +6,6 @@ import (
 
 	"github.com/stack-labs/stack-rpc/pkg/config"
 	"github.com/stack-labs/stack-rpc/pkg/config/reader"
-	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
-	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
-	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 type Broker struct {
@@ -121,24 +118,13 @@ func (c *stackConfig) Init(opts ...Option) error {
 		opt(&c.opts)
 	}
 
-	// need read from config file
-	if len(c.opts.FilePath) > 0 {
-		log.Info("config read from file:", c.opts.FilePath)
-		c.opts.Sources = append(c.opts.Sources, file.NewSource(file.WithPath(c.opts.FilePath)))
-	}
-	// defaultSource, _ := json.Marshal(GetDefault())
-	c.opts.Sources = append(c.opts.Sources,
-		cliSource.NewSource(c.opts.App, cliSource.Context(c.opts.App.Context())),
-		// memory.NewSource(memory.WithJSON(defaultSource)),
-	)
-
 	cfg, err := config.NewConfig(
 		config.Storage(c.opts.Storage),
-		config.Watch(c.opts.Watch))
+		config.Watch(c.opts.Watch),
+		config.Sources(c.opts.Sources...),
+	)
+
 	if err != nil {
-		return err
-	}
-	if err := cfg.Load(c.opts.Sources...); err != nil {
 		return err
 	}
 

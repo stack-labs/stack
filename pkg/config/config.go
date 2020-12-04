@@ -25,7 +25,7 @@ type Config interface {
 	reader.Values
 	// Stop the config loader/watcher
 	Close() error
-	// Load config sources
+	// Load config Sources
 	Load(source ...source.Source) error
 	// Force a source change set sync
 	Sync() error
@@ -55,7 +55,7 @@ func newConfig(opts ...Option) (Config, error) {
 	options := NewOptions(opts...)
 
 	l := loader.NewLoader(loader.WithWatch(options.Watch))
-	if err := l.Load(); err != nil {
+	if err := l.Load(options.Sources...); err != nil {
 		return nil, err
 	}
 	snap, err := l.Snapshot()
@@ -185,7 +185,7 @@ func (c *config) Scan(v interface{}) error {
 	return c.values.Scan(v)
 }
 
-// sync loads all the sources, calls the parser and updates the config
+// sync loads all the Sources, calls the parser and updates the config
 func (c *config) Sync() error {
 	if err := c.loader.Sync(); err != nil {
 		return err

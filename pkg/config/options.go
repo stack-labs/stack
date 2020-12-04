@@ -2,12 +2,14 @@ package config
 
 import (
 	"context"
+	"github.com/stack-labs/stack-rpc/pkg/config/source"
 )
 
 type Options struct {
 	Storage    bool
 	StorageDir string
 	Watch      bool
+	Sources    []source.Source
 	// for alternative data
 	Context context.Context
 }
@@ -42,5 +44,11 @@ func Storage(e bool) Option {
 func StorageDir(d string) Option {
 	return func(o *Options) {
 		o.StorageDir = d
+	}
+}
+
+func Sources(s ...source.Source) Option {
+	return func(o *Options) {
+		o.Sources = append(o.Sources, s...)
 	}
 }

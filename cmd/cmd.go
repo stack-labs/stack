@@ -3,6 +3,9 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/stack-labs/stack-rpc/pkg/config/source"
+	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
+	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 	"io"
 	"math/rand"
 	"os"
@@ -239,7 +242,16 @@ func (c *cmd) before(ctx *cli.Context) error {
 	}
 
 	// need to init config first
-	err := (*c.opts.Config).Init(config.FilePath(c.ConfigFile()), config.App(c.App()))
+	var appendSource []source.Source
+	// need read from config file
+	if len(c.ConfigFile()) > 0 {
+		log.Info("config read from file:", c.ConfigFile())
+		configFileSource := file.NewSource(file.WithPath(c.ConfigFile()))
+		appendSource = append(appendSource, configFileSource)
+	}
+	appendSource = append(appendSource, cliSource.NewSource(c.App(), cliSource.Context(c.App().Context())))
+
+	err := (*c.opts.Config).Init(config.Source(appendSource...))
 	if err != nil {
 		err = fmt.Errorf("init config err: %s", err)
 		log.Fatal(err)

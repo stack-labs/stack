@@ -2,6 +2,7 @@ package config
 
 import (
 	"context"
+
 	"github.com/stack-labs/stack-rpc/pkg/config/source"
 )
 

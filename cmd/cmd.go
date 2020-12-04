@@ -3,9 +3,6 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
-	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
-	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 	"io"
 	"math/rand"
 	"os"
@@ -18,6 +15,9 @@ import (
 	"github.com/stack-labs/stack-rpc/config"
 	log "github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/pkg/cli"
+	"github.com/stack-labs/stack-rpc/pkg/config/source"
+	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
+	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"

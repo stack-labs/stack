@@ -55,7 +55,7 @@ func newConfig(opts ...Option) (Config, error) {
 	options := NewOptions(opts...)
 
 	l := loader.NewLoader(loader.WithWatch(options.Watch))
-	if err := l.Load(options.Sources...); err != nil {
+	if err := l.Load(); err != nil {
 		return nil, err
 	}
 	snap, err := l.Snapshot()

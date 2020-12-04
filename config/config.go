@@ -2,6 +2,8 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
+	"github.com/stack-labs/stack-rpc/util/log"
 	"strings"
 
 	"github.com/stack-labs/stack-rpc/pkg/config"
@@ -101,7 +103,7 @@ type stackConfig struct {
 }
 
 // Init Stack's Config component
-// Any developer Don't use this Func anywhere. Init works for Stack Framework only
+// Any developer Don't use this Func anywhere. NewConfig works for Stack Framework only
 func NewConfig(opts ...Option) Config {
 	var o = Options{
 		Watch: true,
@@ -113,19 +115,29 @@ func NewConfig(opts ...Option) Config {
 	return &stackConfig{opts: o}
 }
 
-func (c *stackConfig) Init(opts ...Option) error {
+func (c *stackConfig) Init(opts ...Option) (err error) {
 	for _, opt := range opts {
 		opt(&c.opts)
 	}
 
+	defer func() {
+		if err != nil {
+			log.Errorf("config init error: %s", err)
+		}
+	}()
+
 	cfg, err := config.NewConfig(
 		config.Storage(c.opts.Storage),
 		config.Watch(c.opts.Watch),
-		config.Sources(c.opts.Sources...),
 	)
-
 	if err != nil {
-		return err
+		err = fmt.Errorf("create new config error: %s", err)
+		return
+	}
+
+	if err = cfg.Load(c.opts.Sources...); err != nil {
+		err = fmt.Errorf("load sources error: %s", err)
+		return
 	}
 
 	c.config = cfg

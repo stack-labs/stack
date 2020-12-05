@@ -42,6 +42,7 @@ require (
 	github.com/mholt/certmagic v0.8.3
 	github.com/miekg/dns v1.1.22
 	github.com/mitchellh/hashstructure v1.0.0
+	github.com/modern-go/reflect2 v1.0.1
 	github.com/nats-io/nats-server/v2 v2.1.9 // indirect
 	github.com/nats-io/nats.go v1.10.0
 	github.com/nlopes/slack v0.6.0

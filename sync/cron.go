@@ -5,7 +5,6 @@ import (
 	"math"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/sync/leader/etcd"
 	"github.com/stack-labs/stack-rpc/sync/task"
 	"github.com/stack-labs/stack-rpc/sync/task/local"
 	"github.com/stack-labs/stack-rpc/util/log"
@@ -77,10 +76,6 @@ func NewCron(opts ...Option) Cron {
 	var options Options
 	for _, o := range opts {
 		o(&options)
-	}
-
-	if options.Leader == nil {
-		options.Leader = etcd.NewLeader()
 	}
 
 	if options.Task == nil {

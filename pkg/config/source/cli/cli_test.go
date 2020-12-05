@@ -319,7 +319,7 @@ var (
 		cli.StringFlag{
 			Name:   "registry",
 			EnvVar: "STACK_REGISTRY",
-			Usage:  "Registry for discovery. etcd, mdns",
+			Usage:  "Registry for discovery. mdns",
 			Alias:  "stack_registry_name",
 		},
 		cli.StringFlag{

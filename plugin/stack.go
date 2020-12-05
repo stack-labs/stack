@@ -14,7 +14,6 @@ import (
 	"github.com/stack-labs/stack-rpc/client/selector/router"
 	"github.com/stack-labs/stack-rpc/client/selector/static"
 	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/registry/etcd"
 	"github.com/stack-labs/stack-rpc/registry/mdns"
 	rmem "github.com/stack-labs/stack-rpc/registry/memory"
 	regSrv "github.com/stack-labs/stack-rpc/registry/service"
@@ -48,7 +47,6 @@ var (
 	DefaultRegistries = map[string]func(...registry.Option) registry.Registry{
 		"stack.rpc.registry": regSrv.NewRegistry,
 		"service":            regSrv.NewRegistry,
-		"etcd":               etcd.NewRegistry,
 		"mdns":               mdns.NewRegistry,
 		"memory":             rmem.NewRegistry,
 	}

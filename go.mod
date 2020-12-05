@@ -3,7 +3,6 @@ module github.com/stack-labs/stack-rpc
 go 1.14
 
 replace (
-	github.com/coreos/bbolt => go.etcd.io/bbolt v1.3.4
 	google.golang.org/grpc => google.golang.org/grpc v1.26.0
 )
 
@@ -13,7 +12,6 @@ require (
 	github.com/bitly/go-simplejson v0.5.0
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
 	github.com/bwmarrin/discordgo v0.20.1
-	github.com/coreos/bbolt v1.3.4 // indirect
 	github.com/coreos/etcd v3.3.17+incompatible
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f // indirect

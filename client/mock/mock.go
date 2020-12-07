@@ -7,6 +7,8 @@ import (
 	"reflect"
 	"sync"
 
+	"github.com/stack-labs/stack-rpc/client/mucp"
+
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/errors"
 )
@@ -129,7 +131,7 @@ func NewClient(opts ...client.Option) *MockClient {
 	}
 
 	return &MockClient{
-		Client:   client.DefaultClient,
+		Client:   mucp.NewClient(),
 		Opts:     options,
 		Response: r,
 	}

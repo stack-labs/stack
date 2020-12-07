@@ -119,7 +119,7 @@ func (c *cache) get(service string) ([]*registry.Service, error) {
 	// get cache ttl
 	ttl := c.ttls[service]
 	// make a copy
-	cp := registry.Copy(services)
+	cp := Copy(services)
 
 	// got services && within ttl so return cache
 	if c.isValid(cp, ttl) {
@@ -152,7 +152,7 @@ func (c *cache) get(service string) ([]*registry.Service, error) {
 
 		// cache results
 		c.Lock()
-		c.set(service, registry.Copy(services))
+		c.set(service, Copy(services))
 		c.Unlock()
 
 		return services, nil

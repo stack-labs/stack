@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/metadata"
+	"github.com/stack-labs/stack-rpc/pkg/metadata"
 )
 
 func TestWrapper(t *testing.T) {

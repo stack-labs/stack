@@ -1,6 +1,12 @@
 package stack
 
 import (
+	"os"
+	"os/signal"
+	"strings"
+	"sync"
+	"syscall"
+
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/debug/profile"
@@ -10,11 +16,6 @@ import (
 	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/util/wrapper"
-	"os"
-	"os/signal"
-	"strings"
-	"sync"
-	"syscall"
 )
 
 type service struct {

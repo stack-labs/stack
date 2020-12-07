@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/stack-labs/stack-rpc"
-	broker "github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack-rpc/broker/http"
 	client "github.com/stack-labs/stack-rpc/client/grpc"
 	server "github.com/stack-labs/stack-rpc/server/grpc"
 )
@@ -16,7 +16,7 @@ func NewService(opts ...stack.Option) stack.Service {
 	// our grpc server
 	s := server.NewServer()
 	// our grpc broker
-	b := broker.NewBroker()
+	b := http.NewBroker()
 
 	// create options with priority for our opts
 	options := []stack.Option{
@@ -39,7 +39,7 @@ func NewFunction(opts ...stack.Option) stack.Function {
 	// our grpc server
 	s := server.NewServer()
 	// our grpc broker
-	b := broker.NewBroker()
+	b := http.NewBroker()
 
 	// create options with priority for our opts
 	options := []stack.Option{

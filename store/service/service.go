@@ -6,6 +6,8 @@ import (
 	"io"
 	"time"
 
+	"github.com/stack-labs/stack-rpc/client/mucp"
+
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/store"
 	pb "github.com/stack-labs/stack-rpc/store/service/proto"
@@ -113,7 +115,7 @@ func NewStore(opts ...options.Option) store.Store {
 	service := &serviceStore{
 		Options: options,
 		Nodes:   nodes,
-		Client:  pb.NewStoreService("stack.rpc.store", client.DefaultClient),
+		Client:  pb.NewStoreService("stack.rpc.store", mucp.NewClient()),
 	}
 
 	return service

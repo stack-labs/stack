@@ -36,8 +36,6 @@ type Filter func([]*registry.Service) []*registry.Service
 type Strategy func([]*registry.Service) Next
 
 var (
-	DefaultSelector = NewSelector()
-
 	ErrNotFound      = errors.New("not found")
 	ErrNoneAvailable = errors.New("none available")
 )

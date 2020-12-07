@@ -10,6 +10,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/stack-labs/stack-rpc/broker/http"
+
 	"github.com/google/uuid"
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/sync/task"
@@ -209,7 +211,7 @@ func NewTask(opts ...task.Option) task.Task {
 
 	b, ok := options.Context.Value(brokerKey{}).(broker.Broker)
 	if !ok {
-		b = broker.DefaultBroker
+		b = http.NewBroker()
 	}
 
 	return &Task{

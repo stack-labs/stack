@@ -11,14 +11,13 @@ import (
 	cmucp "github.com/stack-labs/stack-rpc/client/mucp"
 	"github.com/stack-labs/stack-rpc/client/selector"
 	"github.com/stack-labs/stack-rpc/client/selector/dns"
+	selectorR "github.com/stack-labs/stack-rpc/client/selector/registry"
 	"github.com/stack-labs/stack-rpc/client/selector/router"
 	"github.com/stack-labs/stack-rpc/client/selector/static"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/registry/mdns"
 	rmem "github.com/stack-labs/stack-rpc/registry/memory"
 	regSrv "github.com/stack-labs/stack-rpc/registry/service"
-	"github.com/stack-labs/stack-rpc/runtime"
-	"github.com/stack-labs/stack-rpc/runtime/kubernetes"
 	"github.com/stack-labs/stack-rpc/server"
 	sgrpc "github.com/stack-labs/stack-rpc/server/grpc"
 	smucp "github.com/stack-labs/stack-rpc/server/mucp"
@@ -39,7 +38,7 @@ var (
 	}
 
 	DefaultClients = map[string]func(...client.Option) client.Client{
-		"rpc":  client.NewClient,
+		"rpc":  cmucp.NewClient,
 		"mucp": cmucp.NewClient,
 		"grpc": cgrpc.NewClient,
 	}
@@ -52,15 +51,15 @@ var (
 	}
 
 	DefaultSelectors = map[string]func(...selector.Option) selector.Selector{
-		"default": selector.NewSelector,
+		"default": selectorR.NewSelector,
 		"dns":     dns.NewSelector,
-		"cache":   selector.NewSelector,
+		"cache":   selectorR.NewSelector,
 		"router":  router.NewSelector,
 		"static":  static.NewSelector,
 	}
 
 	DefaultServers = map[string]func(...server.Option) server.Server{
-		"rpc":  server.NewServer,
+		"rpc":  smucp.NewServer,
 		"mucp": smucp.NewServer,
 		"grpc": sgrpc.NewServer,
 	}
@@ -70,10 +69,5 @@ var (
 		"http":   thttp.NewTransport,
 		"grpc":   tgrpc.NewTransport,
 		"quic":   quic.NewTransport,
-	}
-
-	DefaultRuntimes = map[string]func(...runtime.Option) runtime.Runtime{
-		"local":      runtime.NewRuntime,
-		"kubernetes": kubernetes.NewRuntime,
 	}
 )

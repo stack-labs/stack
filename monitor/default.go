@@ -6,9 +6,12 @@ import (
 	"sync"
 	"time"
 
+	"github.com/stack-labs/stack-rpc/client/mucp"
+
+	"github.com/stack-labs/stack-rpc/registry/mdns"
+
 	"github.com/stack-labs/stack-rpc/client"
 	pb "github.com/stack-labs/stack-rpc/debug/service/proto"
-	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/registry/cache"
 )
 
@@ -311,8 +314,8 @@ func (m *monitor) Stop() error {
 
 func newMonitor(opts ...Option) Monitor {
 	options := Options{
-		Client:   client.DefaultClient,
-		Registry: registry.DefaultRegistry,
+		Client:   mucp.NewClient(),
+		Registry: mdns.NewRegistry(),
 	}
 
 	for _, o := range opts {

@@ -3,6 +3,8 @@ package grpc
 import (
 	"reflect"
 
+	"github.com/stack-labs/stack-rpc/server/mucp"
+
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
 )
@@ -30,7 +32,7 @@ func newRpcHandler(handler interface{}, opts ...server.HandlerOption) server.Han
 	var endpoints []*registry.Endpoint
 
 	for m := 0; m < typ.NumMethod(); m++ {
-		if e := extractEndpoint(typ.Method(m)); e != nil {
+		if e := mucp.ExtractEndpoint(typ.Method(m)); e != nil {
 			e.Name = name + "." + e.Name
 
 			for k, v := range options.Metadata[e.Name] {

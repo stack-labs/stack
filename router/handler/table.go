@@ -3,9 +3,9 @@ package handler
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/errors"
 	"github.com/stack-labs/stack-rpc/router"
 	pb "github.com/stack-labs/stack-rpc/router/proto"
+	"github.com/stack-labs/stack-rpc/util/errors"
 )
 
 type Table struct {

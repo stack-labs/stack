@@ -10,10 +10,10 @@ import (
 	"github.com/stack-labs/stack-rpc/server/mucp"
 
 	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/errors"
 	"github.com/stack-labs/stack-rpc/pkg/metadata"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/util/errors"
 	"github.com/stack-labs/stack-rpc/util/log"
 )
 

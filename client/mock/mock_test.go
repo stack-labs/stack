@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/util/errors"
 )
 
 func TestClient(t *testing.T) {

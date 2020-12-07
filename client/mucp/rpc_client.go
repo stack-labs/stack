@@ -18,11 +18,11 @@ import (
 	"github.com/stack-labs/stack-rpc/client/selector"
 	"github.com/stack-labs/stack-rpc/codec"
 	raw "github.com/stack-labs/stack-rpc/codec/bytes"
-	"github.com/stack-labs/stack-rpc/errors"
 	"github.com/stack-labs/stack-rpc/pkg/metadata"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/transport"
 	"github.com/stack-labs/stack-rpc/util/buf"
+	"github.com/stack-labs/stack-rpc/util/errors"
 )
 
 type rpcClient struct {

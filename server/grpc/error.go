@@ -3,7 +3,7 @@ package grpc
 import (
 	"net/http"
 
-	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/util/errors"
 	"google.golang.org/grpc/codes"
 )
 

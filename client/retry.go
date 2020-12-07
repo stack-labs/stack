@@ -3,7 +3,7 @@ package client
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/util/errors"
 )
 
 // note that returning either false or a non-nil error will result in the call not being retried

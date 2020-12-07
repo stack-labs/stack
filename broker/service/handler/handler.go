@@ -5,7 +5,7 @@ import (
 
 	"github.com/stack-labs/stack-rpc/broker"
 	pb "github.com/stack-labs/stack-rpc/broker/service/proto"
-	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/util/errors"
 	"github.com/stack-labs/stack-rpc/util/log"
 )
 

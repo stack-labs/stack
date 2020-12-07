@@ -8,9 +8,9 @@ import (
 
 	"github.com/stack-labs/stack-rpc/codec"
 	raw "github.com/stack-labs/stack-rpc/codec/bytes"
-	"github.com/stack-labs/stack-rpc/errors"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack-rpc/util/errors"
 )
 
 const (

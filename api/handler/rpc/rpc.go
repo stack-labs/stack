@@ -18,9 +18,9 @@ import (
 	"github.com/stack-labs/stack-rpc/codec"
 	"github.com/stack-labs/stack-rpc/codec/jsonrpc"
 	"github.com/stack-labs/stack-rpc/codec/protorpc"
-	"github.com/stack-labs/stack-rpc/errors"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/util/ctx"
+	"github.com/stack-labs/stack-rpc/util/errors"
 )
 
 const (

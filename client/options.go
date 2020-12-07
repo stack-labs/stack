@@ -4,6 +4,16 @@ import (
 	"context"
 	"time"
 
+	registry2 "github.com/stack-labs/stack-rpc/client/selector/registry"
+
+	codecu "github.com/stack-labs/stack-rpc/util/codec"
+
+	httpt "github.com/stack-labs/stack-rpc/transport/http"
+
+	"github.com/stack-labs/stack-rpc/broker/http"
+
+	"github.com/stack-labs/stack-rpc/registry/mdns"
+
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/client/selector"
 	"github.com/stack-labs/stack-rpc/codec"
@@ -85,7 +95,7 @@ type RequestOptions struct {
 	Context context.Context
 }
 
-func newOptions(options ...Option) Options {
+func NewOptions(options ...Option) Options {
 	opts := Options{
 		Codecs: make(map[string]codec.NewCodec),
 		CallOptions: CallOptions{
@@ -104,25 +114,25 @@ func newOptions(options ...Option) Options {
 	}
 
 	if len(opts.ContentType) == 0 {
-		opts.ContentType = DefaultContentType
+		opts.ContentType = codecu.DefaultContentType
 	}
 
 	if opts.Broker == nil {
-		opts.Broker = broker.DefaultBroker
+		opts.Broker = http.NewBroker()
 	}
 
 	if opts.Registry == nil {
-		opts.Registry = registry.DefaultRegistry
+		opts.Registry = mdns.NewRegistry()
 	}
 
 	if opts.Selector == nil {
-		opts.Selector = selector.NewSelector(
+		opts.Selector = registry2.NewSelector(
 			selector.Registry(opts.Registry),
 		)
 	}
 
 	if opts.Transport == nil {
-		opts.Transport = transport.DefaultTransport
+		opts.Transport = httpt.NewTransport()
 	}
 
 	if opts.Context == nil {

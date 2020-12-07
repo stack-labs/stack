@@ -17,7 +17,7 @@ import (
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/codec"
 	"github.com/stack-labs/stack-rpc/errors"
-	meta "github.com/stack-labs/stack-rpc/metadata"
+	meta "github.com/stack-labs/stack-rpc/pkg/metadata"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/util/addr"

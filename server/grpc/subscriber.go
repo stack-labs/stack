@@ -7,9 +7,11 @@ import (
 	"runtime/debug"
 	"strings"
 
+	"github.com/stack-labs/stack-rpc/server/mucp"
+
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/errors"
-	"github.com/stack-labs/stack-rpc/metadata"
+	"github.com/stack-labs/stack-rpc/pkg/metadata"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/util/log"
@@ -64,7 +66,7 @@ func newSubscriber(topic string, sub interface{}, opts ...server.SubscriberOptio
 
 		endpoints = append(endpoints, &registry.Endpoint{
 			Name:    "Func",
-			Request: extractSubValue(typ),
+			Request: mucp.ExtractSubValue(typ),
 			Metadata: map[string]string{
 				"topic":      topic,
 				"subscriber": "true",
@@ -92,7 +94,7 @@ func newSubscriber(topic string, sub interface{}, opts ...server.SubscriberOptio
 
 			endpoints = append(endpoints, &registry.Endpoint{
 				Name:    name + "." + method.Name,
-				Request: extractSubValue(method.Type),
+				Request: mucp.ExtractSubValue(method.Type),
 				Metadata: map[string]string{
 					"topic":      topic,
 					"subscriber": "true",

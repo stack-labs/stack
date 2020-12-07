@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/registry/mdns"
 )
 
 // Options are router options
@@ -79,7 +80,7 @@ func DefaultOptions() Options {
 		Id:        uuid.New().String(),
 		Address:   DefaultAddress,
 		Network:   DefaultNetwork,
-		Registry:  registry.DefaultRegistry,
+		Registry:  mdns.NewRegistry(),
 		Advertise: AdvertiseLocal,
 	}
 }

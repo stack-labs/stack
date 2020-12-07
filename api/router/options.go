@@ -4,6 +4,7 @@ import (
 	"github.com/stack-labs/stack-rpc/api/resolver"
 	"github.com/stack-labs/stack-rpc/api/resolver/stack"
 	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/registry/mdns"
 )
 
 type Options struct {
@@ -18,7 +19,7 @@ type Option func(o *Options)
 func NewOptions(opts ...Option) Options {
 	options := Options{
 		Handler:  "meta",
-		Registry: registry.NewRegistry(),
+		Registry: mdns.NewRegistry(),
 	}
 
 	for _, o := range opts {

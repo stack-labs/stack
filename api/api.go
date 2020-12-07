@@ -5,8 +5,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
+
+	"github.com/stack-labs/stack-rpc/registry"
 )
 
 // Endpoint is a mapping between an RPC method and HTTP endpoint

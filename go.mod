@@ -9,7 +9,6 @@ require (
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
 	github.com/bwmarrin/discordgo v0.20.1
 	github.com/fsnotify/fsnotify v1.4.9
-	github.com/fsouza/go-dockerclient v1.6.5
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-acme/lego/v3 v3.1.0
 	github.com/go-log/log v0.1.0
@@ -35,6 +34,7 @@ require (
 	github.com/nlopes/slack v0.6.0
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
 	github.com/pkg/errors v0.8.1
+	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/stretchr/testify v1.4.0
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897
 	golang.org/x/net v0.0.0-20200707034311-ab3426394381
@@ -44,7 +44,6 @@ require (
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v9 v9.31.0
-	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/urfave/cli.v1 v1.20.0
 	gopkg.in/yaml.v2 v2.3.0
 )

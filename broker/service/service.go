@@ -5,6 +5,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/stack-labs/stack-rpc/client/mucp"
+
 	"github.com/stack-labs/stack-rpc/broker"
 	pb "github.com/stack-labs/stack-rpc/broker/service/proto"
 	"github.com/stack-labs/stack-rpc/client"
@@ -126,7 +128,7 @@ func NewBroker(opts ...broker.Option) broker.Broker {
 
 	return &serviceBroker{
 		Addrs:   addrs,
-		Client:  pb.NewBrokerService(DefaultName, client.DefaultClient),
+		Client:  pb.NewBrokerService(DefaultName, mucp.NewClient()),
 		options: options,
 	}
 }

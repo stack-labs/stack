@@ -8,6 +8,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/stack-labs/stack-rpc/client/mucp"
+
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/router"
 	pb "github.com/stack-labs/stack-rpc/router/proto"
@@ -36,7 +38,7 @@ func NewRouter(opts ...router.Option) router.Router {
 	}
 
 	// NOTE: might need some client opts here
-	cli := client.DefaultClient
+	cli := mucp.NewClient()
 
 	// set options client
 	if options.Client != nil {

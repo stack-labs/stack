@@ -5,14 +5,16 @@ package debug
 
 import (
 	fmt "fmt"
-	proto "github.com/golang/protobuf/proto"
 	math "math"
-)
 
-import (
 	context "context"
+
+	proto "github.com/golang/protobuf/proto"
+
 	api "github.com/stack-labs/stack-rpc/api"
+
 	client "github.com/stack-labs/stack-rpc/client"
+
 	server "github.com/stack-labs/stack-rpc/server"
 )
 

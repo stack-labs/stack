@@ -1,16 +1,31 @@
 # Stack-RPC
 
-**1.0.0版本开发中，预计11月底发布，敬请期待！**
-
 Stack-RPC旨在为中国开发者提供通用的分布式服务微服务开发库（比如配置管理、服务发现、熔断降级、路由、服务代理、安全、主从选举等）。基于Stack，开发者可以快速投入自身的业务开发中，只需要极少的学习成本。Stack适用于中小规模的开发场景，她可以轻易在桌面电脑、服务器、容器集群中搭建分布式服务。
 
-项目于2020年11月2日正式成立，第一版本基于Go-Micro的1.18修改。
+## 开发手册
 
-## 安装
+[开发文档](https://stacklabs.cn/docs/stack-rpc/introduce-cn)
 
-```
-go get github.com/stack-labs/stack-rpc@v1.0.0-rc2
-```
+[示例](https://github.com/stack-labs/stack-rpc-tutorials)
+
+[插件库](https://github.com/stack-labs/stack-rpc-plugins)
+
+## 交流
+
+<div style="float:left">
+<table>
+    <tr>
+        <td>公众号</td>
+        <td>讨论群</td>
+    </tr>
+    <tr>
+        <td><img alt="微信搜索公众号：StackHQ" src="https://github.com/stack-labs/Notice/raw/master/donation/wx_qrcode.jpg" width="100%"> </td>
+        <td><img alt="微信搜索公众号：MicroHQ，备注来源：“github”" src="https://github.com/stack-labs/Notice/raw/master/donation/wx_group_v1.png" width="58%"> </td>
+    </tr>
+</table>
+</div>
+
+> 讨论群：微信搜索MicroHQ，备注来源：“github”
 
 ## 简单易用
 
@@ -18,9 +33,9 @@ go get github.com/stack-labs/stack-rpc@v1.0.0-rc2
 
 ```
 func main() {
-	service := stack.NewService(stack.Name("stack.rpc.greeter"))
-	service.Init()
-	service.Run()
+  service := stack.NewService(stack.Name("stack.rpc.greeter"))
+  service.Init()
+  service.Run()
 }
 ```
 

@@ -1,4 +1,4 @@
-package cache
+package registry
 
 import "github.com/stack-labs/stack-rpc/registry"
 

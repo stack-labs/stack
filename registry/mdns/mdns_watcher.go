@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	registry2 "github.com/stack-labs/stack-rpc/registry"
-
 	"github.com/stack-labs/stack-rpc/pkg/mdns"
+	registry2 "github.com/stack-labs/stack-rpc/registry"
 )
 
 type mdnsWatcher struct {

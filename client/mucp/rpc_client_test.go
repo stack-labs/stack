@@ -8,9 +8,9 @@ import (
 	"github.com/stack-labs/stack-rpc/client"
 
 	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/errors"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/registry/memory"
+	"github.com/stack-labs/stack-rpc/util/errors"
 )
 
 var (

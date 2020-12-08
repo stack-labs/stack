@@ -3,9 +3,9 @@ package grpc
 import (
 	"runtime/debug"
 
-	"github.com/stack-labs/stack-rpc/errors"
 	"github.com/stack-labs/stack-rpc/transport"
 	pb "github.com/stack-labs/stack-rpc/transport/grpc/proto"
+	"github.com/stack-labs/stack-rpc/util/errors"
 	"github.com/stack-labs/stack-rpc/util/log"
 	"google.golang.org/grpc/peer"
 )

@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/errors"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/registry/service"
 	pb "github.com/stack-labs/stack-rpc/registry/service/proto"
+	"github.com/stack-labs/stack-rpc/util/errors"
 )
 
 type Registry struct {

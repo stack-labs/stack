@@ -9,8 +9,8 @@ import (
 	api "github.com/stack-labs/stack-rpc/api/proto"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/errors"
 	"github.com/stack-labs/stack-rpc/util/ctx"
+	"github.com/stack-labs/stack-rpc/util/errors"
 )
 
 type apiHandler struct {

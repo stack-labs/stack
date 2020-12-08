@@ -13,14 +13,14 @@ Stack-RPC旨在为中国开发者提供通用的分布式服务微服务开发�
 ## 交流
 
 <div style="float:left">
-<table>
+<table width="60%">
     <tr>
         <td>公众号</td>
         <td>讨论群</td>
     </tr>
     <tr>
-        <td><img alt="微信搜索公众号：StackHQ" src="https://github.com/stack-labs/Notice/raw/master/donation/wx_qrcode.jpg" width="100%"> </td>
-        <td><img alt="微信搜索公众号：MicroHQ，备注来源：“github”" src="https://github.com/stack-labs/Notice/raw/master/donation/wx_group_v1.png" width="58%"> </td>
+        <td><img alt="微信搜索公众号：StackHQ" src="https://github.com/stack-labs/Notice/raw/master/donation/wx_qrcode.jpg"> </td>
+        <td><img alt="微信搜索公众号：MicroHQ，备注来源：“github”" src="https://github.com/stack-labs/Notice/raw/master/donation/wx_group_v1.jpg"> </td>
     </tr>
 </table>
 </div>

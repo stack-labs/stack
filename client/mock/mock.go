@@ -10,7 +10,7 @@ import (
 	"github.com/stack-labs/stack-rpc/client/mucp"
 
 	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/util/errors"
 )
 
 var (

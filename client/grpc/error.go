@@ -1,7 +1,7 @@
 package grpc
 
 import (
-	"github.com/stack-labs/stack-rpc/errors"
+	"github.com/stack-labs/stack-rpc/util/errors"
 	"google.golang.org/grpc/status"
 )
 

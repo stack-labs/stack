@@ -10,10 +10,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/registry"
-
 	"github.com/google/uuid"
 	"github.com/stack-labs/stack-rpc/pkg/mdns"
+	"github.com/stack-labs/stack-rpc/registry"
 )
 
 var (

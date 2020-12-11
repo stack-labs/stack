@@ -9,6 +9,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/stack-labs/stack-rpc/env"
+
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/broker/http"
 	"github.com/stack-labs/stack-rpc/client"
@@ -55,12 +57,12 @@ func (g *grpcClient) next(request client.Request, opts client.CallOptions) (sele
 	service := request.Service()
 
 	// get proxy
-	if prx := os.Getenv("STACKPROXY"); len(prx) > 0 {
+	if prx := os.Getenv(env.StackProxy); len(prx) > 0 {
 		service = prx
 	}
 
 	// get proxy address
-	if prx := os.Getenv("STACKPROXY_ADDRESS"); len(prx) > 0 {
+	if prx := os.Getenv(env.StackProxyAddress); len(prx) > 0 {
 		opts.Address = []string{prx}
 	}
 
@@ -543,7 +545,7 @@ func (g *grpcClient) Publish(ctx context.Context, p client.Message, opts ...clie
 	topic := p.Topic()
 
 	// get proxy topic
-	if prx := os.Getenv("STACK_PROXY"); len(prx) > 0 {
+	if prx := os.Getenv(env.StackProxy); len(prx) > 0 {
 		options.Exchange = prx
 	}
 

@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"time"
+
+	"github.com/stack-labs/stack-rpc/env"
 )
 
 var (
@@ -49,7 +51,7 @@ const (
 )
 
 func init() {
-	switch os.Getenv("STACK_LOG_LEVEL") {
+	switch os.Getenv(env.StackLogLevel) {
 	case "trace":
 		DefaultLevel = LevelTrace
 	case "debug":

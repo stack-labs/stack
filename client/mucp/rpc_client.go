@@ -8,6 +8,8 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/stack-labs/stack-rpc/env"
+
 	codecu "github.com/stack-labs/stack-rpc/util/codec"
 
 	"github.com/stack-labs/stack-rpc/client"
@@ -323,12 +325,12 @@ func (r *rpcClient) Options() client.Options {
 // hasProxy checks if we have proxy set in the environment
 func (r *rpcClient) hasProxy() bool {
 	// get proxy
-	if prx := os.Getenv("STACK_PROXY"); len(prx) > 0 {
+	if prx := os.Getenv(env.StackProxy); len(prx) > 0 {
 		return true
 	}
 
 	// get proxy address
-	if prx := os.Getenv("STACK_PROXY_ADDRESS"); len(prx) > 0 {
+	if prx := os.Getenv(env.StackProxyAddress); len(prx) > 0 {
 		return true
 	}
 
@@ -340,12 +342,12 @@ func (r *rpcClient) next(request client.Request, opts client.CallOptions) (selec
 	service := request.Service()
 
 	// get proxy
-	if prx := os.Getenv("STACK_PROXY"); len(prx) > 0 {
+	if prx := os.Getenv(env.StackProxy); len(prx) > 0 {
 		service = prx
 	}
 
 	// get proxy address
-	if prx := os.Getenv("STACK_PROXY_ADDRESS"); len(prx) > 0 {
+	if prx := os.Getenv(env.StackProxyAddress); len(prx) > 0 {
 		opts.Address = []string{prx}
 	}
 
@@ -606,7 +608,7 @@ func (r *rpcClient) Publish(ctx context.Context, msg client.Message, opts ...cli
 	topic := msg.Topic()
 
 	// get proxy
-	if prx := os.Getenv("STACK_PROXY"); len(prx) > 0 {
+	if prx := os.Getenv(env.StackProxy); len(prx) > 0 {
 		options.Exchange = prx
 	}
 

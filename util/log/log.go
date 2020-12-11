@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/stack-labs/stack-rpc/env"
+
 	"github.com/go-log/log"
 	golog "github.com/go-log/log/log"
 )
@@ -33,7 +35,7 @@ var (
 )
 
 func init() {
-	switch os.Getenv("STACK_LOG_LEVEL") {
+	switch os.Getenv(env.StackLogLevel) {
 	case "trace":
 		level = LevelTrace
 	case "debug":

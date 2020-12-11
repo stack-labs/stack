@@ -10,11 +10,13 @@ import (
 	"sync"
 	"time"
 
+	"github.com/stack-labs/stack-rpc/env"
+
 	dlog "github.com/stack-labs/stack-rpc/debug/log"
 )
 
 func init() {
-	lvl, err := GetLevel(os.Getenv("STACK_LOG_LEVEL"))
+	lvl, err := GetLevel(os.Getenv(env.StackLogLevel))
 	if err != nil {
 		lvl = InfoLevel
 	}

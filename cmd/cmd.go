@@ -359,6 +359,11 @@ func (c *cmd) before(ctx *cli.Context) error {
 		serverOpts = append(serverOpts, server.Metadata(metadata))
 	}
 
+	// then logger
+	if err := (*c.opts.Logger).Init(); err != nil {
+		log.Fatalf("Error configuring logger: %v", err)
+	}
+
 	// todo we dont need to init so many times
 	if len(conf.Broker.Address) > 0 {
 		if err := (*c.opts.Broker).Init(broker.Addrs(strings.Split(conf.Broker.Address, ",")...)); err != nil {

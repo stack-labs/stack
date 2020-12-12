@@ -5,7 +5,7 @@
 - release binary
     - [releases](https://github.com/stack-labs/stack-rpc/releases)
 - go get
-    - `go get -u github.com/stack-labs/stack-rpc/util/istioctl`
+    - `go get -u github.com/stack-labs/stack-rpc/util/stackctl`
 
 ## example
 

@@ -7,6 +7,8 @@ import (
 	"sync"
 	"syscall"
 
+	"github.com/stack-labs/stack-rpc/env"
+
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/debug/profile"
@@ -53,7 +55,7 @@ func (s *service) Init(opts ...Option) error {
 
 	s.once.Do(func() {
 		// setup the plugins
-		for _, p := range strings.Split(os.Getenv("STACK_PLUGIN"), ",") {
+		for _, p := range strings.Split(os.Getenv(env.StackPlugin), ",") {
 			if len(p) == 0 {
 				continue
 			}
@@ -163,7 +165,7 @@ func (s *service) Run() error {
 
 	// start the profiler
 	// TODO: set as an option to the service, don't just use pprof
-	if prof := os.Getenv("STACK_DEBUG_PROFILE"); len(prof) > 0 {
+	if prof := os.Getenv(env.StackDebugProfile); len(prof) > 0 {
 		service := s.opts.Server.Options().Name
 		version := s.opts.Server.Options().Version
 		id := s.opts.Server.Options().Id

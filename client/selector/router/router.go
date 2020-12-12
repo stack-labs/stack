@@ -7,6 +7,8 @@ import (
 	"sort"
 	"sync"
 
+	"github.com/stack-labs/stack-rpc/env"
+
 	"github.com/stack-labs/stack-rpc/client/mucp"
 
 	"github.com/stack-labs/stack-rpc/registry/mdns"
@@ -227,8 +229,8 @@ func NewSelector(opts ...selector.Option) selector.Selector {
 
 	// get the router from env vars if its a remote service
 	remote := true
-	routerName := os.Getenv("STACK_ROUTER")
-	routerAddress := os.Getenv("STACK_ROUTER_ADDRESS")
+	routerName := os.Getenv(env.StackRouter)
+	routerAddress := os.Getenv(env.StackRouterAddress)
 
 	// start the router advertisements if we're running it locally
 	if len(routerName) == 0 && len(routerAddress) == 0 {

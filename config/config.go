@@ -3,39 +3,51 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"reflect"
+	"runtime"
 	"strings"
 
 	"github.com/stack-labs/stack-rpc/pkg/config"
 	"github.com/stack-labs/stack-rpc/pkg/config/reader"
+	"github.com/stack-labs/stack-rpc/util/log"
+)
+
+var (
+	// Define the tag name for setting autowired value of Options
+	// sc equals stack-config :)
+	// todo support custom tagName
+	DefaultOptionsTagName = "sc"
+
+	// holds all the Options
+	optionsPool map[string]interface{}
 )
 
 type Broker struct {
-	Address string `json:"address"`
-	Name    string `json:"name" `
+	Address string `json:"address" sc:"address"`
+	Name    string `json:"name" sc:"address"`
 }
 
 type Pool struct {
-	Size json.Number `json:"size"`
-	TTL  json.Number `json:"ttl"`
+	Size json.Number `json:"size" sc:"size"`
+	TTL  json.Number `json:"ttl" sc:"ttl"`
 }
 
 type ClientRequest struct {
-	Retries json.Number `json:"retries"`
-	Timeout json.Number `json:"timeout"`
+	Retries json.Number `json:"retries" sc:"retries"`
+	Timeout json.Number `json:"timeout" sc:"timeout"`
 }
 
 type Client struct {
-	Protocol string        `json:"protocol"`
-	Pool     Pool          `json:"pool"`
-	Request  ClientRequest `json:"request"`
+	Protocol string        `json:"protocol" sc:"protocol"`
+	Pool     Pool          `json:"pool" sc:"pool"`
+	Request  ClientRequest `json:"request" sc:"request"`
 }
 
 type Registry struct {
-	Address  string      `json:"address"`
-	Interval json.Number `json:"interval"`
-	Name     string      `json:"name"`
-	TTL      json.Number `json:"ttl"`
+	Address  string      `json:"address" sc:"address"`
+	Interval json.Number `json:"interval" sc:"interval"`
+	Name     string      `json:"name" sc:"name"`
+	TTL      json.Number `json:"ttl" sc:"ttl"`
 }
 
 type Metadata []string
@@ -52,39 +64,39 @@ func (m Metadata) Value(k string) string {
 }
 
 type Server struct {
-	Address   string   `json:"address"`
-	Advertise string   `json:"advertise"`
-	ID        string   `json:"id"`
-	Metadata  Metadata `json:"metadata"`
-	Name      string   `json:"name"`
-	Protocol  string   `json:"protocol"`
-	Version   string   `json:"version"`
+	Address   string   `json:"address" sc:"address"`
+	Advertise string   `json:"advertise" sc:"advertise"`
+	ID        string   `json:"id" sc:"id"`
+	Metadata  Metadata `json:"metadata" sc:"metadata"`
+	Name      string   `json:"name" sc:"name"`
+	Protocol  string   `json:"protocol" sc:"protocol"`
+	Version   string   `json:"version" sc:"version"`
 }
 
 type Selector struct {
-	Name string `json:"name"`
+	Name string `json:"name" sc:"name"`
 }
 
 type Transport struct {
-	Name    string `json:"name"`
-	Address string `json:"address"`
+	Name    string `json:"name" sc:"name"`
+	Address string `json:"address" sc:"address"`
 }
 
 type Logger struct {
-	Name  string `json:"name"`
-	Level string `json:"level"`
+	Name  string `json:"name" sc:"name"`
+	Level string `json:"level" sc:"level"`
 }
 
 type Stack struct {
-	Broker    Broker    `json:"broker"`
-	Client    Client    `json:"client"`
-	Profile   string    `json:"profile"`
-	Registry  Registry  `json:"registry"`
-	Runtime   string    `json:"runtime"`
-	Server    Server    `json:"server"`
-	Selector  Selector  `json:"selector"`
-	Transport Transport `json:"transport"`
-	Logger    Logger    `json:"logger"`
+	Broker    Broker    `json:"broker" sc:"broker"`
+	Client    Client    `json:"client" sc:"client"`
+	Profile   string    `json:"profile" sc:"profile"`
+	Registry  Registry  `json:"registry" sc:"registry"`
+	Runtime   string    `json:"runtime" sc:"runtime"`
+	Server    Server    `json:"server" sc:"server"`
+	Selector  Selector  `json:"selector" sc:"selector"`
+	Transport Transport `json:"transport" sc:"transport"`
+	Logger    Logger    `json:"logger" sc:"logger"`
 }
 
 type Value struct {
@@ -100,19 +112,6 @@ type Config interface {
 type stackConfig struct {
 	config config.Config
 	opts   Options
-}
-
-// Init Stack's Config component
-// Any developer Don't use this Func anywhere. NewConfig works for Stack Framework only
-func NewConfig(opts ...Option) Config {
-	var o = Options{
-		Watch: true,
-	}
-	for _, opt := range opts {
-		opt(&o)
-	}
-
-	return &stackConfig{opts: o}
 }
 
 func (c *stackConfig) Init(opts ...Option) (err error) {
@@ -165,4 +164,31 @@ func (c *stackConfig) Scan(v interface{}) error {
 
 func (c *stackConfig) Close() error {
 	return c.config.Close()
+}
+
+// Init Stack's Config component
+// Any developer Don't use this Func anywhere. NewConfig works for Stack Framework only
+func NewConfig(opts ...Option) Config {
+	var o = Options{
+		Watch: true,
+	}
+	for _, opt := range opts {
+		opt(&o)
+	}
+
+	return &stackConfig{opts: o}
+}
+
+func RegisterOptions(options *interface{}) {
+	val := reflect.ValueOf(options)
+	if val.Kind() != reflect.Ptr {
+		log.Error("options must be a pointer")
+		return
+	}
+
+	_, file, line, _ := runtime.Caller(0)
+
+	key := fmt.Sprintf("%s%d", file, line)
+
+	optionsPool[key] = val
 }

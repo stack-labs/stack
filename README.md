@@ -2,6 +2,10 @@
 
 Stack-RPC旨在为中国开发者提供通用的分布式服务微服务开发库（比如配置管理、服务发现、熔断降级、路由、服务代理、安全、主从选举等）。基于Stack，开发者可以快速投入自身的业务开发中，只需要极少的学习成本。Stack适用于中小规模的开发场景，她可以轻易在桌面电脑、服务器、容器集群中搭建分布式服务。
 
+最新版本：[v1.0.0](https://github.com/stack-labs/stack-rpc/releases/tag/v1.0.0)
+
+开发计划：[Projects](https://github.com/stack-labs/stack-rpc/projects)
+
 ## 开发手册
 
 [开发文档](https://stacklabs.cn/docs/stack-rpc/introduce-cn)
@@ -19,8 +23,8 @@ Stack-RPC旨在为中国开发者提供通用的分布式服务微服务开发�
         <td>讨论群</td>
     </tr>
     <tr>
-        <td><img alt="微信搜索公众号：StackHQ" src="https://github.com/stack-labs/Notice/raw/master/donation/wx_qrcode.jpg"> </td>
-        <td><img alt="微信搜索公众号：MicroHQ，备注来源：“github”" src="https://github.com/stack-labs/Notice/raw/master/donation/wx_group_v1.jpg"> </td>
+        <td width="270px"><img alt="微信搜索公众号：StackHQ" src="https://github.com/stack-labs/Notice/raw/master/donation/wx_qrcode.jpg"> </td>
+        <td width="270px"><img alt="微信搜索公众号：MicroHQ，备注来源：“github”" src="https://github.com/stack-labs/Notice/raw/master/donation/wx_group_v1.jpg"> </td>
     </tr>
 </table>
 </div>

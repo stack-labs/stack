@@ -16,10 +16,11 @@ var (
 	// Define the tag name for setting autowired value of Options
 	// sc equals stack-config :)
 	// todo support custom tagName
-	DefaultOptionsTagName = "sc"
+	DefaultOptionsTagName     = "sc"
+	DefaultHierarchySeparator = "."
 
 	// holds all the Options
-	optionsPool map[string]interface{}
+	optionsPool map[string]reflect.Value
 )
 
 type Broker struct {
@@ -147,7 +148,14 @@ func (c *stackConfig) Init(opts ...Option) (err error) {
 }
 
 func (c *stackConfig) Get(path ...string) reader.Value {
-	return c.config.Get(path...)
+	tempPath := path
+	if len(path) == 1 {
+		if strings.Contains(path[0], DefaultHierarchySeparator) {
+			tempPath = strings.Split(path[0], DefaultHierarchySeparator)
+		}
+	}
+
+	return c.config.Get(tempPath...)
 }
 
 func (c *stackConfig) Bytes() []byte {

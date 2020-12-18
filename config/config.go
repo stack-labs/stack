@@ -1,7 +1,7 @@
 package config
 
 import (
-	"encoding/json"
+	"context"
 	"fmt"
 	"reflect"
 	"runtime"
@@ -20,22 +20,22 @@ var (
 	DefaultHierarchySeparator = "."
 
 	// holds all the Options
-	optionsPool map[string]reflect.Value
+	optionsPool = make(map[string]reflect.Value)
 )
 
 type Broker struct {
 	Address string `json:"address" sc:"address"`
-	Name    string `json:"name" sc:"address"`
+	Name    string `json:"name" sc:"name"`
 }
 
 type Pool struct {
-	Size json.Number `json:"size" sc:"size"`
-	TTL  json.Number `json:"ttl" sc:"ttl"`
+	Size int `json:"size" sc:"size"`
+	TTL  int `json:"ttl" sc:"ttl"`
 }
 
 type ClientRequest struct {
-	Retries json.Number `json:"retries" sc:"retries"`
-	Timeout json.Number `json:"timeout" sc:"timeout"`
+	Retries int    `json:"retries" sc:"retries"`
+	Timeout string `json:"timeout" sc:"timeout"`
 }
 
 type Client struct {
@@ -45,10 +45,10 @@ type Client struct {
 }
 
 type Registry struct {
-	Address  string      `json:"address" sc:"address"`
-	Interval json.Number `json:"interval" sc:"interval"`
-	Name     string      `json:"name" sc:"name"`
-	TTL      json.Number `json:"ttl" sc:"ttl"`
+	Address  string `json:"address" sc:"address"`
+	Interval int    `json:"interval" sc:"interval"`
+	Name     string `json:"name" sc:"name"`
+	TTL      int    `json:"ttl" sc:"ttl"`
 }
 
 type Metadata []string
@@ -89,10 +89,10 @@ type Logger struct {
 }
 
 type Stack struct {
+	Registry  Registry  `json:"registry" sc:"registry"`
 	Broker    Broker    `json:"broker" sc:"broker"`
 	Client    Client    `json:"client" sc:"client"`
 	Profile   string    `json:"profile" sc:"profile"`
-	Registry  Registry  `json:"registry" sc:"registry"`
 	Runtime   string    `json:"runtime" sc:"runtime"`
 	Server    Server    `json:"server" sc:"server"`
 	Selector  Selector  `json:"selector" sc:"selector"`
@@ -101,7 +101,7 @@ type Stack struct {
 }
 
 type Value struct {
-	Stack Stack `json:"stack"`
+	Stack Stack `json:"stack" sc:"stack"`
 }
 
 type Config interface {
@@ -118,6 +118,10 @@ type stackConfig struct {
 func (c *stackConfig) Init(opts ...Option) (err error) {
 	for _, opt := range opts {
 		opt(&c.opts)
+	}
+
+	if c.opts.Context == nil {
+		c.opts.Context = context.Background()
 	}
 
 	defer func() {
@@ -144,6 +148,9 @@ func (c *stackConfig) Init(opts ...Option) (err error) {
 
 	// cache c as sugar
 	_sugar = c
+	// set the autowired values
+	injectAutowired(c.opts.Context)
+
 	return nil
 }
 
@@ -187,16 +194,18 @@ func NewConfig(opts ...Option) Config {
 	return &stackConfig{opts: o}
 }
 
-func RegisterOptions(options *interface{}) {
-	val := reflect.ValueOf(options)
-	if val.Kind() != reflect.Ptr {
-		log.Error("options must be a pointer")
-		return
+func RegisterOptions(options ...interface{}) {
+	for _, option := range options {
+		val := reflect.ValueOf(option)
+		if val.Kind() != reflect.Ptr {
+			log.Error("options must be a pointer")
+			return
+		}
+
+		_, file, line, _ := runtime.Caller(1)
+
+		key := fmt.Sprintf("%s#L%d", file, line)
+
+		optionsPool[key] = val
 	}
-
-	_, file, line, _ := runtime.Caller(0)
-
-	key := fmt.Sprintf("%s%d", file, line)
-
-	optionsPool[key] = val
 }

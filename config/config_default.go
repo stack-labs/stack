@@ -12,12 +12,12 @@ var (
 			Client: Client{
 				Protocol: "",
 				Pool: Pool{
-					Size: "",
-					TTL:  "",
+					Size: 10,
+					TTL:  10,
 				},
 				Request: ClientRequest{
-					Retries: "",
-					Timeout: "",
+					Retries: 1,
+					Timeout: "2s",
 				},
 			},
 			Profile: "",

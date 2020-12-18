@@ -8,6 +8,10 @@ type Options struct {
 	Sources []source.Source
 	Storage bool
 	Watch   bool
+	// HierarchyMerge merges the query args to one
+	// eg. Get("a","b","c") can be used as Get("a.b.c")
+	// the default is false
+	HierarchyMerge bool
 }
 
 type Option func(o *Options)
@@ -27,5 +31,11 @@ func Storage(s bool) Option {
 func Watch(w bool) Option {
 	return func(o *Options) {
 		o.Watch = w
+	}
+}
+
+func HierarchyMerge(h bool) Option {
+	return func(o *Options) {
+		o.HierarchyMerge = h
 	}
 }

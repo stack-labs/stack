@@ -273,3 +273,32 @@ stack:
 		t.Fatal(fmt.Errorf("broker name [%s] should be 'http'", conf.Stack.Broker.Name))
 	}
 }
+
+func TestConfigHierarchyMerge(t *testing.T) {
+	path := filepath.Join(os.TempDir(), "file.yaml")
+	fh, err := os.Create(path)
+	if err != nil {
+		t.Error(fmt.Errorf("Config create tmp yml error: %s ", err))
+	}
+	_, err = fh.Write(ymlFile)
+	if err != nil {
+		t.Error(fmt.Errorf("Config write tmp yml error: %s ", err))
+	}
+	defer func() {
+		fh.Close()
+		os.Remove(path)
+	}()
+
+	c := config.NewConfig(config.Source(file.NewSource(file.WithPath(path))), config.HierarchyMerge(true))
+	if err = c.Init(); err != nil {
+		t.Error(fmt.Errorf("Config init error: %s ", err))
+	}
+
+	if c.Get("stack.broker.name").String("") != "http" {
+		t.Fatal(fmt.Errorf("stack.broker.name should be [http], not: [%s]", c.Get("stack.broker.name").String("")))
+	}
+
+	if c.Get("stack", "broker", "name").String("") != "http" {
+		t.Fatal(fmt.Errorf("stack broker name should be [http], not: [%s]", c.Get("stack", "broker", "name").String("")))
+	}
+}

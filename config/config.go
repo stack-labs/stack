@@ -1,6 +1,7 @@
 package config
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"reflect"
@@ -16,15 +17,16 @@ var (
 	// Define the tag name for setting autowired value of Options
 	// sc equals stack-config :)
 	// todo support custom tagName
-	DefaultOptionsTagName = "sc"
+	DefaultOptionsTagName     = "sc"
+	DefaultHierarchySeparator = "."
 
 	// holds all the Options
-	optionsPool map[string]interface{}
+	optionsPool = make(map[string]reflect.Value)
 )
 
 type Broker struct {
 	Address string `json:"address" sc:"address"`
-	Name    string `json:"name" sc:"address"`
+	Name    string `json:"name" sc:"name"`
 }
 
 type Pool struct {
@@ -100,7 +102,7 @@ type Stack struct {
 }
 
 type Value struct {
-	Stack Stack `json:"stack"`
+	Stack Stack `json:"stack" sc:"stack"`
 }
 
 type Config interface {
@@ -117,6 +119,10 @@ type stackConfig struct {
 func (c *stackConfig) Init(opts ...Option) (err error) {
 	for _, opt := range opts {
 		opt(&c.opts)
+	}
+
+	if c.opts.Context == nil {
+		c.opts.Context = context.Background()
 	}
 
 	defer func() {
@@ -143,11 +149,21 @@ func (c *stackConfig) Init(opts ...Option) (err error) {
 
 	// cache c as sugar
 	_sugar = c
+	// set the autowired values
+	injectAutowired(c.opts.Context)
+
 	return nil
 }
 
 func (c *stackConfig) Get(path ...string) reader.Value {
-	return c.config.Get(path...)
+	tempPath := path
+	if len(path) == 1 {
+		if strings.Contains(path[0], DefaultHierarchySeparator) {
+			tempPath = strings.Split(path[0], DefaultHierarchySeparator)
+		}
+	}
+
+	return c.config.Get(tempPath...)
 }
 
 func (c *stackConfig) Bytes() []byte {
@@ -179,16 +195,18 @@ func NewConfig(opts ...Option) Config {
 	return &stackConfig{opts: o}
 }
 
-func RegisterOptions(options *interface{}) {
-	val := reflect.ValueOf(options)
-	if val.Kind() != reflect.Ptr {
-		log.Error("options must be a pointer")
-		return
+func RegisterOptions(options ...interface{}) {
+	for _, option := range options {
+		val := reflect.ValueOf(option)
+		if val.Kind() != reflect.Ptr {
+			log.Error("options must be a pointer")
+			return
+		}
+
+		_, file, line, _ := runtime.Caller(0)
+
+		key := fmt.Sprintf("%s%d", file, line)
+
+		optionsPool[key] = val
 	}
-
-	_, file, line, _ := runtime.Caller(0)
-
-	key := fmt.Sprintf("%s%d", file, line)
-
-	optionsPool[key] = val
 }

@@ -1,6 +1,8 @@
 package config
 
 import (
+	"context"
+
 	"github.com/stack-labs/stack-rpc/pkg/config/source"
 )
 
@@ -12,6 +14,8 @@ type Options struct {
 	// eg. Get("a","b","c") can be used as Get("a.b.c")
 	// the default is false
 	HierarchyMerge bool
+
+	Context context.Context
 }
 
 type Option func(o *Options)
@@ -37,5 +41,11 @@ func Watch(w bool) Option {
 func HierarchyMerge(h bool) Option {
 	return func(o *Options) {
 		o.HierarchyMerge = h
+	}
+}
+
+func Context(ctx context.Context) Option {
+	return func(o *Options) {
+		o.Context = ctx
 	}
 }

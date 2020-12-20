@@ -72,7 +72,7 @@ var (
 		cli.StringFlag{
 			Name:   "client_pool_ttl",
 			EnvVar: "STACK_CLIENT_POOL_TTL",
-			Usage:  "Sets the client connection pool ttl. e.g 500ms, 5s, 1m. Default: 1m",
+			Usage:  "Sets the client connection pool ttl in seconds.",
 			Alias:  "stack_client_pool_ttl",
 		},
 		cli.IntFlag{
@@ -300,7 +300,7 @@ func (c *cmd) before(ctx *cli.Context) error {
 	if len(conf.Registry.Name) > 0 && (*c.opts.Registry).String() != conf.Registry.Name {
 		r, ok := plugin.DefaultRegistries[conf.Registry.Name]
 		if !ok {
-			return fmt.Errorf("registry %s not found", conf.Registry)
+			return fmt.Errorf("registry %s not found", conf.Registry.Name)
 		}
 
 		*c.opts.Registry = r()
@@ -415,41 +415,36 @@ func (c *cmd) before(ctx *cli.Context) error {
 		serverOpts = append(serverOpts, server.Advertise(conf.Server.Advertise))
 	}
 
-	registryTTL, _ := conf.Registry.TTL.Int64()
+	registryTTL := conf.Registry.TTL
 	if ttl := time.Duration(registryTTL); ttl >= 0 {
 		serverOpts = append(serverOpts, server.RegisterTTL(ttl*time.Second))
 	}
 
-	registryInterval, _ := conf.Registry.Interval.Int64()
-	if val := time.Duration(registryInterval); val >= 0 {
+	registryInterval := conf.Registry.Interval
+	if val := time.Duration(registryInterval); val > 0 {
 		serverOpts = append(serverOpts, server.RegisterInterval(val*time.Second))
 	}
 
 	// client opts
-	requestRetries, _ := conf.Client.Request.Retries.Int64()
+	requestRetries := conf.Client.Request.Retries
 	if requestRetries >= 0 {
-		clientOpts = append(clientOpts, client.Retries(int(requestRetries)))
+		clientOpts = append(clientOpts, client.Retries(requestRetries))
 	}
 
 	if len(conf.Client.Request.Timeout) > 0 {
-		d, err := time.ParseDuration(conf.Client.Request.Timeout.String())
+		d, err := time.ParseDuration(conf.Client.Request.Timeout)
 		if err != nil {
-			return fmt.Errorf("failed to parse client_request_timeout: %v. it shoud be with unit suffix such as 1s, 2m", conf.Client.Request.Timeout.String())
+			return fmt.Errorf("failed to parse client_request_timeout: %v. it shoud be with unit suffix such as 1s, 2m", conf.Client.Request.Timeout)
 		}
 		clientOpts = append(clientOpts, client.RequestTimeout(d))
 	}
 
-	if size, _ := conf.Client.Pool.Size.Int64(); size > 0 {
-		clientOpts = append(clientOpts, client.PoolSize(int(size)))
+	if conf.Client.Pool.Size > 0 {
+		clientOpts = append(clientOpts, client.PoolSize(conf.Client.Pool.Size))
 	}
 
-	poolTTL := conf.Client.Pool.TTL.String()
-	if len(poolTTL) > 0 {
-		d, err := time.ParseDuration(poolTTL)
-		if err != nil {
-			return fmt.Errorf("failed to parse client_pool_ttl: %v. it shoud be with unit suffix such as 1s, 2m", poolTTL)
-		}
-		clientOpts = append(clientOpts, client.PoolTTL(d))
+	if poolTTL := time.Duration(conf.Client.Pool.TTL); poolTTL > 0 {
+		clientOpts = append(clientOpts, client.PoolTTL(poolTTL*time.Second))
 	}
 
 	// We have some command line opts for the server.

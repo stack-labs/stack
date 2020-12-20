@@ -25,7 +25,7 @@ stack:
       size: 2
       ttl: 200
     request:
-      timeout: 300
+      timeout: 300ms
       retries: 3
   registry:
     name: mdns
@@ -60,6 +60,10 @@ stack:
 		},
 	}
 )
+
+func init() {
+	config.RegisterOptions(&conf)
+}
 
 func TestStackConfig_File(t *testing.T) {
 	path := filepath.Join(os.TempDir(), "file.yaml")
@@ -136,9 +140,6 @@ func TestStackConfig_Config(t *testing.T) {
 		t.Error(fmt.Errorf("Config init error: %s ", err))
 	}
 
-	if err := c.Scan(&conf); err != nil {
-		t.Error(fmt.Errorf("Config scan confi error: %s ", err))
-	}
 	t.Log(string(c.Bytes()))
 	t.Log(conf)
 
@@ -159,12 +160,12 @@ func TestStackConfig_Config(t *testing.T) {
 		t.Fatal(fmt.Errorf("broker address should be [:10086] which is cmd value, not: [%s]", conf.Stack.Broker.Address))
 	}
 
-	if conf.Stack.Client.Pool.TTL != "100" {
-		t.Fatal(fmt.Errorf("client pool ttl should be [100] which is cmd value, not: [%s]", conf.Stack.Client.Pool.TTL))
+	if conf.Stack.Client.Pool.TTL != 100 {
+		t.Fatal(fmt.Errorf("client pool ttl should be [100] which is cmd value, not: [%d]", conf.Stack.Client.Pool.TTL))
 	}
 
-	if conf.Stack.Registry.TTL != "300" {
-		t.Fatal(fmt.Errorf("client registry ttl should be [300] which is cmd value, not: [%s]", conf.Stack.Registry.TTL))
+	if conf.Stack.Registry.TTL != 300 {
+		t.Fatal(fmt.Errorf("client registry ttl should be [300] which is cmd value, not: [%d]", conf.Stack.Registry.TTL))
 	}
 
 	// test config root path

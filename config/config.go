@@ -2,7 +2,6 @@ package config
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"reflect"
 	"runtime"
@@ -30,13 +29,13 @@ type Broker struct {
 }
 
 type Pool struct {
-	Size json.Number `json:"size" sc:"size"`
-	TTL  json.Number `json:"ttl" sc:"ttl"`
+	Size int `json:"size" sc:"size"`
+	TTL  int `json:"ttl" sc:"ttl"`
 }
 
 type ClientRequest struct {
-	Retries json.Number `json:"retries" sc:"retries"`
-	Timeout json.Number `json:"timeout" sc:"timeout"`
+	Retries int    `json:"retries" sc:"retries"`
+	Timeout string `json:"timeout" sc:"timeout"`
 }
 
 type Client struct {
@@ -46,10 +45,10 @@ type Client struct {
 }
 
 type Registry struct {
-	Address  string      `json:"address" sc:"address"`
-	Interval json.Number `json:"interval" sc:"interval"`
-	Name     string      `json:"name" sc:"name"`
-	TTL      json.Number `json:"ttl" sc:"ttl"`
+	Address  string `json:"address" sc:"address"`
+	Interval int    `json:"interval" sc:"interval"`
+	Name     string `json:"name" sc:"name"`
+	TTL      int    `json:"ttl" sc:"ttl"`
 }
 
 type Metadata []string
@@ -90,10 +89,10 @@ type Logger struct {
 }
 
 type Stack struct {
+	Registry  Registry  `json:"registry" sc:"registry"`
 	Broker    Broker    `json:"broker" sc:"broker"`
 	Client    Client    `json:"client" sc:"client"`
 	Profile   string    `json:"profile" sc:"profile"`
-	Registry  Registry  `json:"registry" sc:"registry"`
 	Runtime   string    `json:"runtime" sc:"runtime"`
 	Server    Server    `json:"server" sc:"server"`
 	Selector  Selector  `json:"selector" sc:"selector"`
@@ -203,9 +202,9 @@ func RegisterOptions(options ...interface{}) {
 			return
 		}
 
-		_, file, line, _ := runtime.Caller(0)
+		_, file, line, _ := runtime.Caller(1)
 
-		key := fmt.Sprintf("%s%d", file, line)
+		key := fmt.Sprintf("%s#L%d", file, line)
 
 		optionsPool[key] = val
 	}

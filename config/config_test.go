@@ -2,18 +2,19 @@ package config
 
 import (
 	"fmt"
-	"github.com/stack-labs/stack-rpc/pkg/config/source/memory"
 	"testing"
+
+	"github.com/stack-labs/stack-rpc/pkg/config/source/memory"
 )
 
 var (
 	ymlFile = []byte(`
 stack:
+  registry:
+    interval: 8
   broker:
     name: http
     address: :8081
-  registry:
-    interval: 8
 `)
 )
 
@@ -32,7 +33,11 @@ func TestAutowired(t *testing.T) {
 		t.Fatalf("broker name should be http, but it's %s", testValue.Stack.Broker.Name)
 	}
 
-	if testValue.Stack.Registry.Interval.String() != "8" {
-		t.Fatalf("registry interval should be 8, but it's %s", testValue.Stack.Registry.Interval.String())
+	if testValue.Stack.Broker.Address != ":8081" {
+		t.Fatalf("broker name should be :8081, but it's %s", testValue.Stack.Broker.Address)
+	}
+
+	if testValue.Stack.Registry.Interval != 8 {
+		t.Fatalf("registry interval should be 8, but it's %d", testValue.Stack.Registry.Interval)
 	}
 }

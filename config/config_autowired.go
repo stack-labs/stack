@@ -2,10 +2,11 @@ package config
 
 import (
 	"context"
-	"github.com/stack-labs/stack-rpc/util/log"
 	"reflect"
 	"sync"
 	"time"
+
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 func injectAutowired(ctx context.Context) {
@@ -26,30 +27,49 @@ func injectAutowired(ctx context.Context) {
 
 	// refresh for the first time
 	refresh()
-	for {
-		select {
-		// todo configurable, maybe
-		case <-time.After(3 * time.Second):
-			refresh()
-		case data := <-ctx.Done():
-			log.Infof("config autowired stop because of %v", data)
+
+	go func() {
+		for {
+			select {
+			// todo configurable, maybe
+			case <-time.After(3 * time.Second):
+				refresh()
+			case data := <-ctx.Done():
+				log.Infof("config autowired stop because of %v", data)
+			}
 		}
-	}
+	}()
 }
 
-func bindAutowiredValue(val reflect.Value, path ...string) {
-	log.Debugf("setting values for %s", val.Kind().String())
-	configV := _sugar.Get(path...)
-	v := reflect.Indirect(val)
+func bindAutowiredValue(obj reflect.Value, path ...string) {
+	value := _sugar.Get(path...)
+	v := reflect.Indirect(obj)
 	switch v.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		v.SetInt(int64(configV.Int(0)))
+		n := int64(value.Int(0))
+		if v.OverflowInt(n) {
+			log.Errorf("bindAutowiredValue can't assign value due to %s-overflow", v.Kind())
+		}
+		v.SetInt(n)
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		v.SetUint(uint64(configV.Int(0)))
+		n := uint64(value.Int(0))
+		if v.OverflowInt(int64(n)) {
+			log.Errorf("bindAutowiredValue can't assign value due to %s-overflow", v.Kind())
+		}
+		v.SetUint(n)
 	case reflect.String:
-		v.SetString(configV.String(""))
+		v.SetString(value.String(""))
 	case reflect.Bool:
-		v.SetBool(configV.Bool(false))
+		v.SetBool(value.Bool(false))
+		// supports string only now
+	case reflect.Slice, reflect.Array:
+		values := value.StringSlice([]string{})
+		v.Set(reflect.MakeSlice(reflect.SliceOf(v.Type().Elem()), len(values), len(values)))
+		for idx, val := range values {
+			nvalue := reflect.Indirect(reflect.New(v.Type().Elem()))
+			nvalue.SetString(val)
+			v.Index(idx).Set(nvalue)
+		}
 	case reflect.Struct:
 		// Iterate over the struct fields
 		fields := v.Type()
@@ -58,9 +78,10 @@ func bindAutowiredValue(val reflect.Value, path ...string) {
 			if tag == "" || tag == "-" {
 				continue
 			}
-			value := v.Field(i)
+
+			nextValue := v.Field(i)
 			newPath := append(path, tag)
-			bindAutowiredValue(value, newPath...)
+			bindAutowiredValue(nextValue, newPath...)
 		}
 	default:
 		log.Warnf("unsupported type: %s of %s", v.Kind().String(), v.String())

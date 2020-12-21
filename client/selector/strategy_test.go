@@ -38,12 +38,12 @@ func TestStrategies(t *testing.T) {
 		},
 	}
 
-	for name, strategy := range map[string]Strategy{"random": Random, "roundrobin": RoundRobin} {
-		next := strategy(testData)
+	for name, strategy := range map[string]Strategy{"random": Random(), "roundrobin": RoundRobin()} {
+
 		counts := make(map[string]int)
 
 		for i := 0; i < 100; i++ {
-			node, err := next()
+			node, err := strategy(testData)
 			if err != nil {
 				t.Fatal(err)
 			}

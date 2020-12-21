@@ -12,15 +12,18 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
+// Strategy is a selection strategy e.g random, round robin
+type Strategy func([]*registry.Service) (*registry.Node, error)
+
 // Random is a random strategy algorithm for node selection
-func Random(services []*registry.Service) Next {
-	nodes := make([]*registry.Node, 0, len(services))
+func Random() Strategy {
+	return func(services []*registry.Service) (*registry.Node, error) {
+		nodes := make([]*registry.Node, 0, len(services))
 
-	for _, service := range services {
-		nodes = append(nodes, service.Nodes...)
-	}
+		for _, service := range services {
+			nodes = append(nodes, service.Nodes...)
+		}
 
-	return func() (*registry.Node, error) {
 		if len(nodes) == 0 {
 			return nil, ErrNoneAvailable
 		}
@@ -30,27 +33,26 @@ func Random(services []*registry.Service) Next {
 	}
 }
 
-// RoundRobin is a roundrobin strategy algorithm for node selection
-func RoundRobin(services []*registry.Service) Next {
-	nodes := make([]*registry.Node, 0, len(services))
-
-	for _, service := range services {
-		nodes = append(nodes, service.Nodes...)
-	}
-
+// RoundRobin is a round robin strategy algorithm for node selection
+func RoundRobin() Strategy {
 	var i = rand.Int()
 	var mtx sync.Mutex
 
-	return func() (*registry.Node, error) {
+	return func(services []*registry.Service) (*registry.Node, error) {
+		nodes := make([]*registry.Node, 0, len(services))
+
+		for _, service := range services {
+			nodes = append(nodes, service.Nodes...)
+		}
+
 		if len(nodes) == 0 {
 			return nil, ErrNoneAvailable
 		}
 
 		mtx.Lock()
-		node := nodes[i%len(nodes)]
 		i++
 		mtx.Unlock()
 
-		return node, nil
+		return nodes[i%len(nodes)], nil
 	}
 }

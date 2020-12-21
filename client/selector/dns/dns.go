@@ -30,7 +30,7 @@ func (d *dnsSelector) Options() selector.Options {
 	return d.options
 }
 
-func (d *dnsSelector) Select(service string, opts ...selector.SelectOption) (selector.Next, error) {
+func (d *dnsSelector) Next(service string, opts ...selector.SelectOption) (*registry.Node, error) {
 	var srv []*net.SRV
 
 	// check if its host:port
@@ -96,7 +96,7 @@ func (d *dnsSelector) Select(service string, opts ...selector.SelectOption) (sel
 		return nil, selector.ErrNoneAvailable
 	}
 
-	return sopts.Strategy(services), nil
+	return sopts.Strategy(services)
 }
 
 func (d *dnsSelector) Mark(service string, node *registry.Node, err error) {}
@@ -113,7 +113,7 @@ func (d *dnsSelector) String() string {
 
 func NewSelector(opts ...selector.Option) selector.Selector {
 	options := selector.Options{
-		Strategy: selector.Random,
+		Strategy: selector.Random(),
 	}
 
 	for _, o := range opts {

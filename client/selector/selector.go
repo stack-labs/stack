@@ -14,7 +14,7 @@ type Selector interface {
 	Init(opts ...Option) error
 	Options() Options
 	// Select returns a function which should return the next node
-	Select(service string, opts ...SelectOption) (Next, error)
+	Next(service string, opts ...SelectOption) (*registry.Node, error)
 	// Mark sets the success/error against a node
 	Mark(service string, node *registry.Node, err error)
 	// Reset returns state back to zero for a service
@@ -24,16 +24,6 @@ type Selector interface {
 	// Name of the selector
 	String() string
 }
-
-// Next is a function that returns the next node
-// based on the selector's strategy
-type Next func() (*registry.Node, error)
-
-// Filter is used to filter a service during the selection process
-type Filter func([]*registry.Service) []*registry.Service
-
-// Strategy is a selection strategy e.g random, round robin
-type Strategy func([]*registry.Service) Next
 
 var (
 	ErrNotFound      = errors.New("not found")

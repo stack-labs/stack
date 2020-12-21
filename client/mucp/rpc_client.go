@@ -338,7 +338,7 @@ func (r *rpcClient) hasProxy() bool {
 }
 
 // next returns an iterator for the next nodes to call
-func (r *rpcClient) next(request client.Request, opts client.CallOptions) (selector.Next, error) {
+func (r *rpcClient) next(request client.Request, opts client.CallOptions) (*registry.Node, error) {
 	service := request.Service()
 
 	// get proxy
@@ -366,13 +366,11 @@ func (r *rpcClient) next(request client.Request, opts client.CallOptions) (selec
 		}
 
 		// crude return method
-		return func() (*registry.Node, error) {
-			return nodes[time.Now().Unix()%int64(len(nodes))], nil
-		}, nil
+		return nodes[time.Now().Unix()%int64(len(nodes))], nil
 	}
 
 	// get next nodes from the selector
-	next, err := r.opts.Selector.Select(service, opts.SelectOptions...)
+	next, err := r.opts.Selector.Next(service, opts.SelectOptions...)
 	if err != nil {
 		if err == selector.ErrNotFound {
 			return nil, errors.InternalServerError("stack.rpc.client", "service %s: %s", service, err.Error())
@@ -388,11 +386,6 @@ func (r *rpcClient) Call(ctx context.Context, request client.Request, response i
 	callOpts := r.opts.CallOptions
 	for _, opt := range opts {
 		opt(&callOpts)
-	}
-
-	next, err := r.next(request, callOpts)
-	if err != nil {
-		return err
 	}
 
 	// check if we already have a deadline
@@ -438,7 +431,7 @@ func (r *rpcClient) Call(ctx context.Context, request client.Request, response i
 		}
 
 		// select next node
-		node, err := next()
+		node, err := r.next(request, callOpts)
 		service := request.Service()
 		if err != nil {
 			if err == selector.ErrNotFound {
@@ -501,11 +494,6 @@ func (r *rpcClient) Stream(ctx context.Context, request client.Request, opts ...
 		opt(&callOpts)
 	}
 
-	next, err := r.next(request, callOpts)
-	if err != nil {
-		return nil, err
-	}
-
 	// should we noop right here?
 	select {
 	case <-ctx.Done():
@@ -525,7 +513,7 @@ func (r *rpcClient) Stream(ctx context.Context, request client.Request, opts ...
 			time.Sleep(t)
 		}
 
-		node, err := next()
+		node, err := r.next(request, callOpts)
 		service := request.Service()
 		if err != nil {
 			if err == selector.ErrNotFound {

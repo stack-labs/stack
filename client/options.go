@@ -191,7 +191,7 @@ func Transport(t transport.Transport) Option {
 	}
 }
 
-// Next is used to select a node to route a request to
+// Selector is used to select a node to route a request to
 func Selector(s selector.Selector) Option {
 	return func(o *Options) {
 		o.Selector = s

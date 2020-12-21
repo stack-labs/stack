@@ -13,7 +13,7 @@ import (
 type Selector interface {
 	Init(opts ...Option) error
 	Options() Options
-	// Select returns a function which should return the next node
+	// Next returns the next node
 	Next(service string, opts ...SelectOption) (*registry.Node, error)
 	// Mark sets the success/error against a node
 	Mark(service string, node *registry.Node, err error)

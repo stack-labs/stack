@@ -64,6 +64,9 @@ func newOptions(opts ...Option) Options {
 		o(&opt)
 	}
 
+	// register options
+	config.RegisterOptions(&opt)
+
 	return opt
 }
 

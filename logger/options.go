@@ -6,35 +6,35 @@ import (
 )
 
 type PersistenceOptions struct {
-	Enable    bool
-	Dir       string
-	BackupDir string
+	Enable    bool   `sc:"enable"`
+	Dir       string `sc:"dir"`
+	BackupDir string `sc:"back-dir"`
 	// log file max size in megabytes
-	MaxFileSize int
+	MaxFileSize int `sc:"max-file-size"`
 	// backup dir max size in megabytes
-	MaxBackupSize int
+	MaxBackupSize int `sc:"max-backup-size"`
 	// backup files keep max days
-	MaxBackupKeepDays int
+	MaxBackupKeepDays int `sc:"max-backup-keep-days"`
 	// default pattern is ${serviceName}_${level}.log
 	// todo available patterns map
-	FileNamePattern string
+	FileNamePattern string `sc:"file-name-pattern"`
 	// default pattern is ${serviceName}_${level}_${yyyyMMdd_HH}_${idx}.zip
 	// todo available patterns map
-	BackupFileNamePattern string
+	BackupFileNamePattern string `sc:"backup-file-name-pattern"`
 }
 
 type Option func(*Options)
 
 type Options struct {
 	// The logging level the logger should log at. default is `InfoLevel`
-	Level Level
+	Level Level `sc:"level"`
 	// fields to always be logged
-	Fields map[string]interface{}
+	Fields map[string]interface{} `sc:"fields"`
 	// It's common to set this to a file, or leave it default which is `os.Stderr`
 	Out io.Writer
 	// Caller skip frame count for file:line info
-	CallerSkipCount int
-	Persistence     *PersistenceOptions
+	CallerSkipCount int                 `sc:"caller-skip-count"`
+	Persistence     *PersistenceOptions `sc:"persistence"`
 	// Alternative options
 	Context context.Context
 }

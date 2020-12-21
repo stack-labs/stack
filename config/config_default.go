@@ -37,7 +37,3 @@ var (
 		},
 	}
 )
-
-func GetDefault() *Value {
-	return _defaultCfg
-}

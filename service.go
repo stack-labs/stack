@@ -7,13 +7,12 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/stack-labs/stack-rpc/env"
-
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/debug/profile"
 	"github.com/stack-labs/stack-rpc/debug/profile/pprof"
 	"github.com/stack-labs/stack-rpc/debug/service/handler"
+	"github.com/stack-labs/stack-rpc/env"
 	log "github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/server"
@@ -28,12 +27,6 @@ type service struct {
 
 func newService(opts ...Option) Service {
 	options := newOptions(opts...)
-
-	// service name
-	serviceName := options.Server.Options().Name
-
-	// wrap client to inject From-Service header on any calls
-	options.Client = wrapper.FromService(serviceName, options.Client)
 
 	return &service{
 		opts: options,
@@ -52,6 +45,12 @@ func (s *service) Init(opts ...Option) error {
 	for _, o := range opts {
 		o(&s.opts)
 	}
+
+	// service name
+	serviceName := s.opts.Server.Options().Name
+
+	// wrap client to inject From-Service header on any calls
+	s.opts.Client = wrapper.FromService(serviceName, s.opts.Client)
 
 	s.once.Do(func() {
 		// setup the plugins

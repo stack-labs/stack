@@ -29,8 +29,6 @@ stack:
       retries: 3
   registry:
     name: mdns
-    interval: 200
-    ttl: 300
     address: 127.0.0.1:6500
   server:
     name:
@@ -41,6 +39,9 @@ stack:
       - A=a
       - B=b
     version: 1.0.0
+    registry:
+      Interval: 200
+      ttl: 300
   selector:
     name: robin
   transport:
@@ -49,14 +50,14 @@ stack:
   profile: _1
   runtime:
 `)
-	conf = config.Value{
-		Stack: config.Stack{
-			Broker:    config.Broker{},
-			Client:    config.Client{},
-			Registry:  config.Registry{},
-			Selector:  config.Selector{},
-			Server:    config.Server{},
-			Transport: config.Transport{},
+	conf = StackConfig{
+		Stack: stack{
+			Broker:    broker{},
+			Client:    client{},
+			Registry:  registry{},
+			Selector:  selector{},
+			Server:    server{},
+			Transport: transport{},
 		},
 	}
 )
@@ -164,8 +165,8 @@ func TestStackConfig_Config(t *testing.T) {
 		t.Fatal(fmt.Errorf("client pool ttl should be [100] which is cmd value, not: [%d]", conf.Stack.Client.Pool.TTL))
 	}
 
-	if conf.Stack.Registry.TTL != 300 {
-		t.Fatal(fmt.Errorf("client registry ttl should be [300] which is cmd value, not: [%d]", conf.Stack.Registry.TTL))
+	if conf.Stack.Server.Registry.TTL != 300 {
+		t.Fatal(fmt.Errorf("server registry ttl should be [300] which is cmd value, not: [%d]", conf.Stack.Server.Registry.TTL))
 	}
 
 	// test config root path
@@ -253,10 +254,9 @@ stack:
 		t.Fatal(fmt.Errorf("db setting should be 'mysql', not %s", c.Get("db").String("default")))
 	}
 
-	var conf config.Value
-	conf = config.Value{
-		Stack: config.Stack{
-			Server: config.Server{
+	var conf = StackConfig{
+		Stack: stack{
+			Server: server{
 				Name: "default",
 			},
 		},

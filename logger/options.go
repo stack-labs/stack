@@ -27,14 +27,14 @@ type Option func(*Options)
 
 type Options struct {
 	// The logging level the logger should log at. default is `InfoLevel`
-	Level Level `sc:"level"`
+	Level Level
 	// fields to always be logged
-	Fields map[string]interface{} `sc:"fields"`
+	Fields map[string]interface{}
 	// It's common to set this to a file, or leave it default which is `os.Stderr`
 	Out io.Writer
 	// Caller skip frame count for file:line info
-	CallerSkipCount int                 `sc:"caller-skip-count"`
-	Persistence     *PersistenceOptions `sc:"persistence"`
+	CallerSkipCount int
+	Persistence     *PersistenceOptions
 	// Alternative options
 	Context context.Context
 }

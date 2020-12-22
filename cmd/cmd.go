@@ -3,11 +3,11 @@ package cmd
 
 import (
 	"fmt"
+	br "github.com/stack-labs/stack-rpc/broker"
 	cl "github.com/stack-labs/stack-rpc/client"
 	"io"
 	"math/rand"
 	"os"
-	"strings"
 	"time"
 
 	sel "github.com/stack-labs/stack-rpc/client/selector"
@@ -18,9 +18,7 @@ import (
 	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 	"github.com/stack-labs/stack-rpc/plugin"
-	reg "github.com/stack-labs/stack-rpc/registry"
 	ser "github.com/stack-labs/stack-rpc/server"
-	tra "github.com/stack-labs/stack-rpc/transport"
 )
 
 type Cmd interface {
@@ -75,18 +73,18 @@ var (
 			Alias:  "stack_client_pool_ttl",
 		},
 		cli.IntFlag{
-			Name:   "registry_ttl",
-			EnvVar: "STACK_REGISTER_TTL",
+			Name:   "server_registry_ttl",
+			EnvVar: "STACK_SERVER_REGISTRY_TTL",
 			Value:  60,
 			Usage:  "Register TTL in seconds",
-			Alias:  "stack_registry_ttl",
+			Alias:  "stack_server_registry_ttl",
 		},
 		cli.IntFlag{
-			Name:   "registry_interval",
-			EnvVar: "STACK_REGISTER_INTERVAL",
+			Name:   "server_registry_interval",
+			EnvVar: "STACK_SERVER_REGISTRY_INTERVAL",
 			Value:  30,
 			Usage:  "Register interval in seconds",
-			Alias:  "stack_registry_interval",
+			Alias:  "stack_server_registry_interval",
 		},
 		cli.StringFlag{
 			Name:   "server",
@@ -240,14 +238,47 @@ func (c *cmd) ConfigFile() string {
 }
 
 func (c *cmd) before(ctx *cli.Context) error {
-	c.loadConfig(ctx)
+	c.beforeLoadConfig(ctx)
 
-	// If flags are set then use them otherwise do nothing
+	return nil
+}
 
-	//var serverOpts = stackConfig.Server.Options()
-	//var clientOpts = stackConfig.Client.Options()
+func (c *cmd) beforeLoadConfig(ctx *cli.Context) (err error) {
+	// set the config file path
+	if name := ctx.String("config"); len(name) > 0 {
+		c.conf = name
+	}
 
+	// need to init config first
+	var appendSource []source.Source
+	// need read from config file
+	if len(c.ConfigFile()) > 0 {
+		log.Info("config read from file:", c.ConfigFile())
+		configFileSource := file.NewSource(file.WithPath(c.ConfigFile()))
+		appendSource = append(appendSource, configFileSource)
+	}
+	appendSource = append(appendSource, cliSource.NewSource(c.App(), cliSource.Context(c.App().Context())))
+
+	err = (*c.opts.Config).Init(config.Source(appendSource...))
+	if err != nil {
+		err = fmt.Errorf("init config err: %s", err)
+		log.Fatal(err)
+		return
+	}
+
+	return
+}
+
+func (c *cmd) beforeSetupComponents() (err error) {
 	conf := stackConfig.Stack
+
+	var serverOpts = conf.Server.Options()
+	var clientOpts = conf.Client.Options()
+	var transOpts = conf.Transport.Options()
+	var regOpts = conf.Registry.Options()
+	var brokerOpts = conf.Broker.Options()
+	var logOpts = conf.Logger.Options()
+
 	// Set the client
 	if len(conf.Client.Protocol) > 0 {
 		// only change if we have the client and type differs
@@ -273,7 +304,7 @@ func (c *cmd) before(ctx *cli.Context) error {
 
 		*c.opts.Broker = b()
 		serverOpts = append(serverOpts, ser.Broker(*c.opts.Broker))
-		clientOpts = append(clientOpts, client.Broker(*c.opts.Broker))
+		clientOpts = append(clientOpts, cl.Broker(*c.opts.Broker))
 	}
 
 	// Set the registry
@@ -285,15 +316,15 @@ func (c *cmd) before(ctx *cli.Context) error {
 
 		*c.opts.Registry = r()
 		serverOpts = append(serverOpts, ser.Registry(*c.opts.Registry))
-		clientOpts = append(clientOpts, client.Registry(*c.opts.Registry))
+		clientOpts = append(clientOpts, cl.Registry(*c.opts.Registry))
 
-		if err := (*c.opts.Selector).Init(selector.Registry(*c.opts.Registry)); err != nil {
+		if err := (*c.opts.Selector).Init(sel.Registry(*c.opts.Registry)); err != nil {
 			log.Fatalf("Error configuring registry: %v", err)
 		}
 
-		clientOpts = append(clientOpts, client.Selector(*c.opts.Selector))
+		clientOpts = append(clientOpts, cl.Selector(*c.opts.Selector))
 
-		if err := (*c.opts.Broker).Init(broker.Registry(*c.opts.Registry)); err != nil {
+		if err := (*c.opts.Broker).Init(br.Registry(*c.opts.Registry)); err != nil {
 			log.Fatalf("Error configuring broker: %v", err)
 		}
 	}
@@ -308,7 +339,7 @@ func (c *cmd) before(ctx *cli.Context) error {
 		*c.opts.Selector = sl(sel.Registry(*c.opts.Registry))
 
 		// No server option here. Should there be?
-		clientOpts = append(clientOpts, client.Selector(*c.opts.Selector))
+		clientOpts = append(clientOpts, cl.Selector(*c.opts.Selector))
 	}
 
 	// Set the transport
@@ -323,84 +354,31 @@ func (c *cmd) before(ctx *cli.Context) error {
 		clientOpts = append(clientOpts, cl.Transport(*c.opts.Transport))
 	}
 
-	if err := (*c.opts.Logger).Init(stackConfig.Stack.Logger.Options()...); err != nil {
+	if err = (*c.opts.Logger).Init(logOpts...); err != nil {
 		log.Fatalf("Error configuring logger: %v", err)
 	}
 
-	if err := (*c.opts.Broker).Init(stackConfig.Stack.Broker.Options()...); err != nil {
+	if err = (*c.opts.Broker).Init(brokerOpts...); err != nil {
 		log.Fatalf("Error configuring broker: %v", err)
 	}
 
-	if len(conf.Registry.Address) > 0 {
-		if err := (*c.opts.Registry).Init(reg.Addrs(strings.Split(conf.Registry.Address, ",")...)); err != nil {
-			log.Fatalf("Error configuring registry: %v", err)
-		}
-	} else {
-		if err := (*c.opts.Registry).Init(); err != nil {
-			log.Fatalf("Error configuring registry: %v", err)
-		}
+	if err = (*c.opts.Registry).Init(regOpts...); err != nil {
+		log.Fatalf("Error configuring registry: %v", err)
 	}
 
-	if len(conf.Transport.Address) > 0 {
-		if err := (*c.opts.Transport).Init(tra.Addrs(strings.Split(conf.Transport.Address, ",")...)); err != nil {
-			log.Fatalf("Error configuring transport: %v", err)
-		}
-	} else {
-		if err := (*c.opts.Transport).Init(); err != nil {
-			log.Fatalf("Error configuring transport: %v", err)
-		}
+	if err = (*c.opts.Transport).Init(transOpts...); err != nil {
+		log.Fatalf("Error configuring transport: %v", err)
 	}
 
-	registryTTL := conf.Registry.TTL
-	if ttl := time.Duration(registryTTL); ttl >= 0 {
-		serverOpts = append(serverOpts, ser.RegisterTTL(ttl*time.Second))
+	if err = (*c.opts.Server).Init(serverOpts...); err != nil {
+		log.Fatalf("Error configuring server: %v", err)
 	}
 
-	registryInterval := conf.Registry.Interval
-	if val := time.Duration(registryInterval); val > 0 {
-		serverOpts = append(serverOpts, ser.RegisterInterval(val*time.Second))
+	if err = (*c.opts.Client).Init(clientOpts...); err != nil {
+		log.Fatalf("Error configuring client: %v", err)
 	}
 
-	// We have some command line opts for the server.
-	// Lets set it up
-	if len(serverOpts) > 0 {
-		if err := (*c.opts.Server).Init(serverOpts...); err != nil {
-			log.Fatalf("Error configuring server: %v", err)
-		}
-	}
-
-	// Use an init option?
-	if len(clientOpts) > 0 {
-		if err := (*c.opts.Client).Init(clientOpts...); err != nil {
-			log.Fatalf("Error configuring client: %v", err)
-		}
-	}
-
-	return nil
-}
-
-func (c *cmd) loadConfig(ctx *cli.Context) {
-	// set the config file path
-	if name := ctx.String("config"); len(name) > 0 {
-		c.conf = name
-	}
-
-	// need to init config first
-	var appendSource []source.Source
-	// need read from config file
-	if len(c.ConfigFile()) > 0 {
-		log.Info("config read from file:", c.ConfigFile())
-		configFileSource := file.NewSource(file.WithPath(c.ConfigFile()))
-		appendSource = append(appendSource, configFileSource)
-	}
-	appendSource = append(appendSource, cliSource.NewSource(c.App(), cliSource.Context(c.App().Context())))
-
-	err := (*c.opts.Config).Init(config.Source(appendSource...))
-	if err != nil {
-		err = fmt.Errorf("init config err: %s", err)
-		log.Fatal(err)
-		return err
-	}
+	return
 }
 
 func (c *cmd) App() *cli.App {

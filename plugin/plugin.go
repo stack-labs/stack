@@ -1,46 +1,53 @@
-// Package plugin provides the ability to load plugins
 package plugin
 
-// Plugin is a plugin loaded from a file
-type Plugin interface {
-	// Initialise a plugin with the config
-	Init(c *Config) error
-	// Load loads a .so plugin at the given path
-	Load(path string) (*Config, error)
-	// Build a .so plugin with config at the path specified
-	Build(path string, c *Config) error
-}
-
-// Config is the plugin config
-type Config struct {
-	// Name of the plugin e.g rabbitmq
-	Name string
-	// Type of the plugin e.g broker
-	Type string
-	// Path specifies the import path
-	Path string
-	// NewFunc creates an instance of the plugin
-	NewFunc interface{}
-}
-
-var (
-	// Default plugin loader
-	DefaultPlugin = NewPlugin()
+import (
+	"github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack-rpc/logger"
+	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/transport"
 )
 
-// NewPlugin creates a new plugin interface
-func NewPlugin() Plugin {
-	return &plugin{}
+type Options func()
+
+type Plugin interface {
+	Name() string
+	Type() string
 }
 
-func Build(path string, c *Config) error {
-	return DefaultPlugin.Build(path, c)
+type LoggerPlugin interface {
+	Plugin
+	Config() []logger.Option
 }
 
-func Load(path string) (*Config, error) {
-	return DefaultPlugin.Load(path)
+type BrokerPlugin interface {
+	Plugin
+	Config() []broker.Option
 }
 
-func Init(c *Config) error {
-	return DefaultPlugin.Init(c)
+type TransportPlugin interface {
+	Plugin
+	Config() []transport.Option
+}
+
+type ClientPlugin interface {
+	Plugin
+	Config() []client.Option
+}
+
+type ServerPlugin interface {
+	Plugin
+	Config() []server.Option
+}
+
+type RegistryPlugin interface {
+	Plugin
+	Config() []registry.Option
+}
+
+type SelectorPlugin interface {
+	Plugin
+	Config() []selector.Option
 }

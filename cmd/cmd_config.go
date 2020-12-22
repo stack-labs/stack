@@ -2,14 +2,16 @@ package cmd
 
 import (
 	"fmt"
-	reg "github.com/stack-labs/stack-rpc/registry"
 	"strings"
 	"time"
 
 	br "github.com/stack-labs/stack-rpc/broker"
 	cl "github.com/stack-labs/stack-rpc/client"
 	lg "github.com/stack-labs/stack-rpc/logger"
+	"github.com/stack-labs/stack-rpc/plugin"
+	reg "github.com/stack-labs/stack-rpc/registry"
 	ser "github.com/stack-labs/stack-rpc/server"
+	tra "github.com/stack-labs/stack-rpc/transport"
 	"github.com/stack-labs/stack-rpc/util/log"
 )
 
@@ -88,10 +90,8 @@ func (c *client) Options() []cl.Option {
 }
 
 type registry struct {
-	Address  string `json:"address" sc:"address"`
-	Interval int    `json:"interval" sc:"interval"`
-	Name     string `json:"name" sc:"name"`
-	TTL      int    `json:"ttl" sc:"ttl"`
+	Address string `json:"address" sc:"address"`
+	Name    string `json:"name" sc:"name"`
 }
 
 func (r *registry) Options() []reg.Option {
@@ -101,12 +101,9 @@ func (r *registry) Options() []reg.Option {
 		regOptions = append(regOptions, reg.Addrs(strings.Split(r.Address, ",")...))
 	}
 
-	// todo reg ttl & interval
-	/*if regTTL := time.Duration(r.TTL); regTTL > 0 {
-		regOptions = append(regOptions, reg.RegisterTTL(regTTL))
-	}*/
-
-	// todo adapt options by name
+	if plugin.RegistryPlugins[r.Name] != nil {
+		regOptions = append(regOptions, plugin.RegistryPlugins[r.Name].Config()...)
+	}
 
 	return regOptions
 }
@@ -125,13 +122,19 @@ func (m metadata) Value(k string) string {
 }
 
 type server struct {
-	Address   string   `json:"address" sc:"address"`
-	Advertise string   `json:"advertise" sc:"advertise"`
-	ID        string   `json:"id" sc:"id"`
-	Metadata  metadata `json:"metadata" sc:"metadata"`
-	Name      string   `json:"name" sc:"name"`
-	Protocol  string   `json:"protocol" sc:"protocol"`
-	Version   string   `json:"version" sc:"version"`
+	Address   string         `json:"address" sc:"address"`
+	Advertise string         `json:"advertise" sc:"advertise"`
+	ID        string         `json:"id" sc:"id"`
+	Metadata  metadata       `json:"metadata" sc:"metadata"`
+	Name      string         `json:"name" sc:"name"`
+	Protocol  string         `json:"protocol" sc:"protocol"`
+	Version   string         `json:"version" sc:"version"`
+	Registry  serverRegistry `json:"registry" sc:"registry"`
+}
+
+type serverRegistry struct {
+	TTL      int `json:"ttl" sc:"ttl"`
+	Interval int `json:"interval" sc:"interval"`
 }
 
 func (s *server) Options() []ser.Option {
@@ -173,6 +176,14 @@ func (s *server) Options() []ser.Option {
 		serverOpts = append(serverOpts, ser.Advertise(s.Advertise))
 	}
 
+	if ttl := time.Duration(s.Registry.TTL); ttl >= 0 {
+		serverOpts = append(serverOpts, ser.RegisterTTL(ttl*time.Second))
+	}
+
+	if val := time.Duration(s.Registry.Interval); val > 0 {
+		serverOpts = append(serverOpts, ser.RegisterInterval(val*time.Second))
+	}
+
 	return serverOpts
 }
 
@@ -185,9 +196,58 @@ type transport struct {
 	Address string `json:"address" sc:"address"`
 }
 
+func (t *transport) Options() []tra.Option {
+	var traOptions []tra.Option
+	if len(t.Address) > 0 {
+		traOptions = append(traOptions, tra.Addrs(strings.Split(t.Address, ",")...))
+	}
+
+	if plugin.TransportPlugins[t.Name] != nil {
+		traOptions = append(traOptions, plugin.TransportPlugins[t.Name].Config()...)
+	}
+
+	return traOptions
+}
+
 type logger struct {
-	Name  string `json:"name" sc:"name"`
-	Level string `json:"level" sc:"level"`
+	Name            string            `json:"name" sc:"name"`
+	Level           string            `json:"level" sc:"level"`
+	Fields          map[string]string `json:"fields" sc:"fields"`
+	CallerSkipCount int               `json:"caller-skip-count" sc:"caller-skip-count"`
+	Persistence     logPersistence    `json:"persistence" sc:"persistence"`
+}
+
+type logPersistence struct {
+	Enable    bool   `sc:"enable"`
+	Dir       string `sc:"dir"`
+	BackupDir string `sc:"back-dir"`
+	// log file max size in megabytes
+	MaxFileSize int `sc:"max-file-size"`
+	// backup dir max size in megabytes
+	MaxBackupSize int `sc:"max-backup-size"`
+	// backup files keep max days
+	MaxBackupKeepDays int `sc:"max-backup-keep-days"`
+	// default pattern is ${serviceName}_${level}.log
+	// todo available patterns map
+	FileNamePattern string `sc:"file-name-pattern"`
+	// default pattern is ${serviceName}_${level}_${yyyyMMdd_HH}_${idx}.zip
+	// todo available patterns map
+	BackupFileNamePattern string `sc:"backup-file-name-pattern"`
+}
+
+func (l *logPersistence) Options() *lg.PersistenceOptions {
+	o := &lg.PersistenceOptions{
+		Enable:                l.Enable,
+		Dir:                   l.Dir,
+		BackupDir:             l.BackupDir,
+		MaxFileSize:           l.MaxFileSize,
+		MaxBackupSize:         l.MaxBackupSize,
+		MaxBackupKeepDays:     l.MaxBackupKeepDays,
+		FileNamePattern:       l.FileNamePattern,
+		BackupFileNamePattern: l.BackupFileNamePattern,
+	}
+
+	return o
 }
 
 func (l *logger) Options() []lg.Option {
@@ -203,7 +263,13 @@ func (l *logger) Options() []lg.Option {
 		}
 	}
 
-	// todo adapt options by name
+	if l.Persistence.Enable {
+		logOptions = append(logOptions, lg.Persistence(l.Persistence.Options()))
+	}
+
+	if plugin.LoggerPlugins[l.Name] != nil {
+		logOptions = append(logOptions, plugin.LoggerPlugins[l.Name].Config()...)
+	}
 
 	return logOptions
 }

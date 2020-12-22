@@ -3,7 +3,6 @@ package stack
 import (
 	"os"
 	"os/signal"
-	"strings"
 	"sync"
 	"syscall"
 
@@ -14,7 +13,6 @@ import (
 	"github.com/stack-labs/stack-rpc/debug/service/handler"
 	"github.com/stack-labs/stack-rpc/env"
 	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/util/wrapper"
 )
@@ -51,26 +49,6 @@ func (s *service) Init(opts ...Option) error {
 
 	// wrap client to inject From-Service header on any calls
 	s.opts.Client = wrapper.FromService(serviceName, s.opts.Client)
-
-	s.once.Do(func() {
-		// setup the plugins
-		for _, p := range strings.Split(os.Getenv(env.StackPlugin), ",") {
-			if len(p) == 0 {
-				continue
-			}
-
-			// load the plugin
-			c, err := plugin.Load(p)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			// initialise the plugin
-			if err := plugin.Init(c); err != nil {
-				log.Fatal(err)
-			}
-		}
-	})
 
 	return nil
 }

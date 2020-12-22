@@ -13,6 +13,7 @@ import (
 	"github.com/stack-labs/stack-rpc/client/selector/dns"
 	selectorR "github.com/stack-labs/stack-rpc/client/selector/registry"
 	"github.com/stack-labs/stack-rpc/client/selector/static"
+	"github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/registry/mdns"
 	rmem "github.com/stack-labs/stack-rpc/registry/memory"
@@ -68,4 +69,15 @@ var (
 		"grpc":   tgrpc.NewTransport,
 		"quic":   quic.NewTransport,
 	}
+
+	DefaultLoggers = map[string]func(...logger.Option) logger.Logger{
+		"console": logger.NewLogger,
+	}
+)
+
+var (
+	LoggerPlugins    = map[string]LoggerPlugin{}
+	BrokerPlugins    = map[string]BrokerPlugin{}
+	TransportPlugins = map[string]TransportPlugin{}
+	RegistryPlugins  = map[string]RegistryPlugin{}
 )

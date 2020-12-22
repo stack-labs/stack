@@ -3,14 +3,14 @@ package cmd
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/config"
-	"github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/transport"
+	bk "github.com/stack-labs/stack-rpc/broker"
+	cl "github.com/stack-labs/stack-rpc/client"
+	sel "github.com/stack-labs/stack-rpc/client/selector"
+	cfg "github.com/stack-labs/stack-rpc/config"
+	log "github.com/stack-labs/stack-rpc/logger"
+	reg "github.com/stack-labs/stack-rpc/registry"
+	ser "github.com/stack-labs/stack-rpc/server"
+	tra "github.com/stack-labs/stack-rpc/transport"
 )
 
 type Option func(o *Options)
@@ -24,14 +24,14 @@ type Options struct {
 	// can be stored in a context
 	Context context.Context
 
-	Broker    *broker.Broker
-	Registry  *registry.Registry
-	Selector  *selector.Selector
-	Transport *transport.Transport
-	Client    *client.Client
-	Server    *server.Server
-	Config    *config.Config
-	Logger    *logger.Logger
+	Broker    *bk.Broker
+	Registry  *reg.Registry
+	Selector  *sel.Selector
+	Transport *tra.Transport
+	Client    *cl.Client
+	Server    *ser.Server
+	Config    *cfg.Config
+	Logger    *log.Logger
 }
 
 // Command line Name
@@ -55,49 +55,49 @@ func Version(v string) Option {
 	}
 }
 
-func Broker(b *broker.Broker) Option {
+func Broker(b *bk.Broker) Option {
 	return func(o *Options) {
 		o.Broker = b
 	}
 }
 
-func Selector(s *selector.Selector) Option {
+func Selector(s *sel.Selector) Option {
 	return func(o *Options) {
 		o.Selector = s
 	}
 }
 
-func Registry(r *registry.Registry) Option {
+func Registry(r *reg.Registry) Option {
 	return func(o *Options) {
 		o.Registry = r
 	}
 }
 
-func Transport(t *transport.Transport) Option {
+func Transport(t *tra.Transport) Option {
 	return func(o *Options) {
 		o.Transport = t
 	}
 }
 
-func Client(c *client.Client) Option {
+func Client(c *cl.Client) Option {
 	return func(o *Options) {
 		o.Client = c
 	}
 }
 
-func Server(s *server.Server) Option {
+func Server(s *ser.Server) Option {
 	return func(o *Options) {
 		o.Server = s
 	}
 }
 
-func Config(c *config.Config) Option {
+func Config(c *cfg.Config) Option {
 	return func(o *Options) {
 		o.Config = c
 	}
 }
 
-func Logger(log *logger.Logger) Option {
+func Logger(log *log.Logger) Option {
 	return func(o *Options) {
 		o.Logger = log
 	}

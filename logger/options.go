@@ -6,21 +6,21 @@ import (
 )
 
 type PersistenceOptions struct {
-	Enable    bool
-	Dir       string
-	BackupDir string
+	Enable    bool   `sc:"enable"`
+	Dir       string `sc:"dir"`
+	BackupDir string `sc:"back-dir"`
 	// log file max size in megabytes
-	MaxFileSize int
+	MaxFileSize int `sc:"max-file-size"`
 	// backup dir max size in megabytes
-	MaxBackupSize int
+	MaxBackupSize int `sc:"max-backup-size"`
 	// backup files keep max days
-	MaxBackupKeepDays int
+	MaxBackupKeepDays int `sc:"max-backup-keep-days"`
 	// default pattern is ${serviceName}_${level}.log
 	// todo available patterns map
-	FileNamePattern string
+	FileNamePattern string `sc:"file-name-pattern"`
 	// default pattern is ${serviceName}_${level}_${yyyyMMdd_HH}_${idx}.zip
 	// todo available patterns map
-	BackupFileNamePattern string
+	BackupFileNamePattern string `sc:"backup-file-name-pattern"`
 }
 
 type Option func(*Options)

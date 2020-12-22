@@ -11,8 +11,3 @@ var (
 func Get(path ...string) reader.Value {
 	return _sugar.Get(path...)
 }
-
-// todo, doest work
-func ServerName() string {
-	return _defaultCfg.Stack.Server.Name
-}

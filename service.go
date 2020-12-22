@@ -3,19 +3,16 @@ package stack
 import (
 	"os"
 	"os/signal"
-	"strings"
 	"sync"
 	"syscall"
-
-	"github.com/stack-labs/stack-rpc/env"
 
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/debug/profile"
 	"github.com/stack-labs/stack-rpc/debug/profile/pprof"
 	"github.com/stack-labs/stack-rpc/debug/service/handler"
+	"github.com/stack-labs/stack-rpc/env"
 	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/util/wrapper"
 )
@@ -28,12 +25,6 @@ type service struct {
 
 func newService(opts ...Option) Service {
 	options := newOptions(opts...)
-
-	// service name
-	serviceName := options.Server.Options().Name
-
-	// wrap client to inject From-Service header on any calls
-	options.Client = wrapper.FromService(serviceName, options.Client)
 
 	return &service{
 		opts: options,
@@ -53,25 +44,11 @@ func (s *service) Init(opts ...Option) error {
 		o(&s.opts)
 	}
 
-	s.once.Do(func() {
-		// setup the plugins
-		for _, p := range strings.Split(os.Getenv(env.StackPlugin), ",") {
-			if len(p) == 0 {
-				continue
-			}
+	// service name
+	serviceName := s.opts.Server.Options().Name
 
-			// load the plugin
-			c, err := plugin.Load(p)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			// initialise the plugin
-			if err := plugin.Init(c); err != nil {
-				log.Fatal(err)
-			}
-		}
-	})
+	// wrap client to inject From-Service header on any calls
+	s.opts.Client = wrapper.FromService(serviceName, s.opts.Client)
 
 	return nil
 }

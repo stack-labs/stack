@@ -3,15 +3,14 @@ package cmd
 
 import (
 	"fmt"
+	br "github.com/stack-labs/stack-rpc/broker"
+	cl "github.com/stack-labs/stack-rpc/client"
 	"io"
 	"math/rand"
 	"os"
-	"strings"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/selector"
+	sel "github.com/stack-labs/stack-rpc/client/selector"
 	"github.com/stack-labs/stack-rpc/config"
 	log "github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/pkg/cli"
@@ -19,9 +18,7 @@ import (
 	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 	"github.com/stack-labs/stack-rpc/plugin"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/transport"
+	ser "github.com/stack-labs/stack-rpc/server"
 )
 
 type Cmd interface {
@@ -76,18 +73,18 @@ var (
 			Alias:  "stack_client_pool_ttl",
 		},
 		cli.IntFlag{
-			Name:   "registry_ttl",
-			EnvVar: "STACK_REGISTER_TTL",
+			Name:   "server_registry_ttl",
+			EnvVar: "STACK_SERVER_REGISTRY_TTL",
 			Value:  60,
 			Usage:  "Register TTL in seconds",
-			Alias:  "stack_registry_ttl",
+			Alias:  "stack_server_registry_ttl",
 		},
 		cli.IntFlag{
-			Name:   "registry_interval",
-			EnvVar: "STACK_REGISTER_INTERVAL",
+			Name:   "server_registry_interval",
+			EnvVar: "STACK_SERVER_REGISTRY_INTERVAL",
 			Value:  30,
 			Usage:  "Register interval in seconds",
-			Alias:  "stack_registry_interval",
+			Alias:  "stack_server_registry_interval",
 		},
 		cli.StringFlag{
 			Name:   "server",
@@ -193,6 +190,9 @@ var (
 			Alias:  "stack_config",
 		},
 	}
+
+	stackStdConfigFile = "stack.yml"
+	stackConfig        = StackConfig{}
 )
 
 func init() {
@@ -202,6 +202,8 @@ func init() {
 		help(writer, templ, data)
 		os.Exit(0)
 	}
+
+	config.RegisterOptions(&stackConfig)
 }
 
 func newCmd(opts ...Option) Cmd {
@@ -236,6 +238,12 @@ func (c *cmd) ConfigFile() string {
 }
 
 func (c *cmd) before(ctx *cli.Context) error {
+	c.beforeLoadConfig(ctx)
+
+	return nil
+}
+
+func (c *cmd) beforeLoadConfig(ctx *cli.Context) (err error) {
 	// set the config file path
 	if name := ctx.String("config"); len(name) > 0 {
 		c.conf = name
@@ -251,23 +259,26 @@ func (c *cmd) before(ctx *cli.Context) error {
 	}
 	appendSource = append(appendSource, cliSource.NewSource(c.App(), cliSource.Context(c.App().Context())))
 
-	err := (*c.opts.Config).Init(config.Source(appendSource...))
+	err = (*c.opts.Config).Init(config.Source(appendSource...))
 	if err != nil {
 		err = fmt.Errorf("init config err: %s", err)
 		log.Fatal(err)
-		return err
+		return
 	}
 
-	stackConfig := config.GetDefault()
-	if err := (*c.opts.Config).Scan(stackConfig); err != nil {
-		return err
-	}
+	return
+}
 
-	// If flags are set then use them otherwise do nothing
-	var serverOpts []server.Option
-	var clientOpts []client.Option
-
+func (c *cmd) beforeSetupComponents() (err error) {
 	conf := stackConfig.Stack
+
+	var serverOpts = conf.Server.Options()
+	var clientOpts = conf.Client.Options()
+	var transOpts = conf.Transport.Options()
+	var regOpts = conf.Registry.Options()
+	var brokerOpts = conf.Broker.Options()
+	var logOpts = conf.Logger.Options()
+
 	// Set the client
 	if len(conf.Client.Protocol) > 0 {
 		// only change if we have the client and type differs
@@ -292,8 +303,8 @@ func (c *cmd) before(ctx *cli.Context) error {
 		}
 
 		*c.opts.Broker = b()
-		serverOpts = append(serverOpts, server.Broker(*c.opts.Broker))
-		clientOpts = append(clientOpts, client.Broker(*c.opts.Broker))
+		serverOpts = append(serverOpts, ser.Broker(*c.opts.Broker))
+		clientOpts = append(clientOpts, cl.Broker(*c.opts.Broker))
 	}
 
 	// Set the registry
@@ -304,31 +315,31 @@ func (c *cmd) before(ctx *cli.Context) error {
 		}
 
 		*c.opts.Registry = r()
-		serverOpts = append(serverOpts, server.Registry(*c.opts.Registry))
-		clientOpts = append(clientOpts, client.Registry(*c.opts.Registry))
+		serverOpts = append(serverOpts, ser.Registry(*c.opts.Registry))
+		clientOpts = append(clientOpts, cl.Registry(*c.opts.Registry))
 
-		if err := (*c.opts.Selector).Init(selector.Registry(*c.opts.Registry)); err != nil {
+		if err := (*c.opts.Selector).Init(sel.Registry(*c.opts.Registry)); err != nil {
 			log.Fatalf("Error configuring registry: %v", err)
 		}
 
-		clientOpts = append(clientOpts, client.Selector(*c.opts.Selector))
+		clientOpts = append(clientOpts, cl.Selector(*c.opts.Selector))
 
-		if err := (*c.opts.Broker).Init(broker.Registry(*c.opts.Registry)); err != nil {
+		if err := (*c.opts.Broker).Init(br.Registry(*c.opts.Registry)); err != nil {
 			log.Fatalf("Error configuring broker: %v", err)
 		}
 	}
 
 	// Set the selector
 	if len(conf.Selector.Name) > 0 && (*c.opts.Selector).String() != conf.Selector.Name {
-		sel, ok := plugin.DefaultSelectors[conf.Selector.Name]
+		sl, ok := plugin.DefaultSelectors[conf.Selector.Name]
 		if !ok {
 			return fmt.Errorf("selector %s not found", conf.Selector)
 		}
 
-		*c.opts.Selector = sel(selector.Registry(*c.opts.Registry))
+		*c.opts.Selector = sl(sel.Registry(*c.opts.Registry))
 
 		// No server option here. Should there be?
-		clientOpts = append(clientOpts, client.Selector(*c.opts.Selector))
+		clientOpts = append(clientOpts, cl.Selector(*c.opts.Selector))
 	}
 
 	// Set the transport
@@ -339,130 +350,35 @@ func (c *cmd) before(ctx *cli.Context) error {
 		}
 
 		*c.opts.Transport = t()
-		serverOpts = append(serverOpts, server.Transport(*c.opts.Transport))
-		clientOpts = append(clientOpts, client.Transport(*c.opts.Transport))
+		serverOpts = append(serverOpts, ser.Transport(*c.opts.Transport))
+		clientOpts = append(clientOpts, cl.Transport(*c.opts.Transport))
 	}
 
-	// Parse the server options
-	metadata := make(map[string]string)
-	for _, d := range conf.Server.Metadata {
-		var key, val string
-		parts := strings.Split(d, "=")
-		key = parts[0]
-		if len(parts) > 1 {
-			val = strings.Join(parts[1:], "=")
-		}
-		metadata[key] = val
-	}
-
-	if len(metadata) > 0 {
-		serverOpts = append(serverOpts, server.Metadata(metadata))
-	}
-
-	// then logger
-	if err := (*c.opts.Logger).Init(); err != nil {
+	if err = (*c.opts.Logger).Init(logOpts...); err != nil {
 		log.Fatalf("Error configuring logger: %v", err)
 	}
 
-	// todo we dont need to init so many times
-	if len(conf.Broker.Address) > 0 {
-		if err := (*c.opts.Broker).Init(broker.Addrs(strings.Split(conf.Broker.Address, ",")...)); err != nil {
-			log.Fatalf("Error configuring broker: %v", err)
-		}
-	} else {
-		if err := (*c.opts.Broker).Init(); err != nil {
-			log.Fatalf("Error configuring broker: %v", err)
-		}
+	if err = (*c.opts.Broker).Init(brokerOpts...); err != nil {
+		log.Fatalf("Error configuring broker: %v", err)
 	}
 
-	if len(conf.Registry.Address) > 0 {
-		if err := (*c.opts.Registry).Init(registry.Addrs(strings.Split(conf.Registry.Address, ",")...)); err != nil {
-			log.Fatalf("Error configuring registry: %v", err)
-		}
-	} else {
-		if err := (*c.opts.Registry).Init(); err != nil {
-			log.Fatalf("Error configuring registry: %v", err)
-		}
+	if err = (*c.opts.Registry).Init(regOpts...); err != nil {
+		log.Fatalf("Error configuring registry: %v", err)
 	}
 
-	if len(conf.Transport.Address) > 0 {
-		if err := (*c.opts.Transport).Init(transport.Addrs(strings.Split(conf.Transport.Address, ",")...)); err != nil {
-			log.Fatalf("Error configuring transport: %v", err)
-		}
-	} else {
-		if err := (*c.opts.Transport).Init(); err != nil {
-			log.Fatalf("Error configuring transport: %v", err)
-		}
+	if err = (*c.opts.Transport).Init(transOpts...); err != nil {
+		log.Fatalf("Error configuring transport: %v", err)
 	}
 
-	if len(conf.Server.Name) > 0 {
-		serverOpts = append(serverOpts, server.Name(conf.Server.Name))
+	if err = (*c.opts.Server).Init(serverOpts...); err != nil {
+		log.Fatalf("Error configuring server: %v", err)
 	}
 
-	if len(conf.Server.Version) > 0 {
-		serverOpts = append(serverOpts, server.Version(conf.Server.Version))
+	if err = (*c.opts.Client).Init(clientOpts...); err != nil {
+		log.Fatalf("Error configuring client: %v", err)
 	}
 
-	if len(conf.Server.ID) > 0 {
-		serverOpts = append(serverOpts, server.Id(conf.Server.ID))
-	}
-
-	if len(conf.Server.Address) > 0 {
-		serverOpts = append(serverOpts, server.Address(conf.Server.Address))
-	}
-
-	if len(conf.Server.Advertise) > 0 {
-		serverOpts = append(serverOpts, server.Advertise(conf.Server.Advertise))
-	}
-
-	registryTTL := conf.Registry.TTL
-	if ttl := time.Duration(registryTTL); ttl >= 0 {
-		serverOpts = append(serverOpts, server.RegisterTTL(ttl*time.Second))
-	}
-
-	registryInterval := conf.Registry.Interval
-	if val := time.Duration(registryInterval); val > 0 {
-		serverOpts = append(serverOpts, server.RegisterInterval(val*time.Second))
-	}
-
-	// client opts
-	requestRetries := conf.Client.Request.Retries
-	if requestRetries >= 0 {
-		clientOpts = append(clientOpts, client.Retries(requestRetries))
-	}
-
-	if len(conf.Client.Request.Timeout) > 0 {
-		d, err := time.ParseDuration(conf.Client.Request.Timeout)
-		if err != nil {
-			return fmt.Errorf("failed to parse client_request_timeout: %v. it shoud be with unit suffix such as 1s, 2m", conf.Client.Request.Timeout)
-		}
-		clientOpts = append(clientOpts, client.RequestTimeout(d))
-	}
-
-	if conf.Client.Pool.Size > 0 {
-		clientOpts = append(clientOpts, client.PoolSize(conf.Client.Pool.Size))
-	}
-
-	if poolTTL := time.Duration(conf.Client.Pool.TTL); poolTTL > 0 {
-		clientOpts = append(clientOpts, client.PoolTTL(poolTTL*time.Second))
-	}
-
-	// We have some command line opts for the server.
-	// Lets set it up
-	if len(serverOpts) > 0 {
-		if err := (*c.opts.Server).Init(serverOpts...); err != nil {
-			log.Fatalf("Error configuring server: %v", err)
-		}
-	}
-
-	// Use an init option?
-	if len(clientOpts) > 0 {
-		if err := (*c.opts.Client).Init(clientOpts...); err != nil {
-			log.Fatalf("Error configuring client: %v", err)
-		}
-	}
-
-	return nil
+	return
 }
 
 func (c *cmd) App() *cli.App {

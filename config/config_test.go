@@ -18,13 +18,25 @@ stack:
 `)
 )
 
+type testV struct {
+	Stack struct {
+		Registry struct {
+			Interval int `sc:"interval"`
+		} `sc:"registry"`
+		Broker struct {
+			Name    string `sc:"name"`
+			Address string `sc:"address"`
+		} `sc:"broker"`
+	} `sc:"stack"`
+}
+
 func TestAutowired(t *testing.T) {
 	c := NewConfig(Source(memory.NewSource(memory.WithYAML(ymlFile))))
 	if err := c.Init(); err != nil {
 		t.Error(fmt.Errorf("Config init error: %s ", err))
 	}
 
-	testValue := Value{}
+	testValue := testV{}
 	RegisterOptions(&testValue)
 
 	c.Init()

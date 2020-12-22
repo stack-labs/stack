@@ -4,7 +4,10 @@ import (
 	"github.com/stack-labs/stack-rpc/registry"
 )
 
-// FilterEndpoint is an endpoint based Select Filter which will
+// Filter is used to filter a service during the selection process
+type Filter func([]*registry.Service) []*registry.Service
+
+// FilterEndpoint is an endpoint based Next Filter which will
 // only return services with the endpoint specified.
 func FilterEndpoint(name string) Filter {
 	return func(old []*registry.Service) []*registry.Service {
@@ -23,7 +26,7 @@ func FilterEndpoint(name string) Filter {
 	}
 }
 
-// FilterLabel is a label based Select Filter which will
+// FilterLabel is a label based Next Filter which will
 // only return services with the label specified.
 func FilterLabel(key, val string) Filter {
 	return func(old []*registry.Service) []*registry.Service {
@@ -56,7 +59,7 @@ func FilterLabel(key, val string) Filter {
 	}
 }
 
-// FilterVersion is a version based Select Filter which will
+// FilterVersion is a version based Next Filter which will
 // only return services with the version specified.
 func FilterVersion(version string) Filter {
 	return func(old []*registry.Service) []*registry.Service {

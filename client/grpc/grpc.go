@@ -53,7 +53,7 @@ func (g *grpcClient) secure() grpc.DialOption {
 	return grpc.WithInsecure()
 }
 
-func (g *grpcClient) next(request client.Request, opts client.CallOptions) (selector.Next, error) {
+func (g *grpcClient) next(request client.Request, opts client.CallOptions) (*registry.Node, error) {
 	service := request.Service()
 
 	// get proxy
@@ -68,15 +68,13 @@ func (g *grpcClient) next(request client.Request, opts client.CallOptions) (sele
 
 	// return remote address
 	if len(opts.Address) > 0 {
-		return func() (*registry.Node, error) {
-			return &registry.Node{
-				Address: opts.Address[0],
-			}, nil
+		return &registry.Node{
+			Address: opts.Address[0],
 		}, nil
 	}
 
 	// get next nodes from the selector
-	next, err := g.opts.Selector.Select(service, opts.SelectOptions...)
+	next, err := g.opts.Selector.Next(service, opts.SelectOptions...)
 	if err != nil {
 		if err == selector.ErrNotFound {
 			return nil, errors.InternalServerError("stack.rpc.client", "service %s: %s", service, err.Error())
@@ -324,11 +322,6 @@ func (g *grpcClient) Call(ctx context.Context, req client.Request, rsp interface
 		opt(&callOpts)
 	}
 
-	next, err := g.next(req, callOpts)
-	if err != nil {
-		return err
-	}
-
 	// check if we already have a deadline
 	d, ok := ctx.Deadline()
 	if !ok {
@@ -372,7 +365,7 @@ func (g *grpcClient) Call(ctx context.Context, req client.Request, rsp interface
 		}
 
 		// select next node
-		node, err := next()
+		node, err := g.next(req, callOpts)
 		service := req.Service()
 		if err != nil {
 			if err == selector.ErrNotFound {
@@ -427,11 +420,6 @@ func (g *grpcClient) Stream(ctx context.Context, req client.Request, opts ...cli
 		opt(&callOpts)
 	}
 
-	next, err := g.next(req, callOpts)
-	if err != nil {
-		return nil, err
-	}
-
 	// #200 - streams shouldn't have a request timeout set on the context
 
 	// should we noop right here?
@@ -453,7 +441,7 @@ func (g *grpcClient) Stream(ctx context.Context, req client.Request, opts ...cli
 			time.Sleep(t)
 		}
 
-		node, err := next()
+		node, err := g.next(req, callOpts)
 		service := req.Service()
 		if err != nil {
 			if err == selector.ErrNotFound {
@@ -490,7 +478,7 @@ func (g *grpcClient) Stream(ctx context.Context, req client.Request, opts ...cli
 				return rsp.stream, nil
 			}
 
-			retry, rerr := callOpts.Retry(ctx, req, i, err)
+			retry, rerr := callOpts.Retry(ctx, req, i, rsp.err)
 			if rerr != nil {
 				return nil, rerr
 			}

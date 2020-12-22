@@ -12,7 +12,6 @@ import (
 	"github.com/stack-labs/stack-rpc/client/selector"
 	"github.com/stack-labs/stack-rpc/client/selector/dns"
 	selectorR "github.com/stack-labs/stack-rpc/client/selector/registry"
-	"github.com/stack-labs/stack-rpc/client/selector/router"
 	"github.com/stack-labs/stack-rpc/client/selector/static"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/registry/mdns"
@@ -54,7 +53,6 @@ var (
 		"default": selectorR.NewSelector,
 		"dns":     dns.NewSelector,
 		"cache":   selectorR.NewSelector,
-		"router":  router.NewSelector,
 		"static":  static.NewSelector,
 	}
 

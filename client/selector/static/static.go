@@ -22,12 +22,10 @@ func (s *staticSelector) Options() selector.Options {
 	return s.opts
 }
 
-func (s *staticSelector) Select(service string, opts ...selector.SelectOption) (selector.Next, error) {
-	return func() (*registry.Node, error) {
-		return &registry.Node{
-			Id:      service,
-			Address: service,
-		}, nil
+func (s *staticSelector) Next(service string, opts ...selector.SelectOption) (*registry.Node, error) {
+	return &registry.Node{
+		Id:      service,
+		Address: service,
 	}, nil
 }
 

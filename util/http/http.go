@@ -18,7 +18,7 @@ func NewRoundTripper(opts ...Option) http.RoundTripper {
 
 	return &roundTripper{
 		rt:   http.DefaultTransport,
-		st:   selector.Random,
+		st:   selector.Random(),
 		opts: options,
 	}
 }

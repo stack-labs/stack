@@ -104,8 +104,6 @@ func requestToProto(r *http.Request) (*api.Request, error) {
 
 // strategy is a hack for selection
 func strategy(services []*registry.Service) selector.Strategy {
-	return func(_ []*registry.Service) selector.Next {
-		// ignore input to this function, use services above
-		return selector.Random(services)
-	}
+	// ignore input to this function, use services above
+	return selector.Random()
 }

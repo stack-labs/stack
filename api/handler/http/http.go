@@ -65,10 +65,10 @@ func (h *httpHandler) getService(r *http.Request) (string, error) {
 	}
 
 	// create a random selector
-	next := selector.Random(service.Services)
+	next := selector.Random()
 
 	// get the next node
-	s, err := next()
+	s, err := next(service.Services)
 	if err != nil {
 		return "", nil
 	}

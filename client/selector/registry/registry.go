@@ -40,7 +40,7 @@ func (c *registrySelector) Options() selector.Options {
 	return c.opts
 }
 
-func (c *registrySelector) Select(service string, opts ...selector.SelectOption) (selector.Next, error) {
+func (c *registrySelector) Next(service string, opts ...selector.SelectOption) (*registry.Node, error) {
 	sopts := selector.SelectOptions{
 		Strategy: c.opts.Strategy,
 	}
@@ -70,7 +70,7 @@ func (c *registrySelector) Select(service string, opts ...selector.SelectOption)
 		return nil, selector.ErrNoneAvailable
 	}
 
-	return sopts.Strategy(services), nil
+	return sopts.Strategy(services)
 }
 
 func (c *registrySelector) Mark(service string, node *registry.Node, err error) {
@@ -92,7 +92,7 @@ func (c *registrySelector) String() string {
 
 func NewSelector(opts ...selector.Option) selector.Selector {
 	sopts := selector.Options{
-		Strategy: selector.Random,
+		Strategy: selector.Random(),
 	}
 
 	for _, opt := range opts {

@@ -45,7 +45,7 @@ func SetStrategy(fn Strategy) Option {
 }
 
 // WithFilter adds a filter function to the list of filters
-// used during the Select call.
+// used during the Next call.
 func WithFilter(fn ...Filter) SelectOption {
 	return func(o *SelectOptions) {
 		o.Filters = append(o.Filters, fn...)

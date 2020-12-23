@@ -19,11 +19,9 @@ func (r *roundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
 		return nil, err
 	}
 
-	next := r.st(s)
-
 	// rudimentary retry 3 times
 	for i := 0; i < 3; i++ {
-		n, err := next()
+		n, err := r.st(s)
 		if err != nil {
 			continue
 		}

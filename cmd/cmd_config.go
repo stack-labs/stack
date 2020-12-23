@@ -16,6 +16,7 @@ import (
 )
 
 type stack struct {
+	Includes  string    `json:"includes" sc:"includes"`
 	Registry  registry  `json:"registry" sc:"registry"`
 	Broker    broker    `json:"broker" sc:"broker"`
 	Client    client    `json:"client" sc:"client"`

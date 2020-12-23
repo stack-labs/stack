@@ -3,13 +3,14 @@ package cmd
 
 import (
 	"fmt"
-	br "github.com/stack-labs/stack-rpc/broker"
-	cl "github.com/stack-labs/stack-rpc/client"
 	"io"
 	"math/rand"
 	"os"
+	"strings"
 	"time"
 
+	br "github.com/stack-labs/stack-rpc/broker"
+	cl "github.com/stack-labs/stack-rpc/client"
 	sel "github.com/stack-labs/stack-rpc/client/selector"
 	"github.com/stack-labs/stack-rpc/config"
 	log "github.com/stack-labs/stack-rpc/logger"
@@ -19,6 +20,8 @@ import (
 	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 	"github.com/stack-labs/stack-rpc/plugin"
 	ser "github.com/stack-labs/stack-rpc/server"
+	uf "github.com/stack-labs/stack-rpc/util/file"
+	"gopkg.in/yaml.v2"
 )
 
 type Cmd interface {
@@ -237,32 +240,94 @@ func (c *cmd) ConfigFile() string {
 	return c.conf
 }
 
-func (c *cmd) before(ctx *cli.Context) error {
-	c.beforeLoadConfig(ctx)
+func (c *cmd) before(ctx *cli.Context) (err error) {
+	err = c.beforeLoadConfig(ctx)
+	if err != nil {
+		log.Fatalf("load config in before action err: %s", err)
+	}
+
+	err = c.beforeSetupComponents()
+	if err != nil {
+		log.Fatalf("setup components in before action err: %s", err)
+	}
 
 	return nil
 }
 
 func (c *cmd) beforeLoadConfig(ctx *cli.Context) (err error) {
 	// set the config file path
-	if name := ctx.String("config"); len(name) > 0 {
-		c.conf = name
+	if filePath := ctx.String("config"); len(filePath) > 0 {
+		c.conf = filePath
 	}
 
-	// need to init config first
-	var appendSource []source.Source
-	// need read from config file
-	if len(c.ConfigFile()) > 0 {
-		log.Info("config read from file:", c.ConfigFile())
-		configFileSource := file.NewSource(file.WithPath(c.ConfigFile()))
-		appendSource = append(appendSource, configFileSource)
+	// need to init the special config if specified
+	if len(c.conf) == 0 {
+		wkDir, errN := os.Getwd()
+		if errN != nil {
+			err = fmt.Errorf("stack can't access working wkDir: %s", errN)
+			return
+		}
+
+		c.conf = fmt.Sprintf("%s%s%s", wkDir, string(os.PathSeparator), stackStdConfigFile)
 	}
+
+	var appendSource []source.Source
+	if len(c.conf) > 0 {
+		// check file exists
+		exists, err := uf.Exists(c.conf)
+		if err != nil {
+			log.Error(fmt.Errorf("config file is not existed %s", err))
+		}
+
+		if exists {
+			val := struct {
+				Stack struct {
+					Includes string `yaml:"includes"`
+				} `yaml:"stack"`
+			}{}
+			stdFileSource := file.NewSource(file.WithPath(c.conf))
+			appendSource = append(appendSource, stdFileSource)
+
+			set, errN := stdFileSource.Read()
+			if errN != nil {
+				err = fmt.Errorf("stack read the stack.yml err: %s", errN)
+				return err
+			}
+
+			errN = yaml.Unmarshal(set.Data, &val)
+			if errN != nil {
+				err = fmt.Errorf("unmarshal stack.yml err: %s", errN)
+				return err
+			}
+
+			if len(val.Stack.Includes) > 0 {
+				filePath := c.conf[:strings.LastIndex(c.conf, string(os.PathSeparator))+1]
+				for _, f := range strings.Split(val.Stack.Includes, ",") {
+					log.Infof("load extra config file: %s%s", filePath, f)
+					f = strings.TrimSpace(f)
+					extraFile := fmt.Sprintf("%s%s", filePath, f)
+					extraExists, err := uf.Exists(extraFile)
+					if err != nil {
+						log.Error(fmt.Errorf("config file is not existed %s", err))
+						continue
+					} else if !extraExists {
+						log.Error(fmt.Errorf("config file [%s] is not existed", extraFile))
+						continue
+					}
+
+					extraFileSource := file.NewSource(file.WithPath(extraFile))
+					appendSource = append(appendSource, extraFileSource)
+				}
+			}
+		}
+	}
+
+	// the last two must be env & cmd line
 	appendSource = append(appendSource, cliSource.NewSource(c.App(), cliSource.Context(c.App().Context())))
 
 	err = (*c.opts.Config).Init(config.Source(appendSource...))
 	if err != nil {
 		err = fmt.Errorf("init config err: %s", err)
-		log.Fatal(err)
 		return
 	}
 
@@ -319,13 +384,13 @@ func (c *cmd) beforeSetupComponents() (err error) {
 		clientOpts = append(clientOpts, cl.Registry(*c.opts.Registry))
 
 		if err := (*c.opts.Selector).Init(sel.Registry(*c.opts.Registry)); err != nil {
-			log.Fatalf("Error configuring registry: %v", err)
+			return fmt.Errorf("Error configuring registry: %s ", err)
 		}
 
 		clientOpts = append(clientOpts, cl.Selector(*c.opts.Selector))
 
 		if err := (*c.opts.Broker).Init(br.Registry(*c.opts.Registry)); err != nil {
-			log.Fatalf("Error configuring broker: %v", err)
+			return fmt.Errorf("Error configuring broker: %s ", err)
 		}
 	}
 
@@ -355,27 +420,27 @@ func (c *cmd) beforeSetupComponents() (err error) {
 	}
 
 	if err = (*c.opts.Logger).Init(logOpts...); err != nil {
-		log.Fatalf("Error configuring logger: %v", err)
+		return fmt.Errorf("Error configuring logger: %s ", err)
 	}
 
 	if err = (*c.opts.Broker).Init(brokerOpts...); err != nil {
-		log.Fatalf("Error configuring broker: %v", err)
+		return fmt.Errorf("Error configuring broker: %s ", err)
 	}
 
 	if err = (*c.opts.Registry).Init(regOpts...); err != nil {
-		log.Fatalf("Error configuring registry: %v", err)
+		return fmt.Errorf("Error configuring registry: %s ", err)
 	}
 
 	if err = (*c.opts.Transport).Init(transOpts...); err != nil {
-		log.Fatalf("Error configuring transport: %v", err)
+		return fmt.Errorf("Error configuring transport: %s ", err)
 	}
 
 	if err = (*c.opts.Server).Init(serverOpts...); err != nil {
-		log.Fatalf("Error configuring server: %v", err)
+		return fmt.Errorf("Error configuring server: %s ", err)
 	}
 
 	if err = (*c.opts.Client).Init(clientOpts...); err != nil {
-		log.Fatalf("Error configuring client: %v", err)
+		return fmt.Errorf("Error configuring client: %v ", err)
 	}
 
 	return

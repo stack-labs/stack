@@ -331,39 +331,39 @@ func (c *cmd) beforeSetupComponents() (err error) {
 	// Set the client
 	if len(conf.Client.Protocol) > 0 {
 		// only change if we have the client and type differs
-		if cl, ok := plugin.DefaultClients[conf.Client.Protocol]; ok && (*c.opts.Client).String() != conf.Client.Protocol {
-			*c.opts.Client = cl()
+		if cl, ok := plugin.ClientPlugins[conf.Client.Protocol]; ok && (*c.opts.Client).String() != conf.Client.Protocol {
+			*c.opts.Client = cl.New()
 		}
 	}
 
 	// Set the server
 	if len(conf.Server.Protocol) > 0 {
 		// only change if we have the server and type differs
-		if ser, ok := plugin.DefaultServers[conf.Server.Protocol]; ok && (*c.opts.Server).String() != conf.Server.Protocol {
-			*c.opts.Server = ser()
+		if ser, ok := plugin.ServerPlugins[conf.Server.Protocol]; ok && (*c.opts.Server).String() != conf.Server.Protocol {
+			*c.opts.Server = ser.New()
 		}
 	}
 
 	// Set the broker
 	if len(conf.Broker.Name) > 0 && (*c.opts.Broker).String() != conf.Broker.Name {
-		b, ok := plugin.DefaultBrokers[conf.Broker.Name]
+		b, ok := plugin.BrokerPlugins[conf.Broker.Name]
 		if !ok {
 			return fmt.Errorf("broker %s not found", conf.Broker)
 		}
 
-		*c.opts.Broker = b()
+		*c.opts.Broker = b.New()
 		serverOpts = append(serverOpts, ser.Broker(*c.opts.Broker))
 		clientOpts = append(clientOpts, cl.Broker(*c.opts.Broker))
 	}
 
 	// Set the registry
 	if len(conf.Registry.Name) > 0 && (*c.opts.Registry).String() != conf.Registry.Name {
-		r, ok := plugin.DefaultRegistries[conf.Registry.Name]
+		r, ok := plugin.RegistryPlugins[conf.Registry.Name]
 		if !ok {
 			return fmt.Errorf("registry %s not found", conf.Registry.Name)
 		}
 
-		*c.opts.Registry = r()
+		*c.opts.Registry = r.New()
 		serverOpts = append(serverOpts, ser.Registry(*c.opts.Registry))
 		clientOpts = append(clientOpts, cl.Registry(*c.opts.Registry))
 
@@ -380,12 +380,12 @@ func (c *cmd) beforeSetupComponents() (err error) {
 
 	// Set the selector
 	if len(conf.Selector.Name) > 0 && (*c.opts.Selector).String() != conf.Selector.Name {
-		sl, ok := plugin.DefaultSelectors[conf.Selector.Name]
+		sl, ok := plugin.SelectorPlugins[conf.Selector.Name]
 		if !ok {
 			return fmt.Errorf("selector %s not found", conf.Selector)
 		}
 
-		*c.opts.Selector = sl(sel.Registry(*c.opts.Registry))
+		*c.opts.Selector = sl.New(sel.Registry(*c.opts.Registry))
 
 		// No server option here. Should there be?
 		clientOpts = append(clientOpts, cl.Selector(*c.opts.Selector))
@@ -393,12 +393,12 @@ func (c *cmd) beforeSetupComponents() (err error) {
 
 	// Set the transport
 	if len(conf.Transport.Name) > 0 && (*c.opts.Transport).String() != conf.Transport.Name {
-		t, ok := plugin.DefaultTransports[conf.Transport.Name]
+		t, ok := plugin.TransportPlugins[conf.Transport.Name]
 		if !ok {
 			return fmt.Errorf("transport %s not found", conf.Transport)
 		}
 
-		*c.opts.Transport = t()
+		*c.opts.Transport = t.New()
 		serverOpts = append(serverOpts, ser.Transport(*c.opts.Transport))
 		clientOpts = append(clientOpts, cl.Transport(*c.opts.Transport))
 	}

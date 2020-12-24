@@ -103,7 +103,7 @@ func (r *registry) Options() []reg.Option {
 	}
 
 	if plugin.RegistryPlugins[r.Name] != nil {
-		regOptions = append(regOptions, plugin.RegistryPlugins[r.Name].Config()...)
+		regOptions = append(regOptions, plugin.RegistryPlugins[r.Name].Options()...)
 	}
 
 	return regOptions
@@ -204,7 +204,7 @@ func (t *transport) Options() []tra.Option {
 	}
 
 	if plugin.TransportPlugins[t.Name] != nil {
-		traOptions = append(traOptions, plugin.TransportPlugins[t.Name].Config()...)
+		traOptions = append(traOptions, plugin.TransportPlugins[t.Name].Options()...)
 	}
 
 	return traOptions
@@ -269,7 +269,7 @@ func (l *logger) Options() []lg.Option {
 	}
 
 	if plugin.LoggerPlugins[l.Name] != nil {
-		logOptions = append(logOptions, plugin.LoggerPlugins[l.Name].Config()...)
+		logOptions = append(logOptions, plugin.LoggerPlugins[l.Name].Options()...)
 	}
 
 	return logOptions

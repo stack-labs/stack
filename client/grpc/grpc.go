@@ -9,18 +9,16 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/env"
-
 	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/broker/http"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/selector"
 	selectorR "github.com/stack-labs/stack-rpc/client/selector/registry"
 	"github.com/stack-labs/stack-rpc/codec"
 	raw "github.com/stack-labs/stack-rpc/codec/bytes"
+	"github.com/stack-labs/stack-rpc/env"
 	"github.com/stack-labs/stack-rpc/pkg/metadata"
+	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/registry/mdns"
 	"github.com/stack-labs/stack-rpc/transport"
 	"github.com/stack-labs/stack-rpc/util/errors"
 	"google.golang.org/grpc"
@@ -615,11 +613,11 @@ func newClient(opts ...client.Option) client.Client {
 	}
 
 	if options.Broker == nil {
-		options.Broker = http.NewBroker()
+		options.Broker = plugin.BrokerPlugins["http"].New()
 	}
 
 	if options.Registry == nil {
-		options.Registry = mdns.NewRegistry()
+		options.Registry = plugin.RegistryPlugins["mdns"].New()
 	}
 
 	if options.Selector == nil {

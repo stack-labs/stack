@@ -344,6 +344,14 @@ func (c *cmd) beforeSetupComponents() (err error) {
 	var brokerOpts = conf.Broker.Options()
 	var logOpts = conf.Logger.Options()
 
+	// set Logger
+	if len(conf.Logger.Name) > 0 {
+		// only change if we have the logger and type differs
+		if l, ok := plugin.LoggerPlugins[conf.Logger.Name]; ok && (*c.opts.Logger).String() != conf.Logger.Name {
+			*c.opts.Logger = l.New()
+		}
+	}
+
 	// Set the client
 	if len(conf.Client.Protocol) > 0 {
 		// only change if we have the client and type differs

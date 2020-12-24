@@ -35,7 +35,7 @@ func injectAutowired(ctx context.Context) {
 			case <-time.After(3 * time.Second):
 				refresh()
 			case data := <-ctx.Done():
-				log.Infof("config autowired stop because of %v", data)
+				log.Infof("config autowired action stopped because of %v", data)
 			}
 		}
 	}()

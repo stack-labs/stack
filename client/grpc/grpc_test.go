@@ -12,6 +12,8 @@ import (
 	"github.com/stack-labs/stack-rpc/registry/memory"
 	pgrpc "google.golang.org/grpc"
 	pb "google.golang.org/grpc/examples/helloworld/helloworld"
+
+	_ "github.com/stack-labs/stack-rpc/broker/http"
 )
 
 // server is used to implement helloworld.GreeterServer.

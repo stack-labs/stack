@@ -6,11 +6,13 @@ import (
 	"testing"
 
 	"github.com/stack-labs/stack-rpc/client"
-
 	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/registry/memory"
 	"github.com/stack-labs/stack-rpc/util/errors"
+
+	_ "github.com/stack-labs/stack-rpc/client/selector/registry"
 )
 
 var (
@@ -102,6 +104,7 @@ func TestCallAddress(t *testing.T) {
 	c := NewClient(
 		client.Registry(r),
 		client.WrapCall(wrap),
+		client.Selector(plugin.SelectorPlugins["cache"].New()),
 	)
 	c.Options().Selector.Init(selector.Registry(r))
 
@@ -141,6 +144,7 @@ func TestCallRetry(t *testing.T) {
 	c := NewClient(
 		client.Registry(r),
 		client.WrapCall(wrap),
+		client.Selector(plugin.SelectorPlugins["cache"].New()),
 	)
 	c.Options().Selector.Init(selector.Registry(r))
 
@@ -189,6 +193,7 @@ func TestCallWrapper(t *testing.T) {
 	c := NewClient(
 		client.Registry(r),
 		client.WrapCall(wrap),
+		client.Selector(plugin.SelectorPlugins["cache"].New()),
 	)
 	c.Options().Selector.Init(selector.Registry(r))
 

@@ -20,6 +20,7 @@ import (
 	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
 	"github.com/stack-labs/stack-rpc/plugin"
 	ser "github.com/stack-labs/stack-rpc/server"
+	uf "github.com/stack-labs/stack-rpc/util/file"
 	"gopkg.in/yaml.v2"
 )
 
@@ -255,55 +256,70 @@ func (c *cmd) before(ctx *cli.Context) (err error) {
 
 func (c *cmd) beforeLoadConfig(ctx *cli.Context) (err error) {
 	// set the config file path
-	if name := ctx.String("config"); len(name) > 0 {
-		c.conf = name
-	}
-
-	// load the default stack.yml first if exists
-	wkDir, err := os.Getwd()
-	if err != nil {
-		err = fmt.Errorf("stack can't access working wkDir: %s", err)
-		return
-	}
-
-	var appendSource []source.Source
-	if len(wkDir) > 0 {
-		val := struct {
-			Stack struct {
-				Includes string `yaml:"includes"`
-			} `yaml:"stack"`
-		}{}
-		stackYmlFile := fmt.Sprintf("%s%s%s", wkDir, string(os.PathSeparator), stackStdConfigFile)
-		stdFileSource := file.NewSource(file.WithPath(stackYmlFile))
-		appendSource = append(appendSource, stdFileSource)
-
-		set, errN := stdFileSource.Read()
-		if errN != nil {
-			err = fmt.Errorf("stack read the stack.yml err: %s", errN)
-			return
-		}
-		errN = yaml.Unmarshal(set.Data, &val)
-		if errN != nil {
-			err = fmt.Errorf("unmarshal stack.yml err: %s", errN)
-			return
-		}
-
-		if len(val.Stack.Includes) > 0 {
-			for _, f := range strings.Split(val.Stack.Includes, ",") {
-				log.Infof("load extra config file: %s", f)
-				f = strings.TrimSpace(f)
-				extraFile := fmt.Sprintf("%s%s%s", wkDir, string(os.PathSeparator), f)
-				extraFileSource := file.NewSource(file.WithPath(extraFile))
-				appendSource = append(appendSource, extraFileSource)
-			}
-		}
+	if filePath := ctx.String("config"); len(filePath) > 0 {
+		c.conf = filePath
 	}
 
 	// need to init the special config if specified
-	if len(c.ConfigFile()) > 0 {
-		log.Info("config read from file:", c.ConfigFile())
-		configFileSource := file.NewSource(file.WithPath(c.ConfigFile()))
-		appendSource = append(appendSource, configFileSource)
+	if len(c.conf) == 0 {
+		wkDir, errN := os.Getwd()
+		if errN != nil {
+			err = fmt.Errorf("stack can't access working wkDir: %s", errN)
+			return
+		}
+
+		c.conf = fmt.Sprintf("%s%s%s", wkDir, string(os.PathSeparator), stackStdConfigFile)
+	}
+
+	var appendSource []source.Source
+	if len(c.conf) > 0 {
+		// check file exists
+		exists, err := uf.Exists(c.conf)
+		if err != nil {
+			log.Error(fmt.Errorf("config file is not existed %s", err))
+		}
+
+		if exists {
+			val := struct {
+				Stack struct {
+					Includes string `yaml:"includes"`
+				} `yaml:"stack"`
+			}{}
+			stdFileSource := file.NewSource(file.WithPath(c.conf))
+			appendSource = append(appendSource, stdFileSource)
+
+			set, errN := stdFileSource.Read()
+			if errN != nil {
+				err = fmt.Errorf("stack read the stack.yml err: %s", errN)
+				return err
+			}
+
+			errN = yaml.Unmarshal(set.Data, &val)
+			if errN != nil {
+				err = fmt.Errorf("unmarshal stack.yml err: %s", errN)
+				return err
+			}
+
+			if len(val.Stack.Includes) > 0 {
+				filePath := c.conf[:strings.LastIndex(c.conf, string(os.PathSeparator))+1]
+				for _, f := range strings.Split(val.Stack.Includes, ",") {
+					log.Infof("load extra config file: %s%s", filePath, f)
+					f = strings.TrimSpace(f)
+					extraFile := fmt.Sprintf("%s%s", filePath, f)
+					extraExists, err := uf.Exists(extraFile)
+					if err != nil {
+						log.Error(fmt.Errorf("config file is not existed %s", err))
+						continue
+					} else if !extraExists {
+						log.Error(fmt.Errorf("config file [%s] is not existed", extraFile))
+						continue
+					}
+
+					extraFileSource := file.NewSource(file.WithPath(extraFile))
+					appendSource = append(appendSource, extraFileSource)
+				}
+			}
+		}
 	}
 
 	// the last two must be env & cmd line

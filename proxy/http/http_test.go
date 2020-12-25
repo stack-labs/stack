@@ -71,6 +71,8 @@ func TestHTTPProxy(t *testing.T) {
 		server.WithRouter(p),
 	)
 
+	service.Init()
+
 	// run service
 	// server
 	go http.Serve(c, nil)

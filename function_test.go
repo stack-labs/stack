@@ -39,6 +39,8 @@ func TestFunction(t *testing.T) {
 	// wait for start
 	wg.Wait()
 
+	fn.Init()
+
 	// test call debug
 	req := fn.Client().NewRequest(
 		"test.function",

@@ -103,7 +103,7 @@ func (r *registry) Options() []reg.Option {
 	}
 
 	if plugin.RegistryPlugins[r.Name] != nil {
-		regOptions = append(regOptions, plugin.RegistryPlugins[r.Name].Config()...)
+		regOptions = append(regOptions, plugin.RegistryPlugins[r.Name].Options()...)
 	}
 
 	return regOptions
@@ -204,18 +204,19 @@ func (t *transport) Options() []tra.Option {
 	}
 
 	if plugin.TransportPlugins[t.Name] != nil {
-		traOptions = append(traOptions, plugin.TransportPlugins[t.Name].Config()...)
+		traOptions = append(traOptions, plugin.TransportPlugins[t.Name].Options()...)
 	}
 
 	return traOptions
 }
 
 type logger struct {
-	Name            string            `json:"name" sc:"name"`
-	Level           string            `json:"level" sc:"level"`
-	Fields          map[string]string `json:"fields" sc:"fields"`
-	CallerSkipCount int               `json:"caller-skip-count" sc:"caller-skip-count"`
-	Persistence     logPersistence    `json:"persistence" sc:"persistence"`
+	Name  string `json:"name" sc:"name"`
+	Level string `json:"level" sc:"level"`
+	// todo support map settings
+	// Fields          map[string]string `json:"fields" sc:"fields"`
+	CallerSkipCount int            `json:"caller-skip-count" sc:"caller-skip-count"`
+	Persistence     logPersistence `json:"persistence" sc:"persistence"`
 }
 
 type logPersistence struct {
@@ -251,7 +252,9 @@ func (l *logPersistence) Options() *lg.PersistenceOptions {
 	return o
 }
 
-func (l *logger) Options() []lg.Option {
+type logOptions []lg.Option
+
+func (l *logger) Options() logOptions {
 	var logOptions []lg.Option
 
 	if len(l.Level) > 0 {
@@ -269,7 +272,9 @@ func (l *logger) Options() []lg.Option {
 	}
 
 	if plugin.LoggerPlugins[l.Name] != nil {
-		logOptions = append(logOptions, plugin.LoggerPlugins[l.Name].Config()...)
+		logOptions = append(logOptions, plugin.LoggerPlugins[l.Name].Options()...)
+	} else if len(l.Name) > 0 {
+		log.Warnf("seems you declared a logger name:[%s] which stack can't find out.", l.Name)
 	}
 
 	return logOptions

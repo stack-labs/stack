@@ -11,12 +11,12 @@ import (
 	"time"
 
 	"github.com/modern-go/reflect2"
-	log "github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/pkg/config/loader"
 	"github.com/stack-labs/stack-rpc/pkg/config/reader"
 	"github.com/stack-labs/stack-rpc/pkg/config/source"
 	"github.com/stack-labs/stack-rpc/pkg/config/storage"
 	"github.com/stack-labs/stack-rpc/pkg/config/storage/file"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 // Config is an interface abstraction for dynamic configuration

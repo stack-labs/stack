@@ -13,7 +13,7 @@ stack:
     name: http
     address:
   client:
-    protocol: http
+    protocol: mucp
     pool:
       size:
       ttl:
@@ -31,13 +31,24 @@ stack:
     # int in seconds. register time to live.
     register-ttl: 15
   transport:
+    name: http
+    addrs:
+    secure: false
+    timeout:
   selector:
-
+    name: cache
   logger:
-    name:
+    name: console
+    level: info
+    persistence:
+      enable: false
+      max-file-size: 10
+      max-backup-size: 500
+      max-backup-keep-days: 20
+      file-name-pattern:
+      backup-file-name-pattern:
+    slogrus:
+      split-level: true
+      report-caller: true
   runtime:
   profile:
-
-
-
-

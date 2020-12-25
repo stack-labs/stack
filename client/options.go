@@ -4,21 +4,12 @@ import (
 	"context"
 	"time"
 
-	registry2 "github.com/stack-labs/stack-rpc/client/selector/registry"
-
-	codecu "github.com/stack-labs/stack-rpc/util/codec"
-
-	httpt "github.com/stack-labs/stack-rpc/transport/http"
-
-	"github.com/stack-labs/stack-rpc/broker/http"
-
-	"github.com/stack-labs/stack-rpc/registry/mdns"
-
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/client/selector"
 	"github.com/stack-labs/stack-rpc/codec"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/transport"
+	codecu "github.com/stack-labs/stack-rpc/util/codec"
 )
 
 type Options struct {
@@ -115,24 +106,6 @@ func NewOptions(options ...Option) Options {
 
 	if len(opts.ContentType) == 0 {
 		opts.ContentType = codecu.DefaultContentType
-	}
-
-	if opts.Broker == nil {
-		opts.Broker = http.NewBroker()
-	}
-
-	if opts.Registry == nil {
-		opts.Registry = mdns.NewRegistry()
-	}
-
-	if opts.Selector == nil {
-		opts.Selector = registry2.NewSelector(
-			selector.Registry(opts.Registry),
-		)
-	}
-
-	if opts.Transport == nil {
-		opts.Transport = httpt.NewTransport()
 	}
 
 	if opts.Context == nil {

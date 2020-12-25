@@ -132,20 +132,13 @@ func Server(s server.Server) Option {
 func Registry(r registry.Registry) Option {
 	return func(o *Options) {
 		o.Registry = r
-		// Update Client and Server
-		o.Client.Init(client.Registry(r))
-		o.Server.Init(server.Registry(r))
-		// Update Selector
-		o.Client.Options().Selector.Init(selector.Registry(r))
-		// Update Broker
-		o.Broker.Init(broker.Registry(r))
 	}
 }
 
 // Selector sets the selector for the service client
 func Selector(s selector.Selector) Option {
 	return func(o *Options) {
-		o.Client.Init(client.Selector(s))
+		o.Selector = s
 	}
 }
 
@@ -154,9 +147,6 @@ func Selector(s selector.Selector) Option {
 func Transport(t transport.Transport) Option {
 	return func(o *Options) {
 		o.Transport = t
-		// Update Client and Server
-		o.Client.Init(client.Transport(t))
-		o.Server.Init(server.Transport(t))
 	}
 }
 

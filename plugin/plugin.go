@@ -4,50 +4,61 @@ import (
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/transport"
 )
 
-type Options func()
-
 type Plugin interface {
 	Name() string
-	Type() string
 }
 
 type LoggerPlugin interface {
 	Plugin
-	Config() []logger.Option
+	Options() []logger.Option
+	New(...logger.Option) logger.Logger
 }
 
 type BrokerPlugin interface {
 	Plugin
-	Config() []broker.Option
+	Options() []broker.Option
+	New(...broker.Option) broker.Broker
 }
 
 type TransportPlugin interface {
 	Plugin
-	Config() []transport.Option
+	Options() []transport.Option
+	New(...transport.Option) transport.Transport
 }
 
 type ClientPlugin interface {
 	Plugin
-	Config() []client.Option
+	Options() []client.Option
+	New(...client.Option) client.Client
 }
 
 type ServerPlugin interface {
 	Plugin
-	Config() []server.Option
+	Options() []server.Option
+	New(...server.Option) server.Server
 }
 
 type RegistryPlugin interface {
 	Plugin
-	Config() []registry.Option
+	Options() []registry.Option
+	New(...registry.Option) registry.Registry
 }
 
 type SelectorPlugin interface {
 	Plugin
-	Config() []selector.Option
+	Options() []selector.Option
+	New(...selector.Option) selector.Selector
+}
+
+type ConfigPlugin interface {
+	Plugin
+	Options() []config.Option
+	New(...config.Option) config.Config
 }

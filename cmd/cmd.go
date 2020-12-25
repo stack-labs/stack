@@ -280,6 +280,7 @@ func (c *cmd) beforeLoadConfig(ctx *cli.Context) (err error) {
 		}
 
 		if exists {
+			// todo support more types
 			val := struct {
 				Stack struct {
 					Includes string `yaml:"includes"`
@@ -376,8 +377,6 @@ func (c *cmd) beforeSetupComponents() (err error) {
 		}
 
 		*c.opts.Broker = b.New()
-		serverOpts = append(serverOpts, ser.Broker(*c.opts.Broker))
-		clientOpts = append(clientOpts, cl.Broker(*c.opts.Broker))
 	}
 
 	// Set the registry
@@ -388,14 +387,10 @@ func (c *cmd) beforeSetupComponents() (err error) {
 		}
 
 		*c.opts.Registry = r.New()
-		serverOpts = append(serverOpts, ser.Registry(*c.opts.Registry))
-		clientOpts = append(clientOpts, cl.Registry(*c.opts.Registry))
 
 		if err := (*c.opts.Selector).Init(sel.Registry(*c.opts.Registry)); err != nil {
 			return fmt.Errorf("Error configuring registry: %s ", err)
 		}
-
-		clientOpts = append(clientOpts, cl.Selector(*c.opts.Selector))
 
 		if err := (*c.opts.Broker).Init(br.Registry(*c.opts.Registry)); err != nil {
 			return fmt.Errorf("Error configuring broker: %s ", err)
@@ -410,9 +405,6 @@ func (c *cmd) beforeSetupComponents() (err error) {
 		}
 
 		*c.opts.Selector = sl.New(sel.Registry(*c.opts.Registry))
-
-		// No server option here. Should there be?
-		clientOpts = append(clientOpts, cl.Selector(*c.opts.Selector))
 	}
 
 	// Set the transport
@@ -423,9 +415,10 @@ func (c *cmd) beforeSetupComponents() (err error) {
 		}
 
 		*c.opts.Transport = t.New()
-		serverOpts = append(serverOpts, ser.Transport(*c.opts.Transport))
-		clientOpts = append(clientOpts, cl.Transport(*c.opts.Transport))
 	}
+
+	serverOpts = append(serverOpts, ser.Transport(*c.opts.Transport), ser.Broker(*c.opts.Broker), ser.Registry(*c.opts.Registry))
+	clientOpts = append(clientOpts, cl.Transport(*c.opts.Transport), cl.Broker(*c.opts.Broker), cl.Registry(*c.opts.Registry), cl.Selector(*c.opts.Selector))
 
 	if err = (*c.opts.Logger).Init(logOpts...); err != nil {
 		return fmt.Errorf("Error configuring logger: %s ", err)

@@ -12,8 +12,8 @@ import (
 	"github.com/stack-labs/stack-rpc/debug/profile/pprof"
 	"github.com/stack-labs/stack-rpc/debug/service/handler"
 	"github.com/stack-labs/stack-rpc/env"
-	log "github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/util/log"
 	"github.com/stack-labs/stack-rpc/util/wrapper"
 )
 
@@ -49,6 +49,20 @@ func (s *service) Init(opts ...Option) error {
 
 	// wrap client to inject From-Service header on any calls
 	s.opts.Client = wrapper.FromService(serviceName, s.opts.Client)
+
+	if err := s.opts.Cmd.Init(
+		cmd.Broker(&s.opts.Broker),
+		cmd.Registry(&s.opts.Registry),
+		cmd.Transport(&s.opts.Transport),
+		cmd.Client(&s.opts.Client),
+		cmd.Server(&s.opts.Server),
+		cmd.Selector(&s.opts.Selector),
+		cmd.Logger(&s.opts.Logger),
+		cmd.Config(&s.opts.Config),
+	); err != nil {
+		log.Errorf("cmd init error: %s", err)
+		return err
+	}
 
 	return nil
 }
@@ -116,20 +130,6 @@ func (s *service) Stop() error {
 }
 
 func (s *service) Run() error {
-	if err := s.opts.Cmd.Init(
-		cmd.Broker(&s.opts.Broker),
-		cmd.Registry(&s.opts.Registry),
-		cmd.Transport(&s.opts.Transport),
-		cmd.Client(&s.opts.Client),
-		cmd.Server(&s.opts.Server),
-		cmd.Selector(&s.opts.Selector),
-		cmd.Logger(&s.opts.Logger),
-		cmd.Config(&s.opts.Config),
-	); err != nil {
-		log.Errorf("cmd init error: %s", err)
-		return err
-	}
-
 	// register the debug handler
 	if err := s.opts.Server.Handle(
 		s.opts.Server.NewHandler(

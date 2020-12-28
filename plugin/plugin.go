@@ -1,6 +1,8 @@
 package plugin
 
 import (
+	"github.com/stack-labs/stack-rpc/auth"
+	"github.com/stack-labs/stack-rpc/auth/token"
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/selector"
@@ -61,4 +63,16 @@ type ConfigPlugin interface {
 	Plugin
 	Options() []config.Option
 	New(...config.Option) config.Config
+}
+
+type AuthPlugin interface {
+	Plugin
+	Options() []auth.Option
+	New(...auth.Option) auth.Auth
+}
+
+type AuthTokenProviderPlugin interface {
+	Plugin
+	Options() []token.Option
+	New(...token.Option) token.Provider
 }

@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 
+	au "github.com/stack-labs/stack-rpc/auth"
 	bk "github.com/stack-labs/stack-rpc/broker"
 	cl "github.com/stack-labs/stack-rpc/client"
 	sel "github.com/stack-labs/stack-rpc/client/selector"
@@ -32,6 +33,7 @@ type Options struct {
 	Server    *ser.Server
 	Config    *cfg.Config
 	Logger    *log.Logger
+	Auth      *au.Auth
 }
 
 // Command line Name

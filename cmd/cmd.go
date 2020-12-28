@@ -186,6 +186,49 @@ var (
 			Usage:  "Logger Level; INFO",
 			Alias:  "stack_logger_level",
 		},
+		&cli.StringFlag{
+			Name:   "auth",
+			EnvVar: "STACK_AUTH",
+			Usage:  "Auth for role based access control, e.g. service",
+			Alias:  "stack_auth_name",
+		},
+		&cli.StringFlag{
+			Name:   "auth_enable",
+			EnvVar: "STACK_AUTH_ENABLE",
+			Usage:  "enable auth for role based access control, false",
+			Alias:  "stack_auth_enable",
+		},
+		&cli.StringFlag{
+			Name:   "auth_id",
+			EnvVar: "STACK_AUTH_CREDENTIALS_ID",
+			Usage:  "Account ID used for client authentication",
+			Alias:  "stack_auth_credentials_id",
+		},
+		&cli.StringFlag{
+			Name:   "auth_secret",
+			EnvVar: "STACK_AUTH_CREDENTIALS_SECRET",
+			Usage:  "Account secret used for client authentication",
+			Alias:  "stack_auth_credentials_secret",
+		},
+		&cli.StringFlag{
+			Name:   "auth_namespace",
+			EnvVar: "STACK_AUTH_NAMESPACE",
+			Usage:  "Namespace for the services auth account",
+			Value:  "stack.rpc",
+			Alias:  "stack_auth_namespace",
+		},
+		&cli.StringFlag{
+			Name:   "auth_public_key",
+			EnvVar: "STACK_AUTH_PUBLIC_KEY",
+			Usage:  "Public key for JWT auth (base64 encoded PEM)",
+			Alias:  "stack_auth_publicKey",
+		},
+		&cli.StringFlag{
+			Name:   "auth_private_key",
+			EnvVar: "STACK_AUTH_PRIVATE_KEY",
+			Usage:  "Private key for JWT auth (base64 encoded PEM)",
+			Alias:  "stack_auth_privateKey",
+		},
 		cli.StringFlag{
 			Name:   "config",
 			EnvVar: "STACK_CONFIG",
@@ -344,6 +387,7 @@ func (c *cmd) beforeSetupComponents() (err error) {
 	var regOpts = conf.Registry.Options()
 	var brokerOpts = conf.Broker.Options()
 	var logOpts = conf.Logger.Options()
+	var authOpts = conf.Auth.Options()
 
 	// set Logger
 	if len(conf.Logger.Name) > 0 {
@@ -442,6 +486,10 @@ func (c *cmd) beforeSetupComponents() (err error) {
 
 	if err = (*c.opts.Client).Init(clientOpts...); err != nil {
 		return fmt.Errorf("Error configuring client: %v ", err)
+	}
+
+	if err = (*c.opts.Auth).Init(authOpts...); err != nil {
+		return fmt.Errorf("Error configuring auth: %v ", err)
 	}
 
 	return

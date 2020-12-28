@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	au "github.com/stack-labs/stack-rpc/auth"
 	br "github.com/stack-labs/stack-rpc/broker"
 	cl "github.com/stack-labs/stack-rpc/client"
 	lg "github.com/stack-labs/stack-rpc/logger"
@@ -26,6 +27,7 @@ type stack struct {
 	Selector  selector  `json:"selector" sc:"selector"`
 	Transport transport `json:"transport" sc:"transport"`
 	Logger    logger    `json:"logger" sc:"logger"`
+	Auth      auth      `json:"auth" sc:"auth"`
 }
 
 type broker struct {
@@ -252,9 +254,7 @@ func (l *logPersistence) Options() *lg.PersistenceOptions {
 	return o
 }
 
-type logOptions []lg.Option
-
-func (l *logger) Options() logOptions {
+func (l *logger) Options() []lg.Option {
 	var logOptions []lg.Option
 
 	if len(l.Level) > 0 {
@@ -278,6 +278,42 @@ func (l *logger) Options() logOptions {
 	}
 
 	return logOptions
+}
+
+type auth struct {
+	Name            string          `json:"name" sc:"name"`
+	Enable          bool            `json:"enable" sc:"enable"`
+	Namespace       string          `json:"namespace" sc:"namespace"`
+	AuthCredentials authCredentials `json:"authCredentials" sc:"authCredentials"`
+	PublicKey       string          `json:"publicKey" sc:"public-key"`
+	PrivateKey      string          `json:"privateKey" sc:"private-key"`
+}
+
+type authCredentials struct {
+	ID     string `json:"id" sc:"id"`
+	Secret string `json:"secret" sc:"secret"`
+}
+
+func (a *auth) Options() []au.Option {
+	var opts []au.Option
+
+	opts = append(opts, au.Enable(a.Enable))
+	opts = append(opts, au.Namespace(a.Namespace))
+
+	if len(a.AuthCredentials.ID) > 0 {
+		opts = append(opts, au.Credentials(a.AuthCredentials.ID, a.AuthCredentials.Secret))
+	}
+
+	opts = append(opts, au.PublicKey(a.PublicKey))
+	opts = append(opts, au.PrivateKey(a.PrivateKey))
+
+	if plugin.LoggerPlugins[a.Name] != nil {
+		opts = append(opts, plugin.AuthPlugins[a.Name].Options()...)
+	} else if len(a.Name) > 0 {
+		log.Warnf("seems you declared an auth name:[%s] which stack can't find out.", a.Name)
+	}
+
+	return opts
 }
 
 type StackConfig struct {

@@ -91,6 +91,8 @@ func TestGRPCFunction(t *testing.T) {
 	// register test handler
 	hello.RegisterTestHandler(fn.Server(), &testHandler{})
 
+	fn.Init()
+
 	// run service
 	go fn.Run()
 

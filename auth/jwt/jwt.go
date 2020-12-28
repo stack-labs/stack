@@ -35,7 +35,7 @@ func (j *jwt) String() string {
 	return "jwt"
 }
 
-func (j *jwt) Init(opts ...auth.Option) {
+func (j *jwt) Init(opts ...auth.Option) error {
 	j.Lock()
 	defer j.Unlock()
 
@@ -47,6 +47,8 @@ func (j *jwt) Init(opts ...auth.Option) {
 		token.WithPrivateKey(j.options.PrivateKey),
 		token.WithPublicKey(j.options.PublicKey),
 	)
+
+	return nil
 }
 
 func (j *jwt) Options() auth.Options {

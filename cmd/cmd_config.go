@@ -27,6 +27,7 @@ type stack struct {
 	Selector  selector  `json:"selector" sc:"selector"`
 	Transport transport `json:"transport" sc:"transport"`
 	Logger    logger    `json:"logger" sc:"logger"`
+	Auth      auth      `json:"auth" sc:"auth"`
 }
 
 type broker struct {
@@ -280,16 +281,17 @@ func (l *logger) Options() []lg.Option {
 }
 
 type auth struct {
-	Enable          bool            `sc:"enable"`
-	Namespace       string          `sc:"namespace"`
-	AuthCredentials authCredentials `sc:"authCredentials"`
-	PublicKey       string          `sc:"public-key"`
-	PrivateKey      string          `sc:"private-key"`
+	Name            string          `json:"name" sc:"name"`
+	Enable          bool            `json:"enable" sc:"enable"`
+	Namespace       string          `json:"namespace" sc:"namespace"`
+	AuthCredentials authCredentials `json:"authCredentials" sc:"authCredentials"`
+	PublicKey       string          `json:"publicKey" sc:"public-key"`
+	PrivateKey      string          `json:"privateKey" sc:"private-key"`
 }
 
 type authCredentials struct {
-	ID     string `sc:"id"`
-	Secret string `sc:"secret"`
+	ID     string `json:"id" sc:"id"`
+	Secret string `json:"secret" sc:"secret"`
 }
 
 func (a *auth) Options() []au.Option {
@@ -304,6 +306,12 @@ func (a *auth) Options() []au.Option {
 
 	opts = append(opts, au.PublicKey(a.PublicKey))
 	opts = append(opts, au.PrivateKey(a.PrivateKey))
+
+	if plugin.LoggerPlugins[a.Name] != nil {
+		opts = append(opts, plugin.AuthPlugins[a.Name].Options()...)
+	} else if len(a.Name) > 0 {
+		log.Warnf("seems you declared an auth name:[%s] which stack can't find out.", a.Name)
+	}
 
 	return opts
 }

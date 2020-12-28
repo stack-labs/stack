@@ -26,7 +26,7 @@ var (
 // Auth provides authentication and authorization
 type Auth interface {
 	// Init the auth
-	Init(opts ...Option)
+	Init(opts ...Option) error
 	// Options set for auth
 	Options() Options
 	// Generate a new account

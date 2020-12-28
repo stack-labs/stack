@@ -14,8 +14,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/registry/mdns"
-
 	"github.com/stack-labs/stack-rpc"
 	"github.com/stack-labs/stack-rpc/pkg/cli"
 	"github.com/stack-labs/stack-rpc/registry"
@@ -256,7 +254,7 @@ func (s *service) stop() error {
 
 func (s *service) Client() *http.Client {
 	rt := mhttp.NewRoundTripper(
-		mhttp.WithRegistry(mdns.NewRegistry()),
+		mhttp.WithRegistry(s.opts.Registry),
 	)
 	return &http.Client{
 		Transport: rt,

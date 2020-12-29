@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/stack-labs/stack-rpc/auth"
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/broker/http"
 	"github.com/stack-labs/stack-rpc/client"
@@ -32,6 +33,7 @@ type Options struct {
 	Selector  selector.Selector
 	Config    config.Config
 	Logger    logger.Logger
+	Auth      auth.Auth
 	// Before and After funcs
 	BeforeStart []func() error
 	BeforeStop  []func() error
@@ -56,6 +58,7 @@ func newOptions(opts ...Option) Options {
 		Selector:  selectorR.NewSelector(),
 		Logger:    logger.DefaultLogger,
 		Config:    config.DefaultConfig,
+		Auth:      auth.NoopAuth,
 		Context:   context.Background(),
 		Signal:    true,
 	}

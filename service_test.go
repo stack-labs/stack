@@ -80,6 +80,7 @@ func TestService(t *testing.T) {
 
 	// start test server
 	service := testService(ctx, &wg, "test.service")
+	service.Init()
 
 	go func() {
 		// wait for service to start

@@ -99,6 +99,12 @@ func Config(c *cfg.Config) Option {
 	}
 }
 
+func Auth(a *au.Auth) Option {
+	return func(o *Options) {
+		o.Auth = a
+	}
+}
+
 func Logger(log *log.Logger) Option {
 	return func(o *Options) {
 		o.Logger = log

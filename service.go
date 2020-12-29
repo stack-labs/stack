@@ -59,6 +59,7 @@ func (s *service) Init(opts ...Option) error {
 		cmd.Selector(&s.opts.Selector),
 		cmd.Logger(&s.opts.Logger),
 		cmd.Config(&s.opts.Config),
+		cmd.Auth(&s.opts.Auth),
 	); err != nil {
 		log.Errorf("cmd init error: %s", err)
 		return err

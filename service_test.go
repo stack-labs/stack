@@ -6,17 +6,16 @@ import (
 	"sync"
 	"testing"
 
-	glog "github.com/go-log/log"
 	"github.com/stack-labs/stack-rpc/client"
 	proto "github.com/stack-labs/stack-rpc/debug/service/proto"
 	"github.com/stack-labs/stack-rpc/registry/memory"
-	"github.com/stack-labs/stack-rpc/util/log"
-	"github.com/stack-labs/stack-rpc/util/test"
+)
+
+var (
+	testServiceName = "cmd.test.service"
 )
 
 func testShutdown(wg *sync.WaitGroup, cancel func()) {
-	// add 1
-	wg.Add(1)
 	// shutdown the service
 	cancel()
 	// wait for stop
@@ -24,27 +23,14 @@ func testShutdown(wg *sync.WaitGroup, cancel func()) {
 }
 
 func testService(ctx context.Context, wg *sync.WaitGroup, name string) Service {
-	// set no op logger
-	log.SetLogger(glog.DefaultLogger)
-
-	// add self
-	wg.Add(1)
-
-	r := memory.NewRegistry(memory.Services(test.Data))
-
-	// create service
 	return NewService(
 		Name(name),
 		Context(ctx),
-		Registry(r),
 		AfterStart(func() error {
 			wg.Done()
 			return nil
 		}),
-		AfterStop(func() error {
-			wg.Done()
-			return nil
-		}),
+		Registry(memory.NewRegistry()),
 	)
 }
 
@@ -79,19 +65,24 @@ func TestService(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	// start test server
-	service := testService(ctx, &wg, "test.service")
-	service.Init()
+	wg.Add(1)
+	service := testService(ctx, &wg, testServiceName)
+	err := service.Init()
+	if err != nil {
+		t.Fatalf("cmd test service init err: %s", err)
+	}
 
 	go func() {
 		// wait for service to start
 		wg.Wait()
 
 		// make a test call
-		if err := testRequest(ctx, service.Client(), "test.service"); err != nil {
+		if err := testRequest(ctx, service.Client(), testServiceName); err != nil {
 			t.Fatal(err)
 		}
 
 		// shutdown the service
+		wg.Add(1)
 		testShutdown(&wg, cancel)
 	}()
 

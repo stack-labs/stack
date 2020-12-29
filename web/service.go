@@ -123,6 +123,8 @@ func (s *service) register() error {
 	srv := s.genSrv()
 	srv.Endpoints = s.srv.Endpoints
 	s.srv = srv
+
+	log.Logf("Registry [%s] Registering node: %s", s.opts.Registry.String(), s.srv.Nodes[0].Id)
 	return r.Register(s.srv, registry.RegisterTTL(s.opts.RegisterTTL))
 }
 
@@ -136,6 +138,8 @@ func (s *service) deregister() error {
 	if s.opts.Registry != nil {
 		r = s.opts.Registry
 	}
+
+	log.Logf("Registry [%s] Deregistering node: %s", s.opts.Registry.String(), s.srv.Nodes[0].Id)
 	return r.Deregister(s.srv)
 }
 

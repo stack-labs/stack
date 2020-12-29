@@ -31,6 +31,8 @@ Stack-RPC旨在为中国开发者提供通用的分布式服务微服务开发�
 
 > 讨论群：微信搜索MicroHQ，备注来源：“github”
 
+> 支持我们：点击右上方Star支持项目发展，[捐赠链接](https://github.com/stack-labs/Notice/tree/master/donation)
+
 ## 简单易用
 
 启动一个微服务只需要如下代码

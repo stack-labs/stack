@@ -5,33 +5,30 @@ import (
 	"fmt"
 	"os"
 	"sync"
-	"sync/atomic"
 	"time"
-
-	"github.com/stack-labs/stack-rpc/env"
-
-	codecu "github.com/stack-labs/stack-rpc/util/codec"
-
-	"github.com/stack-labs/stack-rpc/client"
 
 	"github.com/google/uuid"
 	"github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/pool"
 	"github.com/stack-labs/stack-rpc/client/selector"
 	"github.com/stack-labs/stack-rpc/codec"
 	raw "github.com/stack-labs/stack-rpc/codec/bytes"
+	"github.com/stack-labs/stack-rpc/env"
 	"github.com/stack-labs/stack-rpc/pkg/metadata"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/transport"
 	"github.com/stack-labs/stack-rpc/util/buf"
+	codecu "github.com/stack-labs/stack-rpc/util/codec"
 	"github.com/stack-labs/stack-rpc/util/errors"
+	"go.uber.org/atomic"
 )
 
 type rpcClient struct {
 	once sync.Once
 	opts client.Options
 	pool pool.Pool
-	seq  uint64
+	seq  *atomic.Uint64
 }
 
 func NewClient(opt ...client.Option) client.Client {
@@ -47,7 +44,7 @@ func NewClient(opt ...client.Option) client.Client {
 		once: sync.Once{},
 		opts: opts,
 		pool: p,
-		seq:  0,
+		seq:  atomic.NewUint64(0),
 	}
 
 	c := client.Client(rc)
@@ -116,8 +113,7 @@ func (r *rpcClient) call(ctx context.Context, node *registry.Node, req client.Re
 		return errors.InternalServerError("stack.rpc.client", "connection error: %v", err)
 	}
 
-	seq := atomic.LoadUint64(&r.seq)
-	atomic.AddUint64(&r.seq, 1)
+	seq := r.seq.Inc()
 	codec := newRpcCodec(msg, c, cf, "")
 
 	rsp := &rpcResponse{
@@ -232,8 +228,7 @@ func (r *rpcClient) stream(ctx context.Context, node *registry.Node, req client.
 	}
 
 	// increment the sequence number
-	seq := atomic.LoadUint64(&r.seq)
-	atomic.AddUint64(&r.seq, 1)
+	seq := r.seq.Inc()
 	id := fmt.Sprintf("%v", seq)
 
 	// create codec with stream id

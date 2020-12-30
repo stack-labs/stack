@@ -15,13 +15,13 @@ import (
 	"github.com/stack-labs/stack-rpc/codec"
 	raw "github.com/stack-labs/stack-rpc/codec/bytes"
 	"github.com/stack-labs/stack-rpc/env"
+	"github.com/stack-labs/stack-rpc/pkg/atomic"
 	"github.com/stack-labs/stack-rpc/pkg/metadata"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/transport"
 	"github.com/stack-labs/stack-rpc/util/buf"
 	codecu "github.com/stack-labs/stack-rpc/util/codec"
 	"github.com/stack-labs/stack-rpc/util/errors"
-	"go.uber.org/atomic"
 )
 
 type rpcClient struct {

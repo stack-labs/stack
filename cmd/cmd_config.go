@@ -8,6 +8,7 @@ import (
 	au "github.com/stack-labs/stack-rpc/auth"
 	br "github.com/stack-labs/stack-rpc/broker"
 	cl "github.com/stack-labs/stack-rpc/client"
+	cfg "github.com/stack-labs/stack-rpc/config"
 	lg "github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/plugin"
 	reg "github.com/stack-labs/stack-rpc/registry"
@@ -18,6 +19,7 @@ import (
 
 type stack struct {
 	Includes  string    `json:"includes" sc:"includes"`
+	Config    config    `json:"config" sc:"config"`
 	Registry  registry  `json:"registry" sc:"registry"`
 	Broker    broker    `json:"broker" sc:"broker"`
 	Client    client    `json:"client" sc:"client"`
@@ -28,6 +30,20 @@ type stack struct {
 	Transport transport `json:"transport" sc:"transport"`
 	Logger    logger    `json:"logger" sc:"logger"`
 	Auth      auth      `json:"auth" sc:"auth"`
+}
+
+type config struct {
+	HierarchyMerge bool `json:"hierarchyMerge" sc:"hierarchy-merge"`
+	Storage        bool `json:"storage" sc:"storage"`
+}
+
+func (c *config) Options() []cfg.Option {
+	var cfgOptions []cfg.Option
+
+	cfgOptions = append(cfgOptions, cfg.HierarchyMerge(c.HierarchyMerge))
+	cfgOptions = append(cfgOptions, cfg.Storage(c.Storage))
+
+	return cfgOptions
 }
 
 type broker struct {

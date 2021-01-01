@@ -12,7 +12,7 @@ import (
 	br "github.com/stack-labs/stack-rpc/broker"
 	cl "github.com/stack-labs/stack-rpc/client"
 	sel "github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/config"
+	cfg "github.com/stack-labs/stack-rpc/config"
 	log "github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/pkg/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config/source"
@@ -249,7 +249,7 @@ func init() {
 		os.Exit(0)
 	}
 
-	config.RegisterOptions(&stackConfig)
+	cfg.RegisterOptions(&stackConfig)
 }
 
 func newCmd(opts ...Option) Cmd {
@@ -315,6 +315,7 @@ func (c *cmd) beforeLoadConfig(ctx *cli.Context) (err error) {
 	}
 
 	var appendSource []source.Source
+	var cfgOption []cfg.Option
 	if len(c.conf) > 0 {
 		// check file exists
 		exists, err := uf.Exists(c.conf)
@@ -327,6 +328,7 @@ func (c *cmd) beforeLoadConfig(ctx *cli.Context) (err error) {
 			val := struct {
 				Stack struct {
 					Includes string `yaml:"includes"`
+					Config   config `yaml:"config"`
 				} `yaml:"stack"`
 			}{}
 			stdFileSource := file.NewSource(file.WithPath(c.conf))
@@ -363,13 +365,16 @@ func (c *cmd) beforeLoadConfig(ctx *cli.Context) (err error) {
 					appendSource = append(appendSource, extraFileSource)
 				}
 			}
+
+			// config option
+			cfgOption = append(cfgOption, cfg.Storage(val.Stack.Config.Storage), cfg.HierarchyMerge(val.Stack.Config.HierarchyMerge))
 		}
 	}
 
 	// the last two must be env & cmd line
 	appendSource = append(appendSource, cliSource.NewSource(c.App(), cliSource.Context(c.App().Context())))
-
-	err = (*c.opts.Config).Init(config.Source(appendSource...))
+	cfgOption = append(cfgOption, cfg.Source(appendSource...))
+	err = (*c.opts.Config).Init(cfgOption...)
 	if err != nil {
 		err = fmt.Errorf("init config err: %s", err)
 		return

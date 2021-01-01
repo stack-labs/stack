@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/config"
+	cfg "github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/pkg/config/source"
 	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
@@ -63,7 +63,7 @@ stack:
 )
 
 func init() {
-	config.RegisterOptions(&conf)
+	cfg.RegisterOptions(&conf)
 }
 
 func TestStackConfig_File(t *testing.T) {
@@ -81,7 +81,7 @@ func TestStackConfig_File(t *testing.T) {
 		os.Remove(path)
 	}()
 
-	c := config.NewConfig(config.Source(file.NewSource(file.WithPath(path))))
+	c := cfg.NewConfig(cfg.Source(file.NewSource(file.WithPath(path))))
 	if err = c.Init(); err != nil {
 		t.Error(fmt.Errorf("Config init error: %s ", err))
 	}
@@ -136,7 +136,7 @@ func TestStackConfig_Config(t *testing.T) {
 		cliSource.NewSource(app, cliSource.Context(app.Context())),
 	}
 
-	c := config.NewConfig(config.Source(sources...))
+	c := cfg.NewConfig(cfg.Source(sources...))
 	if err = c.Init(); err != nil {
 		t.Error(fmt.Errorf("Config init error: %s ", err))
 	}
@@ -241,7 +241,7 @@ stack:
 		cliSource.NewSource(app, cliSource.Context(app.Context())),
 	}
 
-	c := config.NewConfig(config.Source(sources...))
+	c := cfg.NewConfig(cfg.Source(sources...))
 	if err = c.Init(); err != nil {
 		t.Error(fmt.Errorf("Config init error: %s ", err))
 	}
@@ -290,7 +290,7 @@ func TestConfigHierarchyMerge(t *testing.T) {
 		os.Remove(path)
 	}()
 
-	c := config.NewConfig(config.Source(file.NewSource(file.WithPath(path))), config.HierarchyMerge(true))
+	c := cfg.NewConfig(cfg.Source(file.NewSource(file.WithPath(path))), cfg.HierarchyMerge(true))
 	if err = c.Init(); err != nil {
 		t.Error(fmt.Errorf("Config init error: %s ", err))
 	}
@@ -302,4 +302,49 @@ func TestConfigHierarchyMerge(t *testing.T) {
 	if c.Get("stack", "broker", "name").String("") != "http" {
 		t.Fatal(fmt.Errorf("stack broker name should be [http], not: [%s]", c.Get("stack", "broker", "name").String("")))
 	}
+}
+
+func TestConfigIncludes(t *testing.T) {
+	mainYml := []byte(`
+stack:
+  includes: testA.yml
+`)
+	includedYml := []byte(`
+testA:
+  aKey: aValue
+`)
+	mF, mP, err := touchFile(t, "main.yml", mainYml)
+	if err != nil {
+		t.Fatalf("touch file err: %s", err)
+	}
+	iF, iP, err := touchFile(t, "included.yml", includedYml)
+	if err != nil {
+		t.Fatalf("touch file err: %s", err)
+	}
+	defer func() {
+		mF.Close()
+		os.Remove(mP)
+		iF.Close()
+		os.Remove(iP)
+	}()
+
+	type testA struct {
+		AKey string `sc:"aKey"`
+	}
+}
+
+func touchFile(t *testing.T, fileName string, data []byte) (f *os.File, fullPath string, err error) {
+	fileName = t.Name() + fileName
+	filePath := filepath.Join(os.TempDir(), fileName)
+	file, err := os.Create(filePath)
+	if err != nil {
+		return nil, "", fmt.Errorf("create tmp file [%s] error: %s", fileName, err)
+	}
+
+	_, err = file.Write(data)
+	if err != nil {
+		return nil, "", fmt.Errorf("write tmp file [%s] error: %s", fileName, err)
+	}
+
+	return file, filePath, nil
 }

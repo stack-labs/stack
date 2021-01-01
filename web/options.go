@@ -9,6 +9,7 @@ import (
 	"github.com/stack-labs/stack-rpc"
 	"github.com/stack-labs/stack-rpc/pkg/cli"
 	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/registry/mdns"
 )
 
 type Options struct {
@@ -51,6 +52,7 @@ func newOptions(opts ...Option) Options {
 		Version:          DefaultVersion,
 		Id:               DefaultId,
 		Address:          DefaultAddress,
+		Registry:         mdns.NewRegistry(),
 		RegisterTTL:      DefaultRegisterTTL,
 		RegisterInterval: DefaultRegisterInterval,
 		StaticDir:        DefaultStaticDir,

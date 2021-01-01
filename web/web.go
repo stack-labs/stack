@@ -22,7 +22,7 @@ type Option func(o *Options)
 
 var (
 	// For serving
-	DefaultName    = "go-web"
+	DefaultName    = "stack-web"
 	DefaultVersion = "latest"
 	DefaultId      = uuid.New().String()
 	DefaultAddress = ":0"

@@ -15,6 +15,7 @@ import (
 	ser "github.com/stack-labs/stack-rpc/server"
 	tra "github.com/stack-labs/stack-rpc/transport"
 	"github.com/stack-labs/stack-rpc/util/log"
+	wb "github.com/stack-labs/stack-rpc/web"
 )
 
 type stack struct {
@@ -30,6 +31,7 @@ type stack struct {
 	Transport transport `json:"transport" sc:"transport"`
 	Logger    logger    `json:"logger" sc:"logger"`
 	Auth      auth      `json:"auth" sc:"auth"`
+	Web       web       `json:"web" sc:"web"`
 }
 
 type config struct {
@@ -328,6 +330,50 @@ func (a *auth) Options() []au.Option {
 	} else if len(a.Name) > 0 {
 		log.Warnf("seems you declared an auth name:[%s] which stack can't find out.", a.Name)
 	}
+
+	return opts
+}
+
+type web struct {
+	Id        string            `json:"id" sc:"id"`
+	Name      string            `json:"name" sc:"name"`
+	Metadata  map[string]string `json:"metadata" sc:"metadata"`
+	Address   string            `json:"address" sc:"address"`
+	Version   string            `json:"version" sc:"version"`
+	Advertise string            `json:"advertise" sc:"advertise"`
+	Registry  serverRegistry    `json:"registry" sc:"registry"`
+	Secure    bool              `json:"secure" sc:"secure"`
+}
+
+func (w *web) Options() []wb.Option {
+	var opts []wb.Option
+
+	if len(w.Id) != 0 {
+		opts = append(opts, wb.Version(w.Id))
+	}
+
+	if len(w.Name) != 0 {
+		opts = append(opts, wb.Name(w.Name))
+	}
+
+	if len(w.Version) != 0 {
+		opts = append(opts, wb.Version(w.Version))
+	}
+
+	if len(w.Metadata) != 0 {
+		// todo merge?
+		opts = append(opts, wb.Metadata(w.Metadata))
+	}
+
+	if ttl := time.Duration(w.Registry.TTL); ttl >= 0 {
+		opts = append(opts, wb.RegisterTTL(ttl*time.Second))
+	}
+
+	if val := time.Duration(w.Registry.Interval); val > 0 {
+		opts = append(opts, wb.RegisterInterval(val*time.Second))
+	}
+
+	opts = append(opts, wb.Secure(w.Secure))
 
 	return opts
 }

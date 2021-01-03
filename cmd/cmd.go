@@ -237,7 +237,7 @@ var (
 		},
 	}
 
-	stackStdConfigFile = "stack.yml"
+	stackStdConfigFile = "stack_config.yml"
 	stackConfig        = StackConfig{}
 )
 

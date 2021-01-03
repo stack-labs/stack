@@ -315,7 +315,7 @@ func run(ctx *cli.Context) {
 				{"main.go", tmpl.MainAPI},
 				{"generate.go", tmpl.GenerateFile},
 				{"plugin.go", tmpl.Plugin},
-				{"stack_config.yml", tmpl.StackConfig},
+				{"stack.yml", tmpl.StackConfig},
 				{"client/" + alias + ".go", tmpl.WrapperAPI},
 				{"handler/" + alias + ".go", tmpl.HandlerAPI},
 				{"proto/" + alias + "/" + alias + ".proto", tmpl.ProtoAPI},

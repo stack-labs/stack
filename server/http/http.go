@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/codec"
 	"github.com/stack-labs/stack-rpc/codec/jsonrpc"
 	"github.com/stack-labs/stack-rpc/codec/protorpc"
@@ -39,10 +38,6 @@ type httpServer struct {
 	subscribers  map[*httpSubscriber][]broker.Subscriber
 	// used for first registration
 	registered bool
-}
-
-func init() {
-	cmd.DefaultServers["http"] = NewServer
 }
 
 func (h *httpServer) newCodec(contentType string) (codec.NewCodec, error) {

@@ -20,6 +20,8 @@ func NewService(opts ...stack.Option) stack.Service {
 		stack.Broker(b),
 	}
 
+	s.Handle()
+
 	options = append(options, opts...)
 
 	return stack.NewService(options...)

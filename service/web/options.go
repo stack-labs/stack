@@ -2,9 +2,17 @@ package web
 
 import (
 	"context"
+	"github.com/stack-labs/stack-rpc/config"
+	"github.com/stack-labs/stack-rpc/logger"
+	"github.com/stack-labs/stack-rpc/registry/mdns"
 	"net/http"
 
 	"github.com/stack-labs/stack-rpc"
+	"github.com/stack-labs/stack-rpc/auth"
+	httpB "github.com/stack-labs/stack-rpc/broker/http"
+	clientM "github.com/stack-labs/stack-rpc/client/mucp"
+	selectorR "github.com/stack-labs/stack-rpc/client/selector/registry"
+	transportH "github.com/stack-labs/stack-rpc/transport/http"
 )
 
 type staticDirKey struct{}
@@ -63,4 +71,25 @@ func setOption(k, v interface{}) stack.Option {
 		}
 		o.Context = context.WithValue(o.Context, k, v)
 	}
+}
+
+func newOptions(opts ...stack.Option) stack.Options {
+	opt := stack.Options{
+		Broker:    httpB.NewBroker(),
+		Client:    clientM.NewClient(),
+		Registry:  mdns.NewRegistry(),
+		Transport: transportH.NewTransport(),
+		Selector:  selectorR.NewSelector(),
+		Logger:    logger.DefaultLogger,
+		Config:    config.DefaultConfig,
+		Auth:      auth.NoopAuth,
+		Context:   context.Background(),
+		Signal:    true,
+	}
+
+	for _, o := range opts {
+		o(&opt)
+	}
+
+	return opt
 }

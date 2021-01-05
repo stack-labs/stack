@@ -2,6 +2,7 @@ package wrapper
 
 import (
 	"context"
+	"github.com/stack-labs/stack-rpc/debug/trace"
 
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/pkg/metadata"
@@ -53,5 +54,14 @@ func FromService(name string, c client.Client) client.Client {
 		metadata.Metadata{
 			HeaderPrefix + "From-Service": name,
 		},
+	}
+}
+
+// TraceCall is a call tracing wrapper
+func TraceCall(name string, t trace.Tracer, c client.Client) client.Client {
+	return &traceWrapper{
+		name:   name,
+		trace:  t,
+		Client: c,
 	}
 }

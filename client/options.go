@@ -56,6 +56,10 @@ type CallOptions struct {
 	Retries int
 	// Request/Response timeout
 	RequestTimeout time.Duration
+	// Stream timeout for the stream
+	StreamTimeout time.Duration
+	// Use the services own auth token
+	ServiceToken bool
 
 	// Middleware for low level call func
 	CallWrappers []CallWrapper

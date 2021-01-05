@@ -13,6 +13,7 @@ import (
 	selectorR "github.com/stack-labs/stack-rpc/client/selector/registry"
 	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/config"
+	"github.com/stack-labs/stack-rpc/debug/profile"
 	"github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/pkg/cli"
 	"github.com/stack-labs/stack-rpc/registry"
@@ -34,6 +35,8 @@ type Options struct {
 	Config    config.Config
 	Logger    logger.Logger
 	Auth      auth.Auth
+	Profile   profile.Profile
+
 	// Before and After funcs
 	BeforeStart []func() error
 	BeforeStop  []func() error
@@ -189,6 +192,13 @@ func Flags(flags ...cli.Flag) Option {
 func Action(a func(*cli.Context)) Option {
 	return func(o *Options) {
 		o.Cmd.App().Action = a
+	}
+}
+
+// Profile to be used for debug profile
+func Profile(p profile.Profile) Option {
+	return func(o *Options) {
+		o.Profile = p
 	}
 }
 

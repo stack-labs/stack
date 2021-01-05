@@ -1,19 +1,28 @@
 package web
 
 import (
-	"github.com/stack-labs/stack-rpc/util/wrapper"
 	"net/http"
+	"os"
+	"os/signal"
+	"runtime"
+	"sync"
 	"time"
 
 	"github.com/stack-labs/stack-rpc"
 	broker "github.com/stack-labs/stack-rpc/broker/http"
 	cl "github.com/stack-labs/stack-rpc/client"
 	client "github.com/stack-labs/stack-rpc/client/http"
+	"github.com/stack-labs/stack-rpc/debug/handler"
 	ser "github.com/stack-labs/stack-rpc/server"
 	server "github.com/stack-labs/stack-rpc/server/http"
+	"github.com/stack-labs/stack-rpc/util/log"
+	signalutil "github.com/stack-labs/stack-rpc/util/signal"
 )
 
 type webService struct {
+	opts stack.Options
+
+	once sync.Once
 }
 
 func (w *webService) Name() string {
@@ -32,19 +41,100 @@ func (w *webService) Init(option ...stack.Option) error {
 }
 
 func (w *webService) Options() stack.Options {
-	return w.Options()
+	return w.opts
 }
 
 func (w *webService) Client() cl.Client {
-	return w.Client()
+	return w.opts.Client
 }
 
 func (w *webService) Server() ser.Server {
-	return w.Server()
+	return w.opts.Server
 }
 
 func (w *webService) Run() error {
-	panic("implement me")
+	// register the debug handler
+	w.opts.Server.Handle(
+		w.opts.Server.NewHandler(
+			handler.NewHandler(w.opts.Client),
+			ser.InternalHandler(true),
+		),
+	)
+
+	// start the profiler
+	if w.opts.Profile != nil {
+		// to view mutex contention
+		runtime.SetMutexProfileFraction(5)
+		// to view blocking profile
+		runtime.SetBlockProfileRate(1)
+
+		if err := w.opts.Profile.Start(); err != nil {
+			return err
+		}
+		defer w.opts.Profile.Stop()
+	}
+
+	log.Infof("Starting [service] %s", w.Name())
+
+	if err := w.Start(); err != nil {
+		return err
+	}
+
+	ch := make(chan os.Signal, 1)
+	if w.opts.Signal {
+		signal.Notify(ch, signalutil.Shutdown()...)
+	}
+
+	select {
+	// wait on kill signal
+	case <-ch:
+	// wait on context cancel
+	case <-w.opts.Context.Done():
+	}
+
+	return w.Stop()
+}
+
+func (w *webService) Start() error {
+	for _, fn := range w.opts.BeforeStart {
+		if err := fn(); err != nil {
+			return err
+		}
+	}
+
+	if err := w.opts.Server.Start(); err != nil {
+		return err
+	}
+
+	for _, fn := range w.opts.AfterStart {
+		if err := fn(); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (w *webService) Stop() error {
+	var gerr error
+
+	for _, fn := range w.opts.BeforeStop {
+		if err := fn(); err != nil {
+			gerr = err
+		}
+	}
+
+	if err := w.opts.Server.Stop(); err != nil {
+		return err
+	}
+
+	for _, fn := range w.opts.AfterStop {
+		if err := fn(); err != nil {
+			gerr = err
+		}
+	}
+
+	return gerr
 }
 
 func (w *webService) String() string {
@@ -52,25 +142,9 @@ func (w *webService) String() string {
 }
 
 func NewService(opts ...stack.Option) stack.Service {
-	c := client.NewClient()
-	s := server.NewServer()
-	b := broker.NewBroker()
-
-	// wrap client to inject From-Service header on any calls
-	c = wrapper.FromService(serviceName, options.Client)
-	c = wrapper.TraceCall(serviceName, trace.DefaultTracer, options.Client)
-	c = wrapper.CacheClient(cacheFn, options.Client)
-	c = wrapper.AuthClient(authFn, options.Client)
-
-	options := []stack.Option{
-		stack.Client(c),
-		stack.Server(s),
-		stack.Broker(b),
-	}
-
-	options = append(options, opts...)
-
-	return stack.NewService(options...)
+	service := new(webService)
+	service.opts = newOptions(opts...)
+	return service
 }
 
 // NewFunction returns a grpc service compatible with stack-rpc.Function

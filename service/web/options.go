@@ -2,16 +2,17 @@ package web
 
 import (
 	"context"
-	"github.com/stack-labs/stack-rpc/config"
-	"github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/registry/mdns"
 	"net/http"
 
 	"github.com/stack-labs/stack-rpc"
 	"github.com/stack-labs/stack-rpc/auth"
-	httpB "github.com/stack-labs/stack-rpc/broker/http"
-	clientM "github.com/stack-labs/stack-rpc/client/mucp"
+	broker "github.com/stack-labs/stack-rpc/broker/http"
+	client "github.com/stack-labs/stack-rpc/client/http"
 	selectorR "github.com/stack-labs/stack-rpc/client/selector/registry"
+	"github.com/stack-labs/stack-rpc/config"
+	"github.com/stack-labs/stack-rpc/logger"
+	"github.com/stack-labs/stack-rpc/registry/mdns"
+	server "github.com/stack-labs/stack-rpc/server/http"
 	transportH "github.com/stack-labs/stack-rpc/transport/http"
 )
 
@@ -75,9 +76,10 @@ func setOption(k, v interface{}) stack.Option {
 
 func newOptions(opts ...stack.Option) stack.Options {
 	opt := stack.Options{
-		Broker:    httpB.NewBroker(),
-		Client:    clientM.NewClient(),
+		Broker:    broker.NewBroker(),
+		Client:    client.NewClient(),
 		Registry:  mdns.NewRegistry(),
+		Server:    server.NewServer(),
 		Transport: transportH.NewTransport(),
 		Selector:  selectorR.NewSelector(),
 		Logger:    logger.DefaultLogger,

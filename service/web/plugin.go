@@ -27,7 +27,14 @@ func (w *webServicePlugin) Name() string {
 }
 
 func (w *webServicePlugin) Options() []service.Option {
-	return nil
+	var opts []service.Option
+
+	opts = append(opts, Enable(options.Stack.Service.Web.Enable))
+	opts = append(opts, Address(options.Stack.Service.Web.Address))
+	opts = append(opts, StaticDir(options.Stack.Service.Web.StaticDir))
+	opts = append(opts, RootPath(options.Stack.Service.Web.RootPath))
+
+	return opts
 }
 
 func (w *webServicePlugin) New(opts ...service.Option) service.Service {

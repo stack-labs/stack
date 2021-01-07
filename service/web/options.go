@@ -16,12 +16,22 @@ import (
 	transportH "github.com/stack-labs/stack-rpc/transport/http"
 )
 
+type enableKey struct{}
+type addrKey struct{}
 type staticDirKey struct{}
 type rootPathKey struct{}
 type handlersKey struct{}
 type handlerFuncsKey struct{}
 
 type HandlerFunc func(w http.ResponseWriter, r *http.Request)
+
+func Enable(b bool) service.Option {
+	return setOption(enableKey{}, b)
+}
+
+func Address(addr string) service.Option {
+	return setOption(addrKey{}, addr)
+}
 
 func StaticDir(dir string) service.Option {
 	return setOption(staticDirKey{}, dir)

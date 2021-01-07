@@ -11,7 +11,3 @@ type Function interface {
 	// Subscribe registers a subscriber
 	Subscribe(topic string, v interface{}) error
 }
-
-func NewFunction(opts ...Option) Function {
-
-}

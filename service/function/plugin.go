@@ -1,4 +1,4 @@
-package stack
+package function
 
 import (
 	"github.com/stack-labs/stack-rpc/config"
@@ -15,21 +15,21 @@ var options struct {
 	} `sc:"stack"`
 }
 
-type stackServicePlugin struct{}
+type funcServicePlugin struct{}
 
-func (s *stackServicePlugin) Name() string {
+func (s *funcServicePlugin) Name() string {
 	return "stack"
 }
 
-func (s *stackServicePlugin) Options() []service.Option {
+func (s *funcServicePlugin) Options() []service.Option {
 	return nil
 }
 
-func (s *stackServicePlugin) New(opts ...service.Option) service.Service {
-	return NewService(opts...)
+func (s *funcServicePlugin) New(opts ...service.Option) service.Service {
+	return NewFunction(opts...)
 }
 
 func init() {
 	config.RegisterOptions(&options)
-	plugin.ServicePlugins["stack"] = &stackServicePlugin{}
+	plugin.ServicePlugins["function"] = &funcServicePlugin{}
 }

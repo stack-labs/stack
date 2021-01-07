@@ -12,6 +12,7 @@ stack:
       static-dir: /webapp
     stack:
     grpc:
+    function:
   # registry center options
   registry:
     # string. registry middleware name. eg: mdns, etcd, consul...

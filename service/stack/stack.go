@@ -6,10 +6,10 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/stack-labs/stack-rpc/debug/profile"
-	"github.com/stack-labs/stack-rpc/debug/profile/pprof"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/cmd"
+	"github.com/stack-labs/stack-rpc/debug/profile"
+	"github.com/stack-labs/stack-rpc/debug/profile/pprof"
 	"github.com/stack-labs/stack-rpc/debug/service/handler"
 	"github.com/stack-labs/stack-rpc/env"
 	"github.com/stack-labs/stack-rpc/server"
@@ -168,7 +168,7 @@ func (s *stackService) Run() error {
 	return s.Stop()
 }
 
-func newService(opts ...service.Option) service.Service {
+func NewService(opts ...service.Option) service.Service {
 	options := service.NewOptions(opts...)
 
 	return &stackService{

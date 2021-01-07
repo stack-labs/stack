@@ -6,15 +6,10 @@ import (
 	"os/signal"
 	"runtime"
 	"sync"
-	"time"
 
-	"github.com/stack-labs/stack-rpc"
-	broker "github.com/stack-labs/stack-rpc/broker/http"
 	cl "github.com/stack-labs/stack-rpc/client"
-	client "github.com/stack-labs/stack-rpc/client/http"
 	"github.com/stack-labs/stack-rpc/debug/handler"
 	ser "github.com/stack-labs/stack-rpc/server"
-	server "github.com/stack-labs/stack-rpc/server/http"
 	"github.com/stack-labs/stack-rpc/service"
 	"github.com/stack-labs/stack-rpc/util/log"
 	signalutil "github.com/stack-labs/stack-rpc/util/signal"
@@ -146,23 +141,4 @@ func NewService(opts ...service.Option) service.Service {
 	service := new(webService)
 	service.opts = newOptions(opts...)
 	return service
-}
-
-// NewFunction returns a grpc service compatible with stack-rpc.Function
-func NewFunction(opts ...service.Option) service.Function {
-	c := client.NewClient()
-	s := server.NewServer()
-	b := broker.NewBroker()
-
-	options := []service.Option{
-		stack.Client(c),
-		stack.Server(s),
-		stack.Broker(b),
-		stack.RegisterTTL(time.Minute),
-		stack.RegisterInterval(time.Second * 30),
-	}
-
-	options = append(options, opts...)
-
-	return stack.NewFunction(options...)
 }

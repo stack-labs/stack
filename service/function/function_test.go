@@ -7,6 +7,7 @@ import (
 
 	proto "github.com/stack-labs/stack-rpc/debug/service/proto"
 	"github.com/stack-labs/stack-rpc/registry/memory"
+	"github.com/stack-labs/stack-rpc/service"
 	"github.com/stack-labs/stack-rpc/util/test"
 )
 
@@ -18,9 +19,9 @@ func TestFunction(t *testing.T) {
 
 	// create service
 	fn := NewFunction(
-		Registry(r),
-		Name("test.function"),
-		AfterStart(func() error {
+		service.Registry(r),
+		service.Name("test.function"),
+		service.AfterStart(func() error {
 			wg.Done()
 			return nil
 		}),

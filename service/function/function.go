@@ -6,12 +6,8 @@ import (
 
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/service"
+	"github.com/stack-labs/stack-rpc/service/stack"
 )
-
-type function struct {
-	cancel context.CancelFunc
-	service.Service
-}
 
 func fnHandlerWrapper(f service.Function) server.HandlerWrapper {
 	return func(h server.HandlerFunc) server.HandlerFunc {
@@ -31,37 +27,9 @@ func fnSubWrapper(f service.Function) server.SubscriberWrapper {
 	}
 }
 
-func newFunction(opts ...service.Option) service.Function {
-	ctx, cancel := context.WithCancel(context.Background())
-
-	// force ttl/interval
-	fopts := []service.Option{
-		RegisterTTL(time.Minute),
-		RegisterInterval(time.Second * 30),
-	}
-
-	// prepend to opts
-	fopts = append(fopts, opts...)
-
-	// make context the last thing
-	fopts = append(fopts, Context(ctx))
-
-	service := newService(fopts...)
-
-	fn := &function{
-		cancel:  cancel,
-		Service: service,
-	}
-
-	service.Server().Init(
-		// ensure the service waits for requests to finish
-		server.Wait(nil),
-		// wrap handlers and subscribers to finish execution
-		server.WrapHandler(fnHandlerWrapper(fn)),
-		server.WrapSubscriber(fnSubWrapper(fn)),
-	)
-
-	return fn
+type function struct {
+	cancel context.CancelFunc
+	service.Service
 }
 
 func (f *function) Done() error {
@@ -79,4 +47,37 @@ func (f *function) Subscribe(topic string, v interface{}) error {
 	return f.Service.Server().Subscribe(
 		f.Service.Server().NewSubscriber(topic, v),
 	)
+}
+
+func NewFunction(opts ...service.Option) service.Function {
+	ctx, cancel := context.WithCancel(context.Background())
+
+	// force ttl/interval
+	fopts := []service.Option{
+		service.RegisterTTL(time.Minute),
+		service.RegisterInterval(time.Second * 30),
+	}
+
+	// prepend to opts
+	fopts = append(fopts, opts...)
+
+	// make context the last thing
+	fopts = append(fopts, service.Context(ctx))
+
+	service := stack.NewService(fopts...)
+
+	fn := &function{
+		cancel:  cancel,
+		Service: service,
+	}
+
+	service.Server().Init(
+		// ensure the service waits for requests to finish
+		server.Wait(nil),
+		// wrap handlers and subscribers to finish execution
+		server.WrapHandler(fnHandlerWrapper(fn)),
+		server.WrapSubscriber(fnSubWrapper(fn)),
+	)
+
+	return fn
 }

@@ -1,6 +1,17 @@
 stack:
   # array. extra config files should be inited together, files that in the same dir with stack.yml.
   includes:
+  service:
+    id:
+    name:
+    rpc: stack
+    web:
+      enable: false
+      address: 127.0.0.1:8090
+      root-path: /${stack.service.name}
+      static-dir: /webapp
+    stack:
+    grpc:
   # registry center options
   registry:
     # string. registry middleware name. eg: mdns, etcd, consul...
@@ -18,8 +29,6 @@ stack:
       size:
       ttl:
   server:
-    id:
-    name:
     address:
     advertise:
     protocol:

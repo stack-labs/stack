@@ -1,18 +1,19 @@
-package stack
+package function
 
 import (
 	"context"
 	"time"
 
 	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/service"
 )
 
 type function struct {
 	cancel context.CancelFunc
-	Service
+	service.Service
 }
 
-func fnHandlerWrapper(f Function) server.HandlerWrapper {
+func fnHandlerWrapper(f service.Function) server.HandlerWrapper {
 	return func(h server.HandlerFunc) server.HandlerFunc {
 		return func(ctx context.Context, req server.Request, rsp interface{}) error {
 			defer f.Done()
@@ -21,7 +22,7 @@ func fnHandlerWrapper(f Function) server.HandlerWrapper {
 	}
 }
 
-func fnSubWrapper(f Function) server.SubscriberWrapper {
+func fnSubWrapper(f service.Function) server.SubscriberWrapper {
 	return func(s server.SubscriberFunc) server.SubscriberFunc {
 		return func(ctx context.Context, msg server.Message) error {
 			defer f.Done()
@@ -30,11 +31,11 @@ func fnSubWrapper(f Function) server.SubscriberWrapper {
 	}
 }
 
-func newFunction(opts ...Option) Function {
+func newFunction(opts ...service.Option) service.Function {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	// force ttl/interval
-	fopts := []Option{
+	fopts := []service.Option{
 		RegisterTTL(time.Minute),
 		RegisterInterval(time.Second * 30),
 	}

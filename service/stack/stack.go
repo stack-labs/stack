@@ -6,39 +6,32 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/debug/profile"
 	"github.com/stack-labs/stack-rpc/debug/profile/pprof"
+	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/debug/service/handler"
 	"github.com/stack-labs/stack-rpc/env"
 	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/service"
 	"github.com/stack-labs/stack-rpc/util/log"
 	"github.com/stack-labs/stack-rpc/util/wrapper"
 )
 
-type service struct {
-	opts Options
+type stackService struct {
+	opts service.Options
 
 	once sync.Once
 }
 
-func newService(opts ...Option) Service {
-	options := newOptions(opts...)
-
-	return &service{
-		opts: options,
-	}
-}
-
-func (s *service) Name() string {
+func (s *stackService) Name() string {
 	return s.opts.Server.Options().Name
 }
 
 // Init initialises options. Additionally it calls cmd.Init
 // which parses command line flags. cmd.Init is only called
 // on first Init.
-func (s *service) Init(opts ...Option) error {
+func (s *stackService) Init(opts ...service.Option) error {
 	// process options
 	for _, o := range opts {
 		o(&s.opts)
@@ -68,23 +61,23 @@ func (s *service) Init(opts ...Option) error {
 	return nil
 }
 
-func (s *service) Options() Options {
+func (s *stackService) Options() service.Options {
 	return s.opts
 }
 
-func (s *service) Client() client.Client {
+func (s *stackService) Client() client.Client {
 	return s.opts.Client
 }
 
-func (s *service) Server() server.Server {
+func (s *stackService) Server() server.Server {
 	return s.opts.Server
 }
 
-func (s *service) String() string {
+func (s *stackService) String() string {
 	return "stack"
 }
 
-func (s *service) Start() error {
+func (s *stackService) Start() error {
 	for _, fn := range s.opts.BeforeStart {
 		if err := fn(); err != nil {
 			return err
@@ -104,7 +97,7 @@ func (s *service) Start() error {
 	return nil
 }
 
-func (s *service) Stop() error {
+func (s *stackService) Stop() error {
 	var gerr error
 
 	for _, fn := range s.opts.BeforeStop {
@@ -130,7 +123,7 @@ func (s *service) Stop() error {
 	return gerr
 }
 
-func (s *service) Run() error {
+func (s *stackService) Run() error {
 	// register the debug handler
 	if err := s.opts.Server.Handle(
 		s.opts.Server.NewHandler(
@@ -173,4 +166,12 @@ func (s *service) Run() error {
 	}
 
 	return s.Stop()
+}
+
+func newService(opts ...service.Option) service.Service {
+	options := service.NewOptions(opts...)
+
+	return &stackService{
+		opts: options,
+	}
 }

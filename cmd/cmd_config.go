@@ -13,9 +13,9 @@ import (
 	"github.com/stack-labs/stack-rpc/plugin"
 	reg "github.com/stack-labs/stack-rpc/registry"
 	ser "github.com/stack-labs/stack-rpc/server"
+	ss "github.com/stack-labs/stack-rpc/service"
 	tra "github.com/stack-labs/stack-rpc/transport"
 	"github.com/stack-labs/stack-rpc/util/log"
-	wb "github.com/stack-labs/stack-rpc/web"
 )
 
 type stack struct {
@@ -335,41 +335,27 @@ func (a *auth) Options() []au.Option {
 }
 
 type web struct {
-	Id        string            `json:"id" sc:"id"`
-	Name      string            `json:"name" sc:"name"`
-	Metadata  map[string]string `json:"metadata" sc:"metadata"`
-	Address   string            `json:"address" sc:"address"`
-	Version   string            `json:"version" sc:"version"`
-	Advertise string            `json:"advertise" sc:"advertise"`
-	Registry  serverRegistry    `json:"registry" sc:"registry"`
-	Secure    bool              `json:"secure" sc:"secure"`
+	Enable    bool   `json:"enable" sc:"enable"`
+	Address   string `json:"address" sc:"address"`
+	RootPath  string `json:"rootPath" sc:"root-path"`
+	StaticDir string `json:"staticDir" sc:"static-dir"`
 }
 
-func (w *web) Options() []wb.Option {
-	var opts []wb.Option
+type service struct {
+	ID   string `json:"id" sc:"id"`
+	Name string `json:"name" sc:"name"`
+	RPC  string `json:"rpc" sc:"rpc"`
+	Web  web    `json:"web" sc:"web"`
+}
 
-	if len(w.Id) != 0 {
-		opts = append(opts, wb.Version(w.Id))
+func (s *service) Options() []ss.Option {
+	var opts []ss.Option
+
+	if len(s.ID) > 0 {
+		opts = append(opts)
 	}
 
-	if len(w.Name) != 0 {
-		opts = append(opts, wb.Name(w.Name))
-	}
-
-	if len(w.Version) != 0 {
-		opts = append(opts, wb.Version(w.Version))
-	}
-
-	if len(w.Metadata) != 0 {
-		// todo merge?
-		opts = append(opts, wb.Metadata(w.Metadata))
-	}
-
-	if ttl := time.Duration(w.Registry.TTL); ttl >= 0 {
-		opts = append(opts, wb.RegisterTTL(ttl*time.Second))
-	}
-
-	if val := time.Duration(w.Registry.Interval); val > 0 {
+	if val := time.Duration(s.Registry.Interval); val > 0 {
 		opts = append(opts, wb.RegisterInterval(val*time.Second))
 	}
 

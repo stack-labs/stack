@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/stack-labs/stack-rpc"
 	"github.com/stack-labs/stack-rpc/auth"
 	broker "github.com/stack-labs/stack-rpc/broker/http"
 	client "github.com/stack-labs/stack-rpc/client/http"
@@ -13,6 +12,7 @@ import (
 	"github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/registry/mdns"
 	server "github.com/stack-labs/stack-rpc/server/http"
+	"github.com/stack-labs/stack-rpc/service"
 	transportH "github.com/stack-labs/stack-rpc/transport/http"
 )
 
@@ -23,16 +23,16 @@ type handlerFuncsKey struct{}
 
 type HandlerFunc func(w http.ResponseWriter, r *http.Request)
 
-func StaticDir(dir string) stack.Option {
+func StaticDir(dir string) service.Option {
 	return setOption(staticDirKey{}, dir)
 }
 
-func RootPath(path string) stack.Option {
+func RootPath(path string) service.Option {
 	return setOption(rootPathKey{}, path)
 }
 
-func Handlers(hs ...http.Handler) stack.Option {
-	return func(o *stack.Options) {
+func Handlers(hs ...http.Handler) service.Option {
+	return func(o *service.Options) {
 		if o.Context == nil {
 			o.Context = context.Background()
 		}
@@ -48,8 +48,8 @@ func Handlers(hs ...http.Handler) stack.Option {
 	}
 }
 
-func HandleFuncs(hs ...HandlerFunc) stack.Option {
-	return func(o *stack.Options) {
+func HandleFuncs(hs ...HandlerFunc) service.Option {
+	return func(o *service.Options) {
 		if o.Context == nil {
 			o.Context = context.Background()
 		}
@@ -65,8 +65,8 @@ func HandleFuncs(hs ...HandlerFunc) stack.Option {
 	}
 }
 
-func setOption(k, v interface{}) stack.Option {
-	return func(o *stack.Options) {
+func setOption(k, v interface{}) service.Option {
+	return func(o *service.Options) {
 		if o.Context == nil {
 			o.Context = context.Background()
 		}
@@ -74,8 +74,8 @@ func setOption(k, v interface{}) stack.Option {
 	}
 }
 
-func newOptions(opts ...stack.Option) stack.Options {
-	opt := stack.Options{
+func newOptions(opts ...service.Option) service.Options {
+	opt := service.Options{
 		Broker:    broker.NewBroker(),
 		Client:    client.NewClient(),
 		Registry:  mdns.NewRegistry(),

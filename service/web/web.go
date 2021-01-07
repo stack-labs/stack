@@ -15,21 +15,22 @@ import (
 	"github.com/stack-labs/stack-rpc/debug/handler"
 	ser "github.com/stack-labs/stack-rpc/server"
 	server "github.com/stack-labs/stack-rpc/server/http"
+	"github.com/stack-labs/stack-rpc/service"
 	"github.com/stack-labs/stack-rpc/util/log"
 	signalutil "github.com/stack-labs/stack-rpc/util/signal"
 )
 
 type webService struct {
-	opts stack.Options
+	opts service.Options
 
 	once sync.Once
 }
 
 func (w *webService) Name() string {
-	return w.Options().Server.Options().Name
+	return w.opts.Server.Options().Name
 }
 
-func (w *webService) Init(option ...stack.Option) error {
+func (w *webService) Init(option ...service.Option) error {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`hello world`))
@@ -40,7 +41,7 @@ func (w *webService) Init(option ...stack.Option) error {
 	return nil
 }
 
-func (w *webService) Options() stack.Options {
+func (w *webService) Options() service.Options {
 	return w.opts
 }
 
@@ -141,19 +142,19 @@ func (w *webService) String() string {
 	return "web"
 }
 
-func NewService(opts ...stack.Option) stack.Service {
+func NewService(opts ...service.Option) service.Service {
 	service := new(webService)
 	service.opts = newOptions(opts...)
 	return service
 }
 
 // NewFunction returns a grpc service compatible with stack-rpc.Function
-func NewFunction(opts ...stack.Option) stack.Function {
+func NewFunction(opts ...service.Option) service.Function {
 	c := client.NewClient()
 	s := server.NewServer()
 	b := broker.NewBroker()
 
-	options := []stack.Option{
+	options := []service.Option{
 		stack.Client(c),
 		stack.Server(s),
 		stack.Broker(b),

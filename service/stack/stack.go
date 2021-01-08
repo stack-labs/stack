@@ -37,6 +37,12 @@ func (s *stackService) Init(opts ...service.Option) error {
 		o(&s.opts)
 	}
 
+	if len(s.opts.BeforeInit) > 0 {
+		for _, f := range s.opts.BeforeInit {
+			f()
+		}
+	}
+
 	// service name
 	serviceName := s.opts.Server.Options().Name
 
@@ -56,6 +62,12 @@ func (s *stackService) Init(opts ...service.Option) error {
 	); err != nil {
 		log.Errorf("cmd init error: %s", err)
 		return err
+	}
+
+	if len(s.opts.BeforeInit) > 0 {
+		for _, f := range s.opts.BeforeInit {
+			f()
+		}
 	}
 
 	return nil

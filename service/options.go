@@ -42,6 +42,7 @@ type Options struct {
 	Profile   profile.Profile
 
 	// Before and After funcs
+	BeforeInit  []func() error
 	BeforeStart []func() error
 	BeforeStop  []func() error
 	AfterStart  []func() error
@@ -222,7 +223,11 @@ func WrapSubscriber(w ...server.SubscriberWrapper) Option {
 	}
 }
 
-// Before and Afters
+func BeforeInit(fn func() error) Option {
+	return func(o *Options) {
+		o.BeforeInit = append(o.BeforeInit, fn)
+	}
+}
 
 func BeforeStart(fn func() error) Option {
 	return func(o *Options) {

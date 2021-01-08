@@ -21,7 +21,8 @@ type Option func(*Options)
 
 // NewService creates and returns a new Service based on the packages within.
 func NewService(opts ...Option) service.Service {
-	return service.NewService(opts...)
+	o := newOptions(opts...)
+	return service.NewService(o.serviceOpts...)
 }
 
 // FromContext retrieves a Service from the Context.
@@ -33,11 +34,6 @@ func FromContext(ctx context.Context) (service.Service, bool) {
 // NewContext returns a new Context with the Service embedded within it.
 func NewContext(ctx context.Context, s service.Service) context.Context {
 	return context.WithValue(ctx, serviceKey{}, s)
-}
-
-// NewFunction returns a new Function for a one time executing Service
-func NewFunction(opts ...service.Option) service.Function {
-	return service.NewFunction(opts...)
 }
 
 // NewPublisher returns a new Publisher

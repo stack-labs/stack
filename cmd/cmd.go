@@ -3,6 +3,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/stack-labs/stack-rpc/util/wrapper"
 	"io"
 	"math/rand"
 	"os"
@@ -384,16 +385,48 @@ func (c *cmd) beforeLoadConfig(ctx *cli.Context) (err error) {
 }
 
 func (c *cmd) beforeSetupComponents() (err error) {
+	// whole [beforeSetupComponents] region will be rewrite in future
+
 	conf := stackConfig.Stack
 
-	var serverOpts = conf.Server.Options()
-	var clientOpts = conf.Client.Options()
-	var transOpts = conf.Transport.Options()
-	var regOpts = conf.Registry.Options()
-	var brokerOpts = conf.Broker.Options()
-	var logOpts = conf.Logger.Options()
-	var authOpts = conf.Auth.Options()
+	sOpts := conf.Service.Options().opts()
 
+	serverName := fmt.Sprintf("%s-server", sOpts.Name)
+	serverOpts := conf.Server.Options()
+	if len(serverOpts.opts().Name) == 0 {
+		serverOpts = append(serverOpts, ser.Name(serverName))
+	}
+
+	clientName := fmt.Sprintf("%s-client", sOpts.Name)
+	clientOpts := conf.Client.Options()
+	if len(clientOpts.opts().Name) == 0 {
+		clientOpts = append(clientOpts, cl.Name(clientName))
+	}
+
+	transOpts := conf.Transport.Options()
+	regOpts := conf.Registry.Options()
+	brokerOpts := conf.Broker.Options()
+	logOpts := conf.Logger.Options()
+	authOpts := conf.Auth.Options()
+
+	// todo check server is nil
+
+	if len(o.HandlerWrapper) > 0 {
+		var wrappers []server.Option
+		for _, wrap := range o.HandlerWrapper {
+			wrappers = append(wrappers, server.WrapHandler(wrap))
+		}
+		// todo move init server itself
+		o.Server.Init(wrappers...)
+	}
+	if len(o.SubscriberWrapper) > 0 {
+		var wrappers []server.Option
+		for _, wrap := range o.SubscriberWrapper {
+			wrappers = append(wrappers, server.WrapSubscriber(wrap))
+		}
+		// todo move init server itself
+		o.Server.Init(wrappers...)
+	}
 	// set Logger
 	if len(conf.Logger.Name) > 0 {
 		// only change if we have the logger and type differs
@@ -489,6 +522,19 @@ func (c *cmd) beforeSetupComponents() (err error) {
 		return fmt.Errorf("Error configuring server: %s ", err)
 	}
 
+	if len((*c.opts.Client).Options().Wrappers) > 0 {
+		// apply in reverse
+		for i := len((*c.opts.Client).Options().Wrappers); i > 0; i-- {
+			*c.opts.Client = (*c.opts.Client).Options().Wrappers[i-1](*c.opts.Client)
+		}
+	}
+
+	if len((*c.opts.Client).Options().CallOptions.Wrappers) > 0 {
+		// todo move init client itself
+		o.Client.Init(client.WrapCall(o.CallWrapper...))
+	}
+	// wrap client to inject From-Service header on any calls
+	*c.opts.Client = wrapper.FromService(serverName, *c.opts.Client)
 	if err = (*c.opts.Client).Init(clientOpts...); err != nil {
 		return fmt.Errorf("Error configuring client: %v ", err)
 	}

@@ -64,7 +64,7 @@ func NewFunction(opts ...service.Option) service.Function {
 	// make context the last thing
 	fopts = append(fopts, service.Context(ctx))
 
-	service := stack.NewService(fopts...)
+	service := mucp.NewService(fopts...)
 
 	fn := &function{
 		cancel:  cancel,

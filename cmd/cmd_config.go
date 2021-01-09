@@ -14,6 +14,7 @@ import (
 	reg "github.com/stack-labs/stack-rpc/registry"
 	ser "github.com/stack-labs/stack-rpc/server"
 	ss "github.com/stack-labs/stack-rpc/service"
+	sw "github.com/stack-labs/stack-rpc/service/web"
 	tra "github.com/stack-labs/stack-rpc/transport"
 	"github.com/stack-labs/stack-rpc/util/log"
 )
@@ -31,7 +32,7 @@ type stack struct {
 	Transport transport `json:"transport" sc:"transport"`
 	Logger    logger    `json:"logger" sc:"logger"`
 	Auth      auth      `json:"auth" sc:"auth"`
-	Web       web       `json:"web" sc:"web"`
+	Service   service   `json:"service" sc:"service"`
 }
 
 type config struct {
@@ -75,14 +76,30 @@ type clientRequest struct {
 	Timeout string `json:"timeout" sc:"timeout"`
 }
 
+type clientOpts []cl.Option
+
+func (s clientOpts) opts() cl.Options {
+	opts := cl.Options{}
+	for _, o := range s {
+		o(&opts)
+	}
+
+	return opts
+}
+
 type client struct {
+	Name     string        `json:"name" sc:"name"`
 	Protocol string        `json:"protocol" sc:"protocol"`
 	Pool     pool          `json:"pool" sc:"pool"`
 	Request  clientRequest `json:"request" sc:"request"`
 }
 
-func (c *client) Options() []cl.Option {
-	var cliOpts []cl.Option
+func (c *client) Options() clientOpts {
+	var cliOpts clientOpts
+
+	if len(c.Name) > 0 {
+		cliOpts = append(cliOpts, cl.Name(c.Name))
+	}
 
 	requestRetries := c.Request.Retries
 	if requestRetries >= 0 {
@@ -142,6 +159,17 @@ func (m metadata) Value(k string) string {
 	return ""
 }
 
+type serverOpts []ser.Option
+
+func (s serverOpts) opts() ser.Options {
+	opts := ser.Options{}
+	for _, o := range s {
+		o(&opts)
+	}
+
+	return opts
+}
+
 type server struct {
 	Address   string         `json:"address" sc:"address"`
 	Advertise string         `json:"advertise" sc:"advertise"`
@@ -158,8 +186,8 @@ type serverRegistry struct {
 	Interval int `json:"interval" sc:"interval"`
 }
 
-func (s *server) Options() []ser.Option {
-	var serverOpts []ser.Option
+func (s *server) Options() serverOpts {
+	var serverOpts serverOpts
 
 	// Parse the server options
 	metadata := make(map[string]string)
@@ -341,6 +369,17 @@ type web struct {
 	StaticDir string `json:"staticDir" sc:"static-dir"`
 }
 
+type serviceOpts []ss.Option
+
+func (s serviceOpts) opts() ss.Options {
+	opts := ss.Options{}
+	for _, o := range s {
+		o(&opts)
+	}
+
+	return opts
+}
+
 type service struct {
 	ID   string `json:"id" sc:"id"`
 	Name string `json:"name" sc:"name"`
@@ -348,18 +387,34 @@ type service struct {
 	Web  web    `json:"web" sc:"web"`
 }
 
-func (s *service) Options() []ss.Option {
-	var opts []ss.Option
+func (s *service) Options() serviceOpts {
+	var opts serviceOpts
 
 	if len(s.ID) > 0 {
-		opts = append(opts)
+		opts = append(opts, ss.Id(s.ID))
 	}
 
-	if val := time.Duration(s.Registry.Interval); val > 0 {
-		opts = append(opts, wb.RegisterInterval(val*time.Second))
+	if len(s.Name) > 0 {
+		opts = append(opts, ss.Name(s.Name))
 	}
 
-	opts = append(opts, wb.Secure(w.Secure))
+	if len(s.Name) > 0 {
+		opts = append(opts, ss.Name(s.Name))
+	}
+
+	opts = append(opts, sw.Enable(s.Web.Enable))
+
+	if len(s.Web.Address) > 0 {
+		opts = append(opts, sw.Address(s.Web.Address))
+	}
+
+	if len(s.Web.RootPath) > 0 {
+		opts = append(opts, sw.RootPath(s.Web.RootPath))
+	}
+
+	if len(s.Web.StaticDir) > 0 {
+		opts = append(opts, sw.StaticDir(s.Web.StaticDir))
+	}
 
 	return opts
 }

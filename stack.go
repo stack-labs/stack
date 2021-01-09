@@ -3,9 +3,11 @@ package stack
 
 import (
 	"context"
+	"github.com/stack-labs/stack-rpc/util/log"
 
 	"github.com/stack-labs/stack-rpc/client"
 	cmucp "github.com/stack-labs/stack-rpc/client/mucp"
+	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/service"
 )
@@ -22,6 +24,27 @@ type Option func(*Options)
 // NewService creates and returns a new Service based on the packages within.
 func NewService(opts ...Option) service.Service {
 	o := newOptions(opts...)
+
+	o.serviceOpts = append(o.serviceOpts, service.BeforeInit(func(sOpts *service.Options) error {
+		// cmd helps stack parse command options and reset the options that should work.
+		if err := o.Cmd.Init(
+			cmd.Broker(&sOpts.Broker),
+			cmd.Registry(&sOpts.Registry),
+			cmd.Transport(&sOpts.Transport),
+			cmd.Client(&sOpts.Client),
+			cmd.Server(&sOpts.Server),
+			cmd.Selector(&sOpts.Selector),
+			cmd.Logger(&sOpts.Logger),
+			cmd.Config(&sOpts.Config),
+			cmd.Auth(&sOpts.Auth),
+		); err != nil {
+			log.Errorf("cmd init error: %s", err)
+			return err
+		}
+
+		return nil
+	}))
+
 	return service.NewService(o.serviceOpts...)
 }
 

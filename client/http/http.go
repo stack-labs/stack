@@ -16,15 +16,15 @@ import (
 
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/client/selector"
 	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/codec"
 	raw "github.com/stack-labs/stack-rpc/codec/bytes"
-	errors "github.com/stack-labs/stack-rpc/errors"
-	"github.com/stack-labs/stack-rpc/metadata"
+	"github.com/stack-labs/stack-rpc/pkg/metadata"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/router"
-	"github.com/stack-labs/stack-rpc/selector"
 	"github.com/stack-labs/stack-rpc/transport"
+	errors "github.com/stack-labs/stack-rpc/util/errors"
 )
 
 func filterLabel(r []router.Route) []router.Route {
@@ -209,8 +209,8 @@ func (h *httpClient) Call(ctx context.Context, req client.Request, rsp interface
 	hcall := h.call
 
 	// wrap the call in reverse
-	for i := len(callOpts.CallWrappers); i > 0; i-- {
-		hcall = callOpts.CallWrappers[i-1](hcall)
+	for i := len(callOpts.Wrappers); i > 0; i-- {
+		hcall = callOpts.Wrappers[i-1](hcall)
 	}
 
 	// return errors.New("go.micro.client", "request timeout", 408)

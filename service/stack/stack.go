@@ -7,7 +7,6 @@ import (
 	"syscall"
 
 	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/debug/profile"
 	"github.com/stack-labs/stack-rpc/debug/profile/pprof"
 	"github.com/stack-labs/stack-rpc/debug/service/handler"
@@ -15,7 +14,6 @@ import (
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/service"
 	"github.com/stack-labs/stack-rpc/util/log"
-	"github.com/stack-labs/stack-rpc/util/wrapper"
 )
 
 type stackService struct {
@@ -39,34 +37,10 @@ func (s *stackService) Init(opts ...service.Option) error {
 
 	if len(s.opts.BeforeInit) > 0 {
 		for _, f := range s.opts.BeforeInit {
-			f()
-		}
-	}
-
-	// service name
-	serviceName := s.opts.Server.Options().Name
-
-	// wrap client to inject From-Service header on any calls
-	s.opts.Client = wrapper.FromService(serviceName, s.opts.Client)
-
-	if err := s.opts.Cmd.Init(
-		cmd.Broker(&s.opts.Broker),
-		cmd.Registry(&s.opts.Registry),
-		cmd.Transport(&s.opts.Transport),
-		cmd.Client(&s.opts.Client),
-		cmd.Server(&s.opts.Server),
-		cmd.Selector(&s.opts.Selector),
-		cmd.Logger(&s.opts.Logger),
-		cmd.Config(&s.opts.Config),
-		cmd.Auth(&s.opts.Auth),
-	); err != nil {
-		log.Errorf("cmd init error: %s", err)
-		return err
-	}
-
-	if len(s.opts.BeforeInit) > 0 {
-		for _, f := range s.opts.BeforeInit {
-			f()
+			err := f(&s.opts)
+			if err != nil {
+				log.Fatalf("init service err: %s", err)
+			}
 		}
 	}
 

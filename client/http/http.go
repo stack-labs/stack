@@ -17,28 +17,58 @@ import (
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/codec"
 	raw "github.com/stack-labs/stack-rpc/codec/bytes"
 	"github.com/stack-labs/stack-rpc/pkg/metadata"
 	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/router"
 	"github.com/stack-labs/stack-rpc/transport"
 	errors "github.com/stack-labs/stack-rpc/util/errors"
 )
-
-func filterLabel(r []router.Route) []router.Route {
-	//				selector.FilterLabel("protocol", "http")
-	return r
-}
 
 type httpClient struct {
 	once sync.Once
 	opts client.Options
 }
 
-func init() {
-	cmd.DefaultClients["http"] = NewClient
+func (h *httpClient) next(request client.Request, opts client.CallOptions) (selector.Next, error) {
+	service := request.Service()
+
+	// get proxy
+	if prx := os.Getenv("MICRO_PROXY"); len(prx) > 0 {
+		service = prx
+	}
+
+	// get proxy address
+	if prx := os.Getenv("MICRO_PROXY_ADDRESS"); len(prx) > 0 {
+		opts.Address = []string{prx}
+	}
+
+	// return remote address
+	if len(opts.Address) > 0 {
+		return func() (*registry.Node, error) {
+			return &registry.Node{
+				Address: opts.Address[0],
+				Metadata: map[string]string{
+					"protocol": "http",
+				},
+			}, nil
+		}, nil
+	}
+
+	// only get the things that are of mucp protocol
+	selectOptions := append(opts.SelectOptions, selector.WithFilter(
+		selector.FilterLabel("protocol", "http"),
+	))
+
+	// get next nodes from the selector
+	next, err := h.opts.Selector.Select(service, selectOptions...)
+	if err != nil && err == selector.ErrNotFound {
+		return nil, errors.NotFound("go.micro.client", err.Error())
+	} else if err != nil {
+		return nil, errors.InternalServerError("go.micro.client", err.Error())
+	}
+
+	return next, nil
 }
 
 func (h *httpClient) call(ctx context.Context, node *registry.Node, req client.Request, rsp interface{}, opts client.CallOptions) error {
@@ -186,6 +216,12 @@ func (h *httpClient) Call(ctx context.Context, req client.Request, rsp interface
 		opt(&callOpts)
 	}
 
+	// get next nodes from the selector
+	next, err := h.next(req, callOpts)
+	if err != nil {
+		return err
+	}
+
 	// check if we already have a deadline
 	d, ok := ctx.Deadline()
 	if !ok {
@@ -209,8 +245,8 @@ func (h *httpClient) Call(ctx context.Context, req client.Request, rsp interface
 	hcall := h.call
 
 	// wrap the call in reverse
-	for i := len(callOpts.Wrappers); i > 0; i-- {
-		hcall = callOpts.Wrappers[i-1](hcall)
+	for i := len(callOpts.CallWrappers); i > 0; i-- {
+		hcall = callOpts.CallWrappers[i-1](hcall)
 	}
 
 	// return errors.New("go.micro.client", "request timeout", 408)
@@ -226,33 +262,17 @@ func (h *httpClient) Call(ctx context.Context, req client.Request, rsp interface
 			time.Sleep(t)
 		}
 
-		// use the router passed as a call option, or fallback to the rpc clients router
-		if callOpts.Router == nil {
-			callOpts.Router = h.opts.Router
+		// select next node
+		node, err := next()
+		if err != nil && err == selector.ErrNotFound {
+			return errors.NotFound("go.micro.client", err.Error())
+		} else if err != nil {
+			return errors.InternalServerError("go.micro.client", err.Error())
 		}
-		// use the selector passed as a call option, or fallback to the rpc clients selector
-		if callOpts.Selector == nil {
-			callOpts.Selector = h.opts.Selector
-		}
-
-		callOpts.SelectOptions = append(callOpts.SelectOptions, selector.WithFilter(filterLabel))
-
-		// lookup the route to send the request via
-		route, err := client.LookupRoute(req, callOpts)
-		if err != nil {
-			return err
-		}
-
-		// pass a node to enable backwards compatability as changing the
-		// call func would be a breaking change.
-		// todo v3: change the call func to accept a route
-		node := &registry.Node{Address: route.Address, Metadata: route.Metadata}
-		node.Metadata["protocol"] = "http"
 
 		// make the call
 		err = hcall(ctx, node, req, rsp, callOpts)
-		h.opts.Selector.Record(*route, err)
-
+		h.opts.Selector.Mark(req.Service(), node, err)
 		return err
 	}
 
@@ -296,6 +316,12 @@ func (h *httpClient) Stream(ctx context.Context, req client.Request, opts ...cli
 		opt(&callOpts)
 	}
 
+	// get next nodes from the selector
+	next, err := h.next(req, callOpts)
+	if err != nil {
+		return nil, err
+	}
+
 	// check if we already have a deadline
 	d, ok := ctx.Deadline()
 	if !ok {
@@ -327,32 +353,15 @@ func (h *httpClient) Stream(ctx context.Context, req client.Request, opts ...cli
 			time.Sleep(t)
 		}
 
-		// use the router passed as a call option, or fallback to the rpc clients router
-		if callOpts.Router == nil {
-			callOpts.Router = h.opts.Router
+		node, err := next()
+		if err != nil && err == selector.ErrNotFound {
+			return nil, errors.NotFound("go.micro.client", err.Error())
+		} else if err != nil {
+			return nil, errors.InternalServerError("go.micro.client", err.Error())
 		}
-		// use the selector passed as a call option, or fallback to the rpc clients selector
-		if callOpts.Selector == nil {
-			callOpts.Selector = h.opts.Selector
-		}
-
-		callOpts.SelectOptions = append(callOpts.SelectOptions, selector.WithFilter(filterLabel))
-
-		// lookup the route to send the request via
-		route, err := client.LookupRoute(req, callOpts)
-		if err != nil {
-			return nil, err
-		}
-
-		// pass a node to enable backwards compatability as changing the
-		// call func would be a breaking change.
-		// todo v3: change the call func to accept a route
-		node := &registry.Node{Address: route.Address, Metadata: route.Metadata}
-		node.Metadata["protocol"] = "http"
 
 		stream, err := h.stream(ctx, node, req, callOpts)
-		h.opts.Selector.Record(*route, err)
-
+		h.opts.Selector.Mark(req.Service(), node, err)
 		return stream, err
 	}
 
@@ -363,7 +372,6 @@ func (h *httpClient) Stream(ctx context.Context, req client.Request, opts ...cli
 
 	ch := make(chan response, callOpts.Retries)
 	var grr error
-	var err error
 
 	for i := 0; i < callOpts.Retries; i++ {
 		go func() {
@@ -478,12 +486,14 @@ func newClient(opts ...client.Option) client.Client {
 		options.Broker = broker.DefaultBroker
 	}
 
-	if options.Router == nil {
-		options.Router = router.DefaultRouter
+	if options.Registry == nil {
+		options.Registry = registry.DefaultRegistry
 	}
 
 	if options.Selector == nil {
-		options.Selector = selector.DefaultSelector
+		options.Selector = selector.NewSelector(
+			selector.Registry(options.Registry),
+		)
 	}
 
 	rc := &httpClient{

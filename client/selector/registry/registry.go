@@ -4,10 +4,8 @@ import (
 	"time"
 
 	"github.com/stack-labs/stack-rpc/client/selector"
-
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/registry/cache"
-	"github.com/stack-labs/stack-rpc/registry/mdns"
 )
 
 type registrySelector struct {
@@ -97,10 +95,6 @@ func NewSelector(opts ...selector.Option) selector.Selector {
 
 	for _, opt := range opts {
 		opt(&sopts)
-	}
-
-	if sopts.Registry == nil {
-		sopts.Registry = mdns.NewRegistry()
 	}
 
 	s := &registrySelector{

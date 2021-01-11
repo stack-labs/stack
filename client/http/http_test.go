@@ -10,17 +10,16 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/micro/go-plugins/client/http/v2/test"
 	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/client/http/test"
+	"github.com/stack-labs/stack-rpc/client/selector"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/registry/memory"
-	"github.com/stack-labs/stack-rpc/router"
-	rrouter "github.com/stack-labs/stack-rpc/router/registry"
 )
 
 func TestHTTPClient(t *testing.T) {
 	r := memory.NewRegistry()
-	s := rrouter.NewRouter(router.Registry(r))
+	s := selector.NewSelector(selector.Registry(r))
 
 	l, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
@@ -83,7 +82,7 @@ func TestHTTPClient(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	c := NewClient(client.Router(s))
+	c := NewClient(client.Selector(s))
 
 	for i := 0; i < 10; i++ {
 		msg := &test.Message{
@@ -104,7 +103,7 @@ func TestHTTPClient(t *testing.T) {
 
 func TestHTTPClientStream(t *testing.T) {
 	r := memory.NewRegistry()
-	s := rrouter.NewRouter(router.Registry(r))
+	s := selector.NewSelector(selector.Registry(r))
 
 	l, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
@@ -242,7 +241,7 @@ func TestHTTPClientStream(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	c := NewClient(client.Router(s))
+	c := NewClient(client.Selector(s))
 	req := c.NewRequest("test.service", "/foo/bar", new(test.Message))
 	stream, err := c.Stream(context.TODO(), req)
 	if err != nil {

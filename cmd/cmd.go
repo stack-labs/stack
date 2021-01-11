@@ -409,24 +409,6 @@ func (c *cmd) beforeSetupComponents() (err error) {
 	logOpts := conf.Logger.Options()
 	authOpts := conf.Auth.Options()
 
-	// todo check server is nil
-
-	if len(o.HandlerWrapper) > 0 {
-		var wrappers []server.Option
-		for _, wrap := range o.HandlerWrapper {
-			wrappers = append(wrappers, server.WrapHandler(wrap))
-		}
-		// todo move init server itself
-		o.Server.Init(wrappers...)
-	}
-	if len(o.SubscriberWrapper) > 0 {
-		var wrappers []server.Option
-		for _, wrap := range o.SubscriberWrapper {
-			wrappers = append(wrappers, server.WrapSubscriber(wrap))
-		}
-		// todo move init server itself
-		o.Server.Init(wrappers...)
-	}
 	// set Logger
 	if len(conf.Logger.Name) > 0 {
 		// only change if we have the logger and type differs
@@ -522,18 +504,8 @@ func (c *cmd) beforeSetupComponents() (err error) {
 		return fmt.Errorf("Error configuring server: %s ", err)
 	}
 
-	if len((*c.opts.Client).Options().Wrappers) > 0 {
-		// apply in reverse
-		for i := len((*c.opts.Client).Options().Wrappers); i > 0; i-- {
-			*c.opts.Client = (*c.opts.Client).Options().Wrappers[i-1](*c.opts.Client)
-		}
-	}
-
-	if len((*c.opts.Client).Options().CallOptions.Wrappers) > 0 {
-		// todo move init client itself
-		o.Client.Init(client.WrapCall(o.CallWrapper...))
-	}
 	// wrap client to inject From-Service header on any calls
+	// todo wrap not here
 	*c.opts.Client = wrapper.FromService(serverName, *c.opts.Client)
 	if err = (*c.opts.Client).Init(clientOpts...); err != nil {
 		return fmt.Errorf("Error configuring client: %v ", err)

@@ -3,13 +3,18 @@ package stack
 
 import (
 	"context"
-	"github.com/stack-labs/stack-rpc/util/log"
 
 	"github.com/stack-labs/stack-rpc/client"
-	cmucp "github.com/stack-labs/stack-rpc/client/mucp"
 	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/service"
+	"github.com/stack-labs/stack-rpc/util/log"
+
+	_ "github.com/stack-labs/stack-rpc/broker/http"
+	_ "github.com/stack-labs/stack-rpc/client/mucp"
+	_ "github.com/stack-labs/stack-rpc/registry/mdns"
+	_ "github.com/stack-labs/stack-rpc/server/mucp"
+	_ "github.com/stack-labs/stack-rpc/transport/http"
 )
 
 type serviceKey struct{}
@@ -61,9 +66,6 @@ func NewContext(ctx context.Context, s service.Service) context.Context {
 
 // NewPublisher returns a new Publisher
 func NewPublisher(topic string, c client.Client) Publisher {
-	if c == nil {
-		c = cmucp.NewClient()
-	}
 	return &publisher{c, topic}
 }
 

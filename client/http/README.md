@@ -5,7 +5,7 @@ This plugin is a http client for go-micro.
 ## Overview
 
 The http client wraps `net/http` to provide a robust go-micro client with service discovery, load balancing and streaming. 
-It complies with the [stack.Client](https://godoc.org/github.com/stack-labs/stack-rpc/client#Client) interface.
+It complies with the [go-micro.Client](https://godoc.org/github.com/micro/go-micro/client#Client) interface.
 
 ## Usage
 

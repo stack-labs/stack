@@ -8,6 +8,8 @@ import (
 
 	"github.com/stack-labs/stack-rpc"
 	"github.com/stack-labs/stack-rpc/registry/memory"
+	"github.com/stack-labs/stack-rpc/service"
+	"github.com/stack-labs/stack-rpc/service/grpc"
 	hello "github.com/stack-labs/stack-rpc/service/grpc/proto"
 	mls "github.com/stack-labs/stack-rpc/util/tls"
 )
@@ -30,19 +32,22 @@ func TestGRPCService(t *testing.T) {
 	r := memory.NewRegistry()
 
 	// create GRPC service
-	service := NewService(
+	service := stack.NewService(
 		stack.Name("test.service"),
 		stack.Registry(r),
+		stack.Context(ctx),
+		func(options *stack.Options) {
+			options.ServiceOpts = append(options.ServiceOpts, service.RPC("grpc"))
+		},
 		stack.AfterStart(func() error {
 			wg.Done()
 			return nil
 		}),
-		stack.Context(ctx),
 	)
 
 	// register test handler
 	hello.RegisterTestHandler(service.Server(), &testHandler{})
-
+	service.Init()
 	// run service
 	go func() {
 		if err := service.Run(); err != nil {
@@ -55,52 +60,6 @@ func TestGRPCService(t *testing.T) {
 
 	// create client
 	test := hello.NewTestService("test.service", service.Client())
-
-	// call service
-	rsp, err := test.Call(context.Background(), &hello.Request{
-		Name: "John",
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	// check message
-	if rsp.Msg != "Hello John" {
-		t.Fatalf("unexpected response %s", rsp.Msg)
-	}
-}
-
-func TestGRPCFunction(t *testing.T) {
-	var wg sync.WaitGroup
-	wg.Add(1)
-
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
-	// create service
-	fn := NewFunction(
-		stack.Name("test.function"),
-		stack.Registry(memory.NewRegistry()),
-		stack.AfterStart(func() error {
-			wg.Done()
-			return nil
-		}),
-		stack.Context(ctx),
-	)
-
-	// register test handler
-	hello.RegisterTestHandler(fn.Server(), &testHandler{})
-
-	fn.Init()
-
-	// run service
-	go fn.Run()
-
-	// wait for start
-	wg.Wait()
-
-	// create client
-	test := hello.NewTestService("test.function", fn.Client())
 
 	// call service
 	rsp, err := test.Call(context.Background(), &hello.Request{
@@ -137,7 +96,7 @@ func TestGRPCTLSService(t *testing.T) {
 	}
 
 	// create GRPC service
-	service := NewService(
+	service := stack.NewService(
 		stack.Name("test.service"),
 		stack.Registry(r),
 		stack.AfterStart(func() error {
@@ -146,9 +105,14 @@ func TestGRPCTLSService(t *testing.T) {
 		}),
 		stack.Context(ctx),
 		// set TLS config
-		WithTLS(config),
+		func(options *stack.Options) {
+			options.ServiceOpts = append(options.ServiceOpts, grpc.WithTLS(config))
+		},
+		func(options *stack.Options) {
+			options.ServiceOpts = append(options.ServiceOpts, service.RPC("grpc"))
+		},
 	)
-
+	service.Init()
 	// register test handler
 	hello.RegisterTestHandler(service.Server(), &testHandler{})
 

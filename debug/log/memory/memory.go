@@ -4,7 +4,7 @@ package memory
 import (
 	"fmt"
 
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack-rpc/debug/log"
 	"github.com/stack-labs/stack-rpc/util/ring"
 )
 

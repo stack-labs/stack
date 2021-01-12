@@ -3,9 +3,7 @@ package http
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
 )
 
@@ -18,14 +16,6 @@ func newOptions(opt ...server.Option) server.Options {
 
 	for _, o := range opt {
 		o(&opts)
-	}
-
-	if opts.Broker == nil {
-		opts.Broker = broker.DefaultBroker
-	}
-
-	if opts.Registry == nil {
-		opts.Registry = registry.DefaultRegistry
 	}
 
 	if len(opts.Address) == 0 {

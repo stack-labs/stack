@@ -8,7 +8,7 @@ import (
 
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/mucp"
-	pb "github.com/stack-labs/stack-rpc/debug/service/proto"
+	pb "github.com/stack-labs/stack-rpc/debug/proto"
 	"github.com/stack-labs/stack-rpc/registry/cache"
 	"github.com/stack-labs/stack-rpc/registry/mdns"
 )

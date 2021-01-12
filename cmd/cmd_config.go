@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	sel "github.com/stack-labs/stack-rpc/client/selector"
 	"strings"
 	"time"
 
@@ -238,6 +239,16 @@ func (s *server) Options() serverOpts {
 
 type selector struct {
 	Name string `json:"name" sc:"name"`
+}
+
+func (s *selector) Options() []sel.Option {
+	var selOptions []sel.Option
+
+	if plugin.TransportPlugins[s.Name] != nil {
+		selOptions = append(selOptions, plugin.SelectorPlugins[s.Name].Options()...)
+	}
+
+	return selOptions
 }
 
 type transport struct {

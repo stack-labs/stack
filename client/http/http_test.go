@@ -10,16 +10,19 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/http/test"
 	"github.com/stack-labs/stack-rpc/client/selector"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/registry/memory"
+
+	_ "github.com/stack-labs/stack-rpc/client/selector/registry"
 )
 
 func TestHTTPClient(t *testing.T) {
 	r := memory.NewRegistry()
-	s := selector.NewSelector(selector.Registry(r))
+	s := plugin.SelectorPlugins["cache"].New(selector.Registry(r))
 
 	l, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
@@ -103,7 +106,7 @@ func TestHTTPClient(t *testing.T) {
 
 func TestHTTPClientStream(t *testing.T) {
 	r := memory.NewRegistry()
-	s := selector.NewSelector(selector.Registry(r))
+	s := plugin.SelectorPlugins["cache"].New(selector.Registry(r))
 
 	l, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {

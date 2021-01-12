@@ -5,15 +5,19 @@ import (
 	"context"
 
 	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/cmd"
+	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/service"
 	"github.com/stack-labs/stack-rpc/util/log"
 
 	_ "github.com/stack-labs/stack-rpc/broker/http"
 	_ "github.com/stack-labs/stack-rpc/client/mucp"
+	_ "github.com/stack-labs/stack-rpc/logger/console"
 	_ "github.com/stack-labs/stack-rpc/registry/mdns"
 	_ "github.com/stack-labs/stack-rpc/server/mucp"
+	_ "github.com/stack-labs/stack-rpc/service/grpc"
+	_ "github.com/stack-labs/stack-rpc/service/stack"
+	_ "github.com/stack-labs/stack-rpc/service/web"
 	_ "github.com/stack-labs/stack-rpc/transport/http"
 )
 
@@ -30,27 +34,19 @@ type Option func(*Options)
 func NewService(opts ...Option) service.Service {
 	o := newOptions(opts...)
 
-	o.serviceOpts = append(o.serviceOpts, service.BeforeInit(func(sOpts *service.Options) error {
-		// cmd helps stack parse command options and reset the options that should work.
-		if err := o.Cmd.Init(
-			cmd.Broker(&sOpts.Broker),
-			cmd.Registry(&sOpts.Registry),
-			cmd.Transport(&sOpts.Transport),
-			cmd.Client(&sOpts.Client),
-			cmd.Server(&sOpts.Server),
-			cmd.Selector(&sOpts.Selector),
-			cmd.Logger(&sOpts.Logger),
-			cmd.Config(&sOpts.Config),
-			cmd.Auth(&sOpts.Auth),
-		); err != nil {
-			log.Errorf("cmd init error: %s", err)
-			return err
-		}
+	// set default
+	// this will be removed in future
+	so := &service.Options{}
+	for _, opt := range o.ServiceOpts {
+		opt(so)
+	}
 
-		return nil
-	}))
+	p, ok := plugin.ServicePlugins[so.RPC]
+	if !ok {
+		log.Fatal("[%s] service plugin isn't found", so.RPC)
+	}
 
-	return service.NewService(o.serviceOpts...)
+	return p.New(o.ServiceOpts...)
 }
 
 // FromContext retrieves a Service from the Context.

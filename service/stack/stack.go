@@ -155,8 +155,10 @@ func (s *stackService) Run() error {
 }
 
 func NewService(opts ...service.Option) service.Service {
-	options := service.NewOptions(opts...)
-
+	options := service.Options{}
+	for _, o := range opts {
+		o(&options)
+	}
 	return &stackService{
 		opts: options,
 	}

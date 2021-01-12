@@ -3,7 +3,6 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/stack-labs/stack-rpc/util/wrapper"
 	"io"
 	"math/rand"
 	"os"
@@ -22,6 +21,7 @@ import (
 	"github.com/stack-labs/stack-rpc/plugin"
 	ser "github.com/stack-labs/stack-rpc/server"
 	uf "github.com/stack-labs/stack-rpc/util/file"
+	"github.com/stack-labs/stack-rpc/util/wrapper"
 	"gopkg.in/yaml.v2"
 )
 
@@ -391,7 +391,8 @@ func (c *cmd) beforeSetupComponents() (err error) {
 
 	sOpts := conf.Service.Options().opts()
 
-	serverName := fmt.Sprintf("%s-server", sOpts.Name)
+	// serverName := fmt.Sprintf("%s-server", sOpts.Name)
+	serverName := sOpts.Name
 	serverOpts := conf.Server.Options()
 	if len(serverOpts.opts().Name) == 0 {
 		serverOpts = append(serverOpts, ser.Name(serverName))
@@ -404,6 +405,7 @@ func (c *cmd) beforeSetupComponents() (err error) {
 	}
 
 	transOpts := conf.Transport.Options()
+	selectorOpts := conf.Selector.Options()
 	regOpts := conf.Registry.Options()
 	brokerOpts := conf.Broker.Options()
 	logOpts := conf.Logger.Options()
@@ -468,7 +470,7 @@ func (c *cmd) beforeSetupComponents() (err error) {
 			return fmt.Errorf("selector %s not found", conf.Selector)
 		}
 
-		*c.opts.Selector = sl.New(sel.Registry(*c.opts.Registry))
+		*c.opts.Selector = sl.New()
 	}
 
 	// Set the transport
@@ -483,6 +485,7 @@ func (c *cmd) beforeSetupComponents() (err error) {
 
 	serverOpts = append(serverOpts, ser.Transport(*c.opts.Transport), ser.Broker(*c.opts.Broker), ser.Registry(*c.opts.Registry))
 	clientOpts = append(clientOpts, cl.Transport(*c.opts.Transport), cl.Broker(*c.opts.Broker), cl.Registry(*c.opts.Registry), cl.Selector(*c.opts.Selector))
+	selectorOpts = append(selectorOpts, sel.Registry(*c.opts.Registry))
 
 	if err = (*c.opts.Logger).Init(logOpts...); err != nil {
 		return fmt.Errorf("Error configuring logger: %s ", err)
@@ -500,8 +503,12 @@ func (c *cmd) beforeSetupComponents() (err error) {
 		return fmt.Errorf("Error configuring transport: %s ", err)
 	}
 
-	if err = (*c.opts.Server).Init(serverOpts...); err != nil {
-		return fmt.Errorf("Error configuring server: %s ", err)
+	if err = (*c.opts.Transport).Init(transOpts...); err != nil {
+		return fmt.Errorf("Error configuring transport: %s ", err)
+	}
+
+	if err = (*c.opts.Selector).Init(selectorOpts...); err != nil {
+		return fmt.Errorf("Error configuring selector: %s ", err)
 	}
 
 	// wrap client to inject From-Service header on any calls

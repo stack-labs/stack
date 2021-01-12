@@ -3,12 +3,13 @@ package handler
 import (
 	"github.com/stack-labs/stack-rpc"
 	"github.com/stack-labs/stack-rpc/api/router"
+	"github.com/stack-labs/stack-rpc/service"
 )
 
 type Options struct {
 	Namespace string
 	Router    router.Router
-	Service   stack.Service
+	Service   service.Service
 }
 
 type Option func(o *Options)
@@ -48,7 +49,7 @@ func WithRouter(r router.Router) Option {
 }
 
 // WithService specifies a stack.Service
-func WithService(s stack.Service) Option {
+func WithService(s service.Service) Option {
 	return func(o *Options) {
 		o.Service = s
 	}

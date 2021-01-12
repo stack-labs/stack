@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"testing"
 
+	hb "github.com/stack-labs/stack-rpc/broker/http"
 	"github.com/stack-labs/stack-rpc/registry/memory"
 	"github.com/stack-labs/stack-rpc/server"
 )
@@ -14,7 +15,7 @@ func TestHTTPServer(t *testing.T) {
 	reg := memory.NewRegistry()
 
 	// create server
-	srv := NewServer(server.Registry(reg))
+	srv := NewServer(server.Broker(hb.NewBroker()), server.Registry(reg))
 
 	// create server mux
 	mux := http.NewServeMux()

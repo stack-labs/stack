@@ -12,13 +12,16 @@ stack:
       static-dir: /webapp
     stack:
     grpc:
-    function:
   # registry center options
   registry:
     # string. registry middleware name. eg: mdns, etcd, consul...
     name: mdns
     # string. registry center address
     address:
+    # int in seconds. register interval.
+    register-interval: 10
+    # int in seconds. register time to live.
+    register-ttl: 15
   # broker component options
   broker:
     #
@@ -36,10 +39,6 @@ stack:
     version:
     # metadata register to registry. array
     metadata:
-    # int in seconds. register interval.
-    register-interval: 10
-    # int in seconds. register time to live.
-    register-ttl: 15
   transport:
     name: http
     addrs:

@@ -11,7 +11,6 @@ import (
 	"github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/debug/profile"
 	"github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/transport"
@@ -52,6 +51,14 @@ type Options struct {
 	Context context.Context
 
 	Signal bool
+}
+
+// RPC sets the type of service, eg. stack, grpc
+// but this func will be deprecated
+func RPC(r string) Option {
+	return func(o *Options) {
+		o.RPC = r
+	}
 }
 
 func Logger(l logger.Logger) Option {
@@ -125,8 +132,6 @@ func Transport(t transport.Transport) Option {
 	}
 }
 
-// Convenience options
-
 // Address sets the address of the server
 func Address(addr string) Option {
 	return func(o *Options) {
@@ -169,6 +174,12 @@ func Metadata(md map[string]string) Option {
 func Profile(p profile.Profile) Option {
 	return func(o *Options) {
 		o.Profile = p
+	}
+}
+
+func Auth(au auth.Auth) Option {
+	return func(o *Options) {
+		o.Auth = au
 	}
 }
 
@@ -246,26 +257,4 @@ func AfterStop(fn func() error) Option {
 	return func(o *Options) {
 		o.AfterStop = append(o.AfterStop, fn)
 	}
-}
-
-func NewOptions(opts ...Option) Options {
-	opt := Options{
-		Broker:    plugin.BrokerPlugins["http"].New(),
-		Client:    plugin.ClientPlugins["mucp"].New(),
-		Server:    plugin.ServerPlugins["mucp"].New(),
-		Registry:  plugin.RegistryPlugins["mdns"].New(),
-		Transport: plugin.TransportPlugins["http"].New(),
-		Selector:  plugin.SelectorPlugins["cache"].New(),
-		Logger:    logger.DefaultLogger,
-		Config:    config.DefaultConfig,
-		Auth:      auth.NoopAuth,
-		Context:   context.Background(),
-		Signal:    true,
-	}
-
-	for _, o := range opts {
-		o(&opt)
-	}
-
-	return opt
 }

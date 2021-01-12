@@ -15,21 +15,21 @@ var options struct {
 	} `sc:"stack"`
 }
 
-type stackServicePlugin struct{}
+type grpcServicePlugin struct{}
 
-func (s *stackServicePlugin) Name() string {
-	return "stack"
+func (g *grpcServicePlugin) Name() string {
+	return "grpc"
 }
 
-func (s *stackServicePlugin) Options() []service.Option {
+func (g *grpcServicePlugin) Options() []service.Option {
 	return nil
 }
 
-func (s *stackServicePlugin) New(opts ...service.Option) service.Service {
+func (g *grpcServicePlugin) New(opts ...service.Option) service.Service {
 	return NewService(opts...)
 }
 
 func init() {
 	config.RegisterOptions(&options)
-	plugin.ServicePlugins["grpc"] = &stackServicePlugin{}
+	plugin.ServicePlugins["grpc"] = &grpcServicePlugin{}
 }

@@ -30,7 +30,7 @@ type httpClient struct {
 	opts client.Options
 }
 
-func (h *httpClient) next(request client.Request, opts client.CallOptions) (selector.Next, error) {
+func (h *httpClient) next(request client.Request, opts client.CallOptions) (*registry.Node, error) {
 	service := request.Service()
 
 	// get proxy
@@ -45,13 +45,11 @@ func (h *httpClient) next(request client.Request, opts client.CallOptions) (sele
 
 	// return remote address
 	if len(opts.Address) > 0 {
-		return func() (*registry.Node, error) {
-			return &registry.Node{
-				Address: opts.Address[0],
-				Metadata: map[string]string{
-					"protocol": "http",
-				},
-			}, nil
+		return &registry.Node{
+			Address: opts.Address[0],
+			Metadata: map[string]string{
+				"protocol": "http",
+			},
 		}, nil
 	}
 
@@ -61,7 +59,7 @@ func (h *httpClient) next(request client.Request, opts client.CallOptions) (sele
 	))
 
 	// get next nodes from the selector
-	next, err := h.opts.Selector.Select(service, selectOptions...)
+	next, err := h.opts.Selector.Next(service, selectOptions...)
 	if err != nil && err == selector.ErrNotFound {
 		return nil, errors.NotFound("go.micro.client", err.Error())
 	} else if err != nil {
@@ -216,12 +214,6 @@ func (h *httpClient) Call(ctx context.Context, req client.Request, rsp interface
 		opt(&callOpts)
 	}
 
-	// get next nodes from the selector
-	next, err := h.next(req, callOpts)
-	if err != nil {
-		return err
-	}
-
 	// check if we already have a deadline
 	d, ok := ctx.Deadline()
 	if !ok {
@@ -245,8 +237,8 @@ func (h *httpClient) Call(ctx context.Context, req client.Request, rsp interface
 	hcall := h.call
 
 	// wrap the call in reverse
-	for i := len(callOpts.CallWrappers); i > 0; i-- {
-		hcall = callOpts.CallWrappers[i-1](hcall)
+	for i := len(callOpts.Wrappers); i > 0; i-- {
+		hcall = callOpts.Wrappers[i-1](hcall)
 	}
 
 	// return errors.New("go.micro.client", "request timeout", 408)
@@ -263,7 +255,7 @@ func (h *httpClient) Call(ctx context.Context, req client.Request, rsp interface
 		}
 
 		// select next node
-		node, err := next()
+		node, err := h.next(req, callOpts)
 		if err != nil && err == selector.ErrNotFound {
 			return errors.NotFound("go.micro.client", err.Error())
 		} else if err != nil {
@@ -316,12 +308,6 @@ func (h *httpClient) Stream(ctx context.Context, req client.Request, opts ...cli
 		opt(&callOpts)
 	}
 
-	// get next nodes from the selector
-	next, err := h.next(req, callOpts)
-	if err != nil {
-		return nil, err
-	}
-
 	// check if we already have a deadline
 	d, ok := ctx.Deadline()
 	if !ok {
@@ -353,15 +339,13 @@ func (h *httpClient) Stream(ctx context.Context, req client.Request, opts ...cli
 			time.Sleep(t)
 		}
 
-		node, err := next()
-		if err != nil && err == selector.ErrNotFound {
-			return nil, errors.NotFound("go.micro.client", err.Error())
-		} else if err != nil {
-			return nil, errors.InternalServerError("go.micro.client", err.Error())
+		// get next nodes from the selector
+		next, err := h.next(req, callOpts)
+		if err != nil {
+			return nil, err
 		}
-
-		stream, err := h.stream(ctx, node, req, callOpts)
-		h.opts.Selector.Mark(req.Service(), node, err)
+		stream, err := h.stream(ctx, next, req, callOpts)
+		h.opts.Selector.Mark(req.Service(), next, err)
 		return stream, err
 	}
 
@@ -388,7 +372,7 @@ func (h *httpClient) Stream(ctx context.Context, req client.Request, opts ...cli
 				return rsp.stream, nil
 			}
 
-			retry, rerr := callOpts.Retry(ctx, req, i, err)
+			retry, rerr := callOpts.Retry(ctx, req, i, rsp.err)
 			if rerr != nil {
 				return nil, rerr
 			}
@@ -480,20 +464,6 @@ func newClient(opts ...client.Option) client.Client {
 
 	if len(options.ContentType) == 0 {
 		options.ContentType = "application/proto"
-	}
-
-	if options.Broker == nil {
-		options.Broker = broker.DefaultBroker
-	}
-
-	if options.Registry == nil {
-		options.Registry = registry.DefaultRegistry
-	}
-
-	if options.Selector == nil {
-		options.Selector = selector.NewSelector(
-			selector.Registry(options.Registry),
-		)
 	}
 
 	rc := &httpClient{

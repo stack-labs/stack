@@ -5,6 +5,7 @@ import (
 	client "github.com/stack-labs/stack-rpc/client/grpc"
 	server "github.com/stack-labs/stack-rpc/server/grpc"
 	"github.com/stack-labs/stack-rpc/service"
+	"github.com/stack-labs/stack-rpc/service/stack"
 )
 
 // NewService returns a grpc service compatible with stack-rpc.Service
@@ -26,6 +27,6 @@ func NewService(opts ...service.Option) service.Service {
 	// append passed in opts
 	options = append(options, opts...)
 
-	// generate and return a service
-	return service.NewService(options...)
+	// use stack service for current
+	return stack.NewService(options...)
 }

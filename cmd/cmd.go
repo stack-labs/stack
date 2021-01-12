@@ -385,14 +385,11 @@ func (c *cmd) beforeLoadConfig(ctx *cli.Context) (err error) {
 }
 
 func (c *cmd) beforeSetupComponents() (err error) {
-	// whole [beforeSetupComponents] region will be rewrite in future
-
 	conf := stackConfig.Stack
 
 	sOpts := conf.Service.Options().opts()
 
 	// serverName := fmt.Sprintf("%s-server", sOpts.Name)
-	serverName := sOpts.Name
 	serverOpts := conf.Server.Options()
 	if len(serverOpts.opts().Name) == 0 {
 		serverOpts = append(serverOpts, ser.Name(serverName))
@@ -486,41 +483,6 @@ func (c *cmd) beforeSetupComponents() (err error) {
 	serverOpts = append(serverOpts, ser.Transport(*c.opts.Transport), ser.Broker(*c.opts.Broker), ser.Registry(*c.opts.Registry))
 	clientOpts = append(clientOpts, cl.Transport(*c.opts.Transport), cl.Broker(*c.opts.Broker), cl.Registry(*c.opts.Registry), cl.Selector(*c.opts.Selector))
 	selectorOpts = append(selectorOpts, sel.Registry(*c.opts.Registry))
-
-	if err = (*c.opts.Logger).Init(logOpts...); err != nil {
-		return fmt.Errorf("Error configuring logger: %s ", err)
-	}
-
-	if err = (*c.opts.Broker).Init(brokerOpts...); err != nil {
-		return fmt.Errorf("Error configuring broker: %s ", err)
-	}
-
-	if err = (*c.opts.Registry).Init(regOpts...); err != nil {
-		return fmt.Errorf("Error configuring registry: %s ", err)
-	}
-
-	if err = (*c.opts.Transport).Init(transOpts...); err != nil {
-		return fmt.Errorf("Error configuring transport: %s ", err)
-	}
-
-	if err = (*c.opts.Transport).Init(transOpts...); err != nil {
-		return fmt.Errorf("Error configuring transport: %s ", err)
-	}
-
-	if err = (*c.opts.Selector).Init(selectorOpts...); err != nil {
-		return fmt.Errorf("Error configuring selector: %s ", err)
-	}
-
-	// wrap client to inject From-Service header on any calls
-	// todo wrap not here
-	*c.opts.Client = wrapper.FromService(serverName, *c.opts.Client)
-	if err = (*c.opts.Client).Init(clientOpts...); err != nil {
-		return fmt.Errorf("Error configuring client: %v ", err)
-	}
-
-	if err = (*c.opts.Auth).Init(authOpts...); err != nil {
-		return fmt.Errorf("Error configuring auth: %v ", err)
-	}
 
 	return
 }

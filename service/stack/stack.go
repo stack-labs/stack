@@ -13,7 +13,6 @@ import (
 	"github.com/stack-labs/stack-rpc/env"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/service"
-	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 type stackService struct {
@@ -23,28 +22,7 @@ type stackService struct {
 }
 
 func (s *stackService) Name() string {
-	return s.opts.Server.Options().Name
-}
-
-// Init initialises options. Additionally it calls cmd.Init
-// which parses command line flags. cmd.Init is only called
-// on first Init.
-func (s *stackService) Init(opts ...service.Option) error {
-	// process options
-	for _, o := range opts {
-		o(&s.opts)
-	}
-
-	if len(s.opts.BeforeInit) > 0 {
-		for _, f := range s.opts.BeforeInit {
-			err := f(&s.opts)
-			if err != nil {
-				log.Fatalf("init service err: %s", err)
-			}
-		}
-	}
-
-	return nil
+	return s.opts.Name
 }
 
 func (s *stackService) Options() service.Options {

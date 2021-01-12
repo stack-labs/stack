@@ -24,6 +24,16 @@ type Options struct {
 	Name string
 	RPC  string
 
+	BrokerOptions    []broker.Option
+	ClientOptions    []client.Option
+	ServerOptions    []server.Option
+	RegistryOptions  []registry.Option
+	TransportOptions []transport.Option
+	SelectorOptions  []selector.Option
+	ConfigOptions    []config.Option
+	LoggerOptions    []logger.Option
+	AuthOptions      []auth.Option
+
 	Broker    broker.Broker
 	Client    client.Client
 	Server    server.Server
@@ -135,8 +145,7 @@ func Transport(t transport.Transport) Option {
 // Address sets the address of the server
 func Address(addr string) Option {
 	return func(o *Options) {
-		// todo no second level component inited here
-		o.Server.Init(server.Address(addr))
+		o.ServerOptions = append(o.ServerOptions, server.Address(addr))
 	}
 }
 
@@ -157,16 +166,14 @@ func Name(n string) Option {
 // Version of the service
 func Version(v string) Option {
 	return func(o *Options) {
-		// todo no second level component inited here
-		o.Server.Init(server.Version(v))
+		o.ServerOptions = append(o.ServerOptions, server.Version(v))
 	}
 }
 
 // Metadata associated with the service
 func Metadata(md map[string]string) Option {
 	return func(o *Options) {
-		// todo no second level component inited here
-		o.Server.Init(server.Metadata(md))
+		o.ServerOptions = append(o.ServerOptions, server.Metadata(md))
 	}
 }
 
@@ -186,16 +193,14 @@ func Auth(au auth.Auth) Option {
 // RegisterTTL specifies the TTL to use when registering the service
 func RegisterTTL(t time.Duration) Option {
 	return func(o *Options) {
-		// todo no second level component inited here
-		o.Server.Init(server.RegisterTTL(t))
+		o.ServerOptions = append(o.ServerOptions, server.RegisterTTL(t))
 	}
 }
 
 // RegisterInterval specifies the interval on which to re-register
 func RegisterInterval(t time.Duration) Option {
 	return func(o *Options) {
-		// todo no second level component inited here
-		o.Server.Init(server.RegisterInterval(t))
+		o.ServerOptions = append(o.ServerOptions, server.RegisterInterval(t))
 	}
 }
 

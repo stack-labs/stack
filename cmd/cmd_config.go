@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"fmt"
-	sel "github.com/stack-labs/stack-rpc/client/selector"
 	"strings"
 	"time"
 
 	au "github.com/stack-labs/stack-rpc/auth"
 	br "github.com/stack-labs/stack-rpc/broker"
 	cl "github.com/stack-labs/stack-rpc/client"
+	sel "github.com/stack-labs/stack-rpc/client/selector"
 	cfg "github.com/stack-labs/stack-rpc/config"
 	lg "github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/plugin"

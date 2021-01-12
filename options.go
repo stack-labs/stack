@@ -38,21 +38,14 @@ func newOptions(opts ...Option) Options {
 		service.BeforeInit(func(sOpts *service.Options) error {
 			// cmd helps stack parse command options and reset the options that should work.
 			if err := opt.Cmd.Init(
-				cmd.Broker(&sOpts.Broker),
-				cmd.Registry(&sOpts.Registry),
-				cmd.Transport(&sOpts.Transport),
-				cmd.Client(&sOpts.Client),
-				cmd.Server(&sOpts.Server),
-				cmd.Selector(&sOpts.Selector),
-				cmd.Logger(&sOpts.Logger),
-				cmd.Config(&sOpts.Config),
-				cmd.Auth(&sOpts.Auth),
+				cmd.ServiceOptions(sOpts),
 			); err != nil {
 				log.Errorf("cmd init error: %s", err)
 				return err
 			}
 			return nil
 		}),
+		// set the default components
 		service.Broker(plugin.BrokerPlugins["http"].New()),
 		service.Client(plugin.ClientPlugins["mucp"].New()),
 		service.Server(plugin.ServerPlugins["mucp"].New()),

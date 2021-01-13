@@ -7,6 +7,7 @@ import (
 )
 
 type Options struct {
+	Name      string
 	Addrs     []string
 	Timeout   time.Duration
 	Secure    bool
@@ -58,6 +59,12 @@ type DeregisterOption func(*DeregisterOptions)
 type WatchOption func(*WatchOptions)
 type GetOption func(*GetOptions)
 type ListOption func(*ListOptions)
+
+func Name(n string) Option {
+	return func(o *Options) {
+		o.Name = n
+	}
+}
 
 // Addrs is the registry addresses to use
 func Addrs(addrs ...string) Option {

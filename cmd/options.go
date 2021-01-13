@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 
+	cfg "github.com/stack-labs/stack-rpc/config"
 	ss "github.com/stack-labs/stack-rpc/service"
 )
 
@@ -18,6 +19,7 @@ type Options struct {
 	Context context.Context
 
 	ServiceOptions *ss.Options
+	Config         *cfg.Config
 }
 
 func Name(n string) Option {
@@ -41,5 +43,11 @@ func Version(v string) Option {
 func ServiceOptions(so *ss.Options) Option {
 	return func(o *Options) {
 		o.ServiceOptions = so
+	}
+}
+
+func Config(c *cfg.Config) Option {
+	return func(o *Options) {
+		o.Config = c
 	}
 }

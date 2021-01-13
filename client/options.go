@@ -15,8 +15,9 @@ import (
 type Options struct {
 	// Used to select codec
 	ContentType string
-
-	Name string
+	Name        string
+	// Used to select type of Client. mucp, grpc, http...
+	Protocol    string
 
 	// Plugged interfaces
 	Broker    broker.Broker
@@ -125,6 +126,12 @@ func NewOptions(options ...Option) Options {
 func Name(n string) Option {
 	return func(o *Options) {
 		o.Name = n
+	}
+}
+
+func Protocol(p string) Option {
+	return func(o *Options) {
+		o.Protocol = p
 	}
 }
 

@@ -58,6 +58,10 @@ type broker struct {
 func (b *broker) Options() []br.Option {
 	var brOptions []br.Option
 
+	if len(b.Name) > 0 {
+		brOptions = append(brOptions, br.Name(b.Name))
+	}
+
 	if len(b.Address) > 0 {
 		brOptions = append(brOptions, br.Addrs(strings.Split(b.Address, ",")...))
 	}
@@ -102,6 +106,10 @@ func (c *client) Options() clientOpts {
 		cliOpts = append(cliOpts, cl.Name(c.Name))
 	}
 
+	if len(c.Protocol) > 0 {
+		cliOpts = append(cliOpts, cl.Protocol(c.Protocol))
+	}
+
 	requestRetries := c.Request.Retries
 	if requestRetries >= 0 {
 		cliOpts = append(cliOpts, cl.Retries(requestRetries))
@@ -135,6 +143,10 @@ type registry struct {
 
 func (r *registry) Options() []reg.Option {
 	var regOptions []reg.Option
+
+	if len(r.Name) > 0 {
+		regOptions = append(regOptions, reg.Name(r.Name))
+	}
 
 	if len(r.Address) > 0 {
 		regOptions = append(regOptions, reg.Addrs(strings.Split(r.Address, ",")...))
@@ -206,6 +218,10 @@ func (s *server) Options() serverOpts {
 		serverOpts = append(serverOpts, ser.Metadata(metadata))
 	}
 
+	if len(s.Protocol) > 0 {
+		serverOpts = append(serverOpts, ser.Protocol(s.Protocol))
+	}
+
 	if len(s.Name) > 0 {
 		serverOpts = append(serverOpts, ser.Name(s.Name))
 	}
@@ -244,6 +260,10 @@ type selector struct {
 func (s *selector) Options() []sel.Option {
 	var selOptions []sel.Option
 
+	if len(s.Name) > 0 {
+		selOptions = append(selOptions, sel.Name(s.Name))
+	}
+
 	if plugin.TransportPlugins[s.Name] != nil {
 		selOptions = append(selOptions, plugin.SelectorPlugins[s.Name].Options()...)
 	}
@@ -258,6 +278,11 @@ type transport struct {
 
 func (t *transport) Options() []tra.Option {
 	var traOptions []tra.Option
+
+	if len(t.Name) > 0 {
+		traOptions = append(traOptions, tra.Name(t.Name))
+	}
+
 	if len(t.Address) > 0 {
 		traOptions = append(traOptions, tra.Addrs(strings.Split(t.Address, ",")...))
 	}
@@ -313,6 +338,10 @@ func (l *logPersistence) Options() *lg.PersistenceOptions {
 
 func (l *logger) Options() []lg.Option {
 	var logOptions []lg.Option
+
+	if len(l.Name) > 0 {
+		logOptions = append(logOptions, lg.Name(l.Name))
+	}
 
 	if len(l.Level) > 0 {
 		level, err := lg.GetLevel(l.Level)

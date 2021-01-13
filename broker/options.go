@@ -9,6 +9,8 @@ import (
 )
 
 type Options struct {
+	// Used to selecto type of broker. http, grpc etc.
+	Name      string
 	Addrs     []string
 	Secure    bool
 	Codec     codec.Marshaler
@@ -55,6 +57,12 @@ func NewSubscribeOptions(opts ...SubscribeOption) SubscribeOptions {
 	}
 
 	return opt
+}
+
+func Name(n string) Option {
+	return func(o *Options) {
+		o.Name = n
+	}
 }
 
 // Addrs sets the host addresses to be used by the broker

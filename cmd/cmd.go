@@ -9,19 +9,13 @@ import (
 	"strings"
 	"time"
 
-	br "github.com/stack-labs/stack-rpc/broker"
-	cl "github.com/stack-labs/stack-rpc/client"
-	sel "github.com/stack-labs/stack-rpc/client/selector"
 	cfg "github.com/stack-labs/stack-rpc/config"
 	log "github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/pkg/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config/source"
 	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
 	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
-	"github.com/stack-labs/stack-rpc/plugin"
-	ser "github.com/stack-labs/stack-rpc/server"
 	uf "github.com/stack-labs/stack-rpc/util/file"
-	"github.com/stack-labs/stack-rpc/util/wrapper"
 	"gopkg.in/yaml.v2"
 )
 
@@ -290,7 +284,7 @@ func (c *cmd) before(ctx *cli.Context) (err error) {
 		log.Fatalf("load config in before action err: %s", err)
 	}
 
-	err = c.beforeSetupComponents()
+	err = c.beforeSetupOptions()
 	if err != nil {
 		log.Fatalf("setup components in before action err: %s", err)
 	}
@@ -384,105 +378,18 @@ func (c *cmd) beforeLoadConfig(ctx *cli.Context) (err error) {
 	return
 }
 
-func (c *cmd) beforeSetupComponents() (err error) {
+func (c *cmd) beforeSetupOptions() (err error) {
 	conf := stackConfig.Stack
 
-	sOpts := conf.Service.Options().opts()
-
-	// serverName := fmt.Sprintf("%s-server", sOpts.Name)
-	serverOpts := conf.Server.Options()
-	if len(serverOpts.opts().Name) == 0 {
-		serverOpts = append(serverOpts, ser.Name(serverName))
-	}
-
-	clientName := fmt.Sprintf("%s-client", sOpts.Name)
-	clientOpts := conf.Client.Options()
-	if len(clientOpts.opts().Name) == 0 {
-		clientOpts = append(clientOpts, cl.Name(clientName))
-	}
-
-	transOpts := conf.Transport.Options()
-	selectorOpts := conf.Selector.Options()
-	regOpts := conf.Registry.Options()
-	brokerOpts := conf.Broker.Options()
-	logOpts := conf.Logger.Options()
-	authOpts := conf.Auth.Options()
-
-	// set Logger
-	if len(conf.Logger.Name) > 0 {
-		// only change if we have the logger and type differs
-		if l, ok := plugin.LoggerPlugins[conf.Logger.Name]; ok && (*c.opts.Logger).String() != conf.Logger.Name {
-			*c.opts.Logger = l.New()
-		}
-	}
-
-	// Set the client
-	if len(conf.Client.Protocol) > 0 {
-		// only change if we have the client and type differs
-		if cl, ok := plugin.ClientPlugins[conf.Client.Protocol]; ok && (*c.opts.Client).String() != conf.Client.Protocol {
-			*c.opts.Client = cl.New()
-		}
-	}
-
-	// Set the server
-	if len(conf.Server.Protocol) > 0 {
-		// only change if we have the server and type differs
-		if ser, ok := plugin.ServerPlugins[conf.Server.Protocol]; ok && (*c.opts.Server).String() != conf.Server.Protocol {
-			*c.opts.Server = ser.New()
-		}
-	}
-
-	// Set the broker
-	if len(conf.Broker.Name) > 0 && (*c.opts.Broker).String() != conf.Broker.Name {
-		b, ok := plugin.BrokerPlugins[conf.Broker.Name]
-		if !ok {
-			return fmt.Errorf("broker %s not found", conf.Broker)
-		}
-
-		*c.opts.Broker = b.New()
-	}
-
-	// Set the registry
-	if len(conf.Registry.Name) > 0 && (*c.opts.Registry).String() != conf.Registry.Name {
-		r, ok := plugin.RegistryPlugins[conf.Registry.Name]
-		if !ok {
-			return fmt.Errorf("registry %s not found", conf.Registry.Name)
-		}
-
-		*c.opts.Registry = r.New()
-
-		if err := (*c.opts.Selector).Init(sel.Registry(*c.opts.Registry)); err != nil {
-			return fmt.Errorf("Error configuring registry: %s ", err)
-		}
-
-		if err := (*c.opts.Broker).Init(br.Registry(*c.opts.Registry)); err != nil {
-			return fmt.Errorf("Error configuring broker: %s ", err)
-		}
-	}
-
-	// Set the selector
-	if len(conf.Selector.Name) > 0 && (*c.opts.Selector).String() != conf.Selector.Name {
-		sl, ok := plugin.SelectorPlugins[conf.Selector.Name]
-		if !ok {
-			return fmt.Errorf("selector %s not found", conf.Selector)
-		}
-
-		*c.opts.Selector = sl.New()
-	}
-
-	// Set the transport
-	if len(conf.Transport.Name) > 0 && (*c.opts.Transport).String() != conf.Transport.Name {
-		t, ok := plugin.TransportPlugins[conf.Transport.Name]
-		if !ok {
-			return fmt.Errorf("transport %s not found", conf.Transport)
-		}
-
-		*c.opts.Transport = t.New()
-	}
-
-	serverOpts = append(serverOpts, ser.Transport(*c.opts.Transport), ser.Broker(*c.opts.Broker), ser.Registry(*c.opts.Registry))
-	clientOpts = append(clientOpts, cl.Transport(*c.opts.Transport), cl.Broker(*c.opts.Broker), cl.Registry(*c.opts.Registry), cl.Selector(*c.opts.Selector))
-	selectorOpts = append(selectorOpts, sel.Registry(*c.opts.Registry))
+	(*c.opts.ServiceOptions).ServerOptions = conf.Server.Options()
+	(*c.opts.ServiceOptions).ClientOptions = conf.Client.Options()
+	(*c.opts.ServiceOptions).ConfigOptions = conf.Config.Options()
+	(*c.opts.ServiceOptions).TransportOptions = conf.Transport.Options()
+	(*c.opts.ServiceOptions).SelectorOptions = conf.Selector.Options()
+	(*c.opts.ServiceOptions).RegistryOptions = conf.Registry.Options()
+	(*c.opts.ServiceOptions).BrokerOptions = conf.Broker.Options()
+	(*c.opts.ServiceOptions).LoggerOptions = conf.Logger.Options()
+	(*c.opts.ServiceOptions).AuthOptions = conf.Auth.Options()
 
 	return
 }

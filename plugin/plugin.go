@@ -10,11 +10,18 @@ import (
 	"github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/service"
 	"github.com/stack-labs/stack-rpc/transport"
 )
 
 type Plugin interface {
 	Name() string
+}
+
+type ServicePlugin interface {
+	Plugin
+	Options() []service.Option
+	New(...service.Option) service.Service
 }
 
 type LoggerPlugin interface {

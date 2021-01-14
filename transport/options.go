@@ -9,6 +9,7 @@ import (
 )
 
 type Options struct {
+	Name string
 	// Addrs is the list of intermediary addresses to connect to
 	Addrs []string
 	// Codec is the codec interface to use where headers are not supported
@@ -50,6 +51,12 @@ type ListenOptions struct {
 	// Other options for implementations of the interface
 	// can be stored in a context
 	Context context.Context
+}
+
+func Name(n string) Option {
+	return func(o *Options) {
+		o.Name = n
+	}
 }
 
 // Addrs to use for transport

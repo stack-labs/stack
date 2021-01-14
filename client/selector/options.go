@@ -7,6 +7,7 @@ import (
 )
 
 type Options struct {
+	Name     string
 	Registry registry.Registry
 	Strategy Strategy
 
@@ -29,6 +30,12 @@ type Option func(*Options)
 
 // SelectOption used when making a select call
 type SelectOption func(*SelectOptions)
+
+func Name(n string) Option {
+	return func(o *Options) {
+		o.Name = n
+	}
+}
 
 // Registry sets the registry used by the selector
 func Registry(r registry.Registry) Option {

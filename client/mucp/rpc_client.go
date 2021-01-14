@@ -408,8 +408,8 @@ func (r *rpcClient) Call(ctx context.Context, request client.Request, response i
 	rcall := r.call
 
 	// wrap the call in reverse
-	for i := len(callOpts.CallWrappers); i > 0; i-- {
-		rcall = callOpts.CallWrappers[i-1](rcall)
+	for i := len(callOpts.Wrappers); i > 0; i-- {
+		rcall = callOpts.Wrappers[i-1](rcall)
 	}
 
 	// return errors.New("stack.rpc.client", "request timeout", 408)

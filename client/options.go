@@ -15,6 +15,9 @@ import (
 type Options struct {
 	// Used to select codec
 	ContentType string
+	Name        string
+	// Used to select type of Client. mucp, grpc, http...
+	Protocol    string
 
 	// Plugged interfaces
 	Broker    broker.Broker
@@ -56,9 +59,13 @@ type CallOptions struct {
 	Retries int
 	// Request/Response timeout
 	RequestTimeout time.Duration
+	// Stream timeout for the stream
+	StreamTimeout time.Duration
+	// Use the services own auth token
+	ServiceToken bool
 
 	// Middleware for low level call func
-	CallWrappers []CallWrapper
+	Wrappers []CallWrapper
 
 	// Other options for implementations of the interface
 	// can be stored in a context
@@ -113,6 +120,19 @@ func NewOptions(options ...Option) Options {
 	}
 
 	return opts
+}
+
+// Name for this client
+func Name(n string) Option {
+	return func(o *Options) {
+		o.Name = n
+	}
+}
+
+func Protocol(p string) Option {
+	return func(o *Options) {
+		o.Protocol = p
+	}
 }
 
 // Broker to be used for pub/sub
@@ -181,7 +201,7 @@ func Wrap(w Wrapper) Option {
 // Adds a Wrapper to the list of CallFunc wrappers
 func WrapCall(cw ...CallWrapper) Option {
 	return func(o *Options) {
-		o.CallOptions.CallWrappers = append(o.CallOptions.CallWrappers, cw...)
+		o.CallOptions.Wrappers = append(o.CallOptions.Wrappers, cw...)
 	}
 }
 
@@ -248,7 +268,7 @@ func WithSelectOption(so ...selector.SelectOption) CallOption {
 // WithCallWrapper is a CallOption which adds to the existing CallFunc wrappers
 func WithCallWrapper(cw ...CallWrapper) CallOption {
 	return func(o *CallOptions) {
-		o.CallWrappers = append(o.CallWrappers, cw...)
+		o.Wrappers = append(o.Wrappers, cw...)
 	}
 }
 

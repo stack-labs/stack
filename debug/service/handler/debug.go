@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/stack-labs/stack-rpc/debug/log"
-	proto "github.com/stack-labs/stack-rpc/debug/service/proto"
+	proto "github.com/stack-labs/stack-rpc/debug/proto"
 	"github.com/stack-labs/stack-rpc/server"
 )
 
@@ -74,9 +74,24 @@ func (d *Debug) Log(ctx context.Context, stream server.Stream) error {
 		// the connection stays open until some timeout expires
 		// or something like that; that means the map of streams
 		// might end up leaking memory if not cleaned up properly
-		records := d.log.Stream(stop)
-		for record := range records {
-			if err := d.sendRecord(record, stream); err != nil {
+		lgStream, err := d.log.Stream()
+		if err != nil {
+			return err
+		}
+		defer lgStream.Stop()
+
+		for record := range lgStream.Chan() {
+			// copy metadata
+			metadata := make(map[string]string)
+			for k, v := range record.Metadata {
+				metadata[k] = v
+			}
+			// send record
+			if err := stream.Send(&proto.Record{
+				Timestamp: record.Timestamp.Unix(),
+				Message:   record.Message.(string),
+				Metadata:  metadata,
+			}); err != nil {
 				return err
 			}
 		}
@@ -85,7 +100,10 @@ func (d *Debug) Log(ctx context.Context, stream server.Stream) error {
 	}
 
 	// get the log records
-	records := d.log.Read(options...)
+	records, err := d.log.Read(options...)
+	if err != nil {
+		return err
+	}
 	// send all the logs downstream
 	for _, record := range records {
 		if err := d.sendRecord(record, stream); err != nil {
@@ -104,7 +122,7 @@ func (d *Debug) sendRecord(record log.Record, stream server.Stream) error {
 
 	pbRecord := &proto.Record{
 		Timestamp: record.Timestamp.Unix(),
-		Value:     record.Value.(string),
+		Message:   record.Message.(string),
 		Metadata:  metadata,
 	}
 

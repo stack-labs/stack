@@ -23,4 +23,8 @@ type Stat struct {
 	Threads uint64
 	// Garbage collection in nanoseconds
 	GC uint64
+	// Total requests
+	Requests uint64
+	// Total errors
+	Errors uint64
 }

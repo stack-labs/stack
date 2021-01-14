@@ -18,6 +18,7 @@ type Options struct {
 	Transport    transport.Transport
 	Metadata     map[string]string
 	Name         string
+	Protocol     string
 	Address      string
 	Advertise    string
 	Id           string
@@ -53,6 +54,13 @@ func Name(n string) Option {
 func Id(id string) Option {
 	return func(o *Options) {
 		o.Id = id
+	}
+}
+
+// Unique server id
+func Protocol(p string) Option {
+	return func(o *Options) {
+		o.Protocol = p
 	}
 }
 

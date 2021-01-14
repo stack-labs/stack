@@ -8,16 +8,21 @@ import (
 	au "github.com/stack-labs/stack-rpc/auth"
 	br "github.com/stack-labs/stack-rpc/broker"
 	cl "github.com/stack-labs/stack-rpc/client"
+	sel "github.com/stack-labs/stack-rpc/client/selector"
+	cfg "github.com/stack-labs/stack-rpc/config"
 	lg "github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/plugin"
 	reg "github.com/stack-labs/stack-rpc/registry"
 	ser "github.com/stack-labs/stack-rpc/server"
+	ss "github.com/stack-labs/stack-rpc/service"
+	sw "github.com/stack-labs/stack-rpc/service/web"
 	tra "github.com/stack-labs/stack-rpc/transport"
 	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 type stack struct {
 	Includes  string    `json:"includes" sc:"includes"`
+	Config    config    `json:"config" sc:"config"`
 	Registry  registry  `json:"registry" sc:"registry"`
 	Broker    broker    `json:"broker" sc:"broker"`
 	Client    client    `json:"client" sc:"client"`
@@ -28,6 +33,21 @@ type stack struct {
 	Transport transport `json:"transport" sc:"transport"`
 	Logger    logger    `json:"logger" sc:"logger"`
 	Auth      auth      `json:"auth" sc:"auth"`
+	Service   service   `json:"service" sc:"service"`
+}
+
+type config struct {
+	HierarchyMerge bool `json:"hierarchyMerge" sc:"hierarchy-merge"`
+	Storage        bool `json:"storage" sc:"storage"`
+}
+
+func (c *config) Options() []cfg.Option {
+	var cfgOptions []cfg.Option
+
+	cfgOptions = append(cfgOptions, cfg.HierarchyMerge(c.HierarchyMerge))
+	cfgOptions = append(cfgOptions, cfg.Storage(c.Storage))
+
+	return cfgOptions
 }
 
 type broker struct {
@@ -37,6 +57,10 @@ type broker struct {
 
 func (b *broker) Options() []br.Option {
 	var brOptions []br.Option
+
+	if len(b.Name) > 0 {
+		brOptions = append(brOptions, br.Name(b.Name))
+	}
 
 	if len(b.Address) > 0 {
 		brOptions = append(brOptions, br.Addrs(strings.Split(b.Address, ",")...))
@@ -58,6 +82,7 @@ type clientRequest struct {
 }
 
 type client struct {
+	Name     string        `json:"name" sc:"name"`
 	Protocol string        `json:"protocol" sc:"protocol"`
 	Pool     pool          `json:"pool" sc:"pool"`
 	Request  clientRequest `json:"request" sc:"request"`
@@ -65,6 +90,14 @@ type client struct {
 
 func (c *client) Options() []cl.Option {
 	var cliOpts []cl.Option
+
+	if len(c.Name) > 0 {
+		cliOpts = append(cliOpts, cl.Name(c.Name))
+	}
+
+	if len(c.Protocol) > 0 {
+		cliOpts = append(cliOpts, cl.Protocol(c.Protocol))
+	}
 
 	requestRetries := c.Request.Retries
 	if requestRetries >= 0 {
@@ -99,6 +132,10 @@ type registry struct {
 
 func (r *registry) Options() []reg.Option {
 	var regOptions []reg.Option
+
+	if len(r.Name) > 0 {
+		regOptions = append(regOptions, reg.Name(r.Name))
+	}
 
 	if len(r.Address) > 0 {
 		regOptions = append(regOptions, reg.Addrs(strings.Split(r.Address, ",")...))
@@ -159,6 +196,10 @@ func (s *server) Options() []ser.Option {
 		serverOpts = append(serverOpts, ser.Metadata(metadata))
 	}
 
+	if len(s.Protocol) > 0 {
+		serverOpts = append(serverOpts, ser.Protocol(s.Protocol))
+	}
+
 	if len(s.Name) > 0 {
 		serverOpts = append(serverOpts, ser.Name(s.Name))
 	}
@@ -194,6 +235,20 @@ type selector struct {
 	Name string `json:"name" sc:"name"`
 }
 
+func (s *selector) Options() []sel.Option {
+	var selOptions []sel.Option
+
+	if len(s.Name) > 0 {
+		selOptions = append(selOptions, sel.Name(s.Name))
+	}
+
+	if plugin.TransportPlugins[s.Name] != nil {
+		selOptions = append(selOptions, plugin.SelectorPlugins[s.Name].Options()...)
+	}
+
+	return selOptions
+}
+
 type transport struct {
 	Name    string `json:"name" sc:"name"`
 	Address string `json:"address" sc:"address"`
@@ -201,6 +256,11 @@ type transport struct {
 
 func (t *transport) Options() []tra.Option {
 	var traOptions []tra.Option
+
+	if len(t.Name) > 0 {
+		traOptions = append(traOptions, tra.Name(t.Name))
+	}
+
 	if len(t.Address) > 0 {
 		traOptions = append(traOptions, tra.Addrs(strings.Split(t.Address, ",")...))
 	}
@@ -222,21 +282,21 @@ type logger struct {
 }
 
 type logPersistence struct {
-	Enable    bool   `sc:"enable"`
-	Dir       string `sc:"dir"`
-	BackupDir string `sc:"back-dir"`
+	Enable    bool   `json:"enable" sc:"enable"`
+	Dir       string `json:"dir" sc:"dir"`
+	BackupDir string `json:"backupDir" sc:"back-dir"`
 	// log file max size in megabytes
-	MaxFileSize int `sc:"max-file-size"`
+	MaxFileSize int `json:"maxFileSize" sc:"max-file-size"`
 	// backup dir max size in megabytes
-	MaxBackupSize int `sc:"max-backup-size"`
+	MaxBackupSize int `json:"maxBackupSize" sc:"max-backup-size"`
 	// backup files keep max days
-	MaxBackupKeepDays int `sc:"max-backup-keep-days"`
+	MaxBackupKeepDays int `json:"maxBackupKeepDays" sc:"max-backup-keep-days"`
 	// default pattern is ${serviceName}_${level}.log
 	// todo available patterns map
-	FileNamePattern string `sc:"file-name-pattern"`
+	FileNamePattern string `json:"fileNamePattern" sc:"file-name-pattern"`
 	// default pattern is ${serviceName}_${level}_${yyyyMMdd_HH}_${idx}.zip
 	// todo available patterns map
-	BackupFileNamePattern string `sc:"backup-file-name-pattern"`
+	BackupFileNamePattern string `json:"backupFileNamePattern" sc:"backup-file-name-pattern"`
 }
 
 func (l *logPersistence) Options() *lg.PersistenceOptions {
@@ -256,6 +316,10 @@ func (l *logPersistence) Options() *lg.PersistenceOptions {
 
 func (l *logger) Options() []lg.Option {
 	var logOptions []lg.Option
+
+	if len(l.Name) > 0 {
+		logOptions = append(logOptions, lg.Name(l.Name))
+	}
 
 	if len(l.Level) > 0 {
 		level, err := lg.GetLevel(l.Level)
@@ -311,6 +375,63 @@ func (a *auth) Options() []au.Option {
 		opts = append(opts, plugin.AuthPlugins[a.Name].Options()...)
 	} else if len(a.Name) > 0 {
 		log.Warnf("seems you declared an auth name:[%s] which stack can't find out.", a.Name)
+	}
+
+	return opts
+}
+
+type web struct {
+	Enable    bool   `json:"enable" sc:"enable"`
+	Address   string `json:"address" sc:"address"`
+	RootPath  string `json:"rootPath" sc:"root-path"`
+	StaticDir string `json:"staticDir" sc:"static-dir"`
+}
+
+type serviceOpts []ss.Option
+
+func (s serviceOpts) opts() ss.Options {
+	opts := ss.Options{}
+	for _, o := range s {
+		o(&opts)
+	}
+
+	return opts
+}
+
+type service struct {
+	ID   string `json:"id" sc:"id"`
+	Name string `json:"name" sc:"name"`
+	RPC  string `json:"rpc" sc:"rpc"`
+	Web  web    `json:"web" sc:"web"`
+}
+
+func (s *service) Options() serviceOpts {
+	var opts serviceOpts
+
+	if len(s.ID) > 0 {
+		opts = append(opts, ss.Id(s.ID))
+	}
+
+	if len(s.Name) > 0 {
+		opts = append(opts, ss.Name(s.Name))
+	}
+
+	if len(s.Name) > 0 {
+		opts = append(opts, ss.Name(s.Name))
+	}
+
+	opts = append(opts, sw.Enable(s.Web.Enable))
+
+	if len(s.Web.Address) > 0 {
+		opts = append(opts, sw.Address(s.Web.Address))
+	}
+
+	if len(s.Web.RootPath) > 0 {
+		opts = append(opts, sw.RootPath(s.Web.RootPath))
+	}
+
+	if len(s.Web.StaticDir) > 0 {
+		opts = append(opts, sw.StaticDir(s.Web.StaticDir))
 	}
 
 	return opts

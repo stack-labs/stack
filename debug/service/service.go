@@ -6,9 +6,8 @@ import (
 	"time"
 
 	"github.com/stack-labs/stack-rpc/client/mucp"
-
 	"github.com/stack-labs/stack-rpc/debug/log"
-	pb "github.com/stack-labs/stack-rpc/debug/service/proto"
+	pb "github.com/stack-labs/stack-rpc/debug/proto"
 )
 
 // Debug provides debug service client
@@ -75,7 +74,7 @@ func (d *Debug) streamLogs(logChan chan log.Record, stream pb.Debug_LogService) 
 
 		record := log.Record{
 			Timestamp: time.Unix(resp.Timestamp, 0),
-			Value:     resp.Value,
+			Message:   resp.Message,
 			Metadata:  metadata,
 		}
 

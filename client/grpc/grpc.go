@@ -345,8 +345,8 @@ func (g *grpcClient) Call(ctx context.Context, req client.Request, rsp interface
 	gcall := g.call
 
 	// wrap the call in reverse
-	for i := len(callOpts.CallWrappers); i > 0; i-- {
-		gcall = callOpts.CallWrappers[i-1](gcall)
+	for i := len(callOpts.Wrappers); i > 0; i-- {
+		gcall = callOpts.Wrappers[i-1](gcall)
 	}
 
 	// return errors.New("stack.rpc.client", "request timeout", 408)

@@ -1,6 +1,6 @@
 # CMD
 
-CMD is the init entrance for StackAPP
+CMD is the init entrance for Stack APP
 
 Most of its jobs are preparing configurations, setup components like client, server, and init the server
 

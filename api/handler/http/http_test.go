@@ -57,7 +57,9 @@ func testHttp(t *testing.T, path, service, ns string) {
 		router.WithRegistry(r),
 	)
 
-	p := NewHandler(handler.WithRouter(rt))
+	p := NewHandler(
+		handler.WithRouter(rt),
+	)
 
 	// execute the handler
 	p.ServeHTTP(w, req)

@@ -26,6 +26,8 @@ type PersistenceOptions struct {
 type Option func(*Options)
 
 type Options struct {
+	// logger's name, same to logger.String(). console, logrus, zap etc.
+	Name string
 	// The logging level the logger should log at. default is `InfoLevel`
 	Level Level
 	// fields to always be logged
@@ -39,24 +41,30 @@ type Options struct {
 	Context context.Context
 }
 
+func Name(n string) Option {
+	return func(options *Options) {
+		options.Name = n
+	}
+}
+
 // WithFields set default fields for the logger
 func WithFields(fields map[string]interface{}) Option {
-	return func(args *Options) {
-		args.Fields = fields
+	return func(options *Options) {
+		options.Fields = fields
 	}
 }
 
 // WithLevel set default level for the logger
 func WithLevel(level Level) Option {
-	return func(args *Options) {
-		args.Level = level
+	return func(options *Options) {
+		options.Level = level
 	}
 }
 
 // Output set default output writer for the logger
 func Output(out io.Writer) Option {
-	return func(args *Options) {
-		args.Out = out
+	return func(options *Options) {
+		options.Out = out
 	}
 }
 
@@ -68,8 +76,8 @@ func Persistence(o *PersistenceOptions) Option {
 
 // CallerSkipCount set frame count to skip
 func CallerSkipCount(c int) Option {
-	return func(args *Options) {
-		args.CallerSkipCount = c
+	return func(options *Options) {
+		options.CallerSkipCount = c
 	}
 }
 

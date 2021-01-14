@@ -8,9 +8,10 @@ import (
 
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/mucp"
-	pb "github.com/stack-labs/stack-rpc/debug/service/proto"
+	pb "github.com/stack-labs/stack-rpc/debug/proto"
 	"github.com/stack-labs/stack-rpc/registry/cache"
 	"github.com/stack-labs/stack-rpc/registry/mdns"
+	"github.com/stack-labs/stack-rpc/transport/http"
 )
 
 type monitor struct {
@@ -312,7 +313,7 @@ func (m *monitor) Stop() error {
 
 func newMonitor(opts ...Option) Monitor {
 	options := Options{
-		Client:   mucp.NewClient(),
+		Client:   mucp.NewClient(client.Transport(http.NewTransport())),
 		Registry: mdns.NewRegistry(),
 	}
 

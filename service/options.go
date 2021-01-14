@@ -24,15 +24,15 @@ type Options struct {
 	Name string
 	RPC  string
 
-	BrokerOptions    []broker.Option
-	ClientOptions    []client.Option
-	ServerOptions    []server.Option
-	RegistryOptions  []registry.Option
-	TransportOptions []transport.Option
-	SelectorOptions  []selector.Option
-	ConfigOptions    []config.Option
-	LoggerOptions    []logger.Option
-	AuthOptions      []auth.Option
+	BrokerOptions    BrokerOptions
+	ClientOptions    ClientOptions
+	ServerOptions    ServerOptions
+	RegistryOptions  RegistryOptions
+	TransportOptions TransportOptions
+	SelectorOptions  SelectorOptions
+	ConfigOptions    ConfigOptions
+	LoggerOptions    LoggerOptions
+	AuthOptions      AuthOptions
 
 	Broker    broker.Broker
 	Client    client.Client
@@ -61,6 +61,105 @@ type Options struct {
 	Context context.Context
 
 	Signal bool
+}
+
+type BrokerOptions []broker.Option
+
+func (b BrokerOptions) Options() broker.Options {
+	opts := broker.Options{}
+	for _, o := range b {
+		o(&opts)
+	}
+
+	return opts
+}
+
+type ClientOptions []client.Option
+
+func (c ClientOptions) Options() client.Options {
+	opts := client.Options{}
+	for _, o := range c {
+		o(&opts)
+	}
+
+	return opts
+}
+
+type ServerOptions []server.Option
+
+func (c ServerOptions) Options() server.Options {
+	opts := server.Options{}
+	for _, o := range c {
+		o(&opts)
+	}
+
+	return opts
+}
+
+type RegistryOptions []registry.Option
+
+func (c RegistryOptions) Options() registry.Options {
+	opts := registry.Options{}
+	for _, o := range c {
+		o(&opts)
+	}
+
+	return opts
+}
+
+type TransportOptions []transport.Option
+
+func (c TransportOptions) Options() transport.Options {
+	opts := transport.Options{}
+	for _, o := range c {
+		o(&opts)
+	}
+
+	return opts
+}
+
+type SelectorOptions []selector.Option
+
+func (c SelectorOptions) Options() selector.Options {
+	opts := selector.Options{}
+	for _, o := range c {
+		o(&opts)
+	}
+
+	return opts
+}
+
+type ConfigOptions []config.Option
+
+func (c ConfigOptions) Options() config.Options {
+	opts := config.Options{}
+	for _, o := range c {
+		o(&opts)
+	}
+
+	return opts
+}
+
+type LoggerOptions []logger.Option
+
+func (c LoggerOptions) Options() logger.Options {
+	opts := logger.Options{}
+	for _, o := range c {
+		o(&opts)
+	}
+
+	return opts
+}
+
+type AuthOptions []auth.Option
+
+func (a AuthOptions) Options() auth.Options {
+	opts := auth.Options{}
+	for _, o := range a {
+		o(&opts)
+	}
+
+	return opts
 }
 
 // RPC sets the type of service, eg. stack, grpc

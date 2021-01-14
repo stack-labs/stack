@@ -81,17 +81,6 @@ type clientRequest struct {
 	Timeout string `json:"timeout" sc:"timeout"`
 }
 
-type clientOpts []cl.Option
-
-func (s clientOpts) opts() cl.Options {
-	opts := cl.Options{}
-	for _, o := range s {
-		o(&opts)
-	}
-
-	return opts
-}
-
 type client struct {
 	Name     string        `json:"name" sc:"name"`
 	Protocol string        `json:"protocol" sc:"protocol"`
@@ -99,8 +88,8 @@ type client struct {
 	Request  clientRequest `json:"request" sc:"request"`
 }
 
-func (c *client) Options() clientOpts {
-	var cliOpts clientOpts
+func (c *client) Options() []cl.Option {
+	var cliOpts []cl.Option
 
 	if len(c.Name) > 0 {
 		cliOpts = append(cliOpts, cl.Name(c.Name))
@@ -172,17 +161,6 @@ func (m metadata) Value(k string) string {
 	return ""
 }
 
-type serverOpts []ser.Option
-
-func (s serverOpts) opts() ser.Options {
-	opts := ser.Options{}
-	for _, o := range s {
-		o(&opts)
-	}
-
-	return opts
-}
-
 type server struct {
 	Address   string         `json:"address" sc:"address"`
 	Advertise string         `json:"advertise" sc:"advertise"`
@@ -199,8 +177,8 @@ type serverRegistry struct {
 	Interval int `json:"interval" sc:"interval"`
 }
 
-func (s *server) Options() serverOpts {
-	var serverOpts serverOpts
+func (s *server) Options() []ser.Option {
+	var serverOpts []ser.Option
 
 	// Parse the server options
 	metadata := make(map[string]string)
@@ -304,21 +282,21 @@ type logger struct {
 }
 
 type logPersistence struct {
-	Enable    bool   `sc:"enable"`
-	Dir       string `sc:"dir"`
-	BackupDir string `sc:"back-dir"`
+	Enable    bool   `json:"enable" sc:"enable"`
+	Dir       string `json:"dir" sc:"dir"`
+	BackupDir string `json:"backupDir" sc:"back-dir"`
 	// log file max size in megabytes
-	MaxFileSize int `sc:"max-file-size"`
+	MaxFileSize int `json:"maxFileSize" sc:"max-file-size"`
 	// backup dir max size in megabytes
-	MaxBackupSize int `sc:"max-backup-size"`
+	MaxBackupSize int `json:"maxBackupSize" sc:"max-backup-size"`
 	// backup files keep max days
-	MaxBackupKeepDays int `sc:"max-backup-keep-days"`
+	MaxBackupKeepDays int `json:"maxBackupKeepDays" sc:"max-backup-keep-days"`
 	// default pattern is ${serviceName}_${level}.log
 	// todo available patterns map
-	FileNamePattern string `sc:"file-name-pattern"`
+	FileNamePattern string `json:"fileNamePattern" sc:"file-name-pattern"`
 	// default pattern is ${serviceName}_${level}_${yyyyMMdd_HH}_${idx}.zip
 	// todo available patterns map
-	BackupFileNamePattern string `sc:"backup-file-name-pattern"`
+	BackupFileNamePattern string `json:"backupFileNamePattern" sc:"backup-file-name-pattern"`
 }
 
 func (l *logPersistence) Options() *lg.PersistenceOptions {

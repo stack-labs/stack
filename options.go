@@ -38,6 +38,8 @@ func newOptions(opts ...Option) Options {
 		service.BeforeInit(func(sOpts *service.Options) error {
 			// cmd helps stack parse command options and reset the options that should work.
 			if err := opt.Cmd.Init(
+				// todo config passed is not cool
+				cmd.Config(&sOpts.Config),
 				cmd.ServiceOptions(sOpts),
 			); err != nil {
 				log.Errorf("cmd init error: %s", err)

@@ -40,7 +40,7 @@ stack:
       - B=b
     version: 1.0.0
     registry:
-      Interval: 200
+      interval: 200
       ttl: 300
   selector:
     name: robin
@@ -122,13 +122,14 @@ func TestStackConfig_Config(t *testing.T) {
 	// string arg
 	os.Args = append(os.Args, "--broker", "http", "--broker_address", ":10086")
 	// int arg
-	os.Args = append(os.Args, "--client_pool_ttl", "100")
+	os.Args = append(os.Args, "--client_pool_ttl=100")
 	// map
 	os.Args = append(os.Args, "--server_metadata", "C=c")
 	os.Args = append(os.Args, "--server_metadata", "D=d")
 
 	conf.Stack.Server.Name = "default-srv-name"
 	defaultBytes, _ := json.Marshal(conf)
+	t.Log(string(defaultBytes))
 
 	sources := []source.Source{
 		memory.NewSource(memory.WithJSON(defaultBytes)),

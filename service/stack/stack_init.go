@@ -1,6 +1,7 @@
 package stack
 
 import (
+	"context"
 	"fmt"
 
 	br "github.com/stack-labs/stack-rpc/broker"
@@ -20,6 +21,10 @@ func (s *stackService) Init(opts ...service.Option) error {
 	// process options
 	for _, o := range opts {
 		o(&s.opts)
+	}
+
+	if s.opts.Context == nil {
+		s.opts.Context = context.Background()
 	}
 
 	if len(s.opts.BeforeInit) > 0 {

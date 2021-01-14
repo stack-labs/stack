@@ -21,9 +21,13 @@ type addrKey struct{}
 type staticDirKey struct{}
 type rootPathKey struct{}
 type handlersKey struct{}
+type serverMuxKey struct{}
 type handlerFuncsKey struct{}
 
-type HandlerFunc func(w http.ResponseWriter, r *http.Request)
+type HandlerFunc struct {
+	Route string
+	Func  func(w http.ResponseWriter, r *http.Request)
+}
 
 func Enable(b bool) service.Option {
 	return setOption(enableKey{}, b)
@@ -58,6 +62,16 @@ func Handlers(hs ...http.Handler) service.Option {
 	}
 }
 
+func ServerMux(mux http.ServeMux) service.Option {
+	return func(o *service.Options) {
+		if o.Context == nil {
+			o.Context = context.Background()
+		}
+
+		o.Context = context.WithValue(o.Context, serverMuxKey{}, mux)
+	}
+}
+
 func HandleFuncs(hs ...HandlerFunc) service.Option {
 	return func(o *service.Options) {
 		if o.Context == nil {
@@ -84,24 +98,20 @@ func setOption(k, v interface{}) service.Option {
 	}
 }
 
-func newOptions(opts ...service.Option) service.Options {
-	opt := service.Options{
-		Broker:    broker.NewBroker(),
-		Client:    client.NewClient(),
-		Registry:  mdns.NewRegistry(),
-		Server:    server.NewServer(),
-		Transport: transportH.NewTransport(),
-		Selector:  selectorR.NewSelector(),
-		Logger:    logger.DefaultLogger,
-		Config:    config.DefaultConfig,
-		Auth:      auth.NoopAuth,
-		Context:   context.Background(),
-		Signal:    true,
+func newOptions(opts ...service.Option) []service.Option {
+	defaultOptions := []service.Option{
+		service.Broker(broker.NewBroker()),
+		service.Client(client.NewClient()),
+		service.Registry(mdns.NewRegistry()),
+		service.Server(server.NewServer()),
+		service.Transport(transportH.NewTransport()),
+		service.Selector(selectorR.NewSelector()),
+		service.Logger(logger.DefaultLogger),
+		service.Config(config.DefaultConfig),
+		service.Auth(auth.NoopAuth),
+		service.Context(context.Background()),
+		service.HandleSignal(true),
 	}
 
-	for _, o := range opts {
-		o(&opt)
-	}
-
-	return opt
+	return append(defaultOptions, opts...)
 }

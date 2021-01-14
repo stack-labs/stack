@@ -68,7 +68,7 @@ func (h *httpServer) Init(opts ...server.Option) error {
 
 func (h *httpServer) Handle(handler server.Handler) error {
 	if _, ok := handler.Handler().(http.Handler); !ok {
-		return errors.New("Handle requires http.Handler")
+		return errors.New("Handle requires http.Handler ")
 	}
 	h.Lock()
 	h.hd = handler
@@ -200,7 +200,7 @@ func (h *httpServer) Deregister() error {
 	opts := h.opts
 	h.Unlock()
 
-	log.Infof("Deregistering node: %s", opts.Name+"-"+opts.Id)
+	log.Infof("Unregistering node: %s", opts.Name+"-"+opts.Id)
 
 	service := serviceDef(opts)
 	if err := opts.Registry.Deregister(service); err != nil {
@@ -244,7 +244,7 @@ func (h *httpServer) Start() error {
 
 	handler, ok := hd.Handler().(http.Handler)
 	if !ok {
-		return errors.New("Server required http.Handler")
+		return errors.New("Server required http.Handler ")
 	}
 
 	if err = opts.Broker.Connect(); err != nil {

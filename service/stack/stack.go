@@ -89,13 +89,15 @@ func (s *stackService) Stop() error {
 
 func (s *stackService) Run() error {
 	// register the debug handler
-	if err := s.opts.Server.Handle(
-		s.opts.Server.NewHandler(
-			handler.DefaultHandler,
-			server.InternalHandler(true),
-		),
-	); err != nil {
-		return err
+	if s.opts.Server.Options().EnableDebug {
+		if err := s.opts.Server.Handle(
+			s.opts.Server.NewHandler(
+				handler.DefaultHandler,
+				server.InternalHandler(true),
+			),
+		); err != nil {
+			return err
+		}
 	}
 
 	// start the profiler

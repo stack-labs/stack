@@ -162,14 +162,15 @@ func (m metadata) Value(k string) string {
 }
 
 type server struct {
-	Address   string         `json:"address" sc:"address"`
-	Advertise string         `json:"advertise" sc:"advertise"`
-	ID        string         `json:"id" sc:"id"`
-	Metadata  metadata       `json:"metadata" sc:"metadata"`
-	Name      string         `json:"name" sc:"name"`
-	Protocol  string         `json:"protocol" sc:"protocol"`
-	Version   string         `json:"version" sc:"version"`
-	Registry  serverRegistry `json:"registry" sc:"registry"`
+	Address     string         `json:"address" sc:"address"`
+	Advertise   string         `json:"advertise" sc:"advertise"`
+	ID          string         `json:"id" sc:"id"`
+	Metadata    metadata       `json:"metadata" sc:"metadata"`
+	Name        string         `json:"name" sc:"name"`
+	Protocol    string         `json:"protocol" sc:"protocol"`
+	Version     string         `json:"version" sc:"version"`
+	Registry    serverRegistry `json:"registry" sc:"registry"`
+	EnableDebug bool           `json:"enableDebug" sc:"enable-debug"`
 }
 
 type serverRegistry struct {

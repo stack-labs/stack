@@ -1,12 +1,11 @@
-package jwt
+package stack
 
 import (
 	"github.com/stack-labs/stack-rpc/auth/token"
-	"github.com/stack-labs/stack-rpc/plugin"
+	"github.com/stack-labs/stack-rpc/auth/token/jwt"
 )
 
-type jwtTokenProviderPlugin struct {
-}
+type jwtTokenProviderPlugin struct{}
 
 func (j *jwtTokenProviderPlugin) Name() string {
 	return "jwt"
@@ -17,9 +16,5 @@ func (j *jwtTokenProviderPlugin) Options() []token.Option {
 }
 
 func (j *jwtTokenProviderPlugin) New(opts ...token.Option) token.Provider {
-	return NewTokenProvider(opts...)
-}
-
-func init() {
-	plugin.AuthTokenProviderPlugins["jwt"] = &jwtTokenProviderPlugin{}
+	return jwt.NewTokenProvider(opts...)
 }

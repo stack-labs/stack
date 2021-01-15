@@ -1,12 +1,11 @@
-package static
+package stack
 
 import (
 	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/plugin"
+	"github.com/stack-labs/stack-rpc/client/selector/static"
 )
 
-type staticSelectorPlugin struct {
-}
+type staticSelectorPlugin struct{}
 
 func (s *staticSelectorPlugin) Name() string {
 	return "static"
@@ -17,9 +16,5 @@ func (s *staticSelectorPlugin) Options() []selector.Option {
 }
 
 func (s *staticSelectorPlugin) New(opts ...selector.Option) selector.Selector {
-	return NewSelector(opts...)
-}
-
-func init() {
-	plugin.SelectorPlugins["static"] = &staticSelectorPlugin{}
+	return static.NewSelector(opts...)
 }

@@ -1,15 +1,14 @@
-package service
+package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/registry/service"
 )
 
-type serviceRegistryPlugin struct {
-}
+type serviceRegistryPlugin struct{}
 
 func (s *serviceRegistryPlugin) Name() string {
-	return "http"
+	return "service"
 }
 
 func (s *serviceRegistryPlugin) Options() []registry.Option {
@@ -17,9 +16,5 @@ func (s *serviceRegistryPlugin) Options() []registry.Option {
 }
 
 func (s *serviceRegistryPlugin) New(opts ...registry.Option) registry.Registry {
-	return NewRegistry(opts...)
-}
-
-func init() {
-	plugin.RegistryPlugins["service"] = &serviceRegistryPlugin{}
+	return service.NewRegistry(opts...)
 }

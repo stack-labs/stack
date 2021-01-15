@@ -1,12 +1,11 @@
-package jwt
+package stack
 
 import (
 	"github.com/stack-labs/stack-rpc/auth"
-	"github.com/stack-labs/stack-rpc/plugin"
+	"github.com/stack-labs/stack-rpc/auth/jwt"
 )
 
-type jwtAuthPlugin struct {
-}
+type jwtAuthPlugin struct{}
 
 func (j *jwtAuthPlugin) Name() string {
 	return "jwt"
@@ -17,9 +16,5 @@ func (j *jwtAuthPlugin) Options() []auth.Option {
 }
 
 func (j *jwtAuthPlugin) New(opts ...auth.Option) auth.Auth {
-	return NewAuth(opts...)
-}
-
-func init() {
-	plugin.AuthPlugins["jwt"] = &jwtAuthPlugin{}
+	return jwt.NewAuth(opts...)
 }

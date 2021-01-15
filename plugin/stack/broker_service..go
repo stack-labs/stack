@@ -1,12 +1,11 @@
-package service
+package stack
 
 import (
 	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/plugin"
+	"github.com/stack-labs/stack-rpc/broker/service"
 )
 
-type serviceBrokerPlugin struct {
-}
+type serviceBrokerPlugin struct{}
 
 func (s *serviceBrokerPlugin) Name() string {
 	return "service"
@@ -17,9 +16,5 @@ func (s *serviceBrokerPlugin) Options() []broker.Option {
 }
 
 func (s *serviceBrokerPlugin) New(opts ...broker.Option) broker.Broker {
-	return NewBroker(opts...)
-}
-
-func init() {
-	plugin.BrokerPlugins["service"] = &serviceBrokerPlugin{}
+	return service.NewBroker(opts...)
 }

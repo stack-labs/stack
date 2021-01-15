@@ -1,8 +1,8 @@
-package http
+package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/server/http"
 )
 
 type httpServerPlugin struct{}
@@ -16,9 +16,5 @@ func (m *httpServerPlugin) Options() []server.Option {
 }
 
 func (m *httpServerPlugin) New(opts ...server.Option) server.Server {
-	return NewServer(opts...)
-}
-
-func init() {
-	plugin.ServerPlugins["http"] = &httpServerPlugin{}
+	return http.NewServer(opts...)
 }

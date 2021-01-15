@@ -12,11 +12,6 @@ import (
 	pb "github.com/stack-labs/stack-rpc/registry/service/proto"
 )
 
-var (
-	// The default service name
-	DefaultService = "stack.rpc.service"
-)
-
 type serviceRegistry struct {
 	opts registry.Options
 	// name of the registry
@@ -156,8 +151,10 @@ func NewRegistry(opts ...registry.Option) registry.Registry {
 	)
 
 	// service name
-	// TODO: accept option
-	name := DefaultService
+	name := "stack.registry.service"
+	if len(options.Name) > 0 {
+		name = options.Name
+	}
 
 	return &serviceRegistry{
 		opts:    options,

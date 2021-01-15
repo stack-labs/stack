@@ -1,12 +1,11 @@
-package http
+package stack
 
 import (
 	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/plugin"
+	"github.com/stack-labs/stack-rpc/broker/http"
 )
 
-type httpBrokerPlugin struct {
-}
+type httpBrokerPlugin struct{}
 
 func (h *httpBrokerPlugin) Name() string {
 	return "http"
@@ -17,9 +16,5 @@ func (h *httpBrokerPlugin) Options() []broker.Option {
 }
 
 func (h *httpBrokerPlugin) New(opts ...broker.Option) broker.Broker {
-	return NewBroker(opts...)
-}
-
-func init() {
-	plugin.BrokerPlugins["http"] = &httpBrokerPlugin{}
+	return http.NewBroker(opts...)
 }

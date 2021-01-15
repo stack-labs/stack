@@ -1,12 +1,11 @@
-package registry
+package stack
 
 import (
 	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/plugin"
+	"github.com/stack-labs/stack-rpc/client/selector/registry"
 )
 
-type cacheSelectorPlugin struct {
-}
+type cacheSelectorPlugin struct{}
 
 func (c *cacheSelectorPlugin) Name() string {
 	return "cache"
@@ -17,9 +16,5 @@ func (c *cacheSelectorPlugin) Options() []selector.Option {
 }
 
 func (c *cacheSelectorPlugin) New(opts ...selector.Option) selector.Selector {
-	return NewSelector(opts...)
-}
-
-func init() {
-	plugin.SelectorPlugins["cache"] = &cacheSelectorPlugin{}
+	return registry.NewSelector(opts...)
 }

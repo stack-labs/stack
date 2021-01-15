@@ -16,7 +16,7 @@ import (
 	_ "github.com/stack-labs/stack-rpc/registry/mdns"
 	_ "github.com/stack-labs/stack-rpc/server/mucp"
 	_ "github.com/stack-labs/stack-rpc/service/grpc"
-	_ "github.com/stack-labs/stack-rpc/service/stack"
+	_ "github.com/stack-labs/stack-rpc/plugin/stack"
 	_ "github.com/stack-labs/stack-rpc/service/web"
 	_ "github.com/stack-labs/stack-rpc/transport/http"
 )
@@ -43,7 +43,7 @@ func NewService(opts ...Option) service.Service {
 
 	p, ok := plugin.ServicePlugins[so.RPC]
 	if !ok {
-		log.Fatal("[%s] service plugin isn't found", so.RPC)
+		log.Fatalf("[%s] service plugin isn't found", so.RPC)
 	}
 
 	return p.New(o.ServiceOpts...)

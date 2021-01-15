@@ -1,12 +1,11 @@
-package mock
+package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack-rpc/server/mock"
 )
 
-type mockServerPlugin struct {
-}
+type mockServerPlugin struct{}
 
 func (m *mockServerPlugin) Name() string {
 	return "mock"
@@ -17,9 +16,5 @@ func (m *mockServerPlugin) Options() []server.Option {
 }
 
 func (m *mockServerPlugin) New(opts ...server.Option) server.Server {
-	return NewServer(opts...)
-}
-
-func init() {
-	plugin.ServerPlugins["mock"] = &mockServerPlugin{}
+	return mock.NewServer(opts...)
 }

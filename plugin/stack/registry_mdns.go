@@ -1,12 +1,11 @@
-package mdns
+package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack-rpc/registry/mdns"
 )
 
-type mdnsRegistryPlugin struct {
-}
+type mdnsRegistryPlugin struct{}
 
 func (m *mdnsRegistryPlugin) Name() string {
 	return "mdns"
@@ -17,9 +16,5 @@ func (m *mdnsRegistryPlugin) Options() []registry.Option {
 }
 
 func (m *mdnsRegistryPlugin) New(opts ...registry.Option) registry.Registry {
-	return NewRegistry(opts...)
-}
-
-func init() {
-	plugin.RegistryPlugins["mdns"] = &mdnsRegistryPlugin{}
+	return mdns.NewRegistry(opts...)
 }

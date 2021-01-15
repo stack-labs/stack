@@ -1,12 +1,11 @@
-package basic
+package stack
 
 import (
 	"github.com/stack-labs/stack-rpc/auth/token"
-	"github.com/stack-labs/stack-rpc/plugin"
+	"github.com/stack-labs/stack-rpc/auth/token/basic"
 )
 
-type basicTokenProviderPlugin struct {
-}
+type basicTokenProviderPlugin struct{}
 
 func (j *basicTokenProviderPlugin) Name() string {
 	return "basic"
@@ -17,9 +16,5 @@ func (j *basicTokenProviderPlugin) Options() []token.Option {
 }
 
 func (j *basicTokenProviderPlugin) New(opts ...token.Option) token.Provider {
-	return NewTokenProvider(opts...)
-}
-
-func init() {
-	plugin.AuthTokenProviderPlugins["basic"] = &basicTokenProviderPlugin{}
+	return basic.NewTokenProvider(opts...)
 }

@@ -1,10 +1,11 @@
 package web
 
 import (
-	"net/http"
-
 	"github.com/stack-labs/stack-rpc/service"
 	"github.com/stack-labs/stack-rpc/service/stack"
+	"net/http"
+	"path"
+	"strings"
 )
 
 func NewService(opts ...service.Option) service.Service {
@@ -25,11 +26,22 @@ func setHandle(sOpts *service.Options) error {
 		}
 	} else {
 		muxTmp := http.NewServeMux()
+
+		rootPath := "/"
+		if sOpts.Context.Value(rootPathKey{}) != nil {
+			if rootPathTmp, ok := sOpts.Context.Value(rootPathKey{}).(string); ok {
+				if !strings.HasPrefix(rootPathTmp, "/") {
+					rootPathTmp = "/" + rootPathTmp
+				}
+				rootPath = rootPathTmp
+			}
+		}
+
 		// handler funcs
 		if sOpts.Context.Value(handlerFuncsKey{}) != nil {
 			if handlers, ok := sOpts.Context.Value(handlerFuncsKey{}).([]HandlerFunc); ok {
 				for _, handler := range handlers {
-					muxTmp.HandleFunc(handler.Route, handler.Func)
+					muxTmp.HandleFunc(path.Join(rootPath, handler.Route), handler.Func)
 				}
 			}
 		}
@@ -37,7 +49,8 @@ func setHandle(sOpts *service.Options) error {
 		// static dir
 		if sOpts.Context.Value(staticDirKey{}) != nil {
 			if sd, ok := sOpts.Context.Value(staticDirKey{}).(staticDir); ok {
-				muxTmp.Handle(sd.Route, http.StripPrefix(sd.Route, http.FileServer(http.Dir(sd.Dir))))
+				route := path.Join(rootPath, sd.Route)
+				muxTmp.Handle(route, http.StripPrefix(route, http.FileServer(http.Dir(sd.Dir))))
 			}
 		}
 

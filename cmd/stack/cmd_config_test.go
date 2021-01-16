@@ -1,4 +1,4 @@
-package cmd
+package stack
 
 import (
 	"encoding/json"
@@ -154,20 +154,20 @@ func TestStackConfig_Config(t *testing.T) {
 	}
 
 	if conf.Stack.Server.ID != "test-id" {
-		t.Fatal(fmt.Errorf("server id should be [test-id] which is cmd value, not: [%s]", conf.Stack.Server.ID))
+		t.Fatal(fmt.Errorf("server id should be [test-id] which is stackCmd value, not: [%s]", conf.Stack.Server.ID))
 	}
 
-	// test the config from cmd
+	// test the config from stackCmd
 	if conf.Stack.Broker.Address != ":10086" {
-		t.Fatal(fmt.Errorf("broker address should be [:10086] which is cmd value, not: [%s]", conf.Stack.Broker.Address))
+		t.Fatal(fmt.Errorf("broker address should be [:10086] which is stackCmd value, not: [%s]", conf.Stack.Broker.Address))
 	}
 
 	if conf.Stack.Client.Pool.TTL != 100 {
-		t.Fatal(fmt.Errorf("client pool ttl should be [100] which is cmd value, not: [%d]", conf.Stack.Client.Pool.TTL))
+		t.Fatal(fmt.Errorf("client pool ttl should be [100] which is stackCmd value, not: [%d]", conf.Stack.Client.Pool.TTL))
 	}
 
 	if conf.Stack.Server.Registry.TTL != 300 {
-		t.Fatal(fmt.Errorf("server registry ttl should be [300] which is cmd value, not: [%d]", conf.Stack.Server.Registry.TTL))
+		t.Fatal(fmt.Errorf("server registry ttl should be [300] which is stackCmd value, not: [%d]", conf.Stack.Server.Registry.TTL))
 	}
 
 	// test config root path
@@ -179,7 +179,7 @@ func TestStackConfig_Config(t *testing.T) {
 	if conf.Stack.Server.Metadata.Value("C") != "c" {
 		t.Fatal(fmt.Errorf("stack metadata should have [C-c], not: [%s]", conf.Stack.Server.Metadata.Value("C")))
 	}
-	// test map value: the cmd value
+	// test map value: the stackCmd value
 	if conf.Stack.Server.Metadata.Value("D") != "d" {
 		t.Fatal(fmt.Errorf("stack metadata should have [D-d], not: [%s]", conf.Stack.Server.Metadata.Value("D")))
 	}

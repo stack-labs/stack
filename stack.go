@@ -8,15 +8,14 @@ import (
 	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/service"
-	"github.com/stack-labs/stack-rpc/util/log"
 
 	_ "github.com/stack-labs/stack-rpc/broker/http"
 	_ "github.com/stack-labs/stack-rpc/client/mucp"
-	_ "github.com/stack-labs/stack-rpc/logger/console"
+	_ "github.com/stack-labs/stack-rpc/logger"
+	_ "github.com/stack-labs/stack-rpc/plugin/stack"
 	_ "github.com/stack-labs/stack-rpc/registry/mdns"
 	_ "github.com/stack-labs/stack-rpc/server/mucp"
 	_ "github.com/stack-labs/stack-rpc/service/grpc"
-	_ "github.com/stack-labs/stack-rpc/plugin/stack"
 	_ "github.com/stack-labs/stack-rpc/service/web"
 	_ "github.com/stack-labs/stack-rpc/transport/http"
 )
@@ -32,21 +31,12 @@ type Option func(*Options)
 
 // NewService creates and returns a new Service based on the packages within.
 func NewService(opts ...Option) service.Service {
-	o := newOptions(opts...)
-
-	// set default
-	// this will be removed in future
-	so := &service.Options{}
-	for _, opt := range o.ServiceOpts {
-		opt(so)
+	o := Options{}
+	for _, opt := range opts {
+		opt(&o)
 	}
 
-	p, ok := plugin.ServicePlugins[so.RPC]
-	if !ok {
-		log.Fatalf("[%s] service plugin isn't found", so.RPC)
-	}
-
-	return p.New(o.ServiceOpts...)
+	return plugin.ServicePlugins["stack"].New(o.ServiceOpts...)
 }
 
 // FromContext retrieves a Service from the Context.

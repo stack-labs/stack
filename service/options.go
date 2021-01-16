@@ -8,6 +8,7 @@ import (
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/debug/profile"
 	"github.com/stack-labs/stack-rpc/logger"
@@ -23,6 +24,7 @@ type Options struct {
 	Id   string
 	Name string
 	RPC  string
+	Cmd  cmd.Cmd
 
 	BrokerOptions    BrokerOptions
 	ClientOptions    ClientOptions
@@ -160,6 +162,12 @@ func (a AuthOptions) Options() auth.Options {
 	}
 
 	return opts
+}
+
+func Cmd(c cmd.Cmd) Option {
+	return func(o *Options) {
+		o.Cmd = c
+	}
 }
 
 // RPC sets the type of service, eg. stack, grpc

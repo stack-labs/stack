@@ -8,8 +8,6 @@ import (
 var options struct {
 	Stack struct {
 		Service struct {
-			Stack struct {
-			} `sc:"stack"`
 			GRPC struct {
 			} `sc:"grpc"`
 			Web struct {

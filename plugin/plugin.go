@@ -6,6 +6,7 @@ import (
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/registry"
@@ -16,6 +17,12 @@ import (
 
 type Plugin interface {
 	Name() string
+}
+
+type CmdPlugin interface {
+	Plugin
+	Options() []cmd.Option
+	New(...cmd.Option) cmd.Cmd
 }
 
 type ServicePlugin interface {

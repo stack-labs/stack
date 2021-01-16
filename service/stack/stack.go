@@ -135,7 +135,7 @@ func (s *stackService) Run() error {
 }
 
 func NewService(opts ...service.Option) service.Service {
-	options := service.Options{}
+	options := newOptions(opts...)
 	for _, o := range opts {
 		o(&options)
 	}

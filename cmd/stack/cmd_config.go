@@ -1,4 +1,4 @@
-package cmd
+package stack
 
 import (
 	"fmt"
@@ -432,7 +432,8 @@ func (s *service) Options() serviceOpts {
 	}
 
 	if len(s.Web.StaticDir) > 0 {
-		opts = append(opts, sw.StaticDir(s.Web.StaticDir))
+		// todo
+		opts = append(opts, sw.StaticDir(s.Web.RootPath, s.Web.StaticDir))
 	}
 
 	return opts

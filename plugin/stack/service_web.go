@@ -16,7 +16,7 @@ func (w *webServicePlugin) Options() []service.Option {
 
 	opts = append(opts, web.Enable(options.Stack.Service.Web.Enable))
 	opts = append(opts, web.Address(options.Stack.Service.Web.Address))
-	opts = append(opts, web.StaticDir(options.Stack.Service.Web.StaticDir))
+	opts = append(opts, web.StaticDir("", options.Stack.Service.Web.StaticDir))
 	opts = append(opts, web.RootPath(options.Stack.Service.Web.RootPath))
 
 	return opts

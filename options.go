@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/auth"
 	"github.com/stack-labs/stack-rpc/broker"
 	"github.com/stack-labs/stack-rpc/client"
 	"github.com/stack-labs/stack-rpc/client/selector"
@@ -13,12 +12,10 @@ import (
 	"github.com/stack-labs/stack-rpc/debug/profile"
 	"github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/pkg/cli"
-	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/service"
 	"github.com/stack-labs/stack-rpc/transport"
-	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 type Options struct {
@@ -26,50 +23,10 @@ type Options struct {
 	ServiceOpts []service.Option
 }
 
-func newOptions(opts ...Option) Options {
-	opt := Options{
-		Cmd: cmd.NewCmd(),
-	}
-
-	opt.ServiceOpts = append(opt.ServiceOpts,
-		service.Context(context.Background()),
-		// default use stack rpc
-		service.RPC("stack"),
-		service.BeforeInit(func(sOpts *service.Options) error {
-			// cmd helps stack parse command options and reset the options that should work.
-			if err := opt.Cmd.Init(
-				// todo config passed is not cool
-				cmd.Config(&sOpts.Config),
-				cmd.ServiceOptions(sOpts),
-			); err != nil {
-				log.Errorf("cmd init error: %s", err)
-				return err
-			}
-			return nil
-		}),
-		// set the default components
-		service.Broker(plugin.BrokerPlugins["http"].New()),
-		service.Client(plugin.ClientPlugins["mucp"].New()),
-		service.Server(plugin.ServerPlugins["mucp"].New()),
-		service.Registry(plugin.RegistryPlugins["mdns"].New()),
-		service.Transport(plugin.TransportPlugins["http"].New()),
-		service.Selector(plugin.SelectorPlugins["cache"].New()),
-		service.Logger(plugin.LoggerPlugins["console"].New()),
-		service.Config(config.DefaultConfig),
-		service.Auth(auth.NoopAuth),
-		service.HandleSignal(true),
-	)
-
-	for _, o := range opts {
-		o(&opt)
-	}
-
-	return opt
-}
-
 func Cmd(c cmd.Cmd) Option {
 	return func(o *Options) {
 		o.Cmd = c
+		o.ServiceOpts = append(o.ServiceOpts, service.Cmd(c))
 	}
 }
 

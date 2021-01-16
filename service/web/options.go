@@ -29,6 +29,11 @@ type HandlerFunc struct {
 	Func  func(w http.ResponseWriter, r *http.Request)
 }
 
+type staticDir struct {
+	Route string
+	Dir   string
+}
+
 func Enable(b bool) service.Option {
 	return setOption(enableKey{}, b)
 }
@@ -37,8 +42,11 @@ func Address(addr string) service.Option {
 	return setOption(addrKey{}, addr)
 }
 
-func StaticDir(dir string) service.Option {
-	return setOption(staticDirKey{}, dir)
+func StaticDir(path, dir string) service.Option {
+	return setOption(staticDirKey{}, staticDir{
+		Route: path,
+		Dir:   dir,
+	})
 }
 
 func RootPath(path string) service.Option {

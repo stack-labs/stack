@@ -25,11 +25,19 @@ func setHandle(sOpts *service.Options) error {
 		}
 	} else {
 		muxTmp := http.NewServeMux()
+		// handler funcs
 		if sOpts.Context.Value(handlerFuncsKey{}) != nil {
 			if handlers, ok := sOpts.Context.Value(handlerFuncsKey{}).([]HandlerFunc); ok {
 				for _, handler := range handlers {
 					muxTmp.HandleFunc(handler.Route, handler.Func)
 				}
+			}
+		}
+
+		// static dir
+		if sOpts.Context.Value(staticDirKey{}) != nil {
+			if sd, ok := sOpts.Context.Value(staticDirKey{}).(staticDir); ok {
+				muxTmp.Handle(sd.Route, http.StripPrefix(sd.Route, http.FileServer(http.Dir(sd.Dir))))
 			}
 		}
 

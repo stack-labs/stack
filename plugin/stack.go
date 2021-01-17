@@ -1,7 +1,6 @@
 package plugin
 
 var (
-	CmdPlugins               = map[string]CmdPlugin{}
 	ServicePlugins           = map[string]ServicePlugin{}
 	ConfigPlugins            = map[string]ConfigPlugin{}
 	ClientPlugins            = map[string]ClientPlugin{}

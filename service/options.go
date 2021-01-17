@@ -25,6 +25,7 @@ type Options struct {
 	Name string
 	RPC  string
 	Cmd  cmd.Cmd
+	Conf string
 
 	BrokerOptions    BrokerOptions
 	ClientOptions    ClientOptions

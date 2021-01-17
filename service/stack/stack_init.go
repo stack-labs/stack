@@ -3,7 +3,6 @@ package stack
 import (
 	"context"
 	"fmt"
-
 	br "github.com/stack-labs/stack-rpc/broker"
 	cl "github.com/stack-labs/stack-rpc/client"
 	sel "github.com/stack-labs/stack-rpc/client/selector"

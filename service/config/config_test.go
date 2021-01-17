@@ -1,4 +1,4 @@
-package stack
+package config
 
 import (
 	"encoding/json"
@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/stack-labs/stack-rpc/cmd"
 	cfg "github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/pkg/config/source"
 	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
@@ -50,16 +51,7 @@ stack:
   profile: _1
   runtime:
 `)
-	conf = StackConfig{
-		Stack: stack{
-			Broker:    broker{},
-			Client:    client{},
-			Registry:  registry{},
-			Selector:  selector{},
-			Server:    server{},
-			Transport: transport{},
-		},
-	}
+	conf = StackConfig{}
 )
 
 func init() {
@@ -113,9 +105,9 @@ func TestStackConfig_Config(t *testing.T) {
 	}()
 
 	// setup app
-	app := NewCmd().App()
+	app := cmd.NewCmd().App()
 	app.Name = "testcmd"
-	app.Flags = DefaultFlags
+	app.Flags = cmd.DefaultFlags
 
 	// set args
 	os.Args = []string{"run"}
@@ -228,9 +220,9 @@ stack:
 	}()
 
 	// setup app
-	app := NewCmd().App()
+	app := cmd.NewCmd().App()
 	app.Name = "testcmd"
-	app.Flags = DefaultFlags
+	app.Flags = cmd.DefaultFlags
 
 	// set args
 	os.Args = []string{"run"}
@@ -255,13 +247,9 @@ stack:
 		t.Fatal(fmt.Errorf("db setting should be 'mysql', not %s", c.Get("db").String("default")))
 	}
 
-	var conf = StackConfig{
-		Stack: stack{
-			Server: server{
-				Name: "default",
-			},
-		},
-	}
+	var conf = StackConfig{}
+
+	conf.Stack.Server.Name = "default"
 
 	if err := c.Scan(&conf); err != nil {
 		t.Fatal(fmt.Errorf("MultiConfig scan conf error %s", err))

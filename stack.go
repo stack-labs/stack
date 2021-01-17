@@ -39,6 +39,26 @@ func NewService(opts ...Option) service.Service {
 	return plugin.ServicePlugins["stack"].New(o.ServiceOpts...)
 }
 
+// WebService creates and returns a new web Service based on the packages within.
+func WebService(opts ...Option) service.Service {
+	o := Options{}
+	for _, opt := range opts {
+		opt(&o)
+	}
+
+	return plugin.ServicePlugins["web"].New(o.ServiceOpts...)
+}
+
+// GRPCService creates and returns a new web Service based on the packages within.
+func GRPCService(opts ...Option) service.Service {
+	o := Options{}
+	for _, opt := range opts {
+		opt(&o)
+	}
+
+	return plugin.ServicePlugins["grpc"].New(o.ServiceOpts...)
+}
+
 // FromContext retrieves a Service from the Context.
 func FromContext(ctx context.Context) (service.Service, bool) {
 	s, ok := ctx.Value(serviceKey{}).(service.Service)

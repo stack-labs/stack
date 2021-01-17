@@ -1,7 +1,7 @@
 package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/config"
+	cfg "github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/plugin"
 )
 
@@ -21,7 +21,7 @@ var options struct {
 }
 
 func init() {
-	config.RegisterOptions(&options)
+	cfg.RegisterOptions(&options)
 	plugin.ServicePlugins["stack"] = &stackServicePlugin{}
 	plugin.ServicePlugins["grpc"] = &grpcServicePlugin{}
 	plugin.ServicePlugins["web"] = &webServicePlugin{}

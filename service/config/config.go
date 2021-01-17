@@ -1,4 +1,4 @@
-package stack
+package config
 
 import (
 	"fmt"
@@ -20,28 +20,21 @@ import (
 	"github.com/stack-labs/stack-rpc/util/log"
 )
 
-type stack struct {
-	Includes  string    `json:"includes" sc:"includes"`
-	Config    config    `json:"config" sc:"config"`
-	Registry  registry  `json:"registry" sc:"registry"`
-	Broker    broker    `json:"broker" sc:"broker"`
-	Client    client    `json:"client" sc:"client"`
-	Profile   string    `json:"profile" sc:"profile"`
-	Runtime   string    `json:"runtime" sc:"runtime"`
-	Server    server    `json:"server" sc:"server"`
-	Selector  selector  `json:"selector" sc:"selector"`
-	Transport transport `json:"transport" sc:"transport"`
-	Logger    logger    `json:"logger" sc:"logger"`
-	Auth      auth      `json:"auth" sc:"auth"`
-	Service   service   `json:"service" sc:"service"`
+var (
+	stackStdConfigFile = "stack.yml"
+	stackConfig        = StackConfig{}
+)
+
+func init() {
+	cfg.RegisterOptions(&stackConfig)
 }
 
-type config struct {
+type Config struct {
 	HierarchyMerge bool `json:"hierarchyMerge" sc:"hierarchy-merge"`
 	Storage        bool `json:"storage" sc:"storage"`
 }
 
-func (c *config) Options() []cfg.Option {
+func (c *Config) Options() []cfg.Option {
 	var cfgOptions []cfg.Option
 
 	cfgOptions = append(cfgOptions, cfg.HierarchyMerge(c.HierarchyMerge))
@@ -50,12 +43,12 @@ func (c *config) Options() []cfg.Option {
 	return cfgOptions
 }
 
-type broker struct {
+type Broker struct {
 	Address string `json:"address" sc:"address"`
 	Name    string `json:"name" sc:"name"`
 }
 
-func (b *broker) Options() []br.Option {
+func (b *Broker) Options() []br.Option {
 	var brOptions []br.Option
 
 	if len(b.Name) > 0 {
@@ -81,14 +74,14 @@ type clientRequest struct {
 	Timeout string `json:"timeout" sc:"timeout"`
 }
 
-type client struct {
+type Client struct {
 	Name     string        `json:"name" sc:"name"`
 	Protocol string        `json:"protocol" sc:"protocol"`
 	Pool     pool          `json:"pool" sc:"pool"`
 	Request  clientRequest `json:"request" sc:"request"`
 }
 
-func (c *client) Options() []cl.Option {
+func (c *Client) Options() []cl.Option {
 	var cliOpts []cl.Option
 
 	if len(c.Name) > 0 {
@@ -125,12 +118,12 @@ func (c *client) Options() []cl.Option {
 	return cliOpts
 }
 
-type registry struct {
+type Registry struct {
 	Address string `json:"address" sc:"address"`
 	Name    string `json:"name" sc:"name"`
 }
 
-func (r *registry) Options() []reg.Option {
+func (r *Registry) Options() []reg.Option {
 	var regOptions []reg.Option
 
 	if len(r.Name) > 0 {
@@ -161,7 +154,7 @@ func (m metadata) Value(k string) string {
 	return ""
 }
 
-type server struct {
+type Server struct {
 	Address     string         `json:"address" sc:"address"`
 	Advertise   string         `json:"advertise" sc:"advertise"`
 	ID          string         `json:"id" sc:"id"`
@@ -169,7 +162,7 @@ type server struct {
 	Name        string         `json:"name" sc:"name"`
 	Protocol    string         `json:"protocol" sc:"protocol"`
 	Version     string         `json:"version" sc:"version"`
-	Registry    serverRegistry `json:"registry" sc:"registry"`
+	Registry    serverRegistry `json:"Registry" sc:"Registry"`
 	EnableDebug bool           `json:"enableDebug" sc:"enable-debug"`
 }
 
@@ -178,7 +171,7 @@ type serverRegistry struct {
 	Interval int `json:"interval" sc:"interval"`
 }
 
-func (s *server) Options() []ser.Option {
+func (s *Server) Options() []ser.Option {
 	var serverOpts []ser.Option
 
 	// Parse the server options
@@ -232,11 +225,11 @@ func (s *server) Options() []ser.Option {
 	return serverOpts
 }
 
-type selector struct {
+type Selector struct {
 	Name string `json:"name" sc:"name"`
 }
 
-func (s *selector) Options() []sel.Option {
+func (s *Selector) Options() []sel.Option {
 	var selOptions []sel.Option
 
 	if len(s.Name) > 0 {
@@ -250,12 +243,12 @@ func (s *selector) Options() []sel.Option {
 	return selOptions
 }
 
-type transport struct {
+type Transport struct {
 	Name    string `json:"name" sc:"name"`
 	Address string `json:"address" sc:"address"`
 }
 
-func (t *transport) Options() []tra.Option {
+func (t *Transport) Options() []tra.Option {
 	var traOptions []tra.Option
 
 	if len(t.Name) > 0 {
@@ -273,7 +266,7 @@ func (t *transport) Options() []tra.Option {
 	return traOptions
 }
 
-type logger struct {
+type Logger struct {
 	Name  string `json:"name" sc:"name"`
 	Level string `json:"level" sc:"level"`
 	// todo support map settings
@@ -315,7 +308,7 @@ func (l *logPersistence) Options() *lg.PersistenceOptions {
 	return o
 }
 
-func (l *logger) Options() []lg.Option {
+func (l *Logger) Options() []lg.Option {
 	var logOptions []lg.Option
 
 	if len(l.Name) > 0 {
@@ -345,7 +338,7 @@ func (l *logger) Options() []lg.Option {
 	return logOptions
 }
 
-type auth struct {
+type Auth struct {
 	Name            string          `json:"name" sc:"name"`
 	Enable          bool            `json:"enable" sc:"enable"`
 	Namespace       string          `json:"namespace" sc:"namespace"`
@@ -359,7 +352,7 @@ type authCredentials struct {
 	Secret string `json:"secret" sc:"secret"`
 }
 
-func (a *auth) Options() []au.Option {
+func (a *Auth) Options() []au.Option {
 	var opts []au.Option
 
 	opts = append(opts, au.Enable(a.Enable))
@@ -381,7 +374,7 @@ func (a *auth) Options() []au.Option {
 	return opts
 }
 
-type web struct {
+type Web struct {
 	Enable    bool   `json:"enable" sc:"enable"`
 	Address   string `json:"address" sc:"address"`
 	RootPath  string `json:"rootPath" sc:"root-path"`
@@ -399,14 +392,14 @@ func (s serviceOpts) opts() ss.Options {
 	return opts
 }
 
-type service struct {
+type Service struct {
 	ID   string `json:"id" sc:"id"`
 	Name string `json:"name" sc:"name"`
 	RPC  string `json:"rpc" sc:"rpc"`
-	Web  web    `json:"web" sc:"web"`
+	Web  Web    `json:"web" sc:"web"`
 }
 
-func (s *service) Options() serviceOpts {
+func (s *Service) Options() serviceOpts {
 	var opts serviceOpts
 
 	if len(s.ID) > 0 {
@@ -440,5 +433,19 @@ func (s *service) Options() serviceOpts {
 }
 
 type StackConfig struct {
-	Stack stack `json:"stack" sc:"stack"`
+	Stack struct {
+		Includes  string    `json:"includes" sc:"includes"`
+		Config    Config    `json:"config" sc:"config"`
+		Registry  Registry  `json:"registry" sc:"registry"`
+		Broker    Broker    `json:"broker" sc:"broker"`
+		Client    Client    `json:"client" sc:"client"`
+		Profile   string    `json:"profile" sc:"profile"`
+		Runtime   string    `json:"runtime" sc:"runtime"`
+		Server    Server    `json:"server" sc:"server"`
+		Selector  Selector  `json:"selector" sc:"selector"`
+		Transport Transport `json:"transport" sc:"transport"`
+		Logger    Logger    `json:"logger" sc:"logger"`
+		Auth      Auth      `json:"auth" sc:"auth"`
+		Service   Service   `json:"service" sc:"service"`
+	} `json:"stack" sc:"stack"`
 }

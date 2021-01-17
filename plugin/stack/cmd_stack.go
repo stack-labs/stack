@@ -3,7 +3,6 @@ package stack
 import (
 	"github.com/stack-labs/stack-rpc/cmd"
 	"github.com/stack-labs/stack-rpc/cmd/stack"
-	"github.com/stack-labs/stack-rpc/plugin"
 )
 
 type cmdPlugin struct{}
@@ -21,5 +20,5 @@ func (h *cmdPlugin) New(opts ...cmd.Option) cmd.Cmd {
 }
 
 func init() {
-	plugin.CmdPlugins["stack"] = &cmdPlugin{}
+	// plugin.CmdPlugins["stack"] = &cmdPlugin{}
 }

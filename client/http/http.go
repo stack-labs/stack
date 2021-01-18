@@ -22,7 +22,8 @@ import (
 	"github.com/stack-labs/stack-rpc/pkg/metadata"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/transport"
-	errors "github.com/stack-labs/stack-rpc/util/errors"
+	ucodec "github.com/stack-labs/stack-rpc/util/codec"
+	"github.com/stack-labs/stack-rpc/util/errors"
 )
 
 type httpClient struct {
@@ -182,10 +183,10 @@ func (h *httpClient) newCodec(contentType string) (codec.NewCodec, error) {
 	if c, ok := h.opts.Codecs[contentType]; ok {
 		return c, nil
 	}
-	if cf, ok := defaultRPCCodecs[contentType]; ok {
+	if cf, ok := ucodec.DefaultCodecs[contentType]; ok {
 		return cf, nil
 	}
-	return nil, fmt.Errorf("Unsupported Content-Type: %s", contentType)
+	return nil, fmt.Errorf("Unsupported Content-Type: %s ", contentType)
 }
 
 func (h *httpClient) Init(opts ...client.Option) error {

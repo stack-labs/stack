@@ -1,13 +1,18 @@
 package mucp
 
 import (
+	"github.com/stack-labs/stack-rpc/plugin"
 	"testing"
 
 	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/client/mucp"
 )
 
 func TestRequestOptions(t *testing.T) {
-	r := newRequest("service", "endpoint", nil, "application/json")
+	c := mucp.NewClient(
+		client.Selector(plugin.SelectorPlugins["cache"].New()),
+	)
+	r := c.NewRequest("service", "endpoint", nil, client.WithContentType("application/json"))
 	if r.Service() != "service" {
 		t.Fatalf("expected 'service' got %s", r.Service())
 	}
@@ -18,7 +23,7 @@ func TestRequestOptions(t *testing.T) {
 		t.Fatalf("expected 'endpoint' got %s", r.ContentType())
 	}
 
-	r2 := newRequest("service", "endpoint", nil, "application/json", client.WithContentType("application/protobuf"))
+	r2 := c.NewRequest("service", "endpoint", nil, client.WithContentType("application/json"), client.WithContentType("application/protobuf"))
 	if r2.ContentType() != "application/protobuf" {
 		t.Fatalf("expected 'endpoint' got %s", r2.ContentType())
 	}

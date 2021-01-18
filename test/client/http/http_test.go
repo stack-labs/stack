@@ -10,15 +10,25 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/http/test"
+	shttp "github.com/stack-labs/stack-rpc/client/http"
 	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/registry/memory"
+	"github.com/stack-labs/stack-rpc/test/client/http/test"
 
-	_ "github.com/stack-labs/stack-rpc/client/selector/registry"
+	_ "github.com/stack-labs/stack-rpc/plugin/stack"
 )
+
+type buffer struct {
+	*bytes.Buffer
+}
+
+func (b *buffer) Close() error {
+	b.Buffer.Reset()
+	return nil
+}
 
 func TestHTTPClient(t *testing.T) {
 	r := memory.NewRegistry()
@@ -85,7 +95,7 @@ func TestHTTPClient(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	c := NewClient(client.Selector(s))
+	c := shttp.NewClient(client.Selector(s))
 
 	for i := 0; i < 10; i++ {
 		msg := &test.Message{
@@ -244,7 +254,7 @@ func TestHTTPClientStream(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	c := NewClient(client.Selector(s))
+	c := shttp.NewClient(client.Selector(s))
 	req := c.NewRequest("test.service", "/foo/bar", new(test.Message))
 	stream, err := c.Stream(context.TODO(), req)
 	if err != nil {

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/client/mucp"
 	"github.com/stack-labs/stack-rpc/transport"
 )
 
@@ -30,14 +31,14 @@ func TestCallOptions(t *testing.T) {
 				client.DialTimeout(d.dtimeout),
 			)
 
-			cl = NewClient(
+			cl = mucp.NewClient(
 				client.Retries(d.retries),
 				client.RequestTimeout(d.rtimeout),
 				client.DialTimeout(d.dtimeout),
 			)
 		} else {
 			opts = client.NewOptions()
-			cl = NewClient()
+			cl = mucp.NewClient()
 		}
 
 		// test options and those set in client

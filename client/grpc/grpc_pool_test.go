@@ -11,6 +11,14 @@ import (
 	pb "google.golang.org/grpc/examples/helloworld/helloworld"
 )
 
+// server is used to implement helloworld.GreeterServer.
+type greeterServer struct{}
+
+// SayHello implements helloworld.GreeterServer
+func (g *greeterServer) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
+	return &pb.HelloReply{Message: "Hello " + in.Name}, nil
+}
+
 func testPool(t *testing.T, size int, ttl time.Duration) {
 	// setup server
 	l, err := net.Listen("tcp", ":0")

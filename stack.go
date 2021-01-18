@@ -11,13 +11,7 @@ import (
 	"github.com/stack-labs/stack-rpc/service/stack"
 	"github.com/stack-labs/stack-rpc/service/web"
 
-	_ "github.com/stack-labs/stack-rpc/broker/http"
-	_ "github.com/stack-labs/stack-rpc/client/mucp"
-	_ "github.com/stack-labs/stack-rpc/logger"
 	_ "github.com/stack-labs/stack-rpc/plugin/stack"
-	_ "github.com/stack-labs/stack-rpc/registry/mdns"
-	_ "github.com/stack-labs/stack-rpc/server/mucp"
-	_ "github.com/stack-labs/stack-rpc/transport/http"
 )
 
 type serviceKey struct{}

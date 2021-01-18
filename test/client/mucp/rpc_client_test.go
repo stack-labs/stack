@@ -6,13 +6,14 @@ import (
 	"testing"
 
 	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack-rpc/client/mucp"
 	"github.com/stack-labs/stack-rpc/client/selector"
 	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/registry/memory"
 	"github.com/stack-labs/stack-rpc/util/errors"
 
-	_ "github.com/stack-labs/stack-rpc/client/selector/registry"
+	_ "github.com/stack-labs/stack-rpc/plugin/stack"
 )
 
 var (
@@ -101,7 +102,7 @@ func TestCallAddress(t *testing.T) {
 	}
 
 	r := newTestRegistry()
-	c := NewClient(
+	c := mucp.NewClient(
 		client.Registry(r),
 		client.WrapCall(wrap),
 		client.Selector(plugin.SelectorPlugins["cache"].New()),
@@ -141,7 +142,7 @@ func TestCallRetry(t *testing.T) {
 	}
 
 	r := newTestRegistry()
-	c := NewClient(
+	c := mucp.NewClient(
 		client.Registry(r),
 		client.WrapCall(wrap),
 		client.Selector(plugin.SelectorPlugins["cache"].New()),
@@ -190,7 +191,7 @@ func TestCallWrapper(t *testing.T) {
 	}
 
 	r := newTestRegistry()
-	c := NewClient(
+	c := mucp.NewClient(
 		client.Registry(r),
 		client.WrapCall(wrap),
 		client.Selector(plugin.SelectorPlugins["cache"].New()),

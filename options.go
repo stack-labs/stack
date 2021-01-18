@@ -15,6 +15,7 @@ import (
 	"github.com/stack-labs/stack-rpc/registry"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/service"
+	"github.com/stack-labs/stack-rpc/service/web"
 	"github.com/stack-labs/stack-rpc/transport"
 )
 
@@ -82,18 +83,14 @@ func Server(s server.Server) Option {
 // and the underlying components
 func Registry(r registry.Registry) Option {
 	return func(o *Options) {
-		o.ServiceOpts = append(o.ServiceOpts, func(o *service.Options) {
-			o.Registry = r
-		})
+		o.ServiceOpts = append(o.ServiceOpts, service.Registry(r))
 	}
 }
 
 // Selector sets the selector for the service client
 func Selector(s selector.Selector) Option {
 	return func(o *Options) {
-		o.ServiceOpts = append(o.ServiceOpts, func(o *service.Options) {
-			o.Selector = s
-		})
+		o.ServiceOpts = append(o.ServiceOpts, service.Selector(s))
 	}
 }
 
@@ -101,9 +98,7 @@ func Selector(s selector.Selector) Option {
 // and the underlying components
 func Transport(t transport.Transport) Option {
 	return func(o *Options) {
-		o.ServiceOpts = append(o.ServiceOpts, func(o *service.Options) {
-			o.Transport = t
-		})
+		o.ServiceOpts = append(o.ServiceOpts, service.Transport(t))
 	}
 }
 
@@ -141,6 +136,24 @@ func Version(v string) Option {
 func Metadata(md map[string]string) Option {
 	return func(o *Options) {
 		o.ServiceOpts = append(o.ServiceOpts, service.Metadata(md))
+	}
+}
+
+func WebRootPath(rootPath string) Option {
+	return func(o *Options) {
+		o.ServiceOpts = append(o.ServiceOpts, web.RootPath(rootPath))
+	}
+}
+
+func WebHandleFuncs(funcs ...web.HandlerFunc) Option {
+	return func(o *Options) {
+		o.ServiceOpts = append(o.ServiceOpts, web.HandleFuncs(funcs...))
+	}
+}
+
+func WebStaticDir(route, dir string) Option {
+	return func(o *Options) {
+		o.ServiceOpts = append(o.ServiceOpts, web.StaticDir(route, dir))
 	}
 }
 
@@ -182,9 +195,7 @@ func RegisterInterval(t time.Duration) Option {
 // Wrappers are applied in reverse order so the last is executed first.
 func WrapClient(w ...client.Wrapper) Option {
 	return func(o *Options) {
-		o.ServiceOpts = append(o.ServiceOpts, func(o *service.Options) {
-			o.ClientWrapper = w
-		})
+		o.ServiceOpts = append(o.ServiceOpts, service.WrapClient(w...))
 	}
 }
 

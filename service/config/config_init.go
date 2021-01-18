@@ -104,15 +104,15 @@ func LoadConfig(sOpts *service.Options) (err error) {
 func SetOptions(sOpts *service.Options) (err error) {
 	conf := stackConfig.Stack
 
-	sOpts.ServerOptions = conf.Server.Options()
-	sOpts.ClientOptions = conf.Client.Options()
-	sOpts.ConfigOptions = conf.Config.Options()
-	sOpts.TransportOptions = conf.Transport.Options()
-	sOpts.SelectorOptions = conf.Selector.Options()
-	sOpts.RegistryOptions = conf.Registry.Options()
-	sOpts.BrokerOptions = conf.Broker.Options()
-	sOpts.LoggerOptions = conf.Logger.Options()
-	sOpts.AuthOptions = conf.Auth.Options()
+	sOpts.ServerOptions = append(sOpts.ServerOptions, conf.Server.Options()...)
+	sOpts.ClientOptions = append(sOpts.ClientOptions, conf.Client.Options()...)
+	sOpts.ConfigOptions = append(sOpts.ConfigOptions, conf.Config.Options()...)
+	sOpts.TransportOptions = append(sOpts.TransportOptions, conf.Transport.Options()...)
+	sOpts.SelectorOptions = append(sOpts.SelectorOptions, conf.Selector.Options()...)
+	sOpts.RegistryOptions = append(sOpts.RegistryOptions, conf.Registry.Options()...)
+	sOpts.BrokerOptions = append(sOpts.BrokerOptions, conf.Broker.Options()...)
+	sOpts.LoggerOptions = append(sOpts.LoggerOptions, conf.Logger.Options()...)
+	sOpts.AuthOptions = append(sOpts.AuthOptions, conf.Auth.Options()...)
 
 	return
 }

@@ -11,10 +11,10 @@ func (s *serviceRegistryPlugin) Name() string {
 	return "service"
 }
 
-func (s *serviceRegistryPlugin) Options() []Registry.Option {
+func (s *serviceRegistryPlugin) Options() []registry.Option {
 	return nil
 }
 
-func (s *serviceRegistryPlugin) New(opts ...Registry.Option) Registry.Registry {
+func (s *serviceRegistryPlugin) New(opts ...registry.Option) registry.Registry {
 	return service.NewRegistry(opts...)
 }

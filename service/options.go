@@ -261,6 +261,7 @@ func Address(addr string) Option {
 func Id(id string) Option {
 	return func(o *Options) {
 		o.Id = id
+		o.ServerOptions = append(o.ServerOptions, server.Id(id))
 	}
 }
 
@@ -268,6 +269,7 @@ func Id(id string) Option {
 func Name(n string) Option {
 	return func(o *Options) {
 		o.Name = n
+		o.ServerOptions = append(o.ServerOptions, server.Name(n))
 	}
 }
 

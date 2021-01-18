@@ -5,9 +5,11 @@ import (
 	"context"
 
 	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/service"
+	"github.com/stack-labs/stack-rpc/service/grpc"
+	"github.com/stack-labs/stack-rpc/service/stack"
+	"github.com/stack-labs/stack-rpc/service/web"
 
 	_ "github.com/stack-labs/stack-rpc/broker/http"
 	_ "github.com/stack-labs/stack-rpc/client/mucp"
@@ -15,8 +17,6 @@ import (
 	_ "github.com/stack-labs/stack-rpc/plugin/stack"
 	_ "github.com/stack-labs/stack-rpc/registry/mdns"
 	_ "github.com/stack-labs/stack-rpc/server/mucp"
-	_ "github.com/stack-labs/stack-rpc/service/grpc"
-	_ "github.com/stack-labs/stack-rpc/service/web"
 	_ "github.com/stack-labs/stack-rpc/transport/http"
 )
 
@@ -36,27 +36,28 @@ func NewService(opts ...Option) service.Service {
 		opt(&o)
 	}
 
-	return plugin.ServicePlugins["stack"].New(o.ServiceOpts...)
+	return stack.NewService(o.ServiceOpts...)
 }
 
-// WebService creates and returns a new web Service based on the packages within.
-func WebService(opts ...Option) service.Service {
+// NewWebService creates and returns a new web Service based on the packages within.
+func NewWebService(opts ...Option) service.Service {
 	o := Options{}
 	for _, opt := range opts {
 		opt(&o)
 	}
 
-	return plugin.ServicePlugins["web"].New(o.ServiceOpts...)
+	// append with web options
+	return stack.NewService(web.NewOptions(o.ServiceOpts...)...)
 }
 
-// GRPCService creates and returns a new web Service based on the packages within.
-func GRPCService(opts ...Option) service.Service {
+// NewGRPCService creates and returns a new web Service based on the packages within.
+func NewGRPCService(opts ...Option) service.Service {
 	o := Options{}
 	for _, opt := range opts {
 		opt(&o)
 	}
 
-	return plugin.ServicePlugins["grpc"].New(o.ServiceOpts...)
+	return stack.NewService(grpc.NewOptions(o.ServiceOpts...)...)
 }
 
 // FromContext retrieves a Service from the Context.

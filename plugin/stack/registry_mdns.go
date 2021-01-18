@@ -11,10 +11,10 @@ func (m *mdnsRegistryPlugin) Name() string {
 	return "mdns"
 }
 
-func (m *mdnsRegistryPlugin) Options() []Registry.Option {
+func (m *mdnsRegistryPlugin) Options() []registry.Option {
 	return nil
 }
 
-func (m *mdnsRegistryPlugin) New(opts ...Registry.Option) Registry.Registry {
+func (m *mdnsRegistryPlugin) New(opts ...registry.Option) registry.Registry {
 	return mdns.NewRegistry(opts...)
 }

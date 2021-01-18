@@ -1,21 +1,21 @@
 package web
 
 import (
-	"github.com/stack-labs/stack-rpc/service"
-	"github.com/stack-labs/stack-rpc/service/stack"
 	"net/http"
 	"path"
 	"strings"
+
+	"github.com/stack-labs/stack-rpc/service"
 )
 
-func NewService(opts ...service.Option) service.Service {
+func NewOptions(opts ...service.Option) []service.Option {
 	options := newOptions(opts...)
 
 	options = append(options,
 		service.BeforeInit(setHandle),
 	)
 
-	return stack.NewService(options...)
+	return options
 }
 
 func setHandle(sOpts *service.Options) error {

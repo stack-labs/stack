@@ -5,11 +5,10 @@ import (
 	client "github.com/stack-labs/stack-rpc/client/grpc"
 	server "github.com/stack-labs/stack-rpc/server/grpc"
 	"github.com/stack-labs/stack-rpc/service"
-	"github.com/stack-labs/stack-rpc/service/stack"
 )
 
-// NewService returns a grpc service compatible with stack-rpc.Service
-func NewService(opts ...service.Option) service.Service {
+// NewOptions returns a grpc service options compatible with stack-rpc.Service
+func NewOptions(opts ...service.Option) []service.Option {
 	// our grpc client
 	c := client.NewClient()
 	// our grpc server
@@ -24,9 +23,5 @@ func NewService(opts ...service.Option) service.Service {
 		service.Broker(b),
 	}
 
-	// append passed in opts
-	options = append(options, opts...)
-
-	// use stack service for current
-	return stack.NewService(options...)
+	return append(options, opts...)
 }

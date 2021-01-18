@@ -139,6 +139,7 @@ func NewService(opts ...service.Option) service.Service {
 	for _, o := range opts {
 		o(&options)
 	}
+
 	return &stackService{
 		opts: options,
 	}

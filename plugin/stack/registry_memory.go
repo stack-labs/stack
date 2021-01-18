@@ -11,10 +11,10 @@ func (m *memoryRegistryPlugin) Name() string {
 	return "memory"
 }
 
-func (m *memoryRegistryPlugin) Options() []Registry.Option {
+func (m *memoryRegistryPlugin) Options() []registry.Option {
 	return nil
 }
 
-func (m *memoryRegistryPlugin) New(opts ...Registry.Option) Registry.Registry {
+func (m *memoryRegistryPlugin) New(opts ...registry.Option) registry.Registry {
 	return memory.NewRegistry(opts...)
 }

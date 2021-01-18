@@ -22,9 +22,6 @@ var options struct {
 
 func init() {
 	cfg.RegisterOptions(&options)
-	plugin.ServicePlugins["stack"] = &stackServicePlugin{}
-	plugin.ServicePlugins["grpc"] = &grpcServicePlugin{}
-	plugin.ServicePlugins["web"] = &webServicePlugin{}
 	plugin.ServerPlugins["grpc"] = &grpcServerPlugin{}
 	plugin.ServerPlugins["http"] = &httpServerPlugin{}
 	plugin.ServerPlugins["mock"] = &mockServerPlugin{}

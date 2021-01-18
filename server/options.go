@@ -23,6 +23,7 @@ type Options struct {
 	Advertise    string
 	Id           string
 	Version      string
+	EnableDebug  bool
 	HdlrWrappers []HandlerWrapper
 	SubWrappers  []SubscriberWrapper
 
@@ -145,6 +146,12 @@ func RegisterInterval(t time.Duration) Option {
 func WithRouter(r Router) Option {
 	return func(o *Options) {
 		o.Router = r
+	}
+}
+
+func EnableDebug(b bool) Option {
+	return func(o *Options) {
+		o.EnableDebug = b
 	}
 }
 

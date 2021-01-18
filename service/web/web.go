@@ -2,143 +2,60 @@ package web
 
 import (
 	"net/http"
-	"os"
-	"os/signal"
-	"runtime"
-	"sync"
+	"path"
+	"strings"
 
-	cl "github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/debug/handler"
-	ser "github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/service"
-	"github.com/stack-labs/stack-rpc/util/log"
-	signalutil "github.com/stack-labs/stack-rpc/util/signal"
 )
 
-type webService struct {
-	opts service.Options
+func NewOptions(opts ...service.Option) []service.Option {
+	options := newOptions(opts...)
 
-	once sync.Once
-}
-
-func (w *webService) Name() string {
-	return w.opts.Server.Options().Name
-}
-
-func (w *webService) Init(option ...service.Option) error {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(`hello world`))
-	})
-
-	w.Server().NewHandler(mux)
-
-	return nil
-}
-
-func (w *webService) Options() service.Options {
-	return w.opts
-}
-
-func (w *webService) Client() cl.Client {
-	return w.opts.Client
-}
-
-func (w *webService) Server() ser.Server {
-	return w.opts.Server
-}
-
-func (w *webService) Run() error {
-	// register the debug handler
-	w.opts.Server.Handle(
-		w.opts.Server.NewHandler(
-			handler.NewHandler(w.opts.Client),
-			ser.InternalHandler(true),
-		),
+	options = append(options,
+		service.BeforeInit(setHandle),
 	)
 
-	// start the profiler
-	if w.opts.Profile != nil {
-		// to view mutex contention
-		runtime.SetMutexProfileFraction(5)
-		// to view blocking profile
-		runtime.SetBlockProfileRate(1)
-
-		if err := w.opts.Profile.Start(); err != nil {
-			return err
-		}
-		defer w.opts.Profile.Stop()
-	}
-
-	log.Infof("Starting [service] %s", w.Name())
-
-	if err := w.Start(); err != nil {
-		return err
-	}
-
-	ch := make(chan os.Signal, 1)
-	if w.opts.Signal {
-		signal.Notify(ch, signalutil.Shutdown()...)
-	}
-
-	select {
-	// wait on kill signal
-	case <-ch:
-	// wait on context cancel
-	case <-w.opts.Context.Done():
-	}
-
-	return w.Stop()
+	return options
 }
 
-func (w *webService) Start() error {
-	for _, fn := range w.opts.BeforeStart {
-		if err := fn(); err != nil {
-			return err
+func setHandle(sOpts *service.Options) error {
+	var mux http.Handler
+	if sOpts.Context.Value(serverMuxKey{}) != nil {
+		if muxTmp, ok := sOpts.Context.Value(serverMuxKey{}).(http.Handler); ok {
+			mux = muxTmp
 		}
-	}
+	} else {
+		muxTmp := http.NewServeMux()
 
-	if err := w.opts.Server.Start(); err != nil {
-		return err
-	}
-
-	for _, fn := range w.opts.AfterStart {
-		if err := fn(); err != nil {
-			return err
+		rootPath := "/"
+		if sOpts.Context.Value(rootPathKey{}) != nil {
+			if rootPathTmp, ok := sOpts.Context.Value(rootPathKey{}).(string); ok {
+				if !strings.HasPrefix(rootPathTmp, "/") {
+					rootPathTmp = "/" + rootPathTmp
+				}
+				rootPath = rootPathTmp
+			}
 		}
-	}
 
-	return nil
-}
-
-func (w *webService) Stop() error {
-	var gerr error
-
-	for _, fn := range w.opts.BeforeStop {
-		if err := fn(); err != nil {
-			gerr = err
+		// handler funcs
+		if sOpts.Context.Value(handlerFuncsKey{}) != nil {
+			if handlers, ok := sOpts.Context.Value(handlerFuncsKey{}).([]HandlerFunc); ok {
+				for _, handler := range handlers {
+					muxTmp.HandleFunc(path.Join(rootPath, handler.Route), handler.Func)
+				}
+			}
 		}
-	}
 
-	if err := w.opts.Server.Stop(); err != nil {
-		return err
-	}
-
-	for _, fn := range w.opts.AfterStop {
-		if err := fn(); err != nil {
-			gerr = err
+		// static dir
+		if sOpts.Context.Value(staticDirKey{}) != nil {
+			if sd, ok := sOpts.Context.Value(staticDirKey{}).(staticDir); ok {
+				route := path.Join(rootPath, sd.Route)
+				muxTmp.Handle(route, http.StripPrefix(route, http.FileServer(http.Dir(sd.Dir))))
+			}
 		}
+
+		mux = muxTmp
 	}
 
-	return gerr
-}
-
-func (w *webService) String() string {
-	return "web"
-}
-
-func NewService(opts ...service.Option) service.Service {
-	service := new(webService)
-	service.opts = newOptions(opts...)
-	return service
+	return sOpts.Server.Handle(sOpts.Server.NewHandler(mux))
 }

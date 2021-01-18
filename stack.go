@@ -5,20 +5,13 @@ import (
 	"context"
 
 	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/plugin"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/service"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack-rpc/service/grpc"
+	"github.com/stack-labs/stack-rpc/service/stack"
+	"github.com/stack-labs/stack-rpc/service/web"
 
-	_ "github.com/stack-labs/stack-rpc/broker/http"
-	_ "github.com/stack-labs/stack-rpc/client/mucp"
-	_ "github.com/stack-labs/stack-rpc/logger/console"
-	_ "github.com/stack-labs/stack-rpc/registry/mdns"
-	_ "github.com/stack-labs/stack-rpc/server/mucp"
-	_ "github.com/stack-labs/stack-rpc/service/grpc"
-	_ "github.com/stack-labs/stack-rpc/service/stack"
-	_ "github.com/stack-labs/stack-rpc/service/web"
-	_ "github.com/stack-labs/stack-rpc/transport/http"
+	_ "github.com/stack-labs/stack-rpc/plugin/stack"
 )
 
 type serviceKey struct{}
@@ -32,21 +25,33 @@ type Option func(*Options)
 
 // NewService creates and returns a new Service based on the packages within.
 func NewService(opts ...Option) service.Service {
-	o := newOptions(opts...)
-
-	// set default
-	// this will be removed in future
-	so := &service.Options{}
-	for _, opt := range o.ServiceOpts {
-		opt(so)
+	o := Options{}
+	for _, opt := range opts {
+		opt(&o)
 	}
 
-	p, ok := plugin.ServicePlugins[so.RPC]
-	if !ok {
-		log.Fatal("[%s] service plugin isn't found", so.RPC)
+	return stack.NewService(o.ServiceOpts...)
+}
+
+// NewWebService creates and returns a new web Service based on the packages within.
+func NewWebService(opts ...Option) service.Service {
+	o := Options{}
+	for _, opt := range opts {
+		opt(&o)
 	}
 
-	return p.New(o.ServiceOpts...)
+	// append with web options
+	return stack.NewService(web.NewOptions(o.ServiceOpts...)...)
+}
+
+// NewGRPCService creates and returns a new web Service based on the packages within.
+func NewGRPCService(opts ...Option) service.Service {
+	o := Options{}
+	for _, opt := range opts {
+		opt(&o)
+	}
+
+	return stack.NewService(grpc.NewOptions(o.ServiceOpts...)...)
 }
 
 // FromContext retrieves a Service from the Context.

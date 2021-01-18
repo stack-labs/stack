@@ -2,21 +2,12 @@
 package cmd
 
 import (
-	"fmt"
 	"io"
 	"math/rand"
 	"os"
-	"strings"
 	"time"
 
-	cfg "github.com/stack-labs/stack-rpc/config"
-	log "github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/pkg/cli"
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
-	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
-	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
-	uf "github.com/stack-labs/stack-rpc/util/file"
-	"gopkg.in/yaml.v2"
 )
 
 type Cmd interface {
@@ -27,11 +18,9 @@ type Cmd interface {
 	Init(opts ...Option) error
 	// Options set within this command
 	Options() Options
-	// ConfigFile path. This is not good
-	ConfigFile() string
 }
 
-type cmd struct {
+type stackCmd struct {
 	opts Options
 	app  *cli.App
 	conf string
@@ -231,9 +220,6 @@ var (
 			Alias:  "stack_config",
 		},
 	}
-
-	stackStdConfigFile = "stack.yml"
-	stackConfig        = StackConfig{}
 )
 
 func init() {
@@ -243,8 +229,6 @@ func init() {
 		help(writer, templ, data)
 		os.Exit(0)
 	}
-
-	cfg.RegisterOptions(&stackConfig)
 }
 
 func newCmd(opts ...Option) Cmd {
@@ -258,7 +242,7 @@ func newCmd(opts ...Option) Cmd {
 		options.Description = "a stack-rpc service"
 	}
 
-	cmd := new(cmd)
+	cmd := new(stackCmd)
 	cmd.opts = options
 	cmd.app = cli.NewApp()
 	cmd.app.Name = cmd.opts.Name
@@ -274,135 +258,28 @@ func newCmd(opts ...Option) Cmd {
 	return cmd
 }
 
-func (c *cmd) ConfigFile() string {
+func (c *stackCmd) ConfigFile() string {
 	return c.conf
 }
 
-func (c *cmd) before(ctx *cli.Context) (err error) {
-	err = c.beforeLoadConfig(ctx)
-	if err != nil {
-		log.Fatalf("load config in before action err: %s", err)
-	}
-
-	err = c.beforeSetupOptions()
-	if err != nil {
-		log.Fatalf("setup components in before action err: %s", err)
-	}
-
-	return nil
-}
-
-func (c *cmd) beforeLoadConfig(ctx *cli.Context) (err error) {
+func (c *stackCmd) before(ctx *cli.Context) (err error) {
 	// set the config file path
 	if filePath := ctx.String("config"); len(filePath) > 0 {
 		c.conf = filePath
 	}
 
-	// need to init the special config if specified
-	if len(c.conf) == 0 {
-		wkDir, errN := os.Getwd()
-		if errN != nil {
-			err = fmt.Errorf("stack can't access working wkDir: %s", errN)
-			return
-		}
-
-		c.conf = fmt.Sprintf("%s%s%s", wkDir, string(os.PathSeparator), stackStdConfigFile)
-	}
-
-	var appendSource []source.Source
-	var cfgOption []cfg.Option
-	if len(c.conf) > 0 {
-		// check file exists
-		exists, err := uf.Exists(c.conf)
-		if err != nil {
-			log.Error(fmt.Errorf("config file is not existed %s", err))
-		}
-
-		if exists {
-			// todo support more types
-			val := struct {
-				Stack struct {
-					Includes string `yaml:"includes"`
-					Config   config `yaml:"config"`
-				} `yaml:"stack"`
-			}{}
-			stdFileSource := file.NewSource(file.WithPath(c.conf))
-			appendSource = append(appendSource, stdFileSource)
-
-			set, errN := stdFileSource.Read()
-			if errN != nil {
-				err = fmt.Errorf("stack read the stack.yml err: %s", errN)
-				return err
-			}
-
-			errN = yaml.Unmarshal(set.Data, &val)
-			if errN != nil {
-				err = fmt.Errorf("unmarshal stack.yml err: %s", errN)
-				return err
-			}
-
-			if len(val.Stack.Includes) > 0 {
-				filePath := c.conf[:strings.LastIndex(c.conf, string(os.PathSeparator))+1]
-				for _, f := range strings.Split(val.Stack.Includes, ",") {
-					log.Infof("load extra config file: %s%s", filePath, f)
-					f = strings.TrimSpace(f)
-					extraFile := fmt.Sprintf("%s%s", filePath, f)
-					extraExists, err := uf.Exists(extraFile)
-					if err != nil {
-						log.Error(fmt.Errorf("config file is not existed %s", err))
-						continue
-					} else if !extraExists {
-						log.Error(fmt.Errorf("config file [%s] is not existed", extraFile))
-						continue
-					}
-
-					extraFileSource := file.NewSource(file.WithPath(extraFile))
-					appendSource = append(appendSource, extraFileSource)
-				}
-			}
-
-			// config option
-			cfgOption = append(cfgOption, cfg.Storage(val.Stack.Config.Storage), cfg.HierarchyMerge(val.Stack.Config.HierarchyMerge))
-		}
-	}
-
-	// the last two must be env & cmd line
-	appendSource = append(appendSource, cliSource.NewSource(c.App(), cliSource.Context(c.App().Context())))
-	cfgOption = append(cfgOption, cfg.Source(appendSource...))
-	err = (*c.opts.Config).Init(cfgOption...)
-	if err != nil {
-		err = fmt.Errorf("init config err: %s", err)
-		return
-	}
-
-	return
+	return nil
 }
 
-func (c *cmd) beforeSetupOptions() (err error) {
-	conf := stackConfig.Stack
-
-	(*c.opts.ServiceOptions).ServerOptions = conf.Server.Options()
-	(*c.opts.ServiceOptions).ClientOptions = conf.Client.Options()
-	(*c.opts.ServiceOptions).ConfigOptions = conf.Config.Options()
-	(*c.opts.ServiceOptions).TransportOptions = conf.Transport.Options()
-	(*c.opts.ServiceOptions).SelectorOptions = conf.Selector.Options()
-	(*c.opts.ServiceOptions).RegistryOptions = conf.Registry.Options()
-	(*c.opts.ServiceOptions).BrokerOptions = conf.Broker.Options()
-	(*c.opts.ServiceOptions).LoggerOptions = conf.Logger.Options()
-	(*c.opts.ServiceOptions).AuthOptions = conf.Auth.Options()
-
-	return
-}
-
-func (c *cmd) App() *cli.App {
+func (c *stackCmd) App() *cli.App {
 	return c.app
 }
 
-func (c *cmd) Options() Options {
+func (c *stackCmd) Options() Options {
 	return c.opts
 }
 
-func (c *cmd) Init(opts ...Option) error {
+func (c *stackCmd) Init(opts ...Option) error {
 	for _, o := range opts {
 		o(&c.opts)
 	}

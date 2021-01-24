@@ -104,6 +104,11 @@ func LoadConfig(sOpts *service.Options) (err error) {
 func SetOptions(sOpts *service.Options) (err error) {
 	conf := stackConfig.Stack
 
+	// serviceOptions
+	for _, option := range conf.Service.Options() {
+		option(sOpts)
+	}
+
 	sOpts.ServerOptions = append(sOpts.ServerOptions, conf.Server.Options()...)
 	sOpts.ClientOptions = append(sOpts.ClientOptions, conf.Client.Options()...)
 	sOpts.ConfigOptions = append(sOpts.ConfigOptions, conf.Config.Options()...)

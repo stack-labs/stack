@@ -1,13 +1,14 @@
 package service
 
 import (
+	"sort"
+	"strings"
+
 	"github.com/stack-labs/stack-rpc"
 	"github.com/stack-labs/stack-rpc/pkg/cli"
 	"github.com/stack-labs/stack-rpc/service"
 	"github.com/stack-labs/stack-rpc/util/log"
 	"github.com/stack-labs/stack-rpc/util/stackctl/internal/util"
-	"sort"
-	"strings"
 )
 
 func client() service.Service {

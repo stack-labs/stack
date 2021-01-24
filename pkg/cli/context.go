@@ -226,6 +226,12 @@ func (a Args) Swap(from, to int) error {
 	return nil
 }
 
+func (a Args) Slice() []string {
+	ret := make([]string, len(a))
+	copy(ret, a)
+	return ret
+}
+
 func globalContext(ctx *Context) *Context {
 	if ctx == nil {
 		return nil

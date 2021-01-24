@@ -34,11 +34,11 @@ type Options struct {
 	Fields map[string]interface{}
 	// It's common to set this to a file, or leave it default which is `os.Stderr`
 	Out io.Writer
+	// Alternative options
+	Context context.Context
 	// Caller skip frame count for file:line info
 	CallerSkipCount int
 	Persistence     *PersistenceOptions
-	// Alternative options
-	Context context.Context
 }
 
 func Name(n string) Option {

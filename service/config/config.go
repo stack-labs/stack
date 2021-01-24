@@ -375,10 +375,12 @@ func (a *Auth) Options() []au.Option {
 }
 
 type Web struct {
-	Enable    bool   `json:"enable" sc:"enable"`
-	Address   string `json:"address" sc:"address"`
-	RootPath  string `json:"rootPath" sc:"root-path"`
-	StaticDir string `json:"staticDir" sc:"static-dir"`
+	Enable   bool   `json:"enable" sc:"enable"`
+	RootPath string `json:"rootPath" sc:"root-path"`
+	Static   struct {
+		Route string `json:"route" sc:"route"`
+		Dir   string `json:"dir" sc:"dir"`
+	} `json:"static" sc:"static"`
 }
 
 type serviceOpts []ss.Option
@@ -393,10 +395,11 @@ func (s serviceOpts) opts() ss.Options {
 }
 
 type Service struct {
-	ID   string `json:"id" sc:"id"`
-	Name string `json:"name" sc:"name"`
-	RPC  string `json:"rpc" sc:"rpc"`
-	Web  Web    `json:"web" sc:"web"`
+	ID      string `json:"id" sc:"id"`
+	Name    string `json:"name" sc:"name"`
+	Address string `json:"address" sc:"address"`
+	RPC     string `json:"rpc" sc:"rpc"`
+	Web     Web    `json:"web" sc:"web"`
 }
 
 func (s *Service) Options() serviceOpts {
@@ -410,23 +413,14 @@ func (s *Service) Options() serviceOpts {
 		opts = append(opts, ss.Name(s.Name))
 	}
 
-	if len(s.Name) > 0 {
-		opts = append(opts, ss.Name(s.Name))
-	}
-
 	opts = append(opts, sw.Enable(s.Web.Enable))
-
-	if len(s.Web.Address) > 0 {
-		opts = append(opts, sw.Address(s.Web.Address))
-	}
 
 	if len(s.Web.RootPath) > 0 {
 		opts = append(opts, sw.RootPath(s.Web.RootPath))
 	}
 
-	if len(s.Web.StaticDir) > 0 {
-		// todo
-		opts = append(opts, sw.StaticDir(s.Web.RootPath, s.Web.StaticDir))
+	if len(s.Web.Static.Dir) > 0 {
+		opts = append(opts, sw.StaticDir(s.Web.Static.Route, s.Web.Static.Dir))
 	}
 
 	return opts

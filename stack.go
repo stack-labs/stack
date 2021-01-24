@@ -21,37 +21,19 @@ type Publisher interface {
 	Publish(ctx context.Context, msg interface{}, opts ...client.PublishOption) error
 }
 
-type Option func(*Options)
-
 // NewService creates and returns a new Service based on the packages within.
-func NewService(opts ...Option) service.Service {
-	o := Options{}
-	for _, opt := range opts {
-		opt(&o)
-	}
-
-	return stack.NewService(o.ServiceOpts...)
+func NewService(opts ...service.Option) service.Service {
+	return stack.NewService(opts...)
 }
 
 // NewWebService creates and returns a new web Service based on the packages within.
-func NewWebService(opts ...Option) service.Service {
-	o := Options{}
-	for _, opt := range opts {
-		opt(&o)
-	}
-
-	// append with web options
-	return stack.NewService(web.NewOptions(o.ServiceOpts...)...)
+func NewWebService(opts ...service.Option) service.Service {
+	return stack.NewService(web.NewOptions(opts...)...)
 }
 
 // NewGRPCService creates and returns a new web Service based on the packages within.
-func NewGRPCService(opts ...Option) service.Service {
-	o := Options{}
-	for _, opt := range opts {
-		opt(&o)
-	}
-
-	return stack.NewService(grpc.NewOptions(o.ServiceOpts...)...)
+func NewGRPCService(opts ...service.Option) service.Service {
+	return stack.NewService(grpc.NewOptions(opts...)...)
 }
 
 // FromContext retrieves a Service from the Context.

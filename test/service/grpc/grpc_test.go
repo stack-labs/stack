@@ -8,7 +8,6 @@ import (
 
 	"github.com/stack-labs/stack-rpc"
 	"github.com/stack-labs/stack-rpc/registry/memory"
-	"github.com/stack-labs/stack-rpc/service"
 	"github.com/stack-labs/stack-rpc/service/grpc"
 	hello "github.com/stack-labs/stack-rpc/service/grpc/proto"
 	mls "github.com/stack-labs/stack-rpc/util/tls"
@@ -32,13 +31,10 @@ func TestGRPCService(t *testing.T) {
 	r := memory.NewRegistry()
 
 	// create GRPC service
-	service := stack.NewService(
+	service := stack.NewGRPCService(
 		stack.Name("test.service"),
 		stack.Registry(r),
 		stack.Context(ctx),
-		func(options *stack.Options) {
-			options.ServiceOpts = append(options.ServiceOpts, service.RPC("grpc"))
-		},
 		stack.AfterStart(func() error {
 			wg.Done()
 			return nil
@@ -96,7 +92,7 @@ func TestGRPCTLSService(t *testing.T) {
 	}
 
 	// create GRPC service
-	service := stack.NewService(
+	service := stack.NewGRPCService(
 		stack.Name("test.service"),
 		stack.Registry(r),
 		stack.AfterStart(func() error {
@@ -105,12 +101,7 @@ func TestGRPCTLSService(t *testing.T) {
 		}),
 		stack.Context(ctx),
 		// set TLS config
-		func(options *stack.Options) {
-			options.ServiceOpts = append(options.ServiceOpts, grpc.WithTLS(config))
-		},
-		func(options *stack.Options) {
-			options.ServiceOpts = append(options.ServiceOpts, service.RPC("grpc"))
-		},
+		grpc.WithTLS(config),
 	)
 	service.Init()
 	// register test handler

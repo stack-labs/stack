@@ -140,6 +140,20 @@ func (s *stackService) initComponents() error {
 	s.opts.SelectorOptions = append(s.opts.SelectorOptions, sel.Registry(s.opts.Registry))
 	s.opts.BrokerOptions = append(s.opts.BrokerOptions, br.Registry(s.opts.Registry))
 
+	// set wrappers
+	for _, wrapper := range s.opts.HandlerWrapper {
+		s.opts.ServerOptions = append(s.opts.ServerOptions, ser.WrapHandler(wrapper))
+	}
+	for _, wrapper := range s.opts.CallWrapper {
+		s.opts.ClientOptions = append(s.opts.ClientOptions, cl.WrapCall(wrapper))
+	}
+	for _, wrapper := range s.opts.ClientWrapper {
+		s.opts.ClientOptions = append(s.opts.ClientOptions, cl.Wrap(wrapper))
+	}
+	for _, wrapper := range s.opts.SubscriberWrapper {
+		s.opts.ServerOptions = append(s.opts.ServerOptions, ser.WrapSubscriber(wrapper))
+	}
+
 	if err := s.opts.Auth.Init(s.opts.AuthOptions...); err != nil {
 		return fmt.Errorf("Error configuring auth: %v ", err)
 	}

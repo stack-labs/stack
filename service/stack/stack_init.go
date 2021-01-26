@@ -185,6 +185,9 @@ func (s *stackService) initComponents() error {
 	// wrap client to inject From-Service header on any calls
 	// todo wrap not here
 	s.opts.Client = wrapper.FromService(s.Name(), s.opts.Client)
+	for i := len(s.opts.ClientWrapper); i > 0; i-- {
+		s.opts.Client = s.opts.ClientWrapper[i-1](s.opts.Client)
+	}
 	if err := s.opts.Client.Init(s.opts.ClientOptions...); err != nil {
 		return fmt.Errorf("Error configuring client: %v ", err)
 	}

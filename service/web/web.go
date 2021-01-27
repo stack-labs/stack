@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/stack-labs/stack-rpc/service"
+	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 func NewOptions(opts ...service.Option) []service.Option {
@@ -41,6 +42,7 @@ func setHandle(sOpts *service.Options) error {
 		if sOpts.Context.Value(handlerFuncsKey{}) != nil {
 			if handlers, ok := sOpts.Context.Value(handlerFuncsKey{}).([]HandlerFunc); ok {
 				for _, handler := range handlers {
+					log.Debugf("handler url, root: [%s], route: [%s]", rootPath, handler.Route)
 					muxTmp.HandleFunc(path.Join(rootPath, handler.Route), handler.Func)
 				}
 			}

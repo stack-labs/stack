@@ -70,7 +70,7 @@ func Handlers(hs ...http.Handler) service.Option {
 	}
 }
 
-func ServerMux(mux http.ServeMux) service.Option {
+func ServerMux(mux *http.ServeMux) service.Option {
 	return func(o *service.Options) {
 		if o.Context == nil {
 			o.Context = context.Background()

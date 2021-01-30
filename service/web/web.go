@@ -43,7 +43,11 @@ func setHandle(sOpts *service.Options) error {
 			if handlers, ok := sOpts.Context.Value(handlerFuncsKey{}).([]HandlerFunc); ok {
 				for _, handler := range handlers {
 					log.Debugf("handler url, root: [%s], route: [%s]", rootPath, handler.Route)
-					muxTmp.HandleFunc(path.Join(rootPath, handler.Route), handler.Func)
+					route := path.Join(rootPath, handler.Route)
+					if strings.HasSuffix(handler.Route, "/") {
+						route += "/"
+					}
+					muxTmp.HandleFunc(route, handler.Func)
 				}
 			}
 		}

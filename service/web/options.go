@@ -11,7 +11,8 @@ import (
 	"github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/registry/mdns"
-	server "github.com/stack-labs/stack-rpc/server/http"
+	"github.com/stack-labs/stack-rpc/server"
+	serverH "github.com/stack-labs/stack-rpc/server/http"
 	"github.com/stack-labs/stack-rpc/service"
 	transportH "github.com/stack-labs/stack-rpc/transport/http"
 )
@@ -23,6 +24,7 @@ type rootPathKey struct{}
 type handlersKey struct{}
 type serverMuxKey struct{}
 type handlerFuncsKey struct{}
+type handlerOptsKey struct{}
 
 type HandlerFunc struct {
 	Route string
@@ -97,6 +99,23 @@ func HandleFuncs(hs ...HandlerFunc) service.Option {
 	}
 }
 
+func HandlerOptions(opts ...server.HandlerOption) service.Option {
+	return func(o *service.Options) {
+		if o.Context == nil {
+			o.Context = context.Background()
+		}
+
+		v, ok := o.Context.Value(handlerOptsKey{}).([]server.HandlerOption)
+		if ok {
+			v = append(v, opts...)
+		} else {
+			v = opts
+		}
+
+		o.Context = context.WithValue(o.Context, handlerOptsKey{}, v)
+	}
+}
+
 func setOption(k, v interface{}) service.Option {
 	return func(o *service.Options) {
 		if o.Context == nil {
@@ -111,7 +130,7 @@ func newOptions(opts ...service.Option) []service.Option {
 		service.Broker(broker.NewBroker()),
 		service.Client(client.NewClient()),
 		service.Registry(mdns.NewRegistry()),
-		service.Server(server.NewServer()),
+		service.Server(serverH.NewServer()),
 		service.Transport(transportH.NewTransport()),
 		service.Selector(selectorR.NewSelector()),
 		service.Logger(logger.DefaultLogger),

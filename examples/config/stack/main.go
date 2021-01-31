@@ -4,9 +4,9 @@ import (
 	"time"
 
 	"github.com/stack-labs/stack-rpc"
-	stack2 "github.com/stack-labs/stack-rpc-plugins/config/source/stack"
 	"github.com/stack-labs/stack-rpc/config"
 	"github.com/stack-labs/stack-rpc/logger"
+	stack2 "github.com/stack-labs/stack-rpc/plugin/config/source/stack"
 )
 
 func main() {

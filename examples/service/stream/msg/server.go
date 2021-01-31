@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/stack-labs/stack-rpc"
-	proto "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/stream/msg"
-	"github.com/stack-labs/stack-rpc/errors"
+	proto "github.com/stack-labs/stack-rpc/examples/proto/service/stream/msg"
 	log "github.com/stack-labs/stack-rpc/logger"
+	"github.com/stack-labs/stack-rpc/util/errors"
 )
 
 type MsgStreamHandler struct{}

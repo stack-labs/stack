@@ -10,7 +10,7 @@ import (
 	"os"
 
 	"github.com/stack-labs/stack-rpc"
-	file2 "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/stream/file"
+	file2 "github.com/stack-labs/stack-rpc/examples/proto/service/stream/file"
 	"github.com/stack-labs/stack-rpc/util/errors"
 )
 

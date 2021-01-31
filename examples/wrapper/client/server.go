@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/stack-labs/stack-rpc"
-	proto "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/rpc"
+	proto "github.com/stack-labs/stack-rpc/examples/proto/service/rpc"
 	log "github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/pkg/metadata"
 )

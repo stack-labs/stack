@@ -4,13 +4,13 @@ import (
 	"context"
 
 	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc-plugins/logger/logrus"
-	proto "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/rpc"
+	proto "github.com/stack-labs/stack-rpc/examples/proto/service/rpc"
 	"github.com/stack-labs/stack-rpc/logger"
+	"github.com/stack-labs/stack-rpc/plugin/logger/logrus"
 )
 
 // 服务类
-type Greeter struct {}
+type Greeter struct{}
 
 // 实现proto中的Hello接口
 func (g Greeter) Hello(ctx context.Context, req *proto.HelloRequest, rsp *proto.HelloResponse) error {

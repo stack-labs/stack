@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/stack-labs/stack-rpc"
-	proto "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/rpc"
+	proto "github.com/stack-labs/stack-rpc/examples/proto/service/rpc"
 	"github.com/stack-labs/stack-rpc/logger"
 )
 

@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc-plugins/logger/logrus"
 	log "github.com/stack-labs/stack-rpc/logger"
+	"github.com/stack-labs/stack-rpc/plugin/logger/logrus"
 )
 
 func main() {

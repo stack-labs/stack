@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/stack-labs/stack-rpc"
-	proto "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/rpc"
 	"github.com/stack-labs/stack-rpc/client"
+	proto "github.com/stack-labs/stack-rpc/examples/proto/service/rpc"
 )
 
 // logWrapper1 打印每次请求的信息

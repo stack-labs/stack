@@ -6,15 +6,14 @@ import (
 	"strings"
 
 	"github.com/stack-labs/stack-rpc"
-	proto "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/rpc"
 	api "github.com/stack-labs/stack-rpc/api/proto"
+	proto "github.com/stack-labs/stack-rpc/examples/proto/service/rpc"
 	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/util/errors"
 	"github.com/stack-labs/stack-rpc/util/log"
 )
 
 type Example struct{}
-
 
 // Example.Hello 通过API向外暴露为/example/hello，接收http请求
 // 即：/example/call请求会调用go.micro.api.example服务的Example.Call方法

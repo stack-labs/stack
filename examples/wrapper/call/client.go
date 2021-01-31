@@ -6,8 +6,8 @@ import (
 	"github.com/stack-labs/stack-rpc"
 	"time"
 
-	proto "github.com/stack-labs/stack-rpc-tutorials/examples/proto/service/rpc"
 	"github.com/stack-labs/stack-rpc/client"
+	proto "github.com/stack-labs/stack-rpc/examples/proto/service/rpc"
 	log "github.com/stack-labs/stack-rpc/logger"
 	"github.com/stack-labs/stack-rpc/pkg/metadata"
 	"github.com/stack-labs/stack-rpc/registry"

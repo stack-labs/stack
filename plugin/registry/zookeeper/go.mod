@@ -1,4 +1,4 @@
-module github.com/stack-labs/stack-rpc-plugins/registry/zookeeper
+module github.com/stack-labs/stack-rpc/plugin/registry/zookeeper
 
 go 1.14
 

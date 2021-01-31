@@ -1,4 +1,4 @@
-module github.com/stack-labs/stack-rpc-plugins/config/source/apollo
+module github.com/stack-labs/stack-rpc/plugin/config/source/apollo
 
 go 1.14
 

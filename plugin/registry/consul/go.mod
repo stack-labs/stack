@@ -1,4 +1,4 @@
-module github.com/stack-labs/stack-rpc-plugins/registry/consul
+module github.com/stack-labs/stack-rpc/plugin/registry/consul
 
 go 1.14
 

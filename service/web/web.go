@@ -5,6 +5,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/stack-labs/stack-rpc/server"
 	"github.com/stack-labs/stack-rpc/service"
 	"github.com/stack-labs/stack-rpc/util/log"
 )
@@ -43,7 +44,11 @@ func setHandle(sOpts *service.Options) error {
 			if handlers, ok := sOpts.Context.Value(handlerFuncsKey{}).([]HandlerFunc); ok {
 				for _, handler := range handlers {
 					log.Debugf("handler url, root: [%s], route: [%s]", rootPath, handler.Route)
-					muxTmp.HandleFunc(path.Join(rootPath, handler.Route), handler.Func)
+					route := path.Join(rootPath, handler.Route)
+					if strings.HasSuffix(handler.Route, "/") {
+						route += "/"
+					}
+					muxTmp.HandleFunc(route, handler.Func)
 				}
 			}
 		}
@@ -59,5 +64,12 @@ func setHandle(sOpts *service.Options) error {
 		mux = muxTmp
 	}
 
-	return sOpts.Server.Handle(sOpts.Server.NewHandler(mux))
+	var handlerOpts []server.HandlerOption
+	if sOpts.Context.Value(handlerOptsKey{}) != nil {
+		if opts, ok := sOpts.Context.Value(handlerOptsKey{}).([]server.HandlerOption); ok {
+			handlerOpts = opts
+		}
+	}
+
+	return sOpts.Server.Handle(sOpts.Server.NewHandler(mux, handlerOpts...))
 }

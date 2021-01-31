@@ -1,0 +1,16 @@
+stack:
+  logger:
+    name: slogrus
+    level: trace
+    persistence:
+      enable: true
+      max-file-size: 10
+      max-backup-size: 500
+      max-backup-keep-days: 1
+      dir: /tmp/logs
+      backup-dir: /tmp/logs/backup
+    slogrus:
+      split-level: true
+      without-key: true
+      without-quote: true
+      timestamp-format: 2006-01-02 15:04:05.000

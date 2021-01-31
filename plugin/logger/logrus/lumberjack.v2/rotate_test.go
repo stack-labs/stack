@@ -8,7 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/stack-labs/stack-rpc-plugins/logger/logrus/lumberjack.v2"
+	"github.com/stack-labs/stack-rpc/plugin/logger/logrus/lumberjack.v2"
 )
 
 // Example of how to rotate in response to SIGHUP.

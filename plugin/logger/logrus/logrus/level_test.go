@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc-plugins/logger/logrus/logrus"
+	"github.com/stack-labs/stack-rpc/plugin/logger/logrus/logrus"
 	"github.com/stretchr/testify/require"
 )
 

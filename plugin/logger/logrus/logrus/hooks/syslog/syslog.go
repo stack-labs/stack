@@ -7,7 +7,7 @@ import (
 	"log/syslog"
 	"os"
 
-	"github.com/stack-labs/stack-rpc-plugins/logger/logrus/logrus"
+	"github.com/stack-labs/stack-rpc/plugin/logger/logrus/logrus"
 )
 
 // SyslogHook to send logs via syslog.

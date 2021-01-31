@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"sync"
 
-	"github.com/stack-labs/stack-rpc-plugins/logger/logrus/logrus"
+	"github.com/stack-labs/stack-rpc/plugin/logger/logrus/logrus"
 )
 
 // Hook is a hook designed for dealing with logs in test scenarios.

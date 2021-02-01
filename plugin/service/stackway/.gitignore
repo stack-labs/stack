@@ -1,0 +1,7 @@
+.DS_Store
+bin
+stack_config.conf
+
+# Editor directories and files
+.idea
+.vscode

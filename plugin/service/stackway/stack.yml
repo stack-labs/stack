@@ -1,0 +1,24 @@
+stack:
+  server:
+    name: stack.rpc.stackway
+    version: 1.0.0
+    address: :8080 # stackway run as server address
+  registry:
+    name: mdns
+  stackway:
+    handler: meta
+    resolver: stack
+    rpc_path: /rpc
+    api_path: /
+    proxy_path: /{service:[a-zA-Z0-9]+}
+    namespace: stack.rpc.api
+    header_prefix: X-Stack-
+    enable_rpc: true
+    enable_acme: false
+    enable_tls: false
+    acme:
+      provider: autocert
+      challenge_provider: cloudflare
+      ca: https://acme-v02.api.letsencrypt.org/directory
+      hosts:
+        - ""

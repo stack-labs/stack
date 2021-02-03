@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package stack.rpc.stackway.test;
+
+import "github.com/stack-labs/stack-rpc/api/proto/api.proto";
+
+service Test {
+    // rpc handler
+    rpc Rpc (Request) returns (Response) {
+    }
+    // api handler
+    rpc Api (go.api.Request) returns (go.api.Response) {
+    }
+}
+
+message Request {
+    string msg = 1;
+}
+
+message Response {
+    string msg = 1;
+}

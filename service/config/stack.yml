@@ -22,6 +22,18 @@ stack:
     register-interval: 10
     # int in seconds. register time to live.
     register-ttl: 15
+    etcd:
+      # Auth allows you to specify username/password
+      auth-creds:
+        username:
+        password:
+    consul:
+      # specifies services should be registered as Consul Connect services
+      connect:
+      # sets whether any Consul server (non-leader) can service
+      allow-stale:
+      # will tell the service provider to check the service address
+      tcp-check:
   # broker component options
   broker:
     #

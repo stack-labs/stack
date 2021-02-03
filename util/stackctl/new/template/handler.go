@@ -118,8 +118,8 @@ import (
 	"encoding/json"
 
 	api "github.com/stack-labs/stack-rpc/api/proto"
-	"github.com/stack-labs/stack-rpc/errors"
 	log "github.com/stack-labs/stack-rpc/logger"
+	"github.com/stack-labs/stack-rpc/util/errors"
 
 	"{{.Dir}}/client"
 	// FIXME: replace with service proto path

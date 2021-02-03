@@ -1,0 +1,10 @@
+stack:
+  service:
+    name: stack.rpc.web
+    web:
+      root-path: web-demo
+      static:
+        route: webapp
+        dir: static
+  server:
+    address: :8090

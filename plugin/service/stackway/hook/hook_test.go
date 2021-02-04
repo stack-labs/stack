@@ -18,8 +18,8 @@ import (
 	"github.com/stack-labs/stack-rpc/registry/memory"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/stack-labs/stack-rpc-plugins/service/stackway/test/handler"
-	test "github.com/stack-labs/stack-rpc-plugins/service/stackway/test/proto"
+	"github.com/stack-labs/stack-rpc/plugin/service/stackway/test/handler"
+	test "github.com/stack-labs/stack-rpc/plugin/service/stackway/test/proto"
 )
 
 func run(ctx context.Context, t *testing.T) {

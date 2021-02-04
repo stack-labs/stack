@@ -4,7 +4,7 @@ import (
 	"github.com/stack-labs/stack-rpc"
 	"github.com/stack-labs/stack-rpc/util/log"
 
-	"github.com/stack-labs/stack-rpc-plugins/service/stackway/api"
+	"github.com/stack-labs/stack-rpc/plugin/service/stackway/api"
 )
 
 func main() {

@@ -2,8 +2,8 @@ package hook
 
 import (
 	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc-plugins/service/stackway/api"
-	"github.com/stack-labs/stack-rpc-plugins/service/stackway/plugin"
+	"github.com/stack-labs/stack-rpc/plugin/service/stackway/api"
+	"github.com/stack-labs/stack-rpc/plugin/service/stackway/plugin"
 	"github.com/stack-labs/stack-rpc/service"
 	"github.com/stack-labs/stack-rpc/util/log"
 )

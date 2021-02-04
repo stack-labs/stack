@@ -3,8 +3,8 @@ GOPATH:=$(shell go env GOPATH)
 
 .PHONY: proto
 proto:
-	protoc --proto_path=${GOPATH}/src --stack_out=${GOPATH}/src --go_out=:${GOPATH}/src github.com/stack-labs/stack-rpc-plugins/service/stackway/api/proto/api.proto
-	protoc --proto_path=${GOPATH}/src --stack_out=${GOPATH}/src --go_out=:${GOPATH}/src github.com/stack-labs/stack-rpc-plugins/service/stackway/test/proto/test.proto
+	protoc --proto_path=${GOPATH}/src --stack_out=${GOPATH}/src --go_out=:${GOPATH}/src github.com/stack-labs/stack-rpc/plugin/service/stackway/api/proto/api.proto
+	protoc --proto_path=${GOPATH}/src --stack_out=${GOPATH}/src --go_out=:${GOPATH}/src github.com/stack-labs/stack-rpc/plugin/service/stackway/test/proto/test.proto
 
 .PHONY: test
 test:

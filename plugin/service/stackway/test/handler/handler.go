@@ -5,7 +5,7 @@ import (
 
 	proto "github.com/stack-labs/stack-rpc/api/proto"
 
-	test "github.com/stack-labs/stack-rpc-plugins/service/stackway/test/proto"
+	test "github.com/stack-labs/stack-rpc/plugin/service/stackway/test/proto"
 )
 
 var _ test.TestHandler = &Handler{}

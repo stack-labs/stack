@@ -1,4 +1,4 @@
-module github.com/stack-labs/stack-rpc-plugins/service/stackway
+module github.com/stack-labs/stack-rpc/plugin/service/stackway
 
 go 1.14
 

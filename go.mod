@@ -29,8 +29,6 @@ require (
 	github.com/mholt/certmagic v0.8.3
 	github.com/miekg/dns v1.1.27
 	github.com/modern-go/reflect2 v1.0.1
-	github.com/nats-io/nats-server/v2 v2.1.9 // indirect
-	github.com/nats-io/nats.go v1.10.0 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
 	github.com/pkg/errors v0.9.1

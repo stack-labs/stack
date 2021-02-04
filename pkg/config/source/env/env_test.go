@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
+	"github.com/stack-labs/stack/pkg/config/source"
 )
 
 func TestEnv_Read(t *testing.T) {

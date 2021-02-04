@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack/util/log"
 )
 
 func injectAutowired(ctx context.Context) {

@@ -1,8 +1,8 @@
 package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/registry/memory"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/registry/memory"
 )
 
 type memoryRegistryPlugin struct{}

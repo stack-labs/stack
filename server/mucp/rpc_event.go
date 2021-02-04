@@ -1,8 +1,8 @@
 package mucp
 
 import (
-	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack/broker"
+	"github.com/stack-labs/stack/transport"
 )
 
 // event is a broker event we handle on the server transport

@@ -5,7 +5,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/pkg/metadata"
+	"github.com/stack-labs/stack/pkg/metadata"
 )
 
 // Tracer is an interface for distributed tracing

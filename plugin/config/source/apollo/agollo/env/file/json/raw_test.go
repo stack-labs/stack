@@ -21,7 +21,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/extension"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/extension"
 	. "github.com/tevid/gohamcrest"
 )
 

@@ -1,8 +1,8 @@
 package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/broker/http"
+	"github.com/stack-labs/stack/broker"
+	"github.com/stack-labs/stack/broker/http"
 )
 
 type httpBrokerPlugin struct{}

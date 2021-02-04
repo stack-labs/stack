@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/pkg/cli"
+	"github.com/stack-labs/stack/pkg/cli"
 )
 
 type Cmd interface {
@@ -31,7 +31,7 @@ var (
 		cli.StringFlag{
 			Name:   "client",
 			EnvVar: "STACK_CLIENT",
-			Usage:  "Client for stack-rpc; rpc",
+			Usage:  "Client for stack; rpc",
 			Alias:  "stack_client_protocol",
 		},
 		cli.StringFlag{
@@ -76,7 +76,7 @@ var (
 		cli.StringFlag{
 			Name:   "server",
 			EnvVar: "STACK_SERVER",
-			Usage:  "Server for stack-rpc; rpc",
+			Usage:  "Server for stack; rpc",
 			Alias:  "stack_server_protocol",
 		},
 		cli.StringFlag{
@@ -239,7 +239,7 @@ func newCmd(opts ...Option) Cmd {
 	}
 
 	if len(options.Description) == 0 {
-		options.Description = "a stack-rpc service"
+		options.Description = "a stack service"
 	}
 
 	cmd := new(stackCmd)

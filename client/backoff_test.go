@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/codec"
+	"github.com/stack-labs/stack/codec"
 )
 
 func TestBackoff(t *testing.T) {

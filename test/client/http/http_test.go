@@ -10,15 +10,15 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/client"
-	shttp "github.com/stack-labs/stack-rpc/client/http"
-	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/plugin"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/registry/memory"
-	"github.com/stack-labs/stack-rpc/test/client/http/test"
+	"github.com/stack-labs/stack/client"
+	shttp "github.com/stack-labs/stack/client/http"
+	"github.com/stack-labs/stack/client/selector"
+	"github.com/stack-labs/stack/plugin"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/registry/memory"
+	"github.com/stack-labs/stack/test/client/http/test"
 
-	_ "github.com/stack-labs/stack-rpc/plugin/stack"
+	_ "github.com/stack-labs/stack/plugin/stack"
 )
 
 type buffer struct {

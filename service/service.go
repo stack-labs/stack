@@ -1,12 +1,12 @@
 package service
 
 import (
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/server"
 )
 
 // Service is an interface that wraps the lower level libraries
-// within stack-rpc. Its a convenience method for building
+// within stack. Its a convenience method for building
 // and initialising services.
 type Service interface {
 	// The service name

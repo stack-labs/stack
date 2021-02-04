@@ -3,9 +3,9 @@ package main
 import (
 	"time"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/config"
-	log "github.com/stack-labs/stack-rpc/logger"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/config"
+	log "github.com/stack-labs/stack/logger"
 )
 
 type includeA struct {

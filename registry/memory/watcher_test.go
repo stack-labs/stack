@@ -3,7 +3,7 @@ package memory
 import (
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 func TestWatcher(t *testing.T) {

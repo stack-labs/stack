@@ -1,7 +1,7 @@
 package mock
 
 import (
-	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack/client"
 )
 
 // Response sets the response methods for a service

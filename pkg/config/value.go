@@ -3,7 +3,7 @@ package config
 import (
 	"time"
 
-	"github.com/stack-labs/stack-rpc/pkg/config/reader"
+	"github.com/stack-labs/stack/pkg/config/reader"
 )
 
 type value struct{}

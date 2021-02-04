@@ -20,18 +20,18 @@ package notify
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/agcache/memory"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/cluster/roundrobin"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/component/remote"
-	jsonFile "github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/file/json"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/extension"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/agcache/memory"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/cluster/roundrobin"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/component/remote"
+	jsonFile "github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/file/json"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/extension"
 	"sync"
 	"testing"
 	"time"
 
-	_ "github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/agcache/memory"
-	_ "github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/file/json"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/storage"
+	_ "github.com/stack-labs/stack/plugin/config/source/apollo/agollo/agcache/memory"
+	_ "github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/file/json"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/storage"
 	. "github.com/tevid/gohamcrest"
 )
 

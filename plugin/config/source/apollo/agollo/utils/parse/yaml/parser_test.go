@@ -18,8 +18,8 @@
 package yaml
 
 import (
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/utils"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/utils/parse"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/utils"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/utils/parse"
 	"testing"
 
 	. "github.com/tevid/gohamcrest"

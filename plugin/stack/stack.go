@@ -1,8 +1,8 @@
 package stack
 
 import (
-	cfg "github.com/stack-labs/stack-rpc/config"
-	"github.com/stack-labs/stack-rpc/plugin"
+	cfg "github.com/stack-labs/stack/config"
+	"github.com/stack-labs/stack/plugin"
 )
 
 var options struct {

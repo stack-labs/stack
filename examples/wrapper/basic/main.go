@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/stack-labs/stack-rpc"
-	proto "github.com/stack-labs/stack-rpc/examples/proto/service/rpc"
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack"
+	proto "github.com/stack-labs/stack/examples/proto/service/rpc"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/util/log"
 )
 
 type Greeter struct{}

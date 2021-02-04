@@ -7,14 +7,14 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/stack-labs/stack-rpc/server/mucp"
+	"github.com/stack-labs/stack/server/mucp"
 
-	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/pkg/metadata"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/util/errors"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack/broker"
+	"github.com/stack-labs/stack/pkg/metadata"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/util/errors"
+	"github.com/stack-labs/stack/util/log"
 )
 
 const (

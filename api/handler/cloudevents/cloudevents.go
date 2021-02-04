@@ -1,4 +1,4 @@
-// Package cloudevents provides a cloudevents handler publishing the event using the stack-rpc/client
+// Package cloudevents provides a cloudevents handler publishing the event using the stack/client
 package cloudevents
 
 import (
@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/stack-labs/stack-rpc/api/handler"
-	"github.com/stack-labs/stack-rpc/util/ctx"
+	"github.com/stack-labs/stack/api/handler"
+	"github.com/stack-labs/stack/util/ctx"
 )
 
 type event struct {

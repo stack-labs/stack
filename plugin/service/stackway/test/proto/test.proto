@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package stack.rpc.stackway.test;
 
-import "github.com/stack-labs/stack-rpc/api/proto/api.proto";
+import "github.com/stack-labs/stack/api/proto/api.proto";
 
 service Test {
     // rpc handler

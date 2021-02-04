@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/stack-labs/stack-rpc/broker"
-	pb "github.com/stack-labs/stack-rpc/broker/service/proto"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack/broker"
+	pb "github.com/stack-labs/stack/broker/service/proto"
+	"github.com/stack-labs/stack/util/log"
 )
 
 type serviceSub struct {

@@ -3,7 +3,7 @@ package etcd
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 type authKey struct{}

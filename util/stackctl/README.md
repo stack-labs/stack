@@ -3,9 +3,9 @@
 ## install
 
 - release binary
-    - [releases](https://github.com/stack-labs/stack-rpc/releases)
+    - [releases](https://github.com/stack-labs/stack/releases)
 - go get
-    - `go get -u github.com/stack-labs/stack-rpc/util/stackctl`
+    - `go get -u github.com/stack-labs/stack/util/stackctl`
 
 ## example
 

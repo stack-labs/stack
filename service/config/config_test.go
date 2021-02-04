@@ -7,12 +7,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/cmd"
-	cfg "github.com/stack-labs/stack-rpc/config"
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
-	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
-	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
-	"github.com/stack-labs/stack-rpc/pkg/config/source/memory"
+	"github.com/stack-labs/stack/cmd"
+	cfg "github.com/stack-labs/stack/config"
+	"github.com/stack-labs/stack/pkg/config/source"
+	cliSource "github.com/stack-labs/stack/pkg/config/source/cli"
+	"github.com/stack-labs/stack/pkg/config/source/file"
+	"github.com/stack-labs/stack/pkg/config/source/memory"
 )
 
 var (

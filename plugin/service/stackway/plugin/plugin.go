@@ -3,8 +3,8 @@ package plugin
 import (
 	"net/http"
 
-	"github.com/stack-labs/stack-rpc/config"
-	"github.com/stack-labs/stack-rpc/pkg/cli"
+	"github.com/stack-labs/stack/config"
+	"github.com/stack-labs/stack/pkg/cli"
 )
 
 // Plugin is the interface for plugins to micro. It differs from go-micro in that it's for

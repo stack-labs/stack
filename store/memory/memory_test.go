@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/store"
+	"github.com/stack-labs/stack/store"
 )
 
 func TestReadRecordExpire(t *testing.T) {

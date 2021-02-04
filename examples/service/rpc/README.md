@@ -1,6 +1,6 @@
 # RPC API
 
-本示例我们介绍如何使用Stack-RPC来编写RPC服务。
+本示例我们介绍如何使用stack来编写RPC服务。
 
 示例中我们有两个程序：
 
@@ -29,7 +29,7 @@ message HelloResponse {
 
 它提供一个服务叫Greeter，方法叫Hello，入参和出参分别是HelloRequest与HelloResponse
 
-生成proto文件（已生成好，但大家可自行尝试），没有protoc及stack插件，可以参考[准备安装](http://microhq.cn/docs/stack-rpc/prepare-env-cn)
+生成proto文件（已生成好，但大家可自行尝试），没有protoc及stack插件，可以参考[准备安装](http://microhq.cn/docs/stack/prepare-env-cn)
 
 切到proto的rpc目录，再执行：
 

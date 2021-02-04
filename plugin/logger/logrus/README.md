@@ -1,4 +1,4 @@
 # logrus
 
-[example](https://github.com/stack-labs/stack-rpc/blob/master/examples/logger/logrus)
+[example](https://github.com/stack-labs/stack/blob/master/examples/logger/logrus)
 

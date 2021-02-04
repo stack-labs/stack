@@ -25,11 +25,11 @@ import (
 	"sync"
 	"sync/atomic"
 
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/agcache"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/extension"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/utils"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/agcache"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/extension"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/utils"
 )
 
 const (

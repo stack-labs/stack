@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/pkg/config/source/env"
-	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
+	"github.com/stack-labs/stack/pkg/config/source/env"
+	"github.com/stack-labs/stack/pkg/config/source/file"
 )
 
 func createFile(t *testing.T, content string, format string) *os.File {

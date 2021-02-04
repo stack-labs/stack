@@ -18,11 +18,11 @@
 package agollo
 
 import (
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/agcache"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/cluster"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/file"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/extension"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/protocol/auth"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/agcache"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/cluster"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/file"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/extension"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/protocol/auth"
 )
 
 //SetSignature 设置自定义 http 授权控件

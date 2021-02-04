@@ -3,7 +3,7 @@ package memory
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 type servicesKey struct{}

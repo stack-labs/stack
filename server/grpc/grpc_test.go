@@ -5,10 +5,10 @@ import (
 	"testing"
 
 	"google.golang.org/grpc"
-	"github.com/stack-labs/stack-rpc/registry/memory"
-	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack/registry/memory"
+	"github.com/stack-labs/stack/server"
 
-	pb "github.com/stack-labs/stack-rpc/server/grpc/proto"
+	pb "github.com/stack-labs/stack/server/grpc/proto"
 )
 
 // server is used to implement helloworld.GreeterServer.

@@ -22,9 +22,9 @@ import (
 	"os"
 	"sync"
 
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
-	jsonConfig "github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config/json"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/utils"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
+	jsonConfig "github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config/json"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/utils"
 )
 
 const (

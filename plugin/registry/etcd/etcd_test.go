@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 var testData = map[string][]*registry.Service{

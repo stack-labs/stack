@@ -5,7 +5,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/codec"
+	"github.com/stack-labs/stack/codec"
 )
 
 // Client is the interface used to make requests to services.

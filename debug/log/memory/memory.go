@@ -4,8 +4,8 @@ package memory
 import (
 	"fmt"
 
-	"github.com/stack-labs/stack-rpc/debug/log"
-	"github.com/stack-labs/stack-rpc/util/ring"
+	"github.com/stack-labs/stack/debug/log"
+	"github.com/stack-labs/stack/util/ring"
 )
 
 var (

@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/registry/memory"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/registry/memory"
 )
 
 func TestRoundTripper(t *testing.T) {

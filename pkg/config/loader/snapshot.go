@@ -1,6 +1,6 @@
 package loader
 
-import "github.com/stack-labs/stack-rpc/pkg/config/source"
+import "github.com/stack-labs/stack/pkg/config/source"
 
 // Snapshot is a merged ChangeSet
 type Snapshot struct {

@@ -5,9 +5,9 @@ import (
 	"math"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/sync/task"
-	"github.com/stack-labs/stack-rpc/sync/task/local"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack/sync/task"
+	"github.com/stack-labs/stack/sync/task/local"
+	"github.com/stack-labs/stack/util/log"
 )
 
 type syncCron struct {

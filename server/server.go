@@ -4,8 +4,8 @@ package server
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/codec"
+	"github.com/stack-labs/stack/registry"
 )
 
 // Server is a simple stack server abstraction

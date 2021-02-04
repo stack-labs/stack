@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/stack-labs/stack-rpc/pkg/metadata"
+	"github.com/stack-labs/stack/pkg/metadata"
 )
 
 func FromRequest(r *http.Request) context.Context {

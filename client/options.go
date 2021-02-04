@@ -4,12 +4,12 @@ import (
 	"context"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/transport"
-	codecu "github.com/stack-labs/stack-rpc/util/codec"
+	"github.com/stack-labs/stack/broker"
+	"github.com/stack-labs/stack/client/selector"
+	"github.com/stack-labs/stack/codec"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/transport"
+	codecu "github.com/stack-labs/stack/util/codec"
 )
 
 type Options struct {

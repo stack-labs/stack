@@ -1,7 +1,7 @@
 package memory
 
 import (
-	"github.com/stack-labs/stack-rpc/debug/log"
+	"github.com/stack-labs/stack/debug/log"
 )
 
 type logStream struct {

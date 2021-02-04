@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/auth"
+	"github.com/stack-labs/stack/auth"
 )
 
 var (

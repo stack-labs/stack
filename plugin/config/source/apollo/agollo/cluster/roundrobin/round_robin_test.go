@@ -18,12 +18,12 @@
 package roundrobin
 
 import (
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/component/serverlist"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/protocol/http"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/component/serverlist"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/protocol/http"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env"
 	. "github.com/tevid/gohamcrest"
 )
 

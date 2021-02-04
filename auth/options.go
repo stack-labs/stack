@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/store"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/store"
 )
 
 func NewOptions(opts ...Option) Options {

@@ -20,7 +20,7 @@ package cluster
 import (
 	"sync"
 
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
 )
 
 //LoadBalance 负载均衡器

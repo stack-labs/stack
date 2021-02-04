@@ -3,7 +3,7 @@ package pool
 import (
 	"time"
 
-	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack/transport"
 )
 
 type Options struct {

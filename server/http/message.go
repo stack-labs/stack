@@ -1,6 +1,6 @@
 package http
 
-import "github.com/stack-labs/stack-rpc/codec"
+import "github.com/stack-labs/stack/codec"
 
 type httpMessage struct {
 	topic       string

@@ -13,9 +13,9 @@ import (
 
 	consul "github.com/hashicorp/consul/api"
 	hash "github.com/mitchellh/hashstructure"
-	"github.com/stack-labs/stack-rpc/plugin"
-	"github.com/stack-labs/stack-rpc/registry"
-	mnet "github.com/stack-labs/stack-rpc/util/net"
+	"github.com/stack-labs/stack/plugin"
+	"github.com/stack-labs/stack/registry"
+	mnet "github.com/stack-labs/stack/util/net"
 )
 
 type consulRegistry struct {

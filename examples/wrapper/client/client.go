@@ -3,11 +3,11 @@ package main
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/client"
-	proto "github.com/stack-labs/stack-rpc/examples/proto/service/rpc"
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/pkg/metadata"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/client"
+	proto "github.com/stack-labs/stack/examples/proto/service/rpc"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/pkg/metadata"
 )
 
 type logWrapper struct {

@@ -5,7 +5,7 @@ import (
 	"path"
 
 	"github.com/go-zookeeper/zk"
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 type zookeeperWatcher struct {

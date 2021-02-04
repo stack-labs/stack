@@ -20,7 +20,7 @@ package yml
 import (
 	"bytes"
 	"github.com/spf13/viper"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/utils"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/utils"
 )
 
 var vp = viper.New()

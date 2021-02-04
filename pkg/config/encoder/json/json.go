@@ -3,7 +3,7 @@ package json
 import (
 	"encoding/json"
 
-	"github.com/stack-labs/stack-rpc/pkg/config/encoder"
+	"github.com/stack-labs/stack/pkg/config/encoder"
 )
 
 type jsonEncoder struct{}

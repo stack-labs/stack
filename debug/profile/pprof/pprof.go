@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/debug/profile"
+	"github.com/stack-labs/stack/debug/profile"
 )
 
 type profiler struct {

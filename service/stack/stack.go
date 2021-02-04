@@ -6,13 +6,13 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/debug/profile"
-	"github.com/stack-labs/stack-rpc/debug/profile/pprof"
-	"github.com/stack-labs/stack-rpc/debug/service/handler"
-	"github.com/stack-labs/stack-rpc/env"
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/service"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/debug/profile"
+	"github.com/stack-labs/stack/debug/profile/pprof"
+	"github.com/stack-labs/stack/debug/service/handler"
+	"github.com/stack-labs/stack/env"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/service"
 )
 
 type stackService struct {

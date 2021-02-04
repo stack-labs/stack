@@ -5,9 +5,9 @@ import (
 	"io"
 	"sync"
 
-	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack/client"
 
-	"github.com/stack-labs/stack-rpc/codec"
+	"github.com/stack-labs/stack/codec"
 )
 
 // Implements the streamer interface

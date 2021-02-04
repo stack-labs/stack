@@ -1,8 +1,8 @@
 package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/server/mock"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/server/mock"
 )
 
 type mockServerPlugin struct{}

@@ -19,14 +19,14 @@ package notify
 
 import (
 	"encoding/json"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/cluster/roundrobin"
-	_ "github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/cluster/roundrobin"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
-	jsonConfig "github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config/json"
-	_ "github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/file/json"
-	jsonFile "github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/file/json"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/extension"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/cluster/roundrobin"
+	_ "github.com/stack-labs/stack/plugin/config/source/apollo/agollo/cluster/roundrobin"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
+	jsonConfig "github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config/json"
+	_ "github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/file/json"
+	jsonFile "github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/file/json"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/extension"
 	. "github.com/tevid/gohamcrest"
 	"testing"
 )

@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack/broker"
 )
 
 // Handle registers the handler for the given pattern.

@@ -4,7 +4,7 @@ package router
 import (
 	"net/http"
 
-	"github.com/stack-labs/stack-rpc/api"
+	"github.com/stack-labs/stack/api"
 )
 
 // Router is used to determine an endpoint for a request

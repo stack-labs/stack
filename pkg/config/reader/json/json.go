@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"github.com/imdario/mergo"
-	"github.com/stack-labs/stack-rpc/pkg/config/encoder"
-	"github.com/stack-labs/stack-rpc/pkg/config/encoder/json"
-	"github.com/stack-labs/stack-rpc/pkg/config/reader"
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
+	"github.com/stack-labs/stack/pkg/config/encoder"
+	"github.com/stack-labs/stack/pkg/config/encoder/json"
+	"github.com/stack-labs/stack/pkg/config/reader"
+	"github.com/stack-labs/stack/pkg/config/source"
 )
 
 type jsonReader struct {

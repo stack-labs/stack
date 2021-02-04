@@ -11,8 +11,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/stack-labs/stack-rpc/pkg/mdns"
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/pkg/mdns"
+	"github.com/stack-labs/stack/registry"
 )
 
 var (

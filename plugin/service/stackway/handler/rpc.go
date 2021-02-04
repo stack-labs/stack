@@ -7,10 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/plugin/service/stackway/helper"
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/service"
-	"github.com/stack-labs/stack-rpc/util/errors"
+	"github.com/stack-labs/stack/plugin/service/stackway/helper"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/service"
+	"github.com/stack-labs/stack/util/errors"
 )
 
 type rpcRequest struct {
@@ -125,7 +125,7 @@ func (rpc *rpcHandler) Handler(w http.ResponseWriter, r *http.Request) {
 	// create request/response
 	var response json.RawMessage
 	var err error
-	// TODO stack-rpc
+	// TODO stack
 	req := rpc.opts.Client.NewRequest(service, endpoint, request, client.WithContentType("application/json"))
 	// req := client.DefaultClient.NewRequest(service, endpoint, request, client.WithContentType("application/json"))
 
@@ -146,7 +146,7 @@ func (rpc *rpcHandler) Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// remote call
-	// TODO stack-rpc
+	// TODO stack
 	err = rpc.opts.Client.Call(ctx, req, &response, opts...)
 	// err = client.DefaultClient.Call(ctx, req, &response, opts...)
 	if err != nil {

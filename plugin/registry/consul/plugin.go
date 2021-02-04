@@ -3,7 +3,7 @@ package consul
 import (
 	"time"
 
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 var options struct {

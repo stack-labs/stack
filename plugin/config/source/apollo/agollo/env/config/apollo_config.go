@@ -20,7 +20,7 @@ package config
 import (
 	"sync"
 
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/utils"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/utils"
 )
 
 // CurrentApolloConfig 当前 apollo 返回的配置信息

@@ -1,8 +1,8 @@
 package plugin
 
 import (
-	"github.com/stack-labs/stack-rpc/config"
-	"github.com/stack-labs/stack-rpc/pkg/cli"
+	"github.com/stack-labs/stack/config"
+	"github.com/stack-labs/stack/pkg/cli"
 )
 
 // Options are used as part of a new plugin

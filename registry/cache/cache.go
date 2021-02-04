@@ -7,9 +7,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/util/log"
-	regutil "github.com/stack-labs/stack-rpc/util/registry"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/util/log"
+	regutil "github.com/stack-labs/stack/util/registry"
 )
 
 // Cache is the registry cache interface

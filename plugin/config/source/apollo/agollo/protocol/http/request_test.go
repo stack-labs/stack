@@ -19,17 +19,17 @@ package http
 
 import (
 	"fmt"
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/cluster/roundrobin"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/extension"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/cluster/roundrobin"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/extension"
 	"net/url"
 	"testing"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config/json"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/utils"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config/json"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/utils"
 	. "github.com/tevid/gohamcrest"
 
 	json2 "encoding/json"

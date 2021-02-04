@@ -11,9 +11,9 @@ import (
 
 	"github.com/go-zookeeper/zk"
 	hash "github.com/mitchellh/hashstructure"
-	"github.com/stack-labs/stack-rpc/config"
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/config"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/registry"
 )
 
 var (

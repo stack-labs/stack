@@ -6,12 +6,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/mucp"
-	pb "github.com/stack-labs/stack-rpc/debug/proto"
-	"github.com/stack-labs/stack-rpc/registry/cache"
-	"github.com/stack-labs/stack-rpc/registry/mdns"
-	"github.com/stack-labs/stack-rpc/transport/http"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/client/mucp"
+	pb "github.com/stack-labs/stack/debug/proto"
+	"github.com/stack-labs/stack/registry/cache"
+	"github.com/stack-labs/stack/registry/mdns"
+	"github.com/stack-labs/stack/transport/http"
 )
 
 type monitor struct {
@@ -61,7 +61,7 @@ func (m *monitor) check(service string) (*Status, error) {
 		for _, node := range service.Nodes {
 			// TODO: checks that are not just RPC based
 			// TODO: better matching of the protocol
-			// TODO: maybe everything has to be a stack-rpc service?
+			// TODO: maybe everything has to be a stack service?
 			if node.Metadata["server"] != m.client.String() {
 				continue
 			}

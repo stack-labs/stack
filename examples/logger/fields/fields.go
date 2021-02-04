@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/stack-labs/stack-rpc/logger"
+	"github.com/stack-labs/stack/logger"
 )
 
 func main() {

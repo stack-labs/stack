@@ -1,7 +1,7 @@
 package selector
 
 import (
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 // Filter is used to filter a service during the selection process

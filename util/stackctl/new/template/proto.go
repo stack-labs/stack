@@ -67,7 +67,7 @@ message Pong {
 
 package {{.FQDN}};
 
-import "github.com/stack-labs/stack-rpc/api/proto/api.proto";
+import "github.com/stack-labs/stack/api/proto/api.proto";
 
 service {{title .Alias}} {
 	rpc Call(go.api.Request) returns (go.api.Response) {}

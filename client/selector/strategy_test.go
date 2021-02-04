@@ -3,7 +3,7 @@ package selector
 import (
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 func TestStrategies(t *testing.T) {

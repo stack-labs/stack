@@ -8,17 +8,17 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	pb "github.com/golang/protobuf/protoc-gen-go/descriptor"
-	"github.com/stack-labs/stack-rpc/util/protoc-gen-stack/generator"
+	"github.com/stack-labs/stack/util/protoc-gen-stack/generator"
 	options "google.golang.org/genproto/googleapis/api/annotations"
 )
 
 // Paths for packages used by code generated in this file,
 // relative to the import_prefix of the generator.Generator.
 const (
-	apiPkgPath     = "github.com/stack-labs/stack-rpc/api"
+	apiPkgPath     = "github.com/stack-labs/stack/api"
 	contextPkgPath = "context"
-	clientPkgPath  = "github.com/stack-labs/stack-rpc/client"
-	serverPkgPath  = "github.com/stack-labs/stack-rpc/server"
+	clientPkgPath  = "github.com/stack-labs/stack/client"
+	serverPkgPath  = "github.com/stack-labs/stack/server"
 )
 
 func init() {
@@ -26,7 +26,7 @@ func init() {
 }
 
 // stack is an implementation of the Go protocol buffer compiler's
-// plugin architecture.  It generates bindings for stack-rpc support.
+// plugin architecture.  It generates bindings for stack support.
 type stack struct {
 	gen *generator.Generator
 }
@@ -111,7 +111,7 @@ func (g *stack) GenerateImports(file *generator.FileDescriptor, imports map[gene
 
 // reservedClientName records whether a client name is reserved on the client side.
 var reservedClientName = map[string]bool{
-	// TODO: do we need any in stack-rpc?
+	// TODO: do we need any in stack?
 }
 
 func unexport(s string) string {

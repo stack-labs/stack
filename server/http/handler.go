@@ -1,8 +1,8 @@
 package http
 
 import (
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/server"
 )
 
 type httpHandler struct {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack/broker"
 )
 
 func TestMemoryBroker(t *testing.T) {

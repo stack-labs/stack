@@ -3,8 +3,8 @@ package stack
 import (
 	"time"
 
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
-	proto "github.com/stack-labs/stack-rpc/plugin/config/source/stack/proto"
+	"github.com/stack-labs/stack/pkg/config/source"
+	proto "github.com/stack-labs/stack/plugin/config/source/stack/proto"
 )
 
 func toChangeSet(c *proto.ChangeSet) *source.ChangeSet {

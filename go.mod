@@ -1,4 +1,4 @@
-module github.com/stack-labs/stack-rpc
+module github.com/stack-labs/stack
 
 go 1.14
 

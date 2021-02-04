@@ -10,10 +10,10 @@ import (
 	"net/url"
 	"path"
 
-	"github.com/stack-labs/stack-rpc/proxy"
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/util/errors"
-	"github.com/stack-labs/stack-rpc/util/options"
+	"github.com/stack-labs/stack/proxy"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/util/errors"
+	"github.com/stack-labs/stack/util/options"
 )
 
 // Proxy will proxy rpc requests as http POST requests. It is a server.Proxy

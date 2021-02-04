@@ -4,9 +4,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/auth"
-	"github.com/stack-labs/stack-rpc/auth/token"
-	jwtToken "github.com/stack-labs/stack-rpc/auth/token/jwt"
+	"github.com/stack-labs/stack/auth"
+	"github.com/stack-labs/stack/auth/token"
+	jwtToken "github.com/stack-labs/stack/auth/token/jwt"
 )
 
 // NewAuth returns a new instance of the Auth service

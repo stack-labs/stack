@@ -1,8 +1,8 @@
 package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/registry/mdns"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/registry/mdns"
 )
 
 type mdnsRegistryPlugin struct{}

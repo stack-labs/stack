@@ -1,7 +1,7 @@
 package noop
 
 import (
-	"github.com/stack-labs/stack-rpc/debug/log"
+	"github.com/stack-labs/stack/debug/log"
 )
 
 type noop struct{}

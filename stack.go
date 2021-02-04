@@ -4,14 +4,14 @@ package stack
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/service"
-	"github.com/stack-labs/stack-rpc/service/grpc"
-	"github.com/stack-labs/stack-rpc/service/stack"
-	"github.com/stack-labs/stack-rpc/service/web"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/service"
+	"github.com/stack-labs/stack/service/grpc"
+	"github.com/stack-labs/stack/service/stack"
+	"github.com/stack-labs/stack/service/web"
 
-	_ "github.com/stack-labs/stack-rpc/plugin/stack"
+	_ "github.com/stack-labs/stack/plugin/stack"
 )
 
 type serviceKey struct{}

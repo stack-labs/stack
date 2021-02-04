@@ -20,7 +20,7 @@ package roundrobin
 import (
 	"sync"
 
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
 )
 
 //RoundRobin 轮询调度

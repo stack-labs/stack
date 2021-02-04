@@ -3,10 +3,10 @@ package registry
 import (
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/client/selector"
+	"github.com/stack-labs/stack/registry"
 
-	"github.com/stack-labs/stack-rpc/registry/memory"
+	"github.com/stack-labs/stack/registry/memory"
 )
 
 var (

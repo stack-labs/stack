@@ -4,8 +4,8 @@ var (
 	MainFNC = `package main
 
 import (
-	"github.com/stack-labs/stack-rpc"
-	log	"github.com/stack-labs/stack-rpc/logger"
+	"github.com/stack-labs/stack"
+	log	"github.com/stack-labs/stack/logger"
 	"{{.Dir}}/handler"
 	"{{.Dir}}/subscriber"
 )
@@ -36,8 +36,8 @@ func main() {
 	MainSRV = `package main
 
 import (
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack"
 	"{{.Dir}}/handler"
 	"{{.Dir}}/subscriber"
 
@@ -69,9 +69,9 @@ func main() {
 	MainAPI = `package main
 
 import (
-	log "github.com/stack-labs/stack-rpc/logger"
+	log "github.com/stack-labs/stack/logger"
 
-	"github.com/stack-labs/stack-rpc"
+	"github.com/stack-labs/stack"
 	"{{.Dir}}/handler"
 	"{{.Dir}}/client"
 
@@ -105,8 +105,8 @@ func main() {
 import (
 		"net/http"
 
-        log "github.com/stack-labs/stack-rpc/logger"
-        "github.com/stack-labs/stack-rpc/web"
+        log "github.com/stack-labs/stack/logger"
+        "github.com/stack-labs/stack/web"
 
         "{{.Dir}}/handler"
 )

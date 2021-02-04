@@ -3,9 +3,9 @@ package main
 import (
 	"os"
 
-	"github.com/stack-labs/stack-rpc/pkg/cli"
-	"github.com/stack-labs/stack-rpc/util/stackctl/new"
-	"github.com/stack-labs/stack-rpc/util/stackctl/service"
+	"github.com/stack-labs/stack/pkg/cli"
+	"github.com/stack-labs/stack/util/stackctl/new"
+	"github.com/stack-labs/stack/util/stackctl/service"
 )
 
 func main() {

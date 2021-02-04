@@ -8,11 +8,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/client/mucp"
+	"github.com/stack-labs/stack/client/mucp"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/router"
-	pb "github.com/stack-labs/stack-rpc/router/proto"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/router"
+	pb "github.com/stack-labs/stack/router/proto"
 )
 
 type svc struct {

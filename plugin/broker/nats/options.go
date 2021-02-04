@@ -2,7 +2,7 @@ package nats
 
 import (
 	nats "github.com/nats-io/nats.go"
-	"github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack/broker"
 )
 
 type optionsKey struct{}

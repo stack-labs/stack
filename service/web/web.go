@@ -5,9 +5,9 @@ import (
 	"path"
 	"strings"
 
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/service"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/service"
+	"github.com/stack-labs/stack/util/log"
 )
 
 func NewOptions(opts ...service.Option) []service.Option {

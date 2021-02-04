@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/pkg/config/source/memory"
+	"github.com/stack-labs/stack/pkg/config/source/memory"
 )
 
 var (

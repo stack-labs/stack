@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/client"
-	proto "github.com/stack-labs/stack-rpc/examples/proto/service/stream/msg"
-	log "github.com/stack-labs/stack-rpc/logger"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/client"
+	proto "github.com/stack-labs/stack/examples/proto/service/stream/msg"
+	log "github.com/stack-labs/stack/logger"
 )
 
 var msgService proto.MsgStreamService

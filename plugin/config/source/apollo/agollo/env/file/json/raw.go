@@ -19,11 +19,11 @@ package json
 
 import (
 	"fmt"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
 	"os"
 	"sync"
 
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/file"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/file"
 )
 
 var (

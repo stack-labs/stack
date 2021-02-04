@@ -7,10 +7,10 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/stack-labs/stack-rpc/client/mucp"
+	"github.com/stack-labs/stack/client/mucp"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/util/errors"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/util/errors"
 )
 
 var (

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack/transport"
 )
 
 func expectedPort(t *testing.T, expected string, lsn transport.Listener) {

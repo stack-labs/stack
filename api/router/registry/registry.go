@@ -11,10 +11,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/api"
-	"github.com/stack-labs/stack-rpc/api/router"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/registry/cache"
+	"github.com/stack-labs/stack/api"
+	"github.com/stack-labs/stack/api/router"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/registry/cache"
 )
 
 // router is the default router

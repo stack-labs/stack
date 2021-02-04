@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/auth"
-	"github.com/stack-labs/stack-rpc/auth/token"
+	"github.com/stack-labs/stack/auth"
+	"github.com/stack-labs/stack/auth/token"
 )
 
 func TestGenerate(t *testing.T) {

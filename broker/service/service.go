@@ -5,12 +5,12 @@ import (
 	"context"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/client/mucp"
+	"github.com/stack-labs/stack/client/mucp"
 
-	"github.com/stack-labs/stack-rpc/broker"
-	pb "github.com/stack-labs/stack-rpc/broker/service/proto"
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack/broker"
+	pb "github.com/stack-labs/stack/broker/service/proto"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/util/log"
 )
 
 type serviceBroker struct {

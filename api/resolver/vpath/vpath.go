@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/stack-labs/stack-rpc/api/resolver"
+	"github.com/stack-labs/stack/api/resolver"
 )
 
 type Resolver struct{}

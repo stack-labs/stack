@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
 )
 
 func main() {

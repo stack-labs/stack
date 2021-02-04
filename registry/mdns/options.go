@@ -4,7 +4,7 @@ package mdns
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 // Domain sets the mdnsDomain

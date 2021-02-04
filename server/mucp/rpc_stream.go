@@ -6,8 +6,8 @@ import (
 	"io"
 	"sync"
 
-	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack/codec"
+	"github.com/stack-labs/stack/server"
 )
 
 // Implements the Streamer interface

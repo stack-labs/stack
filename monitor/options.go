@@ -1,8 +1,8 @@
 package monitor
 
 import (
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/registry"
 )
 
 type Options struct {

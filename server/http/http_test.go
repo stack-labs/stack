@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"testing"
 
-	hb "github.com/stack-labs/stack-rpc/broker/http"
-	"github.com/stack-labs/stack-rpc/registry/memory"
-	"github.com/stack-labs/stack-rpc/server"
+	hb "github.com/stack-labs/stack/broker/http"
+	"github.com/stack-labs/stack/registry/memory"
+	"github.com/stack-labs/stack/server"
 )
 
 func TestHTTPServer(t *testing.T) {

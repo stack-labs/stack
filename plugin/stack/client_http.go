@@ -1,9 +1,9 @@
 package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/http"
-	"github.com/stack-labs/stack-rpc/plugin"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/client/http"
+	"github.com/stack-labs/stack/plugin"
 )
 
 type httpClientPlugin struct {}

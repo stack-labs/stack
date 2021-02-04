@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc"
+	"github.com/stack-labs/stack"
 )
 
 type Greeter struct{}

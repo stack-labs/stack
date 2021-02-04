@@ -3,7 +3,7 @@ package registry
 import (
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 func TestRemove(t *testing.T) {

@@ -14,8 +14,8 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/util/log"
 )
 
 var (

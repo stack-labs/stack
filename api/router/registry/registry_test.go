@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/api"
+	"github.com/stack-labs/stack/api"
 )
 
 func TestSetNamespace(t *testing.T) {
@@ -29,9 +29,9 @@ func TestSetNamespace(t *testing.T) {
 		},
 		// dashed end
 		{
-			"stack-rpc-api-",
+			"stack-api-",
 			"foo",
-			"stack-rpc-api-foo",
+			"stack-api-foo",
 		},
 		// no namespace
 		{
@@ -40,9 +40,9 @@ func TestSetNamespace(t *testing.T) {
 			"foo",
 		},
 		{
-			"stack-rpc-api-",
+			"stack-api-",
 			"v2.foo",
-			"stack-rpc-api-v2-foo",
+			"stack-api-v2-foo",
 		},
 	}
 

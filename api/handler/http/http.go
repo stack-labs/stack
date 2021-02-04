@@ -8,9 +8,9 @@ import (
 	"net/http/httputil"
 	"net/url"
 
-	"github.com/stack-labs/stack-rpc/api"
-	"github.com/stack-labs/stack-rpc/api/handler"
-	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack/api"
+	"github.com/stack-labs/stack/api/handler"
+	"github.com/stack-labs/stack/client/selector"
 )
 
 const (

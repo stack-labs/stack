@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/stack-labs/stack-rpc/auth"
-	"github.com/stack-labs/stack-rpc/auth/token"
+	"github.com/stack-labs/stack/auth"
+	"github.com/stack-labs/stack/auth/token"
 )
 
 // authClaims to be encoded in the JWT

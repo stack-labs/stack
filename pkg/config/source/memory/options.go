@@ -3,7 +3,7 @@ package memory
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
+	"github.com/stack-labs/stack/pkg/config/source"
 )
 
 type changeSetKey struct{}

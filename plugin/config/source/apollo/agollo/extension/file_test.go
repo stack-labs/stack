@@ -18,10 +18,10 @@
 package extension
 
 import (
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/file"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/file"
 	. "github.com/tevid/gohamcrest"
 )
 

@@ -1,10 +1,10 @@
 package router
 
 import (
-	"github.com/stack-labs/stack-rpc/api/resolver"
-	"github.com/stack-labs/stack-rpc/api/resolver/stack"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/registry/mdns"
+	"github.com/stack-labs/stack/api/resolver"
+	"github.com/stack-labs/stack/api/resolver/stack"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/registry/mdns"
 )
 
 type Options struct {

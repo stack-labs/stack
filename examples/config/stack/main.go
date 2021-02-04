@@ -3,10 +3,10 @@ package stack
 import (
 	"time"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/config"
-	"github.com/stack-labs/stack-rpc/logger"
-	stack2 "github.com/stack-labs/stack-rpc/plugin/config/source/stack"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/config"
+	"github.com/stack-labs/stack/logger"
+	stack2 "github.com/stack-labs/stack/plugin/config/source/stack"
 )
 
 func main() {

@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/service/web"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/service/web"
 )
 
 func main() {

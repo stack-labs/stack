@@ -1,8 +1,8 @@
 package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/client/selector/dns"
+	"github.com/stack-labs/stack/client/selector"
+	"github.com/stack-labs/stack/client/selector/dns"
 )
 
 type dnsSelectorPlugin struct{}

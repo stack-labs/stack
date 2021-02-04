@@ -9,7 +9,7 @@ import (
 
 	"github.com/mholt/certmagic"
 
-	"github.com/stack-labs/stack-rpc/api/server/acme"
+	"github.com/stack-labs/stack/api/server/acme"
 )
 
 type certmagicProvider struct {

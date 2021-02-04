@@ -4,13 +4,13 @@ package api
 import (
 	"net/http"
 
-	goapi "github.com/stack-labs/stack-rpc/api"
-	"github.com/stack-labs/stack-rpc/api/handler"
-	api "github.com/stack-labs/stack-rpc/api/proto"
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/util/ctx"
-	"github.com/stack-labs/stack-rpc/util/errors"
+	goapi "github.com/stack-labs/stack/api"
+	"github.com/stack-labs/stack/api/handler"
+	api "github.com/stack-labs/stack/api/proto"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/client/selector"
+	"github.com/stack-labs/stack/util/ctx"
+	"github.com/stack-labs/stack/util/errors"
 )
 
 type apiHandler struct {

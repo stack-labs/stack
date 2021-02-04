@@ -3,9 +3,9 @@ package grpc
 import (
 	"crypto/tls"
 
-	gc "github.com/stack-labs/stack-rpc/client/grpc"
-	gs "github.com/stack-labs/stack-rpc/server/grpc"
-	"github.com/stack-labs/stack-rpc/service"
+	gc "github.com/stack-labs/stack/client/grpc"
+	gs "github.com/stack-labs/stack/server/grpc"
+	"github.com/stack-labs/stack/service"
 )
 
 // WithTLS sets the TLS config for the service

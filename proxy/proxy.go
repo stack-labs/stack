@@ -1,16 +1,16 @@
-// Package proxy is a transparent proxy built on the stack-rpc/server
+// Package proxy is a transparent proxy built on the stack/server
 package proxy
 
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/router"
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/util/options"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/router"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/util/options"
 )
 
-// Proxy can be used as a proxy server for stack-rpc services
+// Proxy can be used as a proxy server for stack services
 type Proxy interface {
 	options.Options
 	// ProcessMessage handles inbound messages

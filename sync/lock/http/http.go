@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/stack-labs/stack-rpc/sync/lock"
+	"github.com/stack-labs/stack/sync/lock"
 )
 
 var (

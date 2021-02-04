@@ -9,8 +9,8 @@ import (
 	"sync"
 
 	"github.com/gorilla/handlers"
-	"github.com/stack-labs/stack-rpc/api/server"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack/api/server"
+	"github.com/stack-labs/stack/util/log"
 )
 
 type httpServer struct {

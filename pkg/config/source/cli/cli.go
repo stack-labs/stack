@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/pkg/cli"
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
+	"github.com/stack-labs/stack/pkg/cli"
+	"github.com/stack-labs/stack/pkg/config/source"
 )
 
 type cliSource struct {

@@ -6,7 +6,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/stack-labs/stack-rpc/codec"
+	"github.com/stack-labs/stack/codec"
 )
 
 type clientCodec struct {

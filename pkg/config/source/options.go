@@ -3,8 +3,8 @@ package source
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/pkg/config/encoder"
-	"github.com/stack-labs/stack-rpc/pkg/config/encoder/json"
+	"github.com/stack-labs/stack/pkg/config/encoder"
+	"github.com/stack-labs/stack/pkg/config/encoder/json"
 )
 
 type Options struct {

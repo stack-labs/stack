@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/stack-labs/stack-rpc/env"
+	"github.com/stack-labs/stack/env"
 
 	"github.com/go-log/log"
 	golog "github.com/go-log/log/log"

@@ -3,9 +3,9 @@ package registry
 import (
 	"time"
 
-	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/registry/cache"
+	"github.com/stack-labs/stack/client/selector"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/registry/cache"
 )
 
 type registrySelector struct {

@@ -4,7 +4,7 @@ package selector
 import (
 	"errors"
 
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 // Selector builds on the registry as a mechanism to pick nodes

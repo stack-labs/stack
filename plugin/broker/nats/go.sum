@@ -322,8 +322,8 @@ github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d/go.mod h1
 github.com/smartystreets/goconvey v0.0.0-20190330032615-68dc04aab96a/go.mod h1:syvi0/a8iFYH4r/RixwvyeAJjdLS9QV7WQ/tjFTllLA=
 github.com/sourcegraph/annotate v0.0.0-20160123013949-f4cad6c6324d/go.mod h1:UdhH50NIW0fCiwBSr0co2m7BnFLdv4fQTgdqdJTHFeE=
 github.com/sourcegraph/syntaxhighlight v0.0.0-20170531221838-bd320f5d308e/go.mod h1:HuIsMU8RRBOtsCgI77wP899iHVBQpCmg4ErYMZB+2IA=
-github.com/stack-labs/stack-rpc v1.0.1-rc1 h1:7838PGTlSk3KxbZkNx/QdZpzHQUd8cvzm/3slB7GiyY=
-github.com/stack-labs/stack-rpc v1.0.1-rc1/go.mod h1:3njxsbAg2LGKgBtqyqaVQwO43m0LpsBGd/9RXX2sNNc=
+github.com/stack-labs/stack v1.0.1-rc1 h1:7838PGTlSk3KxbZkNx/QdZpzHQUd8cvzm/3slB7GiyY=
+github.com/stack-labs/stack v1.0.1-rc1/go.mod h1:3njxsbAg2LGKgBtqyqaVQwO43m0LpsBGd/9RXX2sNNc=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.2.0/go.mod h1:qt09Ya8vawLte6SNmTgCsAVtYtaKzEcn8ATUoHMkEqE=

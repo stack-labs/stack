@@ -4,7 +4,7 @@ package host
 import (
 	"net/http"
 
-	"github.com/stack-labs/stack-rpc/api/resolver"
+	"github.com/stack-labs/stack/api/resolver"
 )
 
 type Resolver struct{}

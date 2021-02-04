@@ -9,17 +9,17 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/api"
-	hApi "github.com/stack-labs/stack-rpc/api/handler/api"
-	"github.com/stack-labs/stack-rpc/config"
-	"github.com/stack-labs/stack-rpc/pkg/cli"
-	memSource "github.com/stack-labs/stack-rpc/pkg/config/source/memory"
-	"github.com/stack-labs/stack-rpc/registry/memory"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/api"
+	hApi "github.com/stack-labs/stack/api/handler/api"
+	"github.com/stack-labs/stack/config"
+	"github.com/stack-labs/stack/pkg/cli"
+	memSource "github.com/stack-labs/stack/pkg/config/source/memory"
+	"github.com/stack-labs/stack/registry/memory"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/stack-labs/stack-rpc/plugin/service/stackway/test/handler"
-	test "github.com/stack-labs/stack-rpc/plugin/service/stackway/test/proto"
+	"github.com/stack-labs/stack/plugin/service/stackway/test/handler"
+	test "github.com/stack-labs/stack/plugin/service/stackway/test/proto"
 )
 
 func run(ctx context.Context, t *testing.T) {

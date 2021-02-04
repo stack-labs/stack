@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/store"
-	"github.com/stack-labs/stack-rpc/util/options"
+	"github.com/stack-labs/stack/store"
+	"github.com/stack-labs/stack/util/options"
 )
 
 type memoryStore struct {

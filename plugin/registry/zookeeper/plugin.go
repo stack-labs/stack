@@ -1,8 +1,8 @@
 package zookeeper
 
 import (
-	"github.com/stack-labs/stack-rpc/plugin"
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/plugin"
+	"github.com/stack-labs/stack/registry"
 )
 
 type zkRegistryPlugin struct {

@@ -11,9 +11,9 @@ import (
 
 import (
 	context "context"
-	api "github.com/stack-labs/stack-rpc/api"
-	client "github.com/stack-labs/stack-rpc/client"
-	server "github.com/stack-labs/stack-rpc/server"
+	api "github.com/stack-labs/stack/api"
+	client "github.com/stack-labs/stack/client"
+	server "github.com/stack-labs/stack/server"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.

@@ -11,7 +11,7 @@ import (
 	"net/url"
 	"sync"
 
-	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack/client"
 )
 
 // Implements the streamer interface

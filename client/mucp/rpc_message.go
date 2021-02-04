@@ -1,6 +1,6 @@
 package mucp
 
-import "github.com/stack-labs/stack-rpc/client"
+import "github.com/stack-labs/stack/client"
 
 type message struct {
 	topic       string

@@ -3,9 +3,9 @@ package basic
 import (
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/auth"
-	"github.com/stack-labs/stack-rpc/auth/token"
-	"github.com/stack-labs/stack-rpc/store/memory"
+	"github.com/stack-labs/stack/auth"
+	"github.com/stack-labs/stack/auth/token"
+	"github.com/stack-labs/stack/store/memory"
 )
 
 func TestGenerate(t *testing.T) {

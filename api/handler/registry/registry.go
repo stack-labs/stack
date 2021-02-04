@@ -1,4 +1,4 @@
-// Package registry is a stack-rpc/registry handler
+// Package registry is a stack/registry handler
 package registry
 
 import (
@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/stack-labs/stack-rpc/api/handler"
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/api/handler"
+	"github.com/stack-labs/stack/registry"
 )
 
 const (

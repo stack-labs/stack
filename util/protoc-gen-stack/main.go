@@ -37,7 +37,7 @@
 // protocol compiler, so once the protocol compiler (protoc) is installed
 // you can run
 // 	protoc --stack_out=output_directory --go_out=output_directory input_directory/file.proto
-// to generate stack-rpc code for the protocol defined by file.proto.
+// to generate stack code for the protocol defined by file.proto.
 // With that input, the output will be written to
 // 	output_directory/file.stack.go
 //
@@ -53,8 +53,8 @@ import (
 	"os"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/stack-labs/stack-rpc/util/protoc-gen-stack/generator"
-	_ "github.com/stack-labs/stack-rpc/util/protoc-gen-stack/plugin/stack"
+	"github.com/stack-labs/stack/util/protoc-gen-stack/generator"
+	_ "github.com/stack-labs/stack/util/protoc-gen-stack/plugin/stack"
 )
 
 func main() {

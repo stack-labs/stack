@@ -3,13 +3,13 @@ package stack
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/auth"
-	scmd "github.com/stack-labs/stack-rpc/cmd"
-	cfg "github.com/stack-labs/stack-rpc/config"
-	"github.com/stack-labs/stack-rpc/plugin"
-	"github.com/stack-labs/stack-rpc/service"
-	"github.com/stack-labs/stack-rpc/service/config"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack/auth"
+	scmd "github.com/stack-labs/stack/cmd"
+	cfg "github.com/stack-labs/stack/config"
+	"github.com/stack-labs/stack/plugin"
+	"github.com/stack-labs/stack/service"
+	"github.com/stack-labs/stack/service/config"
+	"github.com/stack-labs/stack/util/log"
 )
 
 func newOptions(opts ...service.Option) service.Options {

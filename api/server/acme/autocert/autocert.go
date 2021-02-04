@@ -6,7 +6,7 @@ import (
 	"net"
 
 	"golang.org/x/crypto/acme/autocert"
-	"github.com/stack-labs/stack-rpc/api/server/acme"
+	"github.com/stack-labs/stack/api/server/acme"
 )
 
 // autoCertACME is the ACME provider from golang.org/x/crypto/acme/autocert

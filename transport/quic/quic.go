@@ -8,8 +8,8 @@ import (
 	"time"
 
 	quic "github.com/lucas-clemente/quic-go"
-	"github.com/stack-labs/stack-rpc/transport"
-	utls "github.com/stack-labs/stack-rpc/util/tls"
+	"github.com/stack-labs/stack/transport"
+	utls "github.com/stack-labs/stack/util/tls"
 )
 
 type quicSocket struct {

@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc"
+	"github.com/stack-labs/stack"
 )
 
 func TestNewServer(t *testing.T) {

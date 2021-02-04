@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	lock "github.com/stack-labs/stack-rpc/sync/lock"
+	lock "github.com/stack-labs/stack/sync/lock"
 )
 
 type memoryLock struct {

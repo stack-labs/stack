@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack/codec"
+	"github.com/stack-labs/stack/transport"
 )
 
 // testCodec is a dummy codec that only knows how to encode nil bodies

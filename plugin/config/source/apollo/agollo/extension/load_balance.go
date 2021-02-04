@@ -17,7 +17,7 @@
 
 package extension
 
-import "github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/cluster"
+import "github.com/stack-labs/stack/plugin/config/source/apollo/agollo/cluster"
 
 var defaultLoadBalance cluster.LoadBalance
 

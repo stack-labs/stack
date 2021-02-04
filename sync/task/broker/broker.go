@@ -10,11 +10,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/broker/http"
+	"github.com/stack-labs/stack/broker/http"
 
 	"github.com/google/uuid"
-	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/sync/task"
+	"github.com/stack-labs/stack/broker"
+	"github.com/stack-labs/stack/sync/task"
 )
 
 type brokerKey struct{}

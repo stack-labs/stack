@@ -2,7 +2,7 @@
 
 Stack-RPC旨在为中国开发者提供通用的分布式服务微服务开发库（比如配置管理、服务发现、熔断降级、路由、服务代理、安全、主从选举等）。基于Stack，开发者可以快速投入自身的业务开发中，只需要极少的学习成本。Stack适用于中小规模的开发场景，她可以轻易在桌面电脑、服务器、容器集群中搭建分布式服务。
 
-最新版本：[v1.0.0](https://github.com/stack-labs/stack-rpc/releases/tag/v1.0.0)
+最新版本：[v1.0.1-rc1](https://github.com/stack-labs/stack-rpc/releases/tag/v1.0.1-rc1)
 
 开发计划：[Projects](https://github.com/stack-labs/stack-rpc/projects)
 
@@ -10,9 +10,9 @@ Stack-RPC旨在为中国开发者提供通用的分布式服务微服务开发�
 
 [开发文档](https://stacklabs.cn/docs/stack-rpc/introduce-cn)
 
-[示例](https://github.com/stack-labs/stack-rpc-tutorials)
+[示例](https://github.com/stack-labs/stack-rpc/tree/master/examples)
 
-[插件库](https://github.com/stack-labs/stack-rpc-plugins)
+[插件库](https://github.com/stack-labs/stack-rpc/tree/master/plugin)
 
 ## 交流
 
@@ -66,28 +66,6 @@ Stack-RPC既提供轻量的开发库，同时也提供对应高级别的扩展�
 ## 开始使用
 
 我们为一直为大家准备持续开发、更新、愈加丰富的文档与资料：[StackLabs](https://stacklabs.cn/docs/stack-rpc/introduce-cn)
-
-## 与Go-Micro的差异
-
-- 取消Micro工具集，以服务插件形式集成到Stack-RPC中
-  - Web控制台插件
-  - 网关插件
-  - 注册中心插件
-  - 配置中心插件
-- 多类型服务同时部署
-  - 支持RPC与HTTP同时暴露
-- 增强日志特性
-  - 支持动态修改日志级别
-  - 支持日志自定义目录存储
-  - 支持按级别存储不同文件
-  - 支持按周期压缩日志文件
-  - 支持按大小压缩日志文件
-- 增强配置特性
-  - 增加默认配置命名空间
-  - 定义默认配置文件存储目录
-  - 支持Apollo配置中心
-- 删除不要的组件
-  - Cloudflare
 
 ## 鸣谢
 

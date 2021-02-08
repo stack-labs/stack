@@ -13,11 +13,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/transport"
-	maddr "github.com/stack-labs/stack-rpc/util/addr"
-	"github.com/stack-labs/stack-rpc/util/buf"
-	mnet "github.com/stack-labs/stack-rpc/util/net"
-	mls "github.com/stack-labs/stack-rpc/util/tls"
+	"github.com/stack-labs/stack/transport"
+	maddr "github.com/stack-labs/stack/util/addr"
+	"github.com/stack-labs/stack/util/buf"
+	mnet "github.com/stack-labs/stack/util/net"
+	mls "github.com/stack-labs/stack/util/tls"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 )

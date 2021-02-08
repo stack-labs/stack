@@ -1,7 +1,7 @@
 package store
 
 import (
-	"github.com/stack-labs/stack-rpc/util/options"
+	"github.com/stack-labs/stack/util/options"
 )
 
 // Nodes is a list of nodes used to back the store

@@ -1,11 +1,11 @@
 package logrus
 
 import (
-	"github.com/stack-labs/stack-rpc/config"
-	"github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/plugin"
-	"github.com/stack-labs/stack-rpc/plugin/logger/logrus/logrus"
-	scfg "github.com/stack-labs/stack-rpc/service/config"
+	"github.com/stack-labs/stack/config"
+	"github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/plugin"
+	"github.com/stack-labs/stack/plugin/logger/logrus/logrus"
+	scfg "github.com/stack-labs/stack/service/config"
 )
 
 var options struct {

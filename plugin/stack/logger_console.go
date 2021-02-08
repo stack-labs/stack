@@ -1,7 +1,7 @@
 package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/logger"
+	"github.com/stack-labs/stack/logger"
 )
 
 type consoleLogPlugin struct{}

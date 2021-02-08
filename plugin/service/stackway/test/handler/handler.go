@@ -3,9 +3,9 @@ package handler
 import (
 	"context"
 
-	proto "github.com/stack-labs/stack-rpc/api/proto"
+	proto "github.com/stack-labs/stack/api/proto"
 
-	test "github.com/stack-labs/stack-rpc-plugins/service/stackway/test/proto"
+	test "github.com/stack-labs/stack/plugin/service/stackway/test/proto"
 )
 
 var _ test.TestHandler = &Handler{}

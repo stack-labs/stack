@@ -1,6 +1,6 @@
 package registry
 
-import "github.com/stack-labs/stack-rpc/registry"
+import "github.com/stack-labs/stack/registry"
 
 func addNodes(old, neu []*registry.Node) []*registry.Node {
 	nodes := make([]*registry.Node, len(neu))

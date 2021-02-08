@@ -20,16 +20,16 @@ package agollo
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/agcache/memory"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/agcache/memory"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
 
-	_ "github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/file/json"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/extension"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/storage"
+	_ "github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/file/json"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/extension"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/storage"
 	. "github.com/tevid/gohamcrest"
 )
 

@@ -3,9 +3,9 @@ package loader
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/pkg/config/reader/json"
+	"github.com/stack-labs/stack/pkg/config/reader/json"
 
-	"github.com/stack-labs/stack-rpc/pkg/config/reader"
+	"github.com/stack-labs/stack/pkg/config/reader"
 )
 
 type Options struct {

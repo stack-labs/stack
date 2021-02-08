@@ -25,12 +25,12 @@ import (
 	"testing"
 	"time"
 
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/agcache/memory"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
-	jsonFile "github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config/json"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/extension"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/agcache/memory"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
+	jsonFile "github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config/json"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/extension"
 	. "github.com/tevid/gohamcrest"
 )
 

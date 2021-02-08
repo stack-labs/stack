@@ -2,8 +2,8 @@ package grpc
 
 import (
 	"google.golang.org/grpc"
-	"github.com/stack-labs/stack-rpc/transport"
-	pb "github.com/stack-labs/stack-rpc/transport/grpc/proto"
+	"github.com/stack-labs/stack/transport"
+	pb "github.com/stack-labs/stack/transport/grpc/proto"
 )
 
 type grpcTransportClient struct {

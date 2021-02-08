@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/router"
-	pb "github.com/stack-labs/stack-rpc/router/proto"
+	"github.com/stack-labs/stack/router"
+	pb "github.com/stack-labs/stack/router/proto"
 )
 
 type watcher struct {

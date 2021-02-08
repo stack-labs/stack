@@ -8,13 +8,13 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/stack-labs/stack-rpc/pkg/metadata"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/server/mock"
-	"github.com/stack-labs/stack-rpc/util/addr"
-	"github.com/stack-labs/stack-rpc/util/log"
-	mnet "github.com/stack-labs/stack-rpc/util/net"
+	"github.com/stack-labs/stack/pkg/metadata"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/server/mock"
+	"github.com/stack-labs/stack/util/addr"
+	"github.com/stack-labs/stack/util/log"
+	mnet "github.com/stack-labs/stack/util/net"
 )
 
 type stackwayServer struct {

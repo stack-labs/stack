@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/pkg/cli"
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
+	"github.com/stack-labs/stack/pkg/cli"
+	"github.com/stack-labs/stack/pkg/config/source"
 )
 
 func test(t *testing.T, withContext bool) {
@@ -211,7 +211,7 @@ var (
 		cli.StringFlag{
 			Name:   "client",
 			EnvVar: "STACK_CLIENT",
-			Usage:  "Client for stack-rpc; rpc",
+			Usage:  "Client for stack; rpc",
 			// todo good name
 			Alias: "stack_client_protocol",
 		},
@@ -257,7 +257,7 @@ var (
 		cli.StringFlag{
 			Name:   "server",
 			EnvVar: "STACK_SERVER",
-			Usage:  "Server for stack-rpc; rpc",
+			Usage:  "Server for stack; rpc",
 			// todo good name
 			Alias: "stack_server_protocol",
 		},
@@ -373,7 +373,7 @@ func newCmd(opts ...Option) Cmd {
 	}
 
 	if len(options.Description) == 0 {
-		options.Description = "a stack-rpc service"
+		options.Description = "a stack service"
 	}
 
 	cmd := new(cmd)

@@ -9,9 +9,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/pkg/config/reader"
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack/pkg/config/reader"
+	"github.com/stack-labs/stack/pkg/config/source"
+	"github.com/stack-labs/stack/util/log"
 )
 
 // Loader manages loading sources

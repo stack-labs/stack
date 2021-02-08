@@ -1,4 +1,4 @@
-// Package mucp transparently forwards the incoming request using a stack-rpc client.
+// Package mucp transparently forwards the incoming request using a stack client.
 package mucp
 
 import (
@@ -10,19 +10,19 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/client/mucp"
+	"github.com/stack-labs/stack/client/mucp"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/codec/bytes"
-	"github.com/stack-labs/stack-rpc/pkg/metadata"
-	"github.com/stack-labs/stack-rpc/proxy"
-	"github.com/stack-labs/stack-rpc/router"
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/util/errors"
-	"github.com/stack-labs/stack-rpc/util/log"
-	"github.com/stack-labs/stack-rpc/util/options"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/client/selector"
+	"github.com/stack-labs/stack/codec"
+	"github.com/stack-labs/stack/codec/bytes"
+	"github.com/stack-labs/stack/pkg/metadata"
+	"github.com/stack-labs/stack/proxy"
+	"github.com/stack-labs/stack/router"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/util/errors"
+	"github.com/stack-labs/stack/util/log"
+	"github.com/stack-labs/stack/util/options"
 )
 
 // Proxy will transparently proxy requests to an endpoint.

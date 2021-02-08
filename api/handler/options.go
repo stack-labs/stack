@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/api/router"
-	"github.com/stack-labs/stack-rpc/service"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/api/router"
+	"github.com/stack-labs/stack/service"
 )
 
 type Options struct {

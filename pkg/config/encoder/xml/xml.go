@@ -3,7 +3,7 @@ package xml
 import (
 	"encoding/xml"
 
-	"github.com/stack-labs/stack-rpc/pkg/config/encoder"
+	"github.com/stack-labs/stack/pkg/config/encoder"
 )
 
 type xmlEncoder struct{}

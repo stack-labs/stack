@@ -5,12 +5,12 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/stack-labs/stack-rpc"
-	api "github.com/stack-labs/stack-rpc/api/proto"
-	proto "github.com/stack-labs/stack-rpc/examples/proto/service/rpc"
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/util/errors"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack"
+	api "github.com/stack-labs/stack/api/proto"
+	proto "github.com/stack-labs/stack/examples/proto/service/rpc"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/util/errors"
+	"github.com/stack-labs/stack/util/log"
 )
 
 type Example struct{}

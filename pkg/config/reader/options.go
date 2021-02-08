@@ -1,12 +1,12 @@
 package reader
 
 import (
-	"github.com/stack-labs/stack-rpc/pkg/config/encoder"
-	"github.com/stack-labs/stack-rpc/pkg/config/encoder/hcl"
-	"github.com/stack-labs/stack-rpc/pkg/config/encoder/json"
-	"github.com/stack-labs/stack-rpc/pkg/config/encoder/toml"
-	"github.com/stack-labs/stack-rpc/pkg/config/encoder/xml"
-	"github.com/stack-labs/stack-rpc/pkg/config/encoder/yaml"
+	"github.com/stack-labs/stack/pkg/config/encoder"
+	"github.com/stack-labs/stack/pkg/config/encoder/hcl"
+	"github.com/stack-labs/stack/pkg/config/encoder/json"
+	"github.com/stack-labs/stack/pkg/config/encoder/toml"
+	"github.com/stack-labs/stack/pkg/config/encoder/xml"
+	"github.com/stack-labs/stack/pkg/config/encoder/yaml"
 )
 
 type Options struct {

@@ -2,7 +2,7 @@ package yaml
 
 import (
 	"github.com/ghodss/yaml"
-	"github.com/stack-labs/stack-rpc/pkg/config/encoder"
+	"github.com/stack-labs/stack/pkg/config/encoder"
 )
 
 type yamlEncoder struct{}

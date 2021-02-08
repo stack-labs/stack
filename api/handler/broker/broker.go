@@ -1,4 +1,4 @@
-// Package broker provides a stack-rpc/broker handler
+// Package broker provides a stack/broker handler
 package broker
 
 import (
@@ -11,9 +11,9 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/stack-labs/stack-rpc/api/handler"
-	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack/api/handler"
+	"github.com/stack-labs/stack/broker"
+	"github.com/stack-labs/stack/util/log"
 )
 
 const (

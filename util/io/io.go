@@ -4,7 +4,7 @@ package io
 import (
 	"io"
 
-	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack/transport"
 )
 
 type rwc struct {

@@ -4,7 +4,7 @@ package stack
 import (
 	"net/http"
 
-	"github.com/stack-labs/stack-rpc/api/resolver"
+	"github.com/stack-labs/stack/api/resolver"
 )
 
 // default resolver for legacy purposes

@@ -3,7 +3,7 @@ package nats
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/broker"
+	"github.com/stack-labs/stack/broker"
 )
 
 // setSubscribeOption returns a function to setup a context with given value

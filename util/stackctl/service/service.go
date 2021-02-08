@@ -4,11 +4,11 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/pkg/cli"
-	"github.com/stack-labs/stack-rpc/service"
-	"github.com/stack-labs/stack-rpc/util/log"
-	"github.com/stack-labs/stack-rpc/util/stackctl/internal/util"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/pkg/cli"
+	"github.com/stack-labs/stack/service"
+	"github.com/stack-labs/stack/util/log"
+	"github.com/stack-labs/stack/util/stackctl/internal/util"
 )
 
 func client() service.Service {

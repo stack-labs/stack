@@ -4,14 +4,14 @@ import (
 	"context"
 	"fmt"
 
-	br "github.com/stack-labs/stack-rpc/broker"
-	cl "github.com/stack-labs/stack-rpc/client"
-	sel "github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/plugin"
-	ser "github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/service"
-	"github.com/stack-labs/stack-rpc/util/log"
-	"github.com/stack-labs/stack-rpc/util/wrapper"
+	br "github.com/stack-labs/stack/broker"
+	cl "github.com/stack-labs/stack/client"
+	sel "github.com/stack-labs/stack/client/selector"
+	"github.com/stack-labs/stack/plugin"
+	ser "github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/service"
+	"github.com/stack-labs/stack/util/log"
+	"github.com/stack-labs/stack/util/wrapper"
 )
 
 // Init initialises options. Additionally it calls cmd.Init

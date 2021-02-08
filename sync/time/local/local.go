@@ -4,7 +4,7 @@ package local
 import (
 	gotime "time"
 
-	"github.com/stack-labs/stack-rpc/sync/time"
+	"github.com/stack-labs/stack/sync/time"
 )
 
 type Time struct{}

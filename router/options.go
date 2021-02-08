@@ -2,9 +2,9 @@ package router
 
 import (
 	"github.com/google/uuid"
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/registry/mdns"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/registry/mdns"
 )
 
 // Options are router options

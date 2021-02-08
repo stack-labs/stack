@@ -3,7 +3,7 @@ package file
 import (
 	"strings"
 
-	"github.com/stack-labs/stack-rpc/pkg/config/encoder"
+	"github.com/stack-labs/stack/pkg/config/encoder"
 )
 
 func format(p string, e encoder.Encoder) string {

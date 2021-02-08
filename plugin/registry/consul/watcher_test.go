@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/consul/api"
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 func TestHealthyServiceHandler(t *testing.T) {

@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/client"
 )
 
 func main() {

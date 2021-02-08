@@ -3,8 +3,8 @@ package mucp
 import (
 	"net/http"
 
-	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack/codec"
+	"github.com/stack-labs/stack/transport"
 )
 
 type rpcResponse struct {

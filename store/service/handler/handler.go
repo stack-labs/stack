@@ -5,9 +5,9 @@ import (
 	"io"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/store"
-	pb "github.com/stack-labs/stack-rpc/store/service/proto"
-	"github.com/stack-labs/stack-rpc/util/errors"
+	"github.com/stack-labs/stack/store"
+	pb "github.com/stack-labs/stack/store/service/proto"
+	"github.com/stack-labs/stack/util/errors"
 )
 
 type Store struct {

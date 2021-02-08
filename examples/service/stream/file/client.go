@@ -5,9 +5,9 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/client"
-	file2 "github.com/stack-labs/stack-rpc/examples/proto/service/stream/file"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/client"
+	file2 "github.com/stack-labs/stack/examples/proto/service/stream/file"
 )
 
 var fileService file2.FileService

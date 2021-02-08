@@ -18,8 +18,8 @@
 package extension
 
 import (
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/constant"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/utils/parse"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/constant"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/utils/parse"
 )
 
 var formatParser = make(map[constant.ConfigFileFormat]parse.ContentParser, 0)

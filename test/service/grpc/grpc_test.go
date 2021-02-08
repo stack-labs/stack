@@ -6,11 +6,11 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/registry/memory"
-	"github.com/stack-labs/stack-rpc/service/grpc"
-	hello "github.com/stack-labs/stack-rpc/service/grpc/proto"
-	mls "github.com/stack-labs/stack-rpc/util/tls"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/registry/memory"
+	"github.com/stack-labs/stack/service/grpc"
+	hello "github.com/stack-labs/stack/service/grpc/proto"
+	mls "github.com/stack-labs/stack/util/tls"
 )
 
 type testHandler struct{}

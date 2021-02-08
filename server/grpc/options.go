@@ -4,14 +4,14 @@ import (
 	"context"
 	"crypto/tls"
 
-	httpt "github.com/stack-labs/stack-rpc/transport/http"
+	httpt "github.com/stack-labs/stack/transport/http"
 
-	"github.com/stack-labs/stack-rpc/broker/http"
+	"github.com/stack-labs/stack/broker/http"
 
-	"github.com/stack-labs/stack-rpc/registry/mdns"
+	"github.com/stack-labs/stack/registry/mdns"
 
-	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack/codec"
+	"github.com/stack-labs/stack/server"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/encoding"
 )

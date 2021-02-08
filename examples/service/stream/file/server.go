@@ -9,9 +9,9 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/stack-labs/stack-rpc"
-	file2 "github.com/stack-labs/stack-rpc/examples/proto/service/stream/file"
-	"github.com/stack-labs/stack-rpc/util/errors"
+	"github.com/stack-labs/stack"
+	file2 "github.com/stack-labs/stack/examples/proto/service/stream/file"
+	"github.com/stack-labs/stack/util/errors"
 )
 
 type File struct{}

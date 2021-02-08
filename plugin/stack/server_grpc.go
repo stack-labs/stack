@@ -1,8 +1,8 @@
 package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/server/grpc"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/server/grpc"
 )
 
 type grpcServerPlugin struct{}

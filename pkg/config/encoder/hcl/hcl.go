@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/hashicorp/hcl"
-	"github.com/stack-labs/stack-rpc/pkg/config/encoder"
+	"github.com/stack-labs/stack/pkg/config/encoder"
 )
 
 type hclEncoder struct{}

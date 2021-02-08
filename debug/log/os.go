@@ -4,7 +4,7 @@ import (
 	"sync"
 
 	"github.com/google/uuid"
-	"github.com/stack-labs/stack-rpc/util/ring"
+	"github.com/stack-labs/stack/util/ring"
 )
 
 // Should stream from OS

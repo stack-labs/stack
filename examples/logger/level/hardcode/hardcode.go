@@ -1,6 +1,6 @@
 package main
 
-import log "github.com/stack-labs/stack-rpc/logger"
+import log "github.com/stack-labs/stack/logger"
 
 func main() {
 	log.Init(log.WithLevel(log.DebugLevel))

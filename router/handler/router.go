@@ -5,9 +5,9 @@ import (
 	"io"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/router"
-	pb "github.com/stack-labs/stack-rpc/router/proto"
-	"github.com/stack-labs/stack-rpc/util/errors"
+	"github.com/stack-labs/stack/router"
+	pb "github.com/stack-labs/stack/router/proto"
+	"github.com/stack-labs/stack/util/errors"
 )
 
 // Router implements router handler

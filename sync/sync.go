@@ -2,11 +2,11 @@
 package sync
 
 import (
-	"github.com/stack-labs/stack-rpc/store"
-	"github.com/stack-labs/stack-rpc/sync/leader"
-	"github.com/stack-labs/stack-rpc/sync/lock"
-	"github.com/stack-labs/stack-rpc/sync/task"
-	"github.com/stack-labs/stack-rpc/sync/time"
+	"github.com/stack-labs/stack/store"
+	"github.com/stack-labs/stack/sync/leader"
+	"github.com/stack-labs/stack/sync/lock"
+	"github.com/stack-labs/stack/sync/task"
+	"github.com/stack-labs/stack/sync/time"
 )
 
 // Map provides synchronized access to key-value storage.

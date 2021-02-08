@@ -4,17 +4,17 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/stack-labs/stack-rpc/auth"
-	broker "github.com/stack-labs/stack-rpc/broker/http"
-	client "github.com/stack-labs/stack-rpc/client/http"
-	selectorR "github.com/stack-labs/stack-rpc/client/selector/registry"
-	"github.com/stack-labs/stack-rpc/config"
-	"github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/registry/mdns"
-	"github.com/stack-labs/stack-rpc/server"
-	serverH "github.com/stack-labs/stack-rpc/server/http"
-	"github.com/stack-labs/stack-rpc/service"
-	transportH "github.com/stack-labs/stack-rpc/transport/http"
+	"github.com/stack-labs/stack/auth"
+	broker "github.com/stack-labs/stack/broker/http"
+	client "github.com/stack-labs/stack/client/http"
+	selectorR "github.com/stack-labs/stack/client/selector/registry"
+	"github.com/stack-labs/stack/config"
+	"github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/registry/mdns"
+	"github.com/stack-labs/stack/server"
+	serverH "github.com/stack-labs/stack/server/http"
+	"github.com/stack-labs/stack/service"
+	transportH "github.com/stack-labs/stack/transport/http"
 )
 
 type enableKey struct{}

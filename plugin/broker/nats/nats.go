@@ -8,8 +8,8 @@ import (
 	"sync"
 
 	nats "github.com/nats-io/nats.go"
-	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/codec/json"
+	"github.com/stack-labs/stack/broker"
+	"github.com/stack-labs/stack/codec/json"
 )
 
 type natsBroker struct {

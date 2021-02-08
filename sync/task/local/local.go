@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/stack-labs/stack-rpc/sync/task"
+	"github.com/stack-labs/stack/sync/task"
 )
 
 type localTask struct {

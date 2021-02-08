@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/stack-labs/stack-rpc/debug/trace"
-	"github.com/stack-labs/stack-rpc/util/ring"
+	"github.com/stack-labs/stack/debug/trace"
+	"github.com/stack-labs/stack/util/ring"
 )
 
 type Tracer struct {

@@ -2,14 +2,14 @@ package wrapper
 
 import (
 	"context"
-	"github.com/stack-labs/stack-rpc/auth"
-	"github.com/stack-labs/stack-rpc/debug/trace"
-	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack/auth"
+	"github.com/stack-labs/stack/debug/trace"
+	"github.com/stack-labs/stack/server"
 	"strings"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/pkg/metadata"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/pkg/metadata"
 )
 
 type clientWrapper struct {

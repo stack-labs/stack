@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 func ExtractValue(v reflect.Type, d int) *registry.Value {

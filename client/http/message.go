@@ -1,7 +1,7 @@
 package http
 
 import (
-	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack/client"
 )
 
 type httpMessage struct {

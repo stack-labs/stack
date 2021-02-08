@@ -23,8 +23,8 @@ import (
 	"io/ioutil"
 	"os"
 
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/utils"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/utils"
 )
 
 //ConfigFile json文件读写

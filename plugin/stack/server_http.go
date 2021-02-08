@@ -1,8 +1,8 @@
 package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/server/http"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/server/http"
 )
 
 type httpServerPlugin struct{}

@@ -5,16 +5,16 @@ import (
 	"net"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/grpc"
-	"github.com/stack-labs/stack-rpc/client/selector"
-	selectorR "github.com/stack-labs/stack-rpc/client/selector/registry"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/registry/memory"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/client/grpc"
+	"github.com/stack-labs/stack/client/selector"
+	selectorR "github.com/stack-labs/stack/client/selector/registry"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/registry/memory"
 	pgrpc "google.golang.org/grpc"
 	pb "google.golang.org/grpc/examples/helloworld/helloworld"
 
-	_ "github.com/stack-labs/stack-rpc/plugin/stack"
+	_ "github.com/stack-labs/stack/plugin/stack"
 )
 
 // server is used to implement helloworld.GreeterServer.

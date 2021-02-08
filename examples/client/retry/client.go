@@ -3,12 +3,12 @@ package main
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/mucp"
-	proto "github.com/stack-labs/stack-rpc/examples/proto/service/rpc"
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/util/errors"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/client/mucp"
+	proto "github.com/stack-labs/stack/examples/proto/service/rpc"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/util/errors"
 )
 
 func main() {

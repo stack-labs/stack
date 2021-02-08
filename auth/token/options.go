@@ -3,7 +3,7 @@ package token
 import (
 	"time"
 
-	"github.com/stack-labs/stack-rpc/store"
+	"github.com/stack-labs/stack/store"
 )
 
 type Options struct {

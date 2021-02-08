@@ -20,12 +20,12 @@ package remote
 import (
 	"encoding/json"
 	"fmt"
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/constant"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/extension"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/protocol/http"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/utils"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/constant"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/extension"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/protocol/http"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/utils"
 	"net/url"
 	"path"
 )

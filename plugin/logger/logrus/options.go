@@ -1,8 +1,8 @@
 package logrus
 
 import (
-	"github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/plugin/logger/logrus/logrus"
+	"github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/plugin/logger/logrus/logrus"
 )
 
 type Options struct {

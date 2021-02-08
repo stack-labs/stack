@@ -3,7 +3,7 @@ package file
 import (
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
+	"github.com/stack-labs/stack/pkg/config/source"
 )
 
 func TestFormat(t *testing.T) {

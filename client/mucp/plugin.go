@@ -1,8 +1,8 @@
 package mucp
 
 import (
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/plugin"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/plugin"
 )
 
 type mucpClientPlugin struct {

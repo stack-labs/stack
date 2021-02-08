@@ -1,8 +1,8 @@
 package quic
 
 import (
-	"github.com/stack-labs/stack-rpc/plugin"
-	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack/plugin"
+	"github.com/stack-labs/stack/transport"
 )
 
 type quicTransportPlugin struct {

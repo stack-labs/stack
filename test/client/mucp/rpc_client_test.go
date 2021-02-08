@@ -5,15 +5,15 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/mucp"
-	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/plugin"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/registry/memory"
-	"github.com/stack-labs/stack-rpc/util/errors"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/client/mucp"
+	"github.com/stack-labs/stack/client/selector"
+	"github.com/stack-labs/stack/plugin"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/registry/memory"
+	"github.com/stack-labs/stack/util/errors"
 
-	_ "github.com/stack-labs/stack-rpc/plugin/stack"
+	_ "github.com/stack-labs/stack/plugin/stack"
 )
 
 var (

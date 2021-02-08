@@ -3,10 +3,10 @@ package grpc
 import (
 	"reflect"
 
-	"github.com/stack-labs/stack-rpc/server/mucp"
+	"github.com/stack-labs/stack/server/mucp"
 
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/server"
 )
 
 type rpcHandler struct {

@@ -3,9 +3,9 @@ package http
 import (
 	"net/http"
 
-	"github.com/stack-labs/stack-rpc/registry/mdns"
+	"github.com/stack-labs/stack/registry/mdns"
 
-	"github.com/stack-labs/stack-rpc/client/selector"
+	"github.com/stack-labs/stack/client/selector"
 )
 
 func NewRoundTripper(opts ...Option) http.RoundTripper {

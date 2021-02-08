@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/stack-labs/stack-rpc/auth"
-	"github.com/stack-labs/stack-rpc/auth/token"
-	"github.com/stack-labs/stack-rpc/store"
+	"github.com/stack-labs/stack/auth"
+	"github.com/stack-labs/stack/auth/token"
+	"github.com/stack-labs/stack/store"
 )
 
 // Basic implementation of token provider, backed by the store

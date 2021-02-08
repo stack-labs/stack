@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/mucp"
-	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/client/mucp"
+	"github.com/stack-labs/stack/transport"
 )
 
 func TestCallOptions(t *testing.T) {

@@ -6,7 +6,7 @@ var (
 import (
 	"context"
 
-	log "github.com/stack-labs/stack-rpc/logger"
+	log "github.com/stack-labs/stack/logger"
 
 	{{.Alias}} "{{.Dir}}/proto/{{.Alias}}"
 )
@@ -26,7 +26,7 @@ func (e *{{title .Alias}}) Call(ctx context.Context, req *{{.Alias}}.Request, rs
 import (
 	"context"
 
-	log "github.com/stack-labs/stack-rpc/logger"
+	log "github.com/stack-labs/stack/logger"
 
 	{{.Alias}} "{{.Dir}}/proto/{{.Alias}}"
 )
@@ -76,7 +76,7 @@ func (e *{{title .Alias}}) PingPong(ctx context.Context, stream {{.Alias}}.{{tit
 import (
 	"context"
 
-	log "github.com/stack-labs/stack-rpc/logger"
+	log "github.com/stack-labs/stack/logger"
 
 	{{.Alias}} "{{.Dir}}/proto/{{.Alias}}"
 )
@@ -93,7 +93,7 @@ func (e *{{title .Alias}}) Handle(ctx context.Context, msg *{{.Alias}}.Message) 
 
 import (
 	"context"
-	log "github.com/stack-labs/stack-rpc/logger"
+	log "github.com/stack-labs/stack/logger"
 
 	{{.Alias}} "{{.Dir}}/proto/{{.Alias}}"
 )
@@ -117,9 +117,9 @@ import (
 	"context"
 	"encoding/json"
 
-	api "github.com/stack-labs/stack-rpc/api/proto"
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/util/errors"
+	api "github.com/stack-labs/stack/api/proto"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/util/errors"
 
 	"{{.Dir}}/client"
 	// FIXME: replace with service proto path
@@ -173,7 +173,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack/client"
 	{{.Alias}} "path/to/service/proto/{{.Alias}}"
 )
 

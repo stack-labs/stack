@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/stack-labs/stack-rpc/codec"
+	"github.com/stack-labs/stack/codec"
 )
 
 type serverCodec struct {

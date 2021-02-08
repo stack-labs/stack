@@ -11,12 +11,12 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/cmd"
-	"github.com/stack-labs/stack-rpc/pkg/metadata"
-	"github.com/stack-labs/stack-rpc/registry/memory"
-	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/client/selector"
+	"github.com/stack-labs/stack/cmd"
+	"github.com/stack-labs/stack/pkg/metadata"
+	"github.com/stack-labs/stack/registry/memory"
+	"github.com/stack-labs/stack/server"
 )
 
 type TestHandler struct {

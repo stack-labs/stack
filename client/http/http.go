@@ -14,16 +14,16 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/codec"
-	raw "github.com/stack-labs/stack-rpc/codec/bytes"
-	"github.com/stack-labs/stack-rpc/pkg/metadata"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/transport"
-	ucodec "github.com/stack-labs/stack-rpc/util/codec"
-	"github.com/stack-labs/stack-rpc/util/errors"
+	"github.com/stack-labs/stack/broker"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/client/selector"
+	"github.com/stack-labs/stack/codec"
+	raw "github.com/stack-labs/stack/codec/bytes"
+	"github.com/stack-labs/stack/pkg/metadata"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/transport"
+	ucodec "github.com/stack-labs/stack/util/codec"
+	"github.com/stack-labs/stack/util/errors"
 )
 
 type httpClient struct {

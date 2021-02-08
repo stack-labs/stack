@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/util/addr"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/util/addr"
 )
 
 func serviceDef(opts server.Options) *registry.Service {

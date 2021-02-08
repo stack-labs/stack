@@ -16,10 +16,10 @@ import (
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/etcdserver/api/v3rpc/rpctypes"
 	hash "github.com/mitchellh/hashstructure"
-	"github.com/stack-labs/stack-rpc/config"
-	"github.com/stack-labs/stack-rpc/plugin"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack/config"
+	"github.com/stack-labs/stack/plugin"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/util/log"
 )
 
 var (

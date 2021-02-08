@@ -8,8 +8,8 @@ import (
 
 	"github.com/hashicorp/consul/api"
 	"github.com/hashicorp/consul/api/watch"
-	"github.com/stack-labs/stack-rpc/registry"
-	rUtil "github.com/stack-labs/stack-rpc/util/registry"
+	"github.com/stack-labs/stack/registry"
+	rUtil "github.com/stack-labs/stack/util/registry"
 )
 
 type consulWatcher struct {

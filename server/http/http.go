@@ -10,13 +10,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/codec/jsonrpc"
-	"github.com/stack-labs/stack-rpc/codec/protorpc"
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack/broker"
+	"github.com/stack-labs/stack/codec"
+	"github.com/stack-labs/stack/codec/jsonrpc"
+	"github.com/stack-labs/stack/codec/protorpc"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/server"
 )
 
 var (

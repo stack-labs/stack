@@ -8,10 +8,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/registry/memory"
-	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/registry/memory"
+	"github.com/stack-labs/stack/server"
 )
 
 type testHandler struct{}

@@ -6,10 +6,10 @@ import (
 
 	"github.com/oxtoacart/bpool"
 	"github.com/pkg/errors"
-	"github.com/stack-labs/stack-rpc/codec"
-	raw "github.com/stack-labs/stack-rpc/codec/bytes"
-	"github.com/stack-labs/stack-rpc/transport"
-	codecu "github.com/stack-labs/stack-rpc/util/codec"
+	"github.com/stack-labs/stack/codec"
+	raw "github.com/stack-labs/stack/codec/bytes"
+	"github.com/stack-labs/stack/transport"
+	codecu "github.com/stack-labs/stack/util/codec"
 )
 
 type rpcCodec struct {

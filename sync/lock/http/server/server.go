@@ -4,8 +4,8 @@ package server
 import (
 	"net/http"
 
-	"github.com/stack-labs/stack-rpc/sync/lock"
-	lkhttp "github.com/stack-labs/stack-rpc/sync/lock/http"
+	"github.com/stack-labs/stack/sync/lock"
+	lkhttp "github.com/stack-labs/stack/sync/lock/http"
 )
 
 func Handler(lk lock.Lock) http.Handler {

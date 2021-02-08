@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 func encode(buf []byte) string {

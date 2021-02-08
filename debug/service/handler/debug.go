@@ -6,9 +6,9 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/debug/log"
-	proto "github.com/stack-labs/stack-rpc/debug/proto"
-	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack/debug/log"
+	proto "github.com/stack-labs/stack/debug/proto"
+	"github.com/stack-labs/stack/server"
 )
 
 var (

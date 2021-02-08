@@ -1,11 +1,11 @@
 package hook
 
 import (
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc-plugins/service/stackway/api"
-	"github.com/stack-labs/stack-rpc-plugins/service/stackway/plugin"
-	"github.com/stack-labs/stack-rpc/service"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/plugin/service/stackway/api"
+	"github.com/stack-labs/stack/plugin/service/stackway/plugin"
+	"github.com/stack-labs/stack/service"
+	"github.com/stack-labs/stack/util/log"
 )
 
 func Hook(svc service.Service) {

@@ -3,8 +3,8 @@ package stack
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/pkg/config/source"
 )
 
 type serviceNameKey struct{}

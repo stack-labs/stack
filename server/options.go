@@ -5,10 +5,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack/broker"
+	"github.com/stack-labs/stack/codec"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/transport"
 )
 
 type Options struct {

@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/stack-labs/stack-rpc"
-	proto "github.com/stack-labs/stack-rpc/examples/proto/service/rpc"
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/util/errors"
+	"github.com/stack-labs/stack"
+	proto "github.com/stack-labs/stack/examples/proto/service/rpc"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/util/errors"
 )
 
 type FailureExample struct{}

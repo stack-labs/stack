@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/stack-labs/stack-rpc/pkg/config/reader"
+	"github.com/stack-labs/stack/pkg/config/reader"
 )
 
 var (

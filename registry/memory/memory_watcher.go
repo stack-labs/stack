@@ -3,7 +3,7 @@ package memory
 import (
 	"errors"
 
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 type memoryWatcher struct {

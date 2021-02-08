@@ -1,11 +1,11 @@
 package mucp
 
 import (
-	"github.com/stack-labs/stack-rpc/plugin"
+	"github.com/stack-labs/stack/plugin"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/mucp"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/client/mucp"
 )
 
 func TestRequestOptions(t *testing.T) {

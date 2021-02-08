@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc"
-	proto "github.com/stack-labs/stack-rpc/examples/proto/service/rpc"
-	"github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/plugin/logger/logrus"
+	"github.com/stack-labs/stack"
+	proto "github.com/stack-labs/stack/examples/proto/service/rpc"
+	"github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/plugin/logger/logrus"
 )
 
 // 服务类

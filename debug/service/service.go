@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/client/mucp"
-	"github.com/stack-labs/stack-rpc/debug/log"
-	pb "github.com/stack-labs/stack-rpc/debug/proto"
+	"github.com/stack-labs/stack/client/mucp"
+	"github.com/stack-labs/stack/debug/log"
+	pb "github.com/stack-labs/stack/debug/proto"
 )
 
 // Debug provides debug service client

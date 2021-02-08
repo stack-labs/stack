@@ -4,7 +4,7 @@ package pool
 import (
 	"time"
 
-	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack/transport"
 )
 
 // Pool is an interface for connection pooling

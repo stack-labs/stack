@@ -4,7 +4,7 @@ package socket
 import (
 	"io"
 
-	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack/transport"
 )
 
 // Socket is our pseudo socket for transport.Socket

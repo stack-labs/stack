@@ -6,8 +6,8 @@ var (
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/server"
 
 	// FIXME: replace with service proto path
 	{{.Alias}} "path/to/service/proto/{{.Alias}}"

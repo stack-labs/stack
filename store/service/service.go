@@ -6,12 +6,12 @@ import (
 	"io"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/client/mucp"
+	"github.com/stack-labs/stack/client/mucp"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/store"
-	pb "github.com/stack-labs/stack-rpc/store/service/proto"
-	"github.com/stack-labs/stack-rpc/util/options"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/store"
+	pb "github.com/stack-labs/stack/store/service/proto"
+	"github.com/stack-labs/stack/util/options"
 )
 
 type serviceStore struct {

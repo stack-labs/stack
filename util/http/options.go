@@ -1,7 +1,7 @@
 package http
 
 import (
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 type Options struct {

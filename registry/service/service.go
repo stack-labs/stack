@@ -5,11 +5,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/mucp"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/registry/mdns"
-	pb "github.com/stack-labs/stack-rpc/registry/service/proto"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/client/mucp"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/registry/mdns"
+	pb "github.com/stack-labs/stack/registry/service/proto"
 )
 
 type serviceRegistry struct {

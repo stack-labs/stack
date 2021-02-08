@@ -6,10 +6,10 @@ import (
 	"os"
 	"strings"
 
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
-	apo "github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo"
-	apoC "github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/pkg/config/source"
+	apo "github.com/stack-labs/stack/plugin/config/source/apollo/agollo"
+	apoC "github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
 )
 
 type apolloSource struct {

@@ -1,8 +1,8 @@
 package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/auth"
-	"github.com/stack-labs/stack-rpc/auth/jwt"
+	"github.com/stack-labs/stack/auth"
+	"github.com/stack-labs/stack/auth/jwt"
 )
 
 type jwtAuthPlugin struct{}

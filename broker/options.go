@@ -4,8 +4,8 @@ import (
 	"context"
 	"crypto/tls"
 
-	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/codec"
+	"github.com/stack-labs/stack/registry"
 )
 
 type Options struct {

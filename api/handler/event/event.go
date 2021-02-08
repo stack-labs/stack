@@ -12,9 +12,9 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/stack-labs/stack-rpc/api/handler"
-	proto "github.com/stack-labs/stack-rpc/api/proto"
-	"github.com/stack-labs/stack-rpc/util/ctx"
+	"github.com/stack-labs/stack/api/handler"
+	proto "github.com/stack-labs/stack/api/proto"
+	"github.com/stack-labs/stack/util/ctx"
 )
 
 type event struct {

@@ -6,10 +6,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/stack-labs/stack-rpc/pkg/cli"
-	goplugin "github.com/stack-labs/stack-rpc/plugin"
+	"github.com/stack-labs/stack/pkg/cli"
+	goplugin "github.com/stack-labs/stack/plugin"
 
-	"github.com/stack-labs/stack-rpc-plugins/service/stackway/plugin"
+	"github.com/stack-labs/stack/plugin/service/stackway/plugin"
 )
 
 func build(ctx *cli.Context) {
@@ -31,9 +31,9 @@ func build(ctx *cli.Context) {
 
 	// set the path
 	if len(path) == 0 {
-		// github.com/stack-rpc/stack-rpc-plugins/broker/rabbitmq
-		// github.com/stack-rpc/stack-rpc-plugins/stack/basic_auth
-		path = filepath.Join("github.com/stack-labs/stack-rpc-plugins", typ, name)
+		// github.com/stack/stack/plugin/broker/rabbitmq
+		// github.com/stack/stack/plugin/stack/basic_auth
+		path = filepath.Join("github.com/stack-labs/stack/plugins", typ, name)
 	}
 
 	// set the newfn

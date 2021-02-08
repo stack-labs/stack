@@ -1,7 +1,7 @@
-module github.com/stack-labs/stack-rpc/plugin/broker/nats
+module github.com/stack-labs/stack/plugin/broker/nats
 
 go 1.14
 
 require (
-	github.com/stack-labs/stack-rpc v1.0.1-rc1
+	github.com/stack-labs/stack v1.0.1-rc1
 )

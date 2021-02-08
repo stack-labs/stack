@@ -3,7 +3,7 @@ package stack
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack/client"
 )
 
 type publisher struct {

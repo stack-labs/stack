@@ -3,7 +3,7 @@ package logrus_test
 import (
 	"os"
 
-	"github.com/stack-labs/stack-rpc/plugin/logger/logrus/logrus"
+	"github.com/stack-labs/stack/plugin/logger/logrus/logrus"
 )
 
 func Example_basic() {

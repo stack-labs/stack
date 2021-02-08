@@ -19,12 +19,12 @@ package remote
 
 import (
 	"fmt"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/cluster/roundrobin"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
-	jsonFile "github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/file/json"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/extension"
-	http2 "github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/protocol/http"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/cluster/roundrobin"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
+	jsonFile "github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/file/json"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/extension"
+	http2 "github.com/stack-labs/stack/plugin/config/source/apollo/agollo/protocol/http"
 	. "github.com/tevid/gohamcrest"
 	"net/http"
 	"net/http/httptest"

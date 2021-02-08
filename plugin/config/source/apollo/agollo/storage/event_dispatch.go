@@ -22,7 +22,7 @@ import (
 	"fmt"
 	"regexp"
 
-	log "github.com/stack-labs/stack-rpc/logger"
+	log "github.com/stack-labs/stack/logger"
 )
 
 const (

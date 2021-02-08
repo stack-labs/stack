@@ -10,7 +10,7 @@ import (
 	"time"
 
 	consul "github.com/hashicorp/consul/api"
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 type mockRegistry struct {

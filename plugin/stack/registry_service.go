@@ -1,8 +1,8 @@
 package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/registry/service"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/registry/service"
 )
 
 type serviceRegistryPlugin struct{}

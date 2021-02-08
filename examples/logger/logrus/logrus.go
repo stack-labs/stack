@@ -4,9 +4,9 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/stack-labs/stack-rpc"
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/plugin/logger/logrus"
+	"github.com/stack-labs/stack"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/plugin/logger/logrus"
 )
 
 func main() {

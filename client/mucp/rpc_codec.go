@@ -4,13 +4,13 @@ import (
 	"bytes"
 	errs "errors"
 
-	codecu "github.com/stack-labs/stack-rpc/util/codec"
+	codecu "github.com/stack-labs/stack/util/codec"
 
-	"github.com/stack-labs/stack-rpc/codec"
-	raw "github.com/stack-labs/stack-rpc/codec/bytes"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/transport"
-	"github.com/stack-labs/stack-rpc/util/errors"
+	"github.com/stack-labs/stack/codec"
+	raw "github.com/stack-labs/stack/codec/bytes"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/transport"
+	"github.com/stack-labs/stack/util/errors"
 )
 
 const (

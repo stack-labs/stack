@@ -93,7 +93,7 @@ builds:
 archives:
   - # ID of this archive.
     # Defaults to `default`.
-    id: stack-rpc
+    id: stack
 
     replacements:
       darwin: Darwin

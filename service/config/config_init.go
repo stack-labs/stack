@@ -6,13 +6,13 @@ import (
 	"os"
 	"strings"
 
-	cfg "github.com/stack-labs/stack-rpc/config"
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
-	cliSource "github.com/stack-labs/stack-rpc/pkg/config/source/cli"
-	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
-	"github.com/stack-labs/stack-rpc/service"
-	uf "github.com/stack-labs/stack-rpc/util/file"
-	"github.com/stack-labs/stack-rpc/util/log"
+	cfg "github.com/stack-labs/stack/config"
+	"github.com/stack-labs/stack/pkg/config/source"
+	cliSource "github.com/stack-labs/stack/pkg/config/source/cli"
+	"github.com/stack-labs/stack/pkg/config/source/file"
+	"github.com/stack-labs/stack/service"
+	uf "github.com/stack-labs/stack/util/file"
+	"github.com/stack-labs/stack/util/log"
 )
 
 func LoadConfig(sOpts *service.Options) (err error) {

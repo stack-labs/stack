@@ -3,7 +3,7 @@ package grpc
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack/server"
 	"google.golang.org/grpc"
 )
 

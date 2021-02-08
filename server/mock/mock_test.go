@@ -3,7 +3,7 @@ package mock
 import (
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack/server"
 )
 
 func TestMockServer(t *testing.T) {

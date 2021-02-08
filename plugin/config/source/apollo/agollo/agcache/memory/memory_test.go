@@ -20,7 +20,7 @@ package memory
 import (
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/agcache"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/agcache"
 	. "github.com/tevid/gohamcrest"
 )
 

@@ -1,8 +1,8 @@
 package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/auth/token"
-	"github.com/stack-labs/stack-rpc/auth/token/basic"
+	"github.com/stack-labs/stack/auth/token"
+	"github.com/stack-labs/stack/auth/token/basic"
 )
 
 type basicTokenProviderPlugin struct{}

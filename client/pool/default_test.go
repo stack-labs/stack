@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/transport"
-	"github.com/stack-labs/stack-rpc/transport/memory"
+	"github.com/stack-labs/stack/transport"
+	"github.com/stack-labs/stack/transport/memory"
 )
 
 func testPool(t *testing.T, size int, ttl time.Duration) {

@@ -3,7 +3,7 @@ package memory
 import (
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack/transport"
 )
 
 func TestMemoryTransport(t *testing.T) {

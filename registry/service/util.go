@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/stack-labs/stack-rpc/registry"
-	pb "github.com/stack-labs/stack-rpc/registry/service/proto"
+	"github.com/stack-labs/stack/registry"
+	pb "github.com/stack-labs/stack/registry/service/proto"
 )
 
 func values(v []*registry.Value) []*pb.Value {

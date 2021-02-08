@@ -5,12 +5,12 @@ import (
 	"context"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/debug/log"
-	proto "github.com/stack-labs/stack-rpc/debug/proto"
-	"github.com/stack-labs/stack-rpc/debug/stats"
-	"github.com/stack-labs/stack-rpc/debug/trace"
-	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/debug/log"
+	proto "github.com/stack-labs/stack/debug/proto"
+	"github.com/stack-labs/stack/debug/stats"
+	"github.com/stack-labs/stack/debug/trace"
+	"github.com/stack-labs/stack/server"
 )
 
 // NewHandler returns an instance of the Debug Handler

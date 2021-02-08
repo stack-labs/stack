@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/go-zookeeper/zk"
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 func encode(s *registry.Service) ([]byte, error) {

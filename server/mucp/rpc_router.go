@@ -18,10 +18,10 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/server"
-	merrors "github.com/stack-labs/stack-rpc/util/errors"
-	"github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack/codec"
+	"github.com/stack-labs/stack/server"
+	merrors "github.com/stack-labs/stack/util/errors"
+	"github.com/stack-labs/stack/util/log"
 )
 
 var (

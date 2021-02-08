@@ -3,11 +3,11 @@ package server
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/broker/http"
-	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/registry/mdns"
-	"github.com/stack-labs/stack-rpc/server"
-	httpt "github.com/stack-labs/stack-rpc/transport/http"
+	"github.com/stack-labs/stack/broker/http"
+	"github.com/stack-labs/stack/codec"
+	"github.com/stack-labs/stack/registry/mdns"
+	"github.com/stack-labs/stack/server"
+	httpt "github.com/stack-labs/stack/transport/http"
 )
 
 var (

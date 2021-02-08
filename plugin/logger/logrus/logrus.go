@@ -6,10 +6,10 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/plugin/logger/logrus/logrus"
-	"github.com/stack-labs/stack-rpc/plugin/logger/logrus/lumberjack.v2"
-	sLog "github.com/stack-labs/stack-rpc/util/log"
+	"github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/plugin/logger/logrus/logrus"
+	"github.com/stack-labs/stack/plugin/logger/logrus/lumberjack.v2"
+	sLog "github.com/stack-labs/stack/util/log"
 )
 
 var (
@@ -145,7 +145,7 @@ func (l *logrusLogger) Init(opts ...logger.Option) error {
 }
 
 func (l *logrusLogger) String() string {
-	// stack-rpc-logrus
+	// stack-logrus
 	return "slogrus"
 }
 

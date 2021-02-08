@@ -5,8 +5,8 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/encoding"
-	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/codec/bytes"
+	"github.com/stack-labs/stack/codec"
+	"github.com/stack-labs/stack/codec/bytes"
 )
 
 type response struct {

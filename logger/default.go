@@ -10,9 +10,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/env"
+	"github.com/stack-labs/stack/env"
 
-	dlog "github.com/stack-labs/stack-rpc/debug/log"
+	dlog "github.com/stack-labs/stack/debug/log"
 )
 
 func init() {

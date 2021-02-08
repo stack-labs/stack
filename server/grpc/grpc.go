@@ -14,16 +14,16 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/codec"
-	meta "github.com/stack-labs/stack-rpc/pkg/metadata"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/util/addr"
-	"github.com/stack-labs/stack-rpc/util/errors"
-	mgrpc "github.com/stack-labs/stack-rpc/util/grpc"
-	"github.com/stack-labs/stack-rpc/util/log"
-	mnet "github.com/stack-labs/stack-rpc/util/net"
+	"github.com/stack-labs/stack/broker"
+	"github.com/stack-labs/stack/codec"
+	meta "github.com/stack-labs/stack/pkg/metadata"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/util/addr"
+	"github.com/stack-labs/stack/util/errors"
+	mgrpc "github.com/stack-labs/stack/util/grpc"
+	"github.com/stack-labs/stack/util/log"
+	mnet "github.com/stack-labs/stack/util/net"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -192,7 +192,7 @@ func (g *grpcServer) handler(srv interface{}, stream grpc.ServerStream) error {
 		gmd = metadata.MD{}
 	}
 
-	// copy the metadata to stack-rpc.metadata
+	// copy the metadata to stack.metadata
 	md := meta.Metadata{}
 	for k, v := range gmd {
 		md[k] = strings.Join(v, ", ")

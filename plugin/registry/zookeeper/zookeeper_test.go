@@ -5,7 +5,7 @@ import (
 
 	"github.com/smartystreets/assertions/should"
 	. "github.com/smartystreets/goconvey/convey"
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack/registry"
 )
 
 func TestZKRegistry(t *testing.T) {

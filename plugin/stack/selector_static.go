@@ -1,8 +1,8 @@
 package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/client/selector/static"
+	"github.com/stack-labs/stack/client/selector"
+	"github.com/stack-labs/stack/client/selector/static"
 )
 
 type staticSelectorPlugin struct{}

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/stack-labs/stack-rpc/logger"
-	ls "github.com/stack-labs/stack-rpc/plugin/logger/logrus/logrus"
-	"github.com/stack-labs/stack-rpc/plugin/logger/logrus/lumberjack.v2"
+	"github.com/stack-labs/stack/logger"
+	ls "github.com/stack-labs/stack/plugin/logger/logrus/logrus"
+	"github.com/stack-labs/stack/plugin/logger/logrus/lumberjack.v2"
 )
 
 func prepareLevelHooks(opts logger.PersistenceOptions, l ls.Level) ls.LevelHooks {

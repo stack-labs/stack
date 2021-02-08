@@ -1,4 +1,4 @@
-// Package rpc is a stack-rpc rpc handler.
+// Package rpc is a stack rpc handler.
 package rpc
 
 import (
@@ -10,17 +10,17 @@ import (
 	"strings"
 
 	"github.com/joncalhoun/qson"
-	"github.com/stack-labs/stack-rpc/api"
-	"github.com/stack-labs/stack-rpc/api/handler"
-	proto "github.com/stack-labs/stack-rpc/api/internal/proto"
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/codec/jsonrpc"
-	"github.com/stack-labs/stack-rpc/codec/protorpc"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/util/ctx"
-	"github.com/stack-labs/stack-rpc/util/errors"
+	"github.com/stack-labs/stack/api"
+	"github.com/stack-labs/stack/api/handler"
+	proto "github.com/stack-labs/stack/api/internal/proto"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/client/selector"
+	"github.com/stack-labs/stack/codec"
+	"github.com/stack-labs/stack/codec/jsonrpc"
+	"github.com/stack-labs/stack/codec/protorpc"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/util/ctx"
+	"github.com/stack-labs/stack/util/errors"
 )
 
 const (

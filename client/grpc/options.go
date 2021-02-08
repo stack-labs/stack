@@ -7,7 +7,7 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/encoding"
-	"github.com/stack-labs/stack-rpc/client"
+	"github.com/stack-labs/stack/client"
 )
 
 var (

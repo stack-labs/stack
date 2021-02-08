@@ -10,9 +10,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/transport"
-	maddr "github.com/stack-labs/stack-rpc/util/addr"
-	mnet "github.com/stack-labs/stack-rpc/util/net"
+	"github.com/stack-labs/stack/transport"
+	maddr "github.com/stack-labs/stack/util/addr"
+	mnet "github.com/stack-labs/stack/util/net"
 )
 
 type memorySocket struct {

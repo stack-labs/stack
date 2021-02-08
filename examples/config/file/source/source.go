@@ -3,10 +3,10 @@ package main
 import (
 	"time"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/config"
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/pkg/config/source/file"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/config"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/pkg/config/source/file"
 )
 
 type source struct {

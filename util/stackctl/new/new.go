@@ -12,8 +12,8 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/stack-labs/stack-rpc/pkg/cli"
-	tmpl "github.com/stack-labs/stack-rpc/util/stackctl/new/template"
+	"github.com/stack-labs/stack/pkg/cli"
+	tmpl "github.com/stack-labs/stack/util/stackctl/new/template"
 	"github.com/xlab/treeprint"
 )
 
@@ -251,10 +251,10 @@ func run(ctx *cli.Context) {
 				{".gitignore", tmpl.GitIgnore},
 			},
 			Comments: []string{
-				"\ndownload protobuf for stack-rpc:\n",
+				"\ndownload protobuf for stack:\n",
 				"brew install protobuf",
 				"go get -u github.com/golang/protobuf/{proto,protoc-gen-go}",
-				"go get -u github.com/stack-lags/stack-rpc/util/protoc-gen-stack",
+				"go get -u github.com/stack-lags/stack/util/protoc-gen-stack",
 				"\ncompile the proto file " + alias + ".proto:\n",
 				"cd " + goDir,
 				//"protoc --proto_path=.:$GOPATH/src --go_out=. --stack_out=. proto/" + alias + "/" + alias + ".proto\n",
@@ -288,10 +288,10 @@ func run(ctx *cli.Context) {
 				{".gitignore", tmpl.GitIgnore},
 			},
 			Comments: []string{
-				"\ndownload protobuf for stack-rpc:\n",
+				"\ndownload protobuf for stack:\n",
 				"brew install protobuf",
 				"go get -u github.com/golang/protobuf/{proto,protoc-gen-go}",
-				"go get -u github.com/stack-labs/stack-rpc/util/protoc-gen-stack",
+				"go get -u github.com/stack-labs/stack/util/protoc-gen-stack",
 				"\ncompile the proto file " + alias + ".proto:\n",
 				"cd " + goDir,
 				//"protoc --proto_path=.:$GOPATH/src --go_out=. --stack_out=. proto/" + alias + "/" + alias + ".proto\n",
@@ -325,10 +325,10 @@ func run(ctx *cli.Context) {
 				{".gitignore", tmpl.GitIgnore},
 			},
 			Comments: []string{
-				"\ndownload protobuf for stack-rpc:\n",
+				"\ndownload protobuf for stack:\n",
 				"brew install protobuf",
 				"go get -u github.com/golang/protobuf/{proto,protoc-gen-go}",
-				"go get -u github.com/stack-labs/stack-rpc/util/protoc-gen-stack",
+				"go get -u github.com/stack-labs/stack/util/protoc-gen-stack",
 				"\ncompile the proto file " + alias + ".proto:\n",
 				"cd " + goDir,
 				//"protoc --proto_path=.:$GOPATH/src --go_out=. --stack_out=. proto/" + alias + "/" + alias + ".proto\n",

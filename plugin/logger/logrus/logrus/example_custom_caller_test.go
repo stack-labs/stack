@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/stack-labs/stack-rpc/plugin/logger/logrus/logrus"
+	"github.com/stack-labs/stack/plugin/logger/logrus/logrus"
 )
 
 func ExampleCustomFormatter() {

@@ -1,8 +1,8 @@
 package stack
 
 import (
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
-	proto "github.com/stack-labs/stack-rpc/plugin/config/source/stack/proto"
+	"github.com/stack-labs/stack/pkg/config/source"
+	proto "github.com/stack-labs/stack/plugin/config/source/stack/proto"
 )
 
 type watcher struct {

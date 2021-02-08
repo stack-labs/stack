@@ -3,16 +3,16 @@ package handler
 import (
 	"net/http"
 
-	"github.com/stack-labs/stack-rpc/api/handler"
-	"github.com/stack-labs/stack-rpc/api/handler/event"
-	"github.com/stack-labs/stack-rpc/api/router"
-	"github.com/stack-labs/stack-rpc/service"
-	"github.com/stack-labs/stack-rpc/util/errors"
+	"github.com/stack-labs/stack/api/handler"
+	"github.com/stack-labs/stack/api/handler/event"
+	"github.com/stack-labs/stack/api/router"
+	"github.com/stack-labs/stack/service"
+	"github.com/stack-labs/stack/util/errors"
 	// TODO: only import handler package
-	aapi "github.com/stack-labs/stack-rpc/api/handler/api"
-	ahttp "github.com/stack-labs/stack-rpc/api/handler/http"
-	arpc "github.com/stack-labs/stack-rpc/api/handler/rpc"
-	aweb "github.com/stack-labs/stack-rpc/api/handler/web"
+	aapi "github.com/stack-labs/stack/api/handler/api"
+	ahttp "github.com/stack-labs/stack/api/handler/http"
+	arpc "github.com/stack-labs/stack/api/handler/rpc"
+	aweb "github.com/stack-labs/stack/api/handler/web"
 )
 
 type metaHandler struct {

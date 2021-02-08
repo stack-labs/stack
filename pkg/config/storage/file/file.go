@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/stack-labs/stack-rpc/pkg/config/storage"
+	"github.com/stack-labs/stack/pkg/config/storage"
 )
 
 const _perm = 0644

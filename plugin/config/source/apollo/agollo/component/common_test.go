@@ -18,15 +18,15 @@
 package component
 
 import (
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/protocol/http"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/protocol/http"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/cluster/roundrobin"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config/json"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/extension"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/cluster/roundrobin"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config/json"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/extension"
 	. "github.com/tevid/gohamcrest"
 
 	json2 "encoding/json"

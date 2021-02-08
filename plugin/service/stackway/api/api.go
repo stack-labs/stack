@@ -1,9 +1,9 @@
 package api
 
 import (
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/pkg/cli"
-	"github.com/stack-labs/stack-rpc/service"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/pkg/cli"
+	"github.com/stack-labs/stack/service"
 )
 
 // api stackway options

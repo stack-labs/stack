@@ -3,10 +3,10 @@ package main
 import (
 	"time"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/config"
-	"github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/config"
+	"github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/plugin/config/source/apollo"
 )
 
 func main() {

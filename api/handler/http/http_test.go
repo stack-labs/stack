@@ -6,11 +6,11 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/api/handler"
-	"github.com/stack-labs/stack-rpc/api/router"
-	regRouter "github.com/stack-labs/stack-rpc/api/router/registry"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/registry/memory"
+	"github.com/stack-labs/stack/api/handler"
+	"github.com/stack-labs/stack/api/router"
+	regRouter "github.com/stack-labs/stack/api/router/registry"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/registry/memory"
 )
 
 func testHttp(t *testing.T, path, service, ns string) {

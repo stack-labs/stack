@@ -3,9 +3,9 @@ package mucp
 import (
 	"bytes"
 
-	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/transport"
-	"github.com/stack-labs/stack-rpc/util/buf"
+	"github.com/stack-labs/stack/codec"
+	"github.com/stack-labs/stack/transport"
+	"github.com/stack-labs/stack/util/buf"
 )
 
 type rpcRequest struct {

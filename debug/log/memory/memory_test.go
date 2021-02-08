@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/stack-labs/stack-rpc/debug/log"
+	"github.com/stack-labs/stack/debug/log"
 )
 
 func TestLogger(t *testing.T) {

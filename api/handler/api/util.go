@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"strings"
 
-	api "github.com/stack-labs/stack-rpc/api/proto"
-	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/registry"
+	api "github.com/stack-labs/stack/api/proto"
+	"github.com/stack-labs/stack/client/selector"
+	"github.com/stack-labs/stack/registry"
 )
 
 func requestToProto(r *http.Request) (*api.Request, error) {

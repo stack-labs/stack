@@ -1,8 +1,8 @@
 package http
 
 import (
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/codec"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/codec"
 )
 
 type httpRequest struct {

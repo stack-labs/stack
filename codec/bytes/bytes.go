@@ -6,7 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/stack-labs/stack-rpc/codec"
+	"github.com/stack-labs/stack/codec"
 )
 
 type Codec struct {

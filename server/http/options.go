@@ -3,8 +3,8 @@ package http
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/codec"
-	"github.com/stack-labs/stack-rpc/server"
+	"github.com/stack-labs/stack/codec"
+	"github.com/stack-labs/stack/server"
 )
 
 func newOptions(opt ...server.Option) server.Options {

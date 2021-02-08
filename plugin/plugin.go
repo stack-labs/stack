@@ -1,17 +1,17 @@
 package plugin
 
 import (
-	"github.com/stack-labs/stack-rpc/auth"
-	"github.com/stack-labs/stack-rpc/auth/token"
-	"github.com/stack-labs/stack-rpc/broker"
-	"github.com/stack-labs/stack-rpc/client"
-	"github.com/stack-labs/stack-rpc/client/selector"
-	"github.com/stack-labs/stack-rpc/config"
-	"github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/registry"
-	"github.com/stack-labs/stack-rpc/server"
-	"github.com/stack-labs/stack-rpc/service"
-	"github.com/stack-labs/stack-rpc/transport"
+	"github.com/stack-labs/stack/auth"
+	"github.com/stack-labs/stack/auth/token"
+	"github.com/stack-labs/stack/broker"
+	"github.com/stack-labs/stack/client"
+	"github.com/stack-labs/stack/client/selector"
+	"github.com/stack-labs/stack/config"
+	"github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/registry"
+	"github.com/stack-labs/stack/server"
+	"github.com/stack-labs/stack/service"
+	"github.com/stack-labs/stack/transport"
 )
 
 type Plugin interface {

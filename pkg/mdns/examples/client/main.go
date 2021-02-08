@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/stack-labs/stack-rpc/pkg/mdns"
+	"github.com/stack-labs/stack/pkg/mdns"
 )
 
 func main() {

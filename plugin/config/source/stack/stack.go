@@ -3,10 +3,10 @@ package stack
 import (
 	"context"
 
-	"github.com/stack-labs/stack-rpc/client"
-	log "github.com/stack-labs/stack-rpc/logger"
-	"github.com/stack-labs/stack-rpc/pkg/config/source"
-	proto "github.com/stack-labs/stack-rpc/plugin/config/source/stack/proto"
+	"github.com/stack-labs/stack/client"
+	log "github.com/stack-labs/stack/logger"
+	"github.com/stack-labs/stack/pkg/config/source"
+	proto "github.com/stack-labs/stack/plugin/config/source/stack/proto"
 )
 
 var (

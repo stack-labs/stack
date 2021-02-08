@@ -11,11 +11,11 @@ import (
 
 	proto "github.com/golang/protobuf/proto"
 
-	api "github.com/stack-labs/stack-rpc/api"
+	api "github.com/stack-labs/stack/api"
 
-	client "github.com/stack-labs/stack-rpc/client"
+	client "github.com/stack-labs/stack/client"
 
-	server "github.com/stack-labs/stack-rpc/server"
+	server "github.com/stack-labs/stack/server"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.

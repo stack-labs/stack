@@ -21,11 +21,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config"
+	"github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config"
 	"sync"
 
-	log "github.com/stack-labs/stack-rpc/logger"
-	jsonConfig "github.com/stack-labs/stack-rpc/plugin/config/source/apollo/agollo/env/config/json"
+	log "github.com/stack-labs/stack/logger"
+	jsonConfig "github.com/stack-labs/stack/plugin/config/source/apollo/agollo/env/config/json"
 )
 
 //Suffix 默认文件保存类型

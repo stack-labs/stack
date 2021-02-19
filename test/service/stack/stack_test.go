@@ -5,15 +5,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/registry"
 )
 
 func TestServiceTTL(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	s := stack.NewService(
 		stack.Context(ctx),
-		stack.Name("stack.rpc.test.ttl"),
+		stack.Name("stack.test.ttl"),
 		stack.RegisterTTL(time.Second*3),
 		// much bigger than ttl
 		stack.RegisterInterval(time.Second*20),
@@ -23,7 +23,7 @@ func TestServiceTTL(t *testing.T) {
 		// same as ttl
 		time.Sleep(time.Second * 3)
 
-		svcs, err := s.Options().Registry.GetService("stack.rpc.test.ttl")
+		svcs, err := s.Options().Registry.GetService("stack.test.ttl")
 		if err != nil && err != registry.ErrNotFound {
 			t.Fatal(err)
 		}

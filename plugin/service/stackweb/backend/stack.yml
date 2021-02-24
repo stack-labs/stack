@@ -1,0 +1,18 @@
+stack:
+  service:
+    name: stack.rpc.stackweb
+    web:
+      root-path: /stack
+      static:
+        route: webapp
+        dir: static
+        # todo
+        favicon-ico:
+  server:
+    address: :8090
+  config:
+    hierarchy-merge: true
+    storege: false
+  logger:
+    name: console
+    level: info

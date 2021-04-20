@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stack-labs/stack-rpc"
-	"github.com/stack-labs/stack-rpc/registry"
+	"github.com/stack-labs/stack"
+	"github.com/stack-labs/stack/registry"
 )
 
 func TestServiceTTL(t *testing.T) {

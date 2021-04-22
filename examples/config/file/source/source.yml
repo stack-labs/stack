@@ -1,3 +1,4 @@
 source:
   demoA: Hello! 我是Demo
   number-string: 12345678910
+  rfc3339-time: 2021-04-21T22:08:41+04:10

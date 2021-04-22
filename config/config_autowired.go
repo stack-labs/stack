@@ -9,6 +9,11 @@ import (
 	"github.com/stack-labs/stack/util/log"
 )
 
+var (
+	timeKind   = "time.Time"
+	nullString = "null"
+)
+
 func injectAutowired(ctx context.Context) {
 	refresh := func() {
 		var wg sync.WaitGroup
@@ -62,7 +67,7 @@ func bindAutowiredValue(obj reflect.Value, path ...string) {
 		if len(valTmp) == 0 {
 			// maybe is other type
 			valTmp = string(value.Bytes())
-			if valTmp == "null" {
+			if valTmp == nullString {
 				valTmp = ""
 			}
 		}
@@ -81,6 +86,23 @@ func bindAutowiredValue(obj reflect.Value, path ...string) {
 	case reflect.Struct:
 		// Iterate over the struct fields
 		fields := v.Type()
+
+		// if it's time.Time type
+		if fields.String() == timeKind {
+			// supports RFC3339 only
+			valTmp := value.String("")
+			if len(valTmp) > 0 {
+				t, err := time.Parse(time.RFC3339, valTmp)
+				if err != nil {
+					log.Warnf("%s is not standard RFC3339 format", valTmp)
+					break
+				}
+				v.Set(reflect.ValueOf(t))
+			}
+
+			break
+		}
+
 		for i := 0; i < fields.NumField(); i++ {
 			tag := fields.Field(i).Tag.Get(DefaultOptionsTagName)
 			if tag == "" || tag == "-" {

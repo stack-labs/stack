@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
-	"time"
 
 	"github.com/stack-labs/stack/cmd"
 	cfg "github.com/stack-labs/stack/config"
@@ -54,15 +53,8 @@ stack:
 ext:
   date-time: 2021-03-10 23:10:23.999
 `)
-	conf = stackConfigExt{}
+	conf = StackConfig{}
 )
-
-type stackConfigExt struct {
-	StackConfig
-	Ext struct {
-		DateTime time.Time `sc:"date-time"`
-	} `sc:"ext"`
-}
 
 func init() {
 	cfg.RegisterOptions(&conf)

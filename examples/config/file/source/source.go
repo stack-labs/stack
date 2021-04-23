@@ -10,7 +10,8 @@ import (
 )
 
 type source struct {
-	DemoA string `sc:"demoA"`
+	DemoA        string `sc:"demoA"`
+	NumberString string `sc:"number-string"`
 }
 
 type Value struct {
@@ -27,11 +28,13 @@ func init() {
 
 func main() {
 	service := stack.NewService(
+		stack.Name("stack.config.demo"),
 		stack.Config(config.NewConfig(config.Source(file.NewSource(file.WithPath("./source.yml"))))),
 	)
 	service.Init()
 
 	log.Infof("demoA: %s", value.Source.DemoA)
+	log.Infof("NumberString: %s", value.Source.NumberString)
 
 	go func() {
 		for {

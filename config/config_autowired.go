@@ -58,7 +58,15 @@ func bindAutowiredValue(obj reflect.Value, path ...string) {
 		}
 		v.SetUint(n)
 	case reflect.String:
-		v.SetString(value.String(""))
+		valTmp := value.String("")
+		if len(valTmp) == 0 {
+			// maybe is other type
+			valTmp = string(value.Bytes())
+			if valTmp == "null" {
+				valTmp = ""
+			}
+		}
+		v.SetString(valTmp)
 	case reflect.Bool:
 		v.SetBool(value.Bool(false))
 		// supports string only now

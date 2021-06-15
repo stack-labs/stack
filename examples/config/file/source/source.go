@@ -10,8 +10,9 @@ import (
 )
 
 type source struct {
-	DemoA        string `sc:"demoA"`
-	NumberString string `sc:"number-string"`
+	DemoA        string    `sc:"demoA"`
+	NumberString string    `sc:"number-string"`
+	RFC3339Time  time.Time `sc:"rfc3339-time"`
 }
 
 type Value struct {
@@ -35,6 +36,7 @@ func main() {
 
 	log.Infof("demoA: %s", value.Source.DemoA)
 	log.Infof("NumberString: %s", value.Source.NumberString)
+	log.Infof("RFC3339Time: %s", value.Source.RFC3339Time.String())
 
 	go func() {
 		for {
